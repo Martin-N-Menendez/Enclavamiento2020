@@ -289,7 +289,7 @@ def fsm_semaforos_crear(FSM_semaforos,i,Layout,rutas_dim):
     f.write("architecture "+FSM_semaforos.nombre+ "_" + str(i+1) +"_ARQ of "+FSM_semaforos.nombre+"_"+str(i+1)+" is\n")
     f.write("\t"+"begin\n")   
     
-    fsm_semaforos_proceso(f,i) 
+    #fsm_semaforos_proceso(f,i) 
     
     f.write("end architecture "+FSM_semaforos.nombre+ "_" + str(i+1) +"_ARQ;\n") 
     

@@ -5,7 +5,7 @@ from Mediador import *
 from Senialamiento import *
 from Conectores import *
 
-UCE_bloque = "unidad_central_enclavamiento"
+NODOS = "nodo"
 ENM_bloque = "enmascarador"
 ENR_bloque = "enrutador"
 MED_bloque = "mediador"
@@ -107,21 +107,9 @@ def UCE_inst_SEN(f):
     
     f.write("\tsenialamiento_inst:senialamiento port map(\n")
     f.write("\t\tClock => Clock,\n")
-    f.write("\t\tReset => Reset,\n")
-    f.write("\t\tSemaforo_rojo_in => Rojo_s,\n")
-    f.write("\t\tSemaforo_amarillo_in => Amarillo_s,\n")
-    f.write("\t\tSemaforo_verde_in => Verde_s,\n")
-    f.write("\t\tSemaforo_rojo_out => Rojo_out_s,\n")
-    f.write("\t\tSemaforo_amarillo_out => Amarillo_out_s,\n")
-    f.write("\t\tSemaforo_verde_out => Verde_out_s,\n")
-    f.write("\t\tBarrera_alta_in => Alto_s,\n")
-    f.write("\t\tBarrera_baja_in => Bajo_s,\n")
-    f.write("\t\tBarrera_alta_out => Alto_out_s,\n")
-    f.write("\t\tBarrera_baja_out => Bajo_out_s,\n")
-    f.write("\t\tMaquina_normal_in => Maquina_normal_s,\n")
-    f.write("\t\tMaquina_reversa_in => Maquina_reversa_s,\n")
-    f.write("\t\tMaquina_normal_out => Maquina_normal_out_s,\n")
-    f.write("\t\tMaquina_reversa_out => Maquina_reversa_out_s);\r\n")
+    f.write("\t\tReset => Reset\n")
+   
+    f.write("\t\t);\r\n")
     
 
     
@@ -164,11 +152,51 @@ def entrada_rutas(add):
         puertos.append("Cosa_in_"+str(i+1))
     
     return puertos
+
+#%%
+def nodos_crear(nodos,i,Layout):   
     
+    N_rutas = Layout[0]
+    N_CVS   = Layout[1]
+    N_MDC   = Layout[2]
+    N_PAN   = Layout[3]
+    N_SEM   = Layout[4]
+    
+    f = open(nodos.nombre + "_" + str(i+1) + ".vhd", "w")
+    
+    #Comentario inicial
+    f.write("-- "+ nodos.nombre + "_" + str(i+1) + ".vhdl : Achivo VHDL generado automaticamente por el generador de código RAILIB\r\n")
+    
+    incluir_librerias(f) #Incluir librerias
+    
+    cambios_dim = []
+    nodos.generico = ["N_RUT","N_SEM"]
+    nodos.dimension_generico = [str(N_rutas),str(N_SEM)]
+    nodos.puertos_in = ["Clock","Reset","Anterior","Desvio"]
+    nodos.puertos_out = ["Posterior"]   
+    nodos.dimension = ["1"]*5
+    
+    nodos.sentidos = ["in"]*(len(nodos.puertos_in))+["out"]*(len(nodos.puertos_out))
+    nodos.tipos = ["std_logic"]*(len(nodos.puertos_in)+len(nodos.puertos_out))
+     
+    nodos.instancia = "entidad"
+    
+    crear_objeto_s_i(f,nodos,i)    
+    
+    f.write("-- Arquitectura de FSM_cambios_"+str(i+1)+" : Descripcion del comportamiento\n")
+    
+    f.write("architecture "+nodos.nombre+ "_" + str(i+1) +"_ARQ of "+nodos.nombre+"_"+str(i+1)+" is\n")
+    f.write("\t"+"begin\n")   
+    
+    #fsm_cambios_proceso(f,i) 
+    
+    f.write("end architecture "+nodos.nombre+ "_" + str(i+1) +"_ARQ;\n")   
+    
+    f.close() #Close header file
 
     
 #%%    ########################################### Señalamiento ############################################      
-def unidad_central_enclavamiento(nodos,enmascarador,enrutador,mediador,senialamiento,
+def red_nodos(nodos,enmascarador,enrutador,mediador,senialamiento,
                       FSM_rutas,FSM_semaforos,FSM_barreras,FSM_cambios,
                       SEM_bloque,PAN_bloque,MDC_bloque,
                       Layout,rutas_dim,FSM_dim):
@@ -179,76 +207,52 @@ def unidad_central_enclavamiento(nodos,enmascarador,enrutador,mediador,senialami
     N_PAN   = Layout[3]
     N_SEM   = Layout[4]
     
-    enmascarador_crear(enmascarador,Layout,rutas_dim)
-    enrutador_crear(enrutador,FSM_rutas,FSM_semaforos,FSM_barreras,FSM_cambios,Layout,rutas_dim,FSM_dim)
-    mediador_crear(mediador,Layout,rutas_dim,FSM_dim)
-    senialamiento_crear(senialamiento,SEM_bloque,PAN_bloque,MDC_bloque,Layout)
+
+   #enrutador_crear(enrutador,FSM_rutas,FSM_semaforos,FSM_barreras,FSM_cambios,Layout,rutas_dim,FSM_dim)
+
     
 
-    f = open(UCE_bloque + ".vhd", "w")
+    f = open(NODOS + ".vhd", "w")
     
     #Comentario inicial
-    f.write("-- "+ UCE_bloque +".vhdl : Achivo VHDL generado automaticamente por el generador de código RAILIB\r\n")
+    f.write("-- "+ NODOS +".vhdl : Achivo VHDL generado automaticamente por el generador de código RAILIB\r\n")
     
     #Incluir librerias
     incluir_librerias(f)
     
     nodos.generico = ["N","N_SEM","N_PAN","N_MDC","N_RUT"]
     nodos.dimension_generico = [str(N_CVS),str(N_SEM),str(N_PAN),str(N_MDC),str(N_rutas)]
-    nodos.puertos_in = ["Clock","Reset","Modo","Ruta_in","Ocupacion",
-               "Semaforo_rojo_in","Semaforo_amarillo_in","Semaforo_verde_in",
-               "Barrera_alta_in","Barrera_baja_in",
-               "Maquina_normal_in","Maquina_reversa_in"]
-    nodos.puertos_out = ["Semaforo_rojo_out","Semaforo_amarillo_out","Semaforo_verde_out",
-               "Barrera_alta_out","Barrera_baja_out",
-               "Maquina_normal_out","Maquina_reversa_out"]
-    nodos.sentidos = ["in"]*12+["out"]*7
-    nodos.tipos = ["std_logic"]*19
-    nodos.dimension = ["1"]*2+["N_RUT"]*2+["N"]*1+["N_SEM"]*3+["N_PAN"]*2+["N_MDC"]*2+["N_SEM"]*3+["N_PAN"]*2+["N_MDC"]*2
+    nodos.puertos_in = ["Clock","Reset","Modo","Ruta_in"]
+    nodos.puertos_out = ["Semaforo_rojo_out"]
+    nodos.sentidos = ["in"]*4+["out"]*1
+    nodos.tipos = ["std_logic"]*5
+    nodos.dimension = ["1"]*2+["N_RUT"]*4+["N_SEM"]*1
     nodos.instancia = "entidad"
     
     crear_objeto_s(f,nodos)
     
     f.write("-- Arquitectura del señalamiento : Descripcion del comportamiento\n")
     
-    f.write("architecture "+UCE_bloque+"_ARQ of "+UCE_bloque+" is\n")
+    f.write("architecture "+NODOS+"_ARQ of "+NODOS+" is\n")
     
     # componente enmascarador
-    enmascarador.instancia = "componente"
+    nodos.instancia = "componente"
     
-    crear_objeto_s(f,enmascarador)
+    crear_objeto_s(f,nodos)
     
-     # componente enrutador
-    enrutador.instancia = "componente"
     
-    crear_objeto_s(f,enrutador)    
-    
-    # componente mediador
-    mediador.instancia = "componente"
-    
-    crear_objeto_s(f,mediador)
-    
-
-    # componente senialamiento
-    senialamiento.instancia = "componente"
-    
-    crear_objeto_s(f,senialamiento)
-    
-    #SEM_definir(f,"componente")
     
     UCE_aux(f,N_rutas,rutas_dim,FSM_dim)
     
     f.write("\t"+"begin\n")   
     
     UCE_inst_ENM(f,N_rutas) 
-    UCE_inst_ENR(f,N_rutas)
-    UCE_inst_MED(f,N_rutas)
-    UCE_inst_SEN(f)
+ 
   
     UCE_conexiones(f)   
     
     UCE_proceso(f)
     
-    f.write("end architecture "+UCE_bloque+"_ARQ;\n")
+    f.write("end architecture "+NODOS+"_ARQ;\n")
     
     f.close() #Close header file
