@@ -85,7 +85,57 @@ architecture capa_logica_ARQ of capa_logica is
 	nodo_inst_3:nodo_3
 		port map(
 			Clock => Clock,
-			Anterior => Clock,
+: natural := 5;
+			N_SEM : natural := 5
+		);
+		port(
+			Clock : in std_logic;
+			Reset : in std_logic;
+			Anterior : in std_logic;
+			Desvio : in std_logic;
+			Posterior : out std_logic
+		);
+	end component nodo_5;
+	Signal conector_0a1 , conector_1a2 , conector_2a4 , conector_3a3 : std_logic;
+	Signal wires : std_logic_vector(10 downto 0);
+	begin
+	wires(0) <= Clock;
+	nodo_inst_1:nodo_1
+		port map(
+			Clock => Clock,
+			Posterior => wires(1),
+			Anterior => wires(0),
+			Desvio => Clock,
+			Reset => Reset
+		);
+	nodo_inst_2:nodo_2
+		port map(
+			Clock => Clock,
+			Anterior => wires(1),
+			Posterior => wires(2),
+			Desvio => Clock,
+			Reset => Reset
+		);
+	nodo_inst_3:nodo_3
+		port map(
+			Clock => Clock,
+			Anterior => wires(2),
+			Posterior => wires(3),
+			Desvio => Clock,
+			Reset => Reset
+		);
+	nodo_inst_4:nodo_4
+		port map(
+			Clock => Clock,
+			Posterior => wires(4),
+			Anterior => wires(3),
+			Desvio => Clock,
+			Reset => Reset
+		);
+	nodo_inst_5:nodo_5
+		port map(
+			Clock => Clock,
+			Anterior => wires(4),
 			Desvio => Clock,
 			Reset => Reset
 		);

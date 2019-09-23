@@ -21,19 +21,18 @@ def Contar_rango(Grafo):
         for j in range(len(Grafo)):
             if Grafo[i][j] == '1':
                 cantidad += 1
-                coordenada.append([i+1,j+1])
-
+                coordenada.append([i,j])
 
     return cantidad,coordenada
 #%%   ########################################### Capa lógica - variables auxiliares ############################################ 
 def CAL_aux(f,Grafo):
    
     conexiones,coordenada = Contar_rango(Grafo)
-    print("Conexiones : {} | {}".format(conexiones,coordenada))
+    #print("Conexiones : {} | {}".format(conexiones,coordenada))
     
     aux = "";
     for i in range(conexiones):
-        print("{}".format(coordenada[i]))
+        #print("{}".format(coordenada[i]))
         aux += "conector_"+str(coordenada[i][0])+"a"+str(coordenada[i][1])
         if i < conexiones-1:
             aux += " , "
@@ -43,13 +42,29 @@ def CAL_aux(f,Grafo):
     f.write("\tSignal "+aux+" : std_logic;\r\n")
 
 #%%   ########################################### RUT_FSM - Instanciación ############################################     
-def CAL_inst_NODOS(f,i,N):
+def CAL_inst_NODOS(f,i,N,Grafo):
     
     f.write("\t"+NODOS+"_inst_"+str(i+1)+":"+NODOS+"_"+str(i+1)+"\n")
     f.write("\t\tport map(\n")
     f.write("\t\t\tClock => Clock,\n")
     
-    f.write("\t\t\tAnterior => Clock,\n")
+    
+    conexiones,coordenada = Contar_rango(Grafo)
+    
+    for j in range(conexiones):
+        if i in coordenada[j]:
+            print("{} en <{}>".format(i,coordenada[j]))
+            if i == coordenada[j][0]:
+                #print("{} en <{}>".format(i,coordenada[j][0]))
+                f.write("\t\t\tPosterior => wires("+str(i+1)+"),\n")
+            if i == coordenada[j][1]:
+                #print("{} en <{}>".format(i,coordenada[j][0]))
+                f.write("\t\t\tAnterior => wires("+str(i)+"),\n")
+     
+    if i == 0:
+        f.write("\t\t\tAnterior => wires(0),\n")     
+         
+    #f.write("\t\t\tAnterior => Clock,\n")
     #f.write("\t\t\tPosterior => Clock,\n")
     f.write("\t\t\tDesvio => Clock,\n")
     ##auto_conector_mdc(f,i,N,"In")
@@ -140,10 +155,15 @@ def capa_logica_crear(capa_logica,conectores,nodos,Layout,Grafo):
     
     CAL_aux(f,Grafo)
     
+    
+    f.write("\tSignal wires : std_logic_vector(10 downto 0);\r\n")
+    
     f.write("\t"+"begin\r\n")   
     
+    f.write("\twires(0) <= Clock;\r\n")
+    
     for i in range(N_rutas):
-        CAL_inst_NODOS(f,i,N_rutas)
+        CAL_inst_NODOS(f,i,N_rutas,Grafo)
     
     #CAL_conexiones(f)   
     

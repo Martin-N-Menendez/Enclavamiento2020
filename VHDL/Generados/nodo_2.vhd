@@ -5,8 +5,8 @@ use IEEE.numeric_std.all;
 --entidad_2 de nodo
 entity nodo_2 is
 	generic(
-		N_RUT : natural := 3;
-		N_SEM : natural := 3
+		N_RUT : natural := 5;
+		N_SEM : natural := 5
 	);
 	port(
 		Clock : in std_logic;
