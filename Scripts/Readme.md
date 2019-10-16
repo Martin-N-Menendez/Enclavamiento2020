@@ -1,8 +1,6 @@
-# Caracteristicas de red ferroviaria
+# Tipos de secciones
 
-## Tipos de secciones
-
-# Extremo
-# Estación
-# Cruce
-# Paso a nivel
+## Extremo
+## Estación
+## Cruce
+## Paso a nivel
