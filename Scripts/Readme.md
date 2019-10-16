@@ -3,22 +3,30 @@
 Según la cantidad de conexiones cada nodo puede ser de distinto tipo.
 
 ## Extremo
-### Cantidad de conexiones : 1
-
-Puede ser de entrada o de salida de la red
+### Conexiones : 1
+### Caracteristica : puede ser de entrada o de salida de la red
+### Semaforos : de entrada si son de entrada, de salida si son de salida
 
 ## Común
 
-Cantidad de conexiones : 2
+### Conexiones : 2
+### Caracteristica : no debe de tener de vecino a ningún cruce
+### Semaforos : no
 
 ## Estación
 
-Cantidad de conexiones : 2
+### Conexiones : 2
+### Caracteristica : seteado por el usuario? (A definir!)
+### Semaforos : no
 
 ## Cruce
 
-Cantidad de conexiones : 3
+### Conexiones : 3 o mas
+### Caracteristica : incluye maquina de cambios
+### Semaforos : si - de circulación y maniobra
 
 ## Paso a nivel
 
-Cantidad de conexiones : 4
+### Conexiones : 4 pero 2 perpendiculares
+### Caracteristica : incluye barrera
+### Semaforos : no
