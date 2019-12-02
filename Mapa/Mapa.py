@@ -16,13 +16,19 @@ from Tabla import *
 secciones = []
 conexiones = []
 
+df = []
+
+global N_rutas
+N_rutas = 0
+
 archivos = [
             ['Estaciones/con_0.txt','Estaciones/pos_0.txt'],
             ['Estaciones/con_1.txt','Estaciones/pos_1.txt'],
             ['Estaciones/con_2.txt','Estaciones/pos_2.txt'],
             ['Estaciones/con_3.txt','Estaciones/pos_3.txt'],
             ['Estaciones/con_4.txt','Estaciones/pos_4.txt'],
-            ['Estaciones/con_5.txt','Estaciones/pos_5.txt']
+            ['Estaciones/con_5.txt','Estaciones/pos_5.txt'],
+            ['Estaciones/con_6.txt','Estaciones/pos_6.txt']
             ]
 
 #%%
@@ -173,18 +179,18 @@ def asignar_semaforos():
     for i in range(len(secciones)):
         if(secciones[i].tipo == "Cruce"):
             secciones[i].semaforo = True
-            
-            if(secciones[i].anterior != "" and secciones[i].N_vecinos == 3):
+
+            if(secciones[i].posterior != "" and secciones[i].anterior != "" and secciones[i].N_vecinos == 3):
     
-                (secciones[i].sentido).append("<")                                    
-                (secciones[i].N_aspectos).append("3") 
-                (secciones[i].aspecto).append("Rojo")   
+                if ( secciones[secciones[i].anterior-1].tipo != "Cruce"):
+                    (secciones[i].sentido).append("<")                                    
+                    (secciones[i].N_aspectos).append("3") 
+                    (secciones[i].aspecto).append("Rojo")  
                 
-            if(secciones[i].posterior != "" and secciones[i].N_vecinos == 3):
-    
-                (secciones[i].sentido).append(">")                                    
-                (secciones[i].N_aspectos).append("3") 
-                (secciones[i].aspecto).append("Rojo")  
+                if ( secciones[secciones[i].posterior-1].tipo != "Cruce"):
+                    (secciones[i].sentido).append(">")                                    
+                    (secciones[i].N_aspectos).append("3") 
+                    (secciones[i].aspecto).append("Rojo")  
                 
             if(secciones[i].desvio_sup != ""):
                 if(secciones[i].desvio_sup_dir == ">"):  
@@ -221,7 +227,6 @@ def asignar_semaforos():
                 (secciones[i].N_aspectos).append("3") 
                 (secciones[i].aspecto).append("Verde")       
                       
-  
                 
         secciones[i].N_semaforos = len(secciones[i].N_aspectos)
  
@@ -296,164 +301,165 @@ def actualizar_semaforos(x,y,sentido,cantidad,estado,adj):
             plt.text(x+m*ajuste, y, sentido , color = 'r', family="sans-serif", weight="bold", size = fuente) 
         else:
             plt.text(x+m*ajuste, y, sentido , color = 'k', family="sans-serif", weight="bold", size = fuente) 
- 
-#%%
-def proximo_semaforo(secciones):
-     
-    print("#"*20)
-    N_rutas = 0
-    for i in range(len(secciones)):
-        if secciones[i].semaforo:
-            
-            if secciones[i].tipo == "Extremo":  
-                continue
-            
-            if secciones[i].anterior != "" and "<" in secciones[i].sentido:
-                anterior = secciones[i].anterior
-            
-                while secciones[anterior-1].semaforo == False and "<" not in secciones[anterior-1].sentido:
-                    #print("< {}: {} no tiene semaforo".format(secciones[i].id,secciones[anterior-1].id))
-                    
-                    if secciones[anterior-1].tipo != "Extremo" :
-                        anterior = secciones[anterior-1].anterior
-                        break 
-                   
-                    if secciones[anterior-1].anterior != "" :
-                        anterior = secciones[anterior-1].anterior
-                    
-                (secciones[i].prox_semaforo).append(secciones[anterior-1].id)
-                print("{} < {}".format(secciones[i].id,secciones[anterior-1].id)) 
-                
-                N_rutas = N_rutas + 1          
-                (tabla['Ruta']).append(N_rutas)
-                (tabla['Semaforo inicial']).append(secciones[i].id)
-                (tabla['Semaforo final']).append(secciones[anterior-1].id)
-                
-            if secciones[i].posterior != "" and ">" in secciones[i].sentido:
-                posterior = secciones[i].posterior
-            
-                while secciones[posterior-1].semaforo == False and ">" not in secciones[posterior-1].sentido:
-                    #print("> {}: {} no tiene semaforo".format(secciones[i].id,secciones[posterior-1].id))
-                    
-                    if secciones[posterior-1].tipo != "Extremo" :
-                        posterior = secciones[posterior-1].posterior
-                        break 
-                   
-                    if secciones[posterior-1].posterior != "" :
-                        posterior = secciones[posterior-1].posterior
-                    
-                (secciones[i].prox_semaforo).append(secciones[posterior-1].id)
-                print("{} > {}".format(secciones[i].id,secciones[posterior-1].id)) 
-                
-                N_rutas = N_rutas + 1
-                (tabla['Ruta']).append(N_rutas)
-                (tabla['Semaforo inicial']).append(secciones[i].id)
-                (tabla['Semaforo final']).append(secciones[posterior-1].id)
-                
-#            if secciones[i].desvio_sup != "":# and ">" in secciones[i].sentido:
-#                desvio_sup = secciones[i].desvio_sup
-#            
-#                #print(i+1)
-#                #print(desvio_sup)
-#                sentido = secciones[i].sentido[(secciones[i].N_aspectos).index('2')]
-#                #print(sentido)
-#                if secciones[desvio_sup-1].tipo == "Cruce":
-#                    if sentido == ">" :
-#                        desvio_sup = secciones[desvio_sup-1].posterior
-#                    else:
-#                        desvio_sup = secciones[desvio_sup-1].anterior
-#                        
-#                    sentido = secciones[i].sentido[(secciones[i].N_aspectos).index('2')]
-#                    
-#                while secciones[desvio_sup-1].semaforo == False or sentido not in secciones[desvio_sup-1].sentido:
-#                    #print("d> {}: {} no tiene semaforo".format(secciones[i].id,secciones[desvio_sup-1].id))
-#                    
-#                    # NO SIEMPRE VA A TENER UN ANT/POS! PUEDE SER UN DESVIO!                     
-#                    if sentido == ">" :
-#                        desvio_sup = secciones[desvio_sup-1].posterior
-#                    else:
-#                        desvio_sup = secciones[desvio_sup-1].anterior
-#                    
-#                (secciones[i].prox_semaforo).append(secciones[desvio_sup-1].id)
-#                print("{} ^{} {}".format(secciones[i].id,sentido,secciones[desvio_sup-1].id)) 
-#                
-#                N_rutas = N_rutas + 1
-#                (tabla['Ruta']).append(N_rutas)
-#                (tabla['Semaforo inicial']).append(secciones[i].id)
-#                (tabla['Semaforo final']).append(secciones[desvio_sup-1].id)
-#                
-#            if secciones[i].desvio_inf != "":# and ">" in secciones[i].sentido:
-#                
-#                desvio_inf = secciones[i].desvio_inf
-#            
-#                sentido = secciones[i].sentido[(secciones[i].N_aspectos).index('2')]
-#                
-#                #print(i)
-#                if secciones[desvio_inf-1].tipo == "Cruce":
-#                    if sentido == ">" :
-#                        desvio_inf = secciones[desvio_inf-1].posterior
-#                    else:
-#                        desvio_inf = secciones[desvio_inf-1].anterior
-#                    
-#                    sentido = secciones[i].sentido[(secciones[i].N_aspectos).index('2')]
-#                
-#                while secciones[desvio_inf-1].semaforo == False or sentido not in secciones[desvio_inf-1].sentido:
-#                    #print("d22> {}: {} no tiene semaforo".format(secciones[i].id,secciones[desvio_inf-1].id))
-#                    
-#                    if sentido == ">" :
-#                        desvio_inf = secciones[desvio_inf-1].posterior
-#                    else:
-#                        desvio_inf = secciones[desvio_inf-1].anterior
-#                    
-#                (secciones[i].prox_semaforo).append(secciones[desvio_inf-1].id)
-#                print("{} v{} {}".format(secciones[i].id,sentido,secciones[desvio_inf-1].id)) 
-#                
-#                N_rutas = N_rutas + 1
-#                (tabla['Ruta']).append(N_rutas)
-#                (tabla['Semaforo inicial']).append(secciones[i].id)
-#                (tabla['Semaforo final']).append(secciones[desvio_inf-1].id)
-                
-    print ("Rutas soportadas: {}".format(N_rutas))
 
 #%%
-def detectar_rutas(secciones):        
+def detectar_rutas(secciones, test = False):        
       
     print("#"*20)
     inicial = 0
-    final  = 0
+    
+    
+    
+    if test == True:
+        imprimir = True
+    else:
+        imprimir = False
+        
     for i in range(len(secciones)):
         inicial = i+1
-        
-        
-        for j in range(len(secciones[i].sentido)):
-            if (secciones[i].sentido[j] == ">"):
-
-                          
-                if (secciones[i].posterior == secciones[i].vecinos[j]):
-                    final = secciones[i].vecinos[j]                    
-                    #print("Desde {} hasta {}".format(inicial,final))
+               
+        if (secciones[i].tipo == "Cruce"):
+            
+            if ('<' in secciones[i].sentido and secciones[i].posterior != "" and secciones[secciones[i].posterior-1].tipo != "Cruce"):
+                recorrido = []
+                semaforo_anterior(inicial,recorrido = recorrido, test = imprimir)
                 
-                if (secciones[i].desvio_sup == secciones[i].vecinos[j]):
-                    final = secciones[i].vecinos[j]                    
-                    #print("Desde {} hasta {}".format(inicial,final))
-                 
-                if (secciones[i].desvio_inf == secciones[i].vecinos[j]):
-                    final = secciones[i].vecinos[j]                    
-                    #print("Desde {} hasta {}".format(inicial,final))    
-                    
-                    #print("Con "+">"*int(secciones[i].N_aspectos[j])+" : {} ".format(secciones[i].id))
+            if ('>' in secciones[i].sentido and secciones[i].anterior != "" and secciones[secciones[i].anterior-1].tipo != "Cruce"):
+                recorrido = []
+                semaforo_siguiente(inicial,recorrido = recorrido, test = imprimir)
                 
-    # 3  - 5            falta 1
-    # 3  - 10           falta 2
-    # 5  - 7            falta 1
-    # 10 - 5
+    print ("Rutas soportadas: {}".format(N_rutas))
+                
+#%%
+def semaforo_anterior(inicial,intermedio = None, desvio = None,recorrido = [], test = False):
     
-#    print("#"*20)
-#    for i in range(len(secciones)):
-#        for j in range(len(secciones[i].sentido)):
-#            if (secciones[i].sentido[j] == "<"):
-#                print("Con "+"<"*int(secciones[i].N_aspectos[j])+" : {} ".format(secciones[i].id)) 
+    global N_rutas
+     
+    if intermedio == None and desvio == None:
+        recorrido = []
+        
+    if intermedio == None:
+        inicio = secciones[inicial-1]
+    else:
+        inicio = secciones[intermedio-1]  
+    
+    if desvio != None:
+        inicio = secciones[desvio-1] 
+        
+    if (inicio.anterior != ""):
+        anterior = inicio.anterior
+        recorrido.append(anterior)
+        if (secciones[anterior-1].tipo == "Extremo" or 
+            (secciones[anterior-1].tipo == "Cruce" and 
+             secciones[secciones[anterior-1].posterior-1].semaforo == False)):
+            
+            recorrido.insert(0,inicial)
+            
+            if (recorrido[0] != inicial):
+                recorrido.insert(0,inicial)
+            
+            if (recorrido[0] == recorrido[1]):
+                recorrido.pop(0)
+                
+            camino = '-'.join(str(e) for e in recorrido)
+        
+            if (test == True):
+                print(camino)                    
+                print("{} > {}".format(inicial,anterior))
+            N_rutas = N_rutas + 1
+            
+            (tabla['Ruta']).append(N_rutas)
+            (tabla['Inicial']).append(inicial)
+            (tabla['Final']).append(anterior)
+            (tabla['Secuencia']).append(camino)
+            (tabla['Sentido']).append('<')
+            
+        else:    
+            semaforo_anterior(inicial,anterior,recorrido = recorrido, test = test)
+    
+    #print("Volviendo a {}".format(inicio.id))  
+    if inicio.id in recorrido:
+        recorrido[recorrido.index(inicio.id)+1:] = []
+    
+    
+        
+    if (inicio.desvio_inf != "" and inicio.desvio_inf_dir == '<'): 
+        if desvio != None:
+            recorrido.append(desvio)
+        #print("{}^{}".format(inicial,inicio.desvio_sup))
+        recorrido.append(inicio.desvio_inf)   
+        semaforo_anterior(inicial,desvio = inicio.desvio_inf,recorrido = recorrido, test = test)
+        
+    if (inicio.desvio_sup != "" and inicio.desvio_sup_dir == '<'):  
+        if desvio != None:
+            recorrido.append(desvio)
+        #print("{}^{}".format(inicial,inicio.desvio_sup))
+        recorrido.append(inicio.desvio_sup)    
+        semaforo_anterior(inicial,desvio = inicio.desvio_sup,recorrido = recorrido, test = test)
+        
+#%%
+def semaforo_siguiente(inicial,intermedio = None, desvio = None, recorrido = [],test = False):
+    
+    global N_rutas
+        
+    if intermedio == None and desvio == None:
+        recorrido = []
+        
+    if intermedio == None:
+        inicio = secciones[inicial-1] 
+    else:
+        inicio = secciones[intermedio-1]
+   
+    if desvio != None:
+        inicio = secciones[desvio-1] 
 
+    if (inicio.posterior != ""):
+        posterior = inicio.posterior
+        recorrido.append(posterior)
+        if (secciones[posterior-1].tipo == "Extremo" or 
+            (secciones[posterior-1].tipo == "Cruce" and 
+             secciones[secciones[posterior-1].anterior-1].semaforo == False)):
+            
+            if (recorrido[0] != inicial):
+                recorrido.insert(0,inicial)
+            
+            if (recorrido[0] == recorrido[1]):
+                recorrido.pop(0)
+                
+            camino = '-'.join(str(e) for e in recorrido)
+            
+            if (test == True):        
+                print(camino)                     
+                print("{} > {}".format(inicial,posterior))
+                
+            N_rutas = N_rutas + 1
+                    
+            (tabla['Ruta']).append(N_rutas)
+            (tabla['Inicial']).append(inicial)
+            (tabla['Final']).append(posterior)
+            (tabla['Secuencia']).append(camino)
+            (tabla['Sentido']).append('>')
+           
+        else:
+            semaforo_siguiente(inicial,posterior,recorrido = recorrido, test = test)
+
+    #print("Volviendo a {}".format(inicio.id))  
+    if inicio.id in recorrido:
+        recorrido[recorrido.index(inicio.id)+1:] = []
+         
+    if (inicio.desvio_inf != "" and inicio.desvio_inf_dir == '>'): 
+        if desvio != None:
+            recorrido.append(desvio)
+        #print("{}^{}".format(inicial,inicio.desvio_sup))
+        recorrido.append(inicio.desvio_inf)      
+        semaforo_siguiente(inicial,desvio = inicio.desvio_inf, recorrido = recorrido, test = test)
+    
+    if (inicio.desvio_sup != "" and inicio.desvio_sup_dir == '>'):
+        if desvio != None:
+            recorrido.append(desvio)
+        #print("{}^{} de {}".format(inicial,inicio.desvio_sup,inicio.id))
+        recorrido.append(inicio.desvio_sup)
+        semaforo_siguiente(inicial,desvio = inicio.desvio_sup, recorrido = recorrido, test = test)
 #%%
 def calcular_ejes(secciones):
     
@@ -479,34 +485,81 @@ def calcular_ejes(secciones):
         #print(i,[[min_x,max_x],[min_y,max_y]])   
         
     return [[min_x,float(max_x)],[min_y,max_y]]
-           
-                   
+
+#%%           
+def analizar_tabla(tabla):
+        
+    tabla2 = {'Ruta': [],
+        'Inicial': [],
+        'Final': [],
+        'Secuencia': [],
+        'Sentido' : []
+        }
+    n = 0
+    
+    rutas = []
+    
+    for i in range(len(tabla['Inicial'])):    
+        rutas.append([tabla['Inicial'][i],tabla['Final'][i]])
+        
+    #print(rutas)
+      
+    repetido = []
+
+    unico = []
+
+    indices = []
+    
+    for x in rutas:
+
+    	if x not in unico:
+    
+            unico.append(x)
+            index = rutas.index(x)
+            indices.append(index)
+            
+            n = n +1
+            tabla2['Ruta'].append(n) 
+            tabla2['Inicial'].append(tabla['Inicial'][index]) 
+            tabla2['Final'].append(tabla['Final'][index]) 
+            tabla2['Secuencia'].append(tabla['Secuencia'][index]) 
+            tabla2['Sentido'].append(tabla['Sentido'][index]) 
+    	else:
+    
+    		if x not in repetido:  
+    			repetido.append(x)             
+                
+#    print("$$$")          
+#    print(unico)
+#    print("$$$") 
+#    print(repetido)
+#    print("$$$") 
+#    print(indices)
+    
+        
+    #print(tabla2)
+    return tabla2
 #%%
 
 v = 0.5
 
 print("@"*25+" Analizador de grafos v"+str(v)+" "+"@"*25+"\n")
 
-  
-df = []
-
 
 
 for i in range(len(archivos)):
     
-#    # Falta corregir desvios
-#    if i == 0: 
-#        continue
-#    # Falta corregir desvios
-#    if i == 1: 
-#        continue
-#    # Falta corregir desvios
-#    if i == 4: 
-#        continue
+    # Falta corregir desvios
+    #if i != 6: 
+    #    continue
+
+    N_rutas = 0
     
     tabla = {'Ruta': [],
-        'Semaforo inicial': [],
-        'Semaforo final': []
+        'Inicial': [],
+        'Final': [],
+        'Secuencia': [],
+        'Sentido' : []
         }
     
     secciones.clear()
@@ -544,23 +597,30 @@ for i in range(len(archivos)):
     
     dibujar_secciones(secciones, ajuste)
     
-    #imprimir_estados()
+    imprimir_estados()
     
     imprimir_semaforos(secciones,ajuste)    
     
     conectar_secciones(secciones)
     
-    proximo_semaforo(secciones)
+    #proximo_semaforo(secciones)
     
-    detectar_rutas(secciones)
+    detectar_rutas(secciones,True)
         
     #dibujar_barrera(5.5,-1, b = 1, h = 3, c = [0.85,0.85,0.85])
         
     ax.axis('off')
     plt.savefig('Mapas/Mapa_'+str(i)+'.png',dpi = 100)
      
-    print(tabla)
-    (df).append(pd.DataFrame(tabla, columns = ['Ruta', 'Semaforo inicial', 'Semaforo final']))
+    #print(tabla)
+    
+    tabla = analizar_tabla(tabla)
+    #analizar_tabla(tabla)
+    
+    #print(tabla)
+    
+    (df).append(pd.DataFrame(tabla, columns = ['Ruta', 'Inicial', 'Final', 'Secuencia','Sentido']))
+    
     
 exportar_tablas(df)
     
