@@ -5,7 +5,8 @@ class Estaciones:
      
     def imprimir(self):
         print("##################")
-        print("<{}>:[{},{}]".format(self.id,self.pos_x,self.pos_y)) 
+        print("<{}>:({})[{},{}]".format(self.id,self.nombre,self.pos_x,self.pos_y)) 
+
         #print("Vecinos <{}> : {}".format(self.N_vecinos,self.vecinos)) 
         if self.anterior != "":
             print("Anterior: {} ".format(self.anterior))
@@ -19,9 +20,19 @@ class Estaciones:
         if (self.desvio_sup != ""):    
             print("Desvio_sup: {} {}".format(self.desvio_sup,self.desvio_sup_dir))
 
-#        if (len(self.direccion) > 0):    
-#            print("direccion del desvio: {} ".format(self.direccion))
-        print("Tipo : {}".format(self.tipo)) 
+        if self.tipo == 'Extremo':
+            if self.extremo:
+                print("Tipo : {} absoluto".format(self.tipo))
+            else:
+                print("Tipo : {} relativo".format(self.tipo))
+        elif self.tipo == "Cruce":
+            if self.cambio_raiz:
+                print("Tipo : {} raiz".format(self.tipo))
+            else:
+                print("Tipo : {} heredado".format(self.tipo))
+        else:
+            print("Tipo : {}".format(self.tipo))
+        
         if self.semaforo == True:
             print("Cantidad de Aspectos <{}> : {}".format(self.N_semaforos,self.N_aspectos)) 
             print("Sentido <{}> : {}".format(self.N_semaforos,self.sentido)) 
@@ -42,38 +53,43 @@ class Estaciones:
     def calcular_semaforos(self):
         self.N_semaforos = len(self.N_aspectos)
         
-    def __init__(self,index,pos_x,pos_y, b = False):
+    def __init__(self,nombre,index,pos_x,pos_y, sentido = '<>', barrera = False, extremo = False):
         self.id = index
+        self.nombre = nombre
         self.pos_x = pos_x
         self.pos_y = pos_y
         
         self.vecinos = []
         self.anterior = ""
         self.posterior = ""
-        #self.desvio = ""
+        
         self.desvio_sup = ""
         self.desvio_inf = ""
         self.desvio_sup_dir = ""
         self.desvio_inf_dir = ""
+        
         self.N_vecinos = 0
-        self.T_vecino = []
         
         self.tipo = ""
+        self.sentido = sentido
+        self.extremo = extremo
         
-        self.semaforo = False
-        self.prox_semaforo = []
+        self.semaforo = False     
         self.N_aspectos = []
-        self.N_semaforos = 0
-        self.sentido = []
-        self.aspecto = []
-        self.libre = ""
+        self.sem_sentido = []
+        self.aspecto = [] 
+        self.N_semaforos = 0 
+        self.prox_semaforo = []
+        
         self.ocupado = False
         
         self.cambio = False
+        self.cambio_raiz = True
+
         #self.cambio_orden = ""
         #self.cambio_estado = True
         
-        self.barrera = b
+        self.barrera = barrera
         self.barrera_index = 0
         #self.barrera_orden = ""
         #self.barrera_estado = ""

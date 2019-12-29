@@ -28,9 +28,9 @@ archivos = [
             ['Estaciones/con_3.txt','Estaciones/pos_3.txt'],
             ['Estaciones/con_4.txt','Estaciones/pos_4.txt'],
             ['Estaciones/con_5.txt','Estaciones/pos_5.txt'],
-            ['Estaciones/con_6.txt','Estaciones/pos_6.txt']
+            ['Estaciones/con_6.txt','Estaciones/pos_6.txt'],
+            ['Estaciones/con_7.txt','Estaciones/pos_7.txt']
             ]
-
 #%%
 def cargar_secciones(archivo_conexiones='conexiones.txt',archivo_posiciones='posiciones.txt'):
     # load in edges from 't_edges.txt'
@@ -45,20 +45,35 @@ def cargar_secciones(archivo_conexiones='conexiones.txt',archivo_posiciones='pos
              # add edge to graph with color attribute and time as weight
              conexiones.append([int(inicio)-1,int(fin)-1])
              
+    indice = 0;
     # load in edges from 't_edges.txt'
     with open(archivo_posiciones) as t:
          # read in all lines 
-         edges = t.readlines()
+        edges = t.readlines()
+         
          # iterate over edges and add all nodes and edges to graph
-         for line in edges:
-             (indice, pos_x, pos_y, barrera) = tuple(line.split(','))
-             # get rid of newline char at end of color string
-             barrera = barrera.replace('\n','') 
-             if barrera == 'b':
-                 secciones.append(Estaciones(int(indice),float(pos_x),float(pos_y),True))
-                 #print("{}".format(len(secciones)))
-             else:
-                 secciones.append(Estaciones(int(indice),float(pos_x),float(pos_y)))
+        for line in edges:
+            indice = indice + 1;
+                       
+            (nombre, pos_x, pos_y, barrera, sentido, extremo) = tuple(line.split(','))
+
+            # get rid of newline char at end of color string
+            extremo = extremo.replace('\n','')
+             
+            if sentido == '-':
+                sentido = '<>'
+
+            if extremo == '*':
+                 extremo = True
+            else:
+                extremo = False
+
+            if barrera == 'b':
+                barrera = True
+            else:
+                barrera = False
+
+            secciones.append(Estaciones(str(nombre),int(indice),float(pos_x),float(pos_y),str(sentido),barrera,extremo))
 #%%            
 def buscar_vecinos(test = False):
     
@@ -134,18 +149,17 @@ def clasificar_vecinos(test = False):
                 print("{}: [[{},{}]] ".format(secciones[i].vecinos[j],secciones[indice_vecino].pos_x,secciones[indice_vecino].pos_y))
                           
                 print("index: {} ".format(secciones[i].id))
+                print("nombre: {} ".format(secciones[i].nombre))
                 print("Vecinos <{}> : {} ".format(secciones[i].N_vecinos,secciones[i].vecinos))
                 print("Anterior: {} ".format(secciones[i].anterior))
                 print("Posterior: {} ".format(secciones[i].posterior))
                 print("Desvio_inf: {} ".format(secciones[i].desvio_inf))
                 print("Desvio_sup: {} ".format(secciones[i].desvio_sup))
-   
-                
 #%%
 def imprimir_estados():
     for i in range(len(secciones)):
+        #if i == 2-1 or i == 5-1 or i == 9-1:
         secciones[i].imprimir()
-
 #%%
 def asignar_tipo():
     for i in range(len(secciones)):
@@ -153,83 +167,177 @@ def asignar_tipo():
             secciones[i].tipo = "Extremo"
         if(len(secciones[i].vecinos) == 2 and secciones[i].tipo == ""):
             secciones[i].tipo = "Simple"
-        if(len(secciones[i].vecinos) == 3):
+        if(len(secciones[i].vecinos) == 3 or len(secciones[i].vecinos) == 4):
             secciones[i].tipo = "Cruce"
             secciones[i].cambio = True
-            
+
             if random.randint(0, 1) > 0:
                 estado = True
             else:
                 estado = False
-                        
-      
+
             secciones[i].cambio_estado = estado
                 
             for j in range(len(secciones[i].vecinos)):
                 if(secciones[secciones[i].vecinos[j]-1].pos_y != secciones[i].pos_y):
-                        
+
+
                     secciones[secciones[i].vecinos[j]-1].tipo = "Cruce"
                     secciones[secciones[i].vecinos[j]-1].cambio = True
                     secciones[secciones[i].vecinos[j]-1].cambio_estado = estado
                      
-                    #print("<<{}".format(secciones[secciones[i].vecinos[j]-1].id))
-                    
- #%%
+                    print("{} tiene de vecino a {}".format(i+1,secciones[secciones[i].vecinos[j]-1].id))
+#%%
+def cambios_herencia():
+
+    for i in range(len(secciones)):
+        if secciones[i].tipo == "Cruce":
+            vecinos_totales = secciones[i].N_vecinos
+
+            vecinos_secundarios = 0
+            if secciones[i].desvio_sup != "":
+                vecinos_secundarios = vecinos_secundarios + 1;
+            if secciones[i].desvio_inf != "":
+                vecinos_secundarios = vecinos_secundarios + 1;
+
+            vecinos_principales = vecinos_totales - vecinos_secundarios
+
+            if vecinos_principales > vecinos_secundarios:
+                secciones[i].cambio_raiz = True
+            else:
+                secciones[i].cambio_raiz = False
+
+
+        #%%
+#%%
 def asignar_semaforos():
     for i in range(len(secciones)):
-        if(secciones[i].tipo == "Cruce"):
+        if(secciones[i].tipo == "Cruce" ):
             secciones[i].semaforo = True
+            if (secciones[i].cambio_raiz == True):
 
-            if(secciones[i].posterior != "" and secciones[i].anterior != "" and secciones[i].N_vecinos == 3):
-    
-                if ( secciones[secciones[i].anterior-1].tipo != "Cruce"):
-                    (secciones[i].sentido).append("<")                                    
-                    (secciones[i].N_aspectos).append("3") 
-                    (secciones[i].aspecto).append("Rojo")  
-                
-                if ( secciones[secciones[i].posterior-1].tipo != "Cruce"):
-                    (secciones[i].sentido).append(">")                                    
-                    (secciones[i].N_aspectos).append("3") 
-                    (secciones[i].aspecto).append("Rojo")  
-                
-            if(secciones[i].desvio_sup != ""):
-                if(secciones[i].desvio_sup_dir == ">"):  
-                    (secciones[i].sentido).append(">")  
-                if(secciones[i].desvio_sup_dir == "<"):  
-                    (secciones[i].sentido).append("<")  
-                                       
-                (secciones[i].N_aspectos).append("2") 
-                (secciones[i].aspecto).append("Amarillo")
+                if(secciones[i].posterior != "" and secciones[i].anterior != "" and secciones[i].N_vecinos == 3):
 
-          
-            if(secciones[i].desvio_inf != ""):
-                if(secciones[i].desvio_inf_dir == ">"):  
-                    (secciones[i].sentido).append(">")  
-                if(secciones[i].desvio_inf_dir == "<"):  
-                    (secciones[i].sentido).append("<")  
-                                       
-                (secciones[i].N_aspectos).append("2") 
-                (secciones[i].aspecto).append("Amarillo")
-    
+                    if ( secciones[secciones[i].anterior-1].tipo != "Cruce"):
+                        (secciones[i].sem_sentido).append("<")
+                        (secciones[i].N_aspectos).append("3")
+                        (secciones[i].aspecto).append("Rojo")
+
+                    if ( secciones[secciones[i].posterior-1].tipo != "Cruce"):
+                        (secciones[i].sem_sentido).append(">")
+                        (secciones[i].N_aspectos).append("3")
+                        (secciones[i].aspecto).append("Rojo")
+
+
+                if (secciones[i].desvio_sup != ""):
+                    desvio = secciones[i].desvio_sup
+                else:
+                    desvio = ""
+
+                while (desvio != ""):
+                    #print("{} a {}".format(secciones[desvio-1].desvio_inf,desvio))
+                    desvio = secciones[desvio-1].desvio_sup
+                    if (secciones[i].desvio_sup_dir == ">"):
+                        (secciones[i].sem_sentido).append(">")
+                    else:
+                        (secciones[i].sem_sentido).append("<")
+                    (secciones[i].N_aspectos).append("2")
+                    (secciones[i].aspecto).append("Amarillo")
+
+                if (secciones[i].desvio_inf != ""):
+                    desvio = secciones[i].desvio_inf
+                else:
+                    desvio = ""
+
+                while (desvio != ""):
+                    #print("{} a {}".format(secciones[desvio-1].desvio_inf,desvio))
+                    desvio = secciones[desvio-1].desvio_inf
+                    if (secciones[i].desvio_inf_dir == ">"):
+                        (secciones[i].sem_sentido).append(">")
+                    else:
+                        (secciones[i].sem_sentido).append("<")
+                    (secciones[i].N_aspectos).append("2")
+                    (secciones[i].aspecto).append("Amarillo")
+
+            else:   # Si no es raiz
+                desvios = 0
+                if (secciones[i].desvio_sup != ""):
+                    desvios = desvios +1
+                if (secciones[i].desvio_inf != ""):
+                    desvios = desvios +1
+
+                #print("{} tiene {}".format(i+1, desvios))
+
+                if (desvios == 2):
+                    if (secciones[secciones[i].desvio_sup - 1].cambio_raiz == True):
+                        if (secciones[i].desvio_sup_dir == ">"):
+                            (secciones[i].sem_sentido).append(">")
+                        else:
+                            (secciones[i].sem_sentido).append("<")
+                        (secciones[i].N_aspectos).append("2")
+                        (secciones[i].aspecto).append("Amarillo")
+
+                    if (secciones[secciones[i].desvio_inf - 1].cambio_raiz == True):
+                        if (secciones[i].desvio_inf_dir == ">"):
+                            (secciones[i].sem_sentido).append(">")
+                        else:
+                            (secciones[i].sem_sentido).append("<")
+                        (secciones[i].N_aspectos).append("2")
+                        (secciones[i].aspecto).append("Amarillo")
+
+                if (desvios == 1):
+                    if (secciones[i].desvio_sup != ""):
+
+                        if(secciones[i].desvio_sup_dir == ">"):
+                            (secciones[i].sem_sentido).append(">")
+                        else:
+                            (secciones[i].sem_sentido).append("<")
+                        (secciones[i].N_aspectos).append("2")
+                        (secciones[i].aspecto).append("Amarillo")
+
+                    if (secciones[i].desvio_inf != ""):
+
+                        if (secciones[i].desvio_inf_dir == ">"):
+                            (secciones[i].sem_sentido).append(">")
+                        else:
+                            (secciones[i].sem_sentido).append("<")
+                        (secciones[i].N_aspectos).append("2")
+                        (secciones[i].aspecto).append("Amarillo")
+
           
         if(secciones[i].tipo == "Extremo"):
             secciones[i].semaforo = True
-    
-            if(secciones[i].anterior != ""):
-    
-                (secciones[i].sentido).append(">")                                    
-                (secciones[i].N_aspectos).append("3") 
-                (secciones[i].aspecto).append("Verde")   
-             
-            if(secciones[i].posterior != ""):
-    
-                (secciones[i].sentido).append("<")                                    
-                (secciones[i].N_aspectos).append("3") 
-                (secciones[i].aspecto).append("Verde")       
-                      
-                
+
+            if (secciones[i].extremo == False):
+                if(secciones[i].anterior != ""):
+
+                    (secciones[i].sem_sentido).append(">")
+                    (secciones[i].N_aspectos).append("3")
+                    (secciones[i].aspecto).append("Verde")
+
+                if(secciones[i].posterior != ""):
+
+                    (secciones[i].sem_sentido).append("<")
+                    (secciones[i].N_aspectos).append("3")
+                    (secciones[i].aspecto).append("Verde")
+            else:
+                if (secciones[i].anterior != ""):
+                    (secciones[i].sem_sentido).append("<")
+                    (secciones[i].sem_sentido).append(">")
+                    (secciones[i].N_aspectos).append("2")
+                    (secciones[i].N_aspectos).append("2")
+                    (secciones[i].aspecto).append("Amarillo")
+                    (secciones[i].aspecto).append("Amarillo")
+
+                if (secciones[i].posterior != ""):
+                    (secciones[i].sem_sentido).append(">")
+                    (secciones[i].sem_sentido).append("<")
+                    (secciones[i].N_aspectos).append("2")
+                    (secciones[i].N_aspectos).append("2")
+                    (secciones[i].aspecto).append("Amarillo")
+                    (secciones[i].aspecto).append("Amarillo")
+
         secciones[i].N_semaforos = len(secciones[i].N_aspectos)
- 
 #%%
 def imprimir_semaforos(secciones,ajuste):
      
@@ -253,62 +361,60 @@ def imprimir_semaforos(secciones,ajuste):
                 x = x + ajuste_x
                 y = y + ajuste_y
               
-                actualizar_semaforos(x,y,secciones[i].sentido[j],L,secciones[i].aspecto[j],ajuste)
-                
-
+                actualizar_semaforos(x,y,secciones[i].sem_sentido[j],L,secciones[i].aspecto[j],ajuste)
 #%%
-def actualizar_semaforos(x,y,sentido,cantidad,estado,adj):
+def actualizar_semaforos(x,y,sem_sentido,cantidad,estado,adj):
     
     ajuste = 0.15
     
     fuente = 40/adj
     
     m = 1
-    if sentido == '>':    
+    if sem_sentido == '>':    
         if estado == 'Rojo':
-            plt.text(x, y, sentido , color = 'r', family="sans-serif", weight="bold", size = fuente) 
+            plt.text(x, y, sem_sentido , color = 'r', family="sans-serif", weight="bold", size = fuente) 
         else:
-            plt.text(x, y, sentido , color = 'k', family="sans-serif", weight="bold", size = fuente) 
+            plt.text(x, y, sem_sentido , color = 'k', family="sans-serif", weight="bold", size = fuente) 
             
         if estado == 'Amarillo':
-            plt.text(x+m*ajuste, y, sentido , color = 'y', family="sans-serif", weight="bold", size = fuente)  
+            plt.text(x+m*ajuste, y, sem_sentido , color = 'y', family="sans-serif", weight="bold", size = fuente)  
         else:
-            plt.text(x+m*ajuste, y, sentido , color = 'k', family="sans-serif", weight="bold", size = fuente) 
+            plt.text(x+m*ajuste, y, sem_sentido , color = 'k', family="sans-serif", weight="bold", size = fuente) 
         
         m = m + 1          
         if cantidad == 3:            
             if estado == 'Verde':
-                plt.text(x+m*ajuste, y, sentido , color = 'c', family="sans-serif", weight="bold", size = fuente)  
+                plt.text(x+m*ajuste, y, sem_sentido , color = 'c', family="sans-serif", weight="bold", size = fuente)  
             else:
-                plt.text(x+m*ajuste, y, sentido , color = 'k', family="sans-serif", weight="bold", size = fuente) 
+                plt.text(x+m*ajuste, y, sem_sentido , color = 'k', family="sans-serif", weight="bold", size = fuente) 
     
     m = 1
-    if sentido == '<': 
+    if sem_sentido == '<': 
         if cantidad == 3:            
             if estado == 'Verde':
-                plt.text(x, y, sentido , color = 'c', family="sans-serif", weight="bold", size = fuente)  
+                plt.text(x, y, sem_sentido , color = 'c', family="sans-serif", weight="bold", size = fuente)  
             else:
-                plt.text(x, y, sentido , color = 'k', family="sans-serif", weight="bold", size = fuente) 
+                plt.text(x, y, sem_sentido , color = 'k', family="sans-serif", weight="bold", size = fuente) 
         else:
             m = 0
         if estado == 'Amarillo':
-            plt.text(x+m*ajuste, y, sentido , color = 'y', family="sans-serif", weight="bold", size = fuente)  
+            plt.text(x+m*ajuste, y, sem_sentido , color = 'y', family="sans-serif", weight="bold", size = fuente)  
         else:
-            plt.text(x+m*ajuste, y, sentido , color = 'k', family="sans-serif", weight="bold", size = fuente) 
+            plt.text(x+m*ajuste, y, sem_sentido , color = 'k', family="sans-serif", weight="bold", size = fuente) 
          
         m = m + 1
         if estado == 'Rojo':
-            plt.text(x+m*ajuste, y, sentido , color = 'r', family="sans-serif", weight="bold", size = fuente) 
+            plt.text(x+m*ajuste, y, sem_sentido , color = 'r', family="sans-serif", weight="bold", size = fuente) 
         else:
-            plt.text(x+m*ajuste, y, sentido , color = 'k', family="sans-serif", weight="bold", size = fuente) 
+            plt.text(x+m*ajuste, y, sem_sentido , color = 'k', family="sans-serif", weight="bold", size = fuente) 
 
 #%%
-def detectar_rutas(secciones, test = False):        
+#%%
+def detectar_rutas(secciones, test = False):
       
     print("#"*20)
     inicial = 0
-    
-    
+
     
     if test == True:
         imprimir = True
@@ -319,17 +425,33 @@ def detectar_rutas(secciones, test = False):
         inicial = i+1
                
         if (secciones[i].tipo == "Cruce"):
-            
-            if ('<' in secciones[i].sentido and secciones[i].posterior != "" and secciones[secciones[i].posterior-1].tipo != "Cruce"):
+
+            #print("Iniciales: {}".format(inicial))
+            if (secciones[i].anterior != "" and secciones[secciones[i].anterior-1].tipo == "Cruce" and
+                 secciones[i].posterior != "" and secciones[secciones[i].posterior-1].tipo == "Cruce"):
+                continue
+                
+            if ('<' in secciones[i].sem_sentido and secciones[i].posterior != ""):# and secciones[secciones[i].posterior-1].tipo != "Cruce"):        
                 recorrido = []
                 semaforo_anterior(inicial,recorrido = recorrido, test = imprimir)
                 
-            if ('>' in secciones[i].sentido and secciones[i].anterior != "" and secciones[secciones[i].anterior-1].tipo != "Cruce"):
+            if ('>' in secciones[i].sem_sentido and secciones[i].anterior != ""):# and secciones[secciones[i].anterior-1].tipo != "Cruce"):
                 recorrido = []
                 semaforo_siguiente(inicial,recorrido = recorrido, test = imprimir)
-                
+
+        if (secciones[i].tipo == "Extremo" and secciones[i].extremo == True):
+
+            #print("Iniciales: {}".format(inicial))
+
+            if ('<' in secciones[i].sem_sentido and secciones[i].anterior != ""):
+                recorrido = []
+                semaforo_anterior(inicial, recorrido=recorrido, test=imprimir)
+
+            if ('>' in secciones[i].sem_sentido and secciones[i].posterior != ""):
+                recorrido = []
+                semaforo_siguiente(inicial, recorrido=recorrido, test=imprimir)
+
     print ("Rutas soportadas: {}".format(N_rutas))
-                
 #%%
 def semaforo_anterior(inicial,intermedio = None, desvio = None,recorrido = [], test = False):
     
@@ -364,7 +486,7 @@ def semaforo_anterior(inicial,intermedio = None, desvio = None,recorrido = [], t
             camino = '-'.join(str(e) for e in recorrido)
         
             if (test == True):
-                print(camino)                    
+                #print(camino)
                 print("{} > {}".format(inicial,anterior))
             N_rutas = N_rutas + 1
             
@@ -396,7 +518,6 @@ def semaforo_anterior(inicial,intermedio = None, desvio = None,recorrido = [], t
         #print("{}^{}".format(inicial,inicio.desvio_sup))
         recorrido.append(inicio.desvio_sup)    
         semaforo_anterior(inicial,desvio = inicio.desvio_sup,recorrido = recorrido, test = test)
-        
 #%%
 def semaforo_siguiente(inicial,intermedio = None, desvio = None, recorrido = [],test = False):
     
@@ -429,7 +550,7 @@ def semaforo_siguiente(inicial,intermedio = None, desvio = None, recorrido = [],
             camino = '-'.join(str(e) for e in recorrido)
             
             if (test == True):        
-                print(camino)                     
+                #print(camino)
                 print("{} > {}".format(inicial,posterior))
                 
             N_rutas = N_rutas + 1
@@ -485,7 +606,6 @@ def calcular_ejes(secciones):
         #print(i,[[min_x,max_x],[min_y,max_y]])   
         
     return [[min_x,float(max_x)],[min_y,max_y]]
-
 #%%           
 def analizar_tabla(tabla):
         
@@ -538,6 +658,7 @@ def analizar_tabla(tabla):
     
         
     #print(tabla2)
+    print ("Rutas optimizadas: {}".format(n))
     return tabla2
 #%%
 
@@ -545,12 +666,10 @@ v = 0.5
 
 print("@"*25+" Analizador de grafos v"+str(v)+" "+"@"*25+"\n")
 
-
-
 for i in range(len(archivos)):
     
     # Falta corregir desvios
-    #if i != 6: 
+    #if i != 4:
     #    continue
 
     N_rutas = 0
@@ -580,7 +699,6 @@ for i in range(len(archivos)):
     adj = 0.75 
     ax.set_xlim((axis[0][0]-3*r, axis[0][1]+3*r))
     ax.set_ylim((axis[1][0]-adj, axis[1][1]+adj))
-     
         
     if axis[0][1] > 7:
         ajuste = 4
@@ -592,7 +710,9 @@ for i in range(len(archivos)):
     clasificar_vecinos()
     
     asignar_tipo()
-    
+
+    cambios_herencia()
+
     asignar_semaforos()
     
     dibujar_secciones(secciones, ajuste)
@@ -611,11 +731,12 @@ for i in range(len(archivos)):
         
     ax.axis('off')
     plt.savefig('Mapas/Mapa_'+str(i)+'.png',dpi = 100)
-     
+    #plt.show()
+
     #print(tabla)
     
     tabla = analizar_tabla(tabla)
-    #analizar_tabla(tabla)
+    analizar_tabla(tabla)
     
     #print(tabla)
     
