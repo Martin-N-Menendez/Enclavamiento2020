@@ -2,14 +2,13 @@ library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
 
-
-
 entity sistema is
 	port(
 		clk_i: in std_logic;
         rst_i: in std_logic;
 		r_data: in std_logic_vector(8-1 downto 0);
-		rx_empty : in std_logic;
+		switch : in std_logic;
+		leds : out std_logic_vector(2-1 downto 0);
 		led_rgb_1  : out std_logic_vector(3-1 downto 0);
 		led_rgb_2  : out std_logic_vector(3-1 downto 0);
 		w_data: out std_logic_vector(8-1 downto 0)
@@ -23,26 +22,89 @@ architecture Behavioral of sistema is
 		clk_i: in std_logic;
         rst_i: in std_logic;
 		r_data: in std_logic_vector(8-1 downto 0);	
-		rx_empty : in std_logic;
 		led_rgb_1  : out std_logic_vector(3-1 downto 0);
 		led_rgb_2  : out std_logic_vector(3-1 downto 0);
+		paquete: out std_logic_vector(23-1 downto 0);
 		w_data: out std_logic_vector(8-1 downto 0)
 	);
     end component;
 
+    component enclavamiento is
+	port(
+		Clock: in std_logic;
+        Reset: in std_logic;
+        Paquete_i: in std_logic_vector(23-1 downto 0);
+        Paquete_o: out std_logic_vector(17-1 downto 0)
+	);
+    end component;
+    
+    component fifo_enclavamiento is
+	port(
+		clk_i: in std_logic;
+        rst_i: in std_logic;
+        paquete_i: in std_logic_vector(17-1 downto 0);
+        w_data: out std_logic_vector(8-1 downto 0)
+	);
+    end component;
+    
+    component conector_test is
+	port(
+		clk_i: in std_logic;
+        rst_i: in std_logic;
+        switch : in std_logic;
+        leds : out std_logic_vector(2-1 downto 0);
+        w_data_1: in std_logic_vector(8-1 downto 0);
+        w_data_2: in std_logic_vector(8-1 downto 0);
+        w_data_3: out std_logic_vector(8-1 downto 0)
+	);
+    end component;
+    
+    signal paquete_i : std_logic_vector(23-1 downto 0);
+    signal paquete_o : std_logic_vector(17-1 downto 0);
+    signal w_data_1,w_data_2,w_data_3 : std_logic_vector(8-1 downto 0);
+    
 begin
     
     detector_i: detector
 		port map(
 			clk_i 		=>  clk_i,
 			rst_i       =>  rst_i,
-			rx_empty   => rx_empty,
 			r_data     => r_data,
 			led_rgb_1 => led_rgb_1,
 			led_rgb_2 => led_rgb_2,
-			w_data     => w_data
+			paquete  => paquete_i,
+			w_data     => w_data_1
+		);	
+	
+	enclavamiento_i: enclavamiento
+		port map(
+			Clock 		=>  clk_i,
+			Reset       =>  rst_i,
+			Paquete_i     => paquete_i,
+			Paquete_o     => paquete_o
+		);	
+	
+	fifo_enclavamiento_i: fifo_enclavamiento
+		port map(
+			clk_i 		=>  clk_i,
+			rst_i       =>  rst_i,
+			paquete_i   => paquete_o,
+			w_data     => w_data_2
 		);	
 		
+		conector_test_i: conector_test
+		port map(
+			clk_i 		=>  clk_i,
+			rst_i       =>  rst_i,
+			switch      => switch,
+			leds       => leds,
+			w_data_1     => w_data_1,
+			w_data_2     => w_data_2,
+			w_data_3     => w_data_3
+		);
+		
+		w_data <= w_data_3;
+				
         --w_data <= r_data;
         
 end Behavioral;
