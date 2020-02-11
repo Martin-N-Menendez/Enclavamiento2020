@@ -45,34 +45,33 @@ begin
                 if estado /= lectura then 
                     contador <= (others => '0');
                 else
-                    char_data <= r_data;
-                    if char_data /= r_data then
-                        contador <= std_logic_vector(unsigned(contador) + 1); 
-                    end if;   
+                    if r_data /= "00111100"then
+                        char_data <= r_data;
+                        if char_data /= r_data then
+                            contador <= std_logic_vector(unsigned(contador) + 1); 
+                        end if;  
+                    end if; 
                 end if;
             end if;
-        end if;       
-       
-  end process;
+        end if;             
+    end process;
    
      process(estado,r_data,contador)      
      begin
  
-        estado_siguiente <= estado;
-        
+        estado_siguiente <= estado;   
         -- LED4 = RGB2 | LED5 => RGB1
         -- BGR -> 001 = R | 010 = G | 100 = B
-        case(estado) is
-        
+        case(estado) is    
           when espera =>
-            --led_rgb_1 <= "100"; -- azul LD5
-            --led_rgb_2 <= "100"; -- azul LD4     
+            led_rgb_1 <= "111"; -- blanco LD5
+            --led_rgb_2 <= "100"; -- azul LD4   
             if r_data = "00111100" then -- r_data = '<'
                 estado_siguiente  <= inicio;                          
             end if;        
           when inicio =>        
-            led_rgb_1 <= "010"; -- verde 
-            --contador <= (others => '0');  
+            --led_rgb_1 <= "000"; -- verde 
+            --led_rgb_2 <= "000"; -- verde 
             estado_siguiente <= lectura;          
           when lectura =>  
             if contador = "1000" then
@@ -80,18 +79,19 @@ begin
                   estado_siguiente <= final;
                 else
                   estado_siguiente <= error;                
-               end if;                        
+               end if;                      
             else
-                led_rgb_2 <= "111"; -- blanco
-                --contador <= std_logic_vector(unsigned(contador) + 1);
-            end if;           
-          when final =>     
+                led_rgb_1 <= "100"; -- azul
+                led_rgb_2 <= "000"; -- azul
+            end if;         
+          when final =>  
+            --led_rgb_1 <= "111"; -- blanco   
             led_rgb_2 <= "010"; -- verde
             estado_siguiente <= espera;         
-          when error =>          
-            led_rgb_1 <= "001"; -- rojo
+          when error => 
+            --led_rgb_1 <= "111"; -- blanco        
             led_rgb_2 <= "001"; -- rojo
-            --estado_siguiente <= espera;               
+            estado_siguiente <= espera;               
           when others => null;
         end case;
       end process;
