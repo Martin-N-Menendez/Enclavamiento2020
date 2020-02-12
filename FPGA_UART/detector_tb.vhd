@@ -59,7 +59,7 @@ begin
         rst_i <= '1';
         wait for 100 ns;
         rst_i <= '0';
-        wait for 10000 * TbPeriod;
+        wait for 1000 * TbPeriod;
 
         -- Stop the clock and hence terminate the simulation
         --TbSimEnded <= '1';
@@ -106,6 +106,8 @@ begin
 	r_data <= "00110110"; -- 6
 	wait for 50 ns;
 	r_data <= "00110111"; -- 7
+	wait for 50 ns;
+	r_data <= "00111000"; -- 8
 	wait for 50 ns;
 	r_data <= "00111110"; -- >
 

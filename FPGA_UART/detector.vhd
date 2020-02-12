@@ -16,7 +16,7 @@ end detector;
 
 architecture Behavioral of detector is
     
-    type estados_t is (espera,inicio,lectura,final,error);
+    type estados_t is (inicio,lectura,final,error);
     signal estado, estado_siguiente : estados_t; 
   
     signal char_data : std_logic_vector(8-1 downto 0);
@@ -29,9 +29,9 @@ begin
     begin
         if (clk_i = '1' and clk_i'event) then
             if rst_i = '1' then          
-                estado <= espera;
-            else 
-                estado <= estado_siguiente;    
+                estado <= inicio;
+            else
+                estado <= estado_siguiente;       
             end if;
         end if;
     end process;
@@ -42,7 +42,7 @@ begin
             if rst_i = '1' then          
                 contador <= (others => '0'); 
             else
-                if estado /= lectura then 
+                if r_data = "00111100" then 
                     contador <= (others => '0');
                 else
                     if r_data /= "00111100"then
@@ -62,17 +62,14 @@ begin
         estado_siguiente <= estado;   
         -- LED4 = RGB2 | LED5 => RGB1
         -- BGR -> 001 = R | 010 = G | 100 = B
-        case(estado) is    
-          when espera =>
-            led_rgb_1 <= "111"; -- blanco LD5
-            --led_rgb_2 <= "100"; -- azul LD4   
-            if r_data = "00111100" then -- r_data = '<'
-                estado_siguiente  <= inicio;                          
-            end if;        
+        case(estado) is                  
+                    
           when inicio =>        
-            --led_rgb_1 <= "000"; -- verde 
-            --led_rgb_2 <= "000"; -- verde 
-            estado_siguiente <= lectura;          
+            led_rgb_1 <= "100";   -- azul LD5
+            --led_rgb_2 <= "100"; -- azul LD4
+            if r_data = "00111100" then -- r_data = '<'
+                estado_siguiente <= lectura;                    
+            end if;               
           when lectura =>  
             if contador = "1000" then
                 if r_data = "00111110" then --  r_data = '>'                  
@@ -81,17 +78,21 @@ begin
                   estado_siguiente <= error;                
                end if;                      
             else
-                led_rgb_1 <= "100"; -- azul
-                led_rgb_2 <= "000"; -- azul
+                led_rgb_1 <= "101"; -- azul
+                led_rgb_2 <= "100"; -- azul
             end if;         
           when final =>  
             --led_rgb_1 <= "111"; -- blanco   
             led_rgb_2 <= "010"; -- verde
-            estado_siguiente <= espera;         
+            if r_data = "00111100" then -- r_data = '<'
+                estado_siguiente <= lectura;                    
+            end if;           
           when error => 
             --led_rgb_1 <= "111"; -- blanco        
             led_rgb_2 <= "001"; -- rojo
-            estado_siguiente <= espera;               
+            if r_data = "00111100" then -- r_data = '<'
+                estado_siguiente <= lectura;                    
+            end if;                
           when others => null;
         end case;
       end process;
