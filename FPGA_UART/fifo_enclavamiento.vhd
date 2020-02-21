@@ -24,16 +24,25 @@ begin
     
     
     
---    process(clk_i)
---    begin
---        if rising_edge(clk_i) then
---            if rst_i = '1' then
---                char_data <= "00000000";
---            else                 
---                char_data <= r_data;
---            end if;
---        end if;
---    end process;
+    process(clk_i)
+    begin
+        if rising_edge(clk_i) then
+            if rst_i = '1' then
+                char_data <= "00000000";
+                contador <= (others => '0');
+            else
+                contador <= std_logic_vector(unsigned(contador) + 1);
+                
+                if paquete_i(to_integer(unsigned(contador))) = '0' then                 
+                    char_data <= "00110000";
+                end if;
+                if paquete_i(to_integer(unsigned(contador))) = '1' then                 
+                    char_data <= "00110001";
+                end if;
+                
+            end if;
+        end if;
+    end process;
     
     --char_data <= r_data;
     
@@ -46,6 +55,7 @@ begin
 --   w_data(6) <= paquete_i(6); 
 --   w_data(7) <= paquete_i(7);     
 
-    w_data <= "01100001";
+    --w_data <= "01100001";
+      w_data <= char_data;
         
 end Behavioral;

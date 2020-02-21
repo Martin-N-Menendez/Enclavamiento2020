@@ -25,6 +25,7 @@ architecture Behavioral of sistema is
 		led_rgb_1  : out std_logic_vector(3-1 downto 0);
 		led_rgb_2  : out std_logic_vector(3-1 downto 0);
 		paquete: out std_logic_vector(23-1 downto 0);
+		paquete_ok : out std_logic;
 		w_data: out std_logic_vector(8-1 downto 0)
 	);
     end component;
@@ -33,6 +34,7 @@ architecture Behavioral of sistema is
 	port(
 		Clock: in std_logic;
         Reset: in std_logic;
+        paquete_ok : in std_logic;
         Paquete_i: in std_logic_vector(23-1 downto 0);
         Paquete_o: out std_logic_vector(17-1 downto 0)
 	);
@@ -62,7 +64,7 @@ architecture Behavioral of sistema is
     signal paquete_i : std_logic_vector(23-1 downto 0);
     signal paquete_o : std_logic_vector(17-1 downto 0);
     signal w_data_1,w_data_2,w_data_3 : std_logic_vector(8-1 downto 0);
-    
+    signal paquete_ok_s : std_logic;
 begin
     
     detector_i: detector
@@ -72,6 +74,7 @@ begin
 			r_data     => r_data,
 			led_rgb_1 => led_rgb_1,
 			led_rgb_2 => led_rgb_2,
+			paquete_ok => paquete_ok_s,
 			paquete  => paquete_i,
 			w_data     => w_data_1
 		);	
@@ -80,6 +83,7 @@ begin
 		port map(
 			Clock 		=>  clk_i,
 			Reset       =>  rst_i,
+			paquete_ok  => paquete_ok_s,
 			Paquete_i     => paquete_i,
 			Paquete_o     => paquete_o
 		);	
