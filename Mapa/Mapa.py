@@ -9,6 +9,7 @@ import matplotlib.pyplot as plt
 import random
 import pandas as pd
 
+
 from Estaciones import *
 from Plotear import *
 from Tabla import *
@@ -735,8 +736,6 @@ for i in range(len(archivos)):
     plt.savefig('Mapas/Mapa_'+str(i)+'.png',dpi = 100)
     plt.show()
 
-    crear_modulo_vhdl(secciones)
-
     #print(tabla)
     
     tabla = analizar_tabla(tabla)
@@ -746,6 +745,7 @@ for i in range(len(archivos)):
     
     (df).append(pd.DataFrame(tabla, columns = ['Ruta', 'Inicial', 'Final', 'Secuencia','Sentido']))
     
+    crear_modulo_vhdl(secciones,tabla)
     
 exportar_tablas(df)
   

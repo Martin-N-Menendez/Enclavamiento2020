@@ -1,5 +1,6 @@
-    
-def crear_modulo_vhdl(secciones):
+import numpy as np
+  
+def crear_modulo_vhdl(secciones,tabla):
 
  
     print("%"*25+" Iniciando creacion de modulos "+"%"*25)    
@@ -14,7 +15,7 @@ def crear_modulo_vhdl(secciones):
     
     creando_mediador(secciones,objetos)
     
-    creando_red(secciones,objetos)
+    creando_red(secciones,objetos,tabla)
     
     creando_nodo(secciones,objetos)
     
@@ -485,7 +486,7 @@ def instanciar_red(f,nombre):
     f.write("\t\t);\r\n")
         
  #%%    
-def creando_red(secciones,objetos):        
+def creando_red(secciones,objetos,tabla):        
     
     print("Redes > Creando") 
     
@@ -530,6 +531,12 @@ def creando_red(secciones,objetos):
     
     f.write("architecture Behavioral of "+red+" is\r\n") 
 
+    sem_cant,sem_actual,sem_anterior = calcular_semaforos(secciones,objetos,tabla)
+    
+    print("Cantidades : {}".format(sem_cant))
+    print("Actuales : {}".format(sem_actual))
+    print("Anteriores : {}".format(sem_anterior))
+    
     # componente cambio 
     
     for i in range(N_MDC):
@@ -579,12 +586,20 @@ def creando_red(secciones,objetos):
             f.write("\t\t\t"+"Estado_ante"+   " : "+" out "+"std_logic;"+"\n")
         if secciones[i].posterior != "" or secciones[i].desvio_inf_dir == ">" or secciones[i].desvio_sup_dir == ">":
             f.write("\t\t\t"+"Estado_post"+   " : "+" out "+"std_logic;"+"\n")
+            
         if secciones[i].semaforo:
             for j in range(secciones[i].N_semaforos):
                 f.write("\t\t\t"+"Semaforo_propio_i_"+str(j+1)+   " : "+" in "+"sem_type;"+"\n")
                 f.write("\t\t\t"+"Semaforo_propio_o_"+str(j+1)+   " : "+" out "+"sem_type;"+"\n")
-        f.write("\t\t\t"+"Semaforo_cercano"+   " : "+" out "+"sem_type;"+"\n")
-        f.write("\t\t\t"+"Semaforo_lejano"+   " : "+" out "+"sem_type;"+"\n")
+                
+                
+        # ACA, usar la lista! $$$$$       
+        if str(i+1) in sem_actual:
+            f.write("\t\t\t"+"Semaforo_cercano"+   " : "+" out "+"sem_type;"+"\n")
+            #print ("TIENE : {}".format(i+1))
+    
+            
+        #f.write("\t\t\t"+"Semaforo_lejano"+   " : "+" out "+"sem_type;"+"\n")
         #if secciones[i].cambio:
         #    f.write("\t\t\t"+"Cambio"+   " : "+" in "+"std_logic;"+"\n")
         if secciones[i].barrera:
@@ -603,8 +618,10 @@ def creando_red(secciones,objetos):
         #    f.write("\tSignal desv_"+str(i+1)+" : std_logic;\n")
     
     for i in range(N_SEM):
-        f.write("\tSignal sem_lsb_"+str(i+1)+" : std_logic;\n")
-        f.write("\tSignal sem_msb_"+str(i+1)+" : std_logic;\n")
+        f.write("\tSignal sem_lsb_i_"+str(i+1)+" : std_logic;\n")
+        f.write("\tSignal sem_msb_i_"+str(i+1)+" : std_logic;\n")
+        f.write("\tSignal sem_lsb_o_"+str(i+1)+" : std_logic;\n")
+        f.write("\tSignal sem_msb_o_"+str(i+1)+" : std_logic;\n")
         
     for i in range(N_PAN):
         f.write("\tSignal pan_i_"+str(i+1)+" : std_logic;\n")
@@ -619,7 +636,9 @@ def creando_red(secciones,objetos):
         f.write("\tSignal mdc_post_o_"+str(i+1)+" : std_logic;\n")
         f.write("\tSignal mdc_desv_i_"+str(i+1)+" : std_logic;\n")
         f.write("\tSignal mdc_desv_o_"+str(i+1)+" : std_logic;\n")
-        
+     
+    f.write("\tSignal cosa : std_logic;\n")
+    
     # Begin    
     f.write("begin\r\n")  
 
@@ -680,6 +699,7 @@ def creando_red(secciones,objetos):
                         f.write("\t\t"+"Estado_ante => mdc_post_o_"+str(cambio_index)+",\n")
                         cambios_vecinos.append(i+1)
                         #print ("ACA {}".format(cambios_vecinos))
+                                   
                     else:
                         print ("Nodo : {} < {}".format(anterior,i+1))
                         f.write("\t\t"+"Estado_ante => conector_"+str(anterior)+",\n")
@@ -705,10 +725,16 @@ def creando_red(secciones,objetos):
         
         if secciones[i].semaforo:
             for j in range(secciones[i].N_semaforos):
-                f.write("\t\t"+"Semaforo_propio_i_"+str(j+1)+".lsb => sem_lsb_"+str(sem_index)+","+"\n") 
-                f.write("\t\t"+"Semaforo_propio_i_"+str(j+1)+".msb => sem_msb_"+str(sem_index)+","+"\n") 
+                f.write("\t\t"+"Semaforo_propio_i_"+str(j+1)+".lsb => sem_lsb_i_"+str(sem_index)+","+"\n") 
+                f.write("\t\t"+"Semaforo_propio_i_"+str(j+1)+".msb => sem_msb_i_"+str(sem_index)+","+"\n") 
+                f.write("\t\t"+"Semaforo_propio_o_"+str(j+1)+".lsb => sem_lsb_o_"+str(sem_index)+","+"\n") 
+                f.write("\t\t"+"Semaforo_propio_o_"+str(j+1)+".msb => sem_msb_o_"+str(sem_index)+","+"\n") 
                 sem_index = sem_index + 1
                 
+        if str(i+1) in sem_actual:
+            f.write("\t\t"+"Semaforo_cercano"+".lsb => "+"cosa"+",\n") 
+            f.write("\t\t"+"Semaforo_cercano"+".msb => "+"cosa"+",\n") 
+            
         f.write("\t\t"+"Estado_i => ocupacion_"+str(i+1)+",\n")
         f.write("\t\t"+"Estado_o => conector_"+str(i+1)+",\n")     
         f.write("\t\t"+"Reset"+" => "+"Reset"+"\n")    
@@ -739,7 +765,8 @@ def creando_red(secciones,objetos):
             
     f.write("\t\t"+"barreras_o <= barreras_i;\n")
    
-
+    f.write("\t\t"+"cosa <= '0';\n")
+    
     for i in range(N_CVS):
         f.write("\t\t"+"ocupacion_"+str(i+1)+" <= Ocupacion("+str(i)+");\n")
     
@@ -753,8 +780,13 @@ def creando_red(secciones,objetos):
      
     for i in range(N_SEM):
 
-        f.write("\t\t"+"sem_lsb_"+str(i+1)+" <= semaforos_i.lsb("+str(i)+");"+"\n") 
-        f.write("\t\t"+"sem_msb_"+str(i+1)+" <= semaforos_i.msb("+str(i)+");"+"\n") 
+        # ACA, usar la lista! $$$$$
+        
+        f.write("\t\t"+"sem_lsb_i_"+str(i+1)+" <= semaforos_i.lsb("+str(i)+");"+"\n") 
+        f.write("\t\t"+"sem_msb_i_"+str(i+1)+" <= semaforos_i.msb("+str(i)+");"+"\n") 
+        
+        f.write("\t\t"+"semaforos_o.lsb("+str(i)+") <= sem_lsb_o_"+str(i+1)+";"+"\n") 
+        f.write("\t\t"+"semaforos_o.msb("+str(i)+") <= sem_msb_o_"+str(i+1)+";"+"\n")
         
 #    instanciar_red(f,"red")
     
@@ -837,7 +869,10 @@ def creando_nodo(secciones,objetos):
                 f.write("\t\t\t\t"+"Semaforo_propio_o_"+str(j+1)+   ".lsb <= '0';"+"\n")
         f.write("\t\t\t"+"else\n")    
         f.write("\t\t\t\t"+"Estado_o <= Estado_i;"+"\n") 
-                  
+        if secciones[i].semaforo:
+            for j in range(secciones[i].N_semaforos):
+                f.write("\t\t\t\t"+"Semaforo_propio_o_"+str(j+1)+".msb <= Semaforo_propio_i_"+str(j+1)+".msb;"+"\n")
+                f.write("\t\t\t\t"+"Semaforo_propio_o_"+str(j+1)+".lsb <= Semaforo_propio_i_"+str(j+1)+".lsb;"+"\n")          
         f.write("\t\t\t"+"end if;\n")
         f.write("\t\t"+"end if;\n")
         f.write("\t"+"end process;\r\n")   
@@ -932,5 +967,70 @@ def creando_cambio(secciones,objetos):
     
     print("Nodo > Finalizado")
     
-
+#%%
+def calcular_semaforos(secciones,objetos,tabla):
+   
+    N_CVS = objetos[0]
+    N_SEM = objetos[1]
+    N_PAN = objetos[2]
+    N_MDC = objetos[3]
+    
+    sem_actu = 0
+    sem_ante = 1
+    sem_post = 2
+    
+    N = N_CVS + 2*N_SEM + N_PAN + N_MDC
+    
+    M = 2*N_SEM + N_PAN + N_MDC
+    
+    print("Semaforeo > Iniciando")
+    
+    sem_index = -1;
+    sem_lista = [];
+    sem_actual = [];
+    sem_anterior = [];
+    sem_cant = [0]*N_SEM;
+    
+    semaforeo = np.zeros((3,N_SEM))
+    
+    for i in range(N_SEM):
+        semaforeo[sem_actu][i] = i+1
+        semaforeo[sem_ante][i] = -1
+        semaforeo[sem_post][i] = -1
+        
+    #print("{}".format(semaforeo)) 
+    print("{}".format(tabla['Secuencia'])) 
+    
+    for i in range(len(tabla['Secuencia'])):
+        
+        semaforo = tabla['Secuencia'][i][-1]
+        sem_actual.append(semaforo)
+        
+        if semaforo not in sem_lista:
+            sem_lista.append(semaforo)
+            
+            sem_index = sem_index + 1
+            sem_cant[sem_index] = 1                 
+        
+        semaforo = tabla['Secuencia'][i][0]
+        sem_anterior.append(semaforo)
+        
+        if semaforo not in sem_lista:
+            sem_lista.append(semaforo)
+            sem_index = sem_index + 1
+            sem_cant[sem_index] = 1     
+        else:
+            
+            sem_cant[sem_lista.index(semaforo)] = sem_cant[sem_lista.index(semaforo)] + 1
+            sem_cant.remove(0)
+            
+        print("Semaforo: {} Anterior: {}".format(tabla['Secuencia'][i][-1],tabla['Secuencia'][i][0])) 
+    print("{}".format(sem_lista))
+    print("{}".format(sem_cant))
+    print("{}".format(sem_actual))
+    print("{}".format(sem_anterior))
+    
+    print("Semaforeo > Finalizado")     
+    
+    return sem_cant,sem_actual,sem_anterior
     
