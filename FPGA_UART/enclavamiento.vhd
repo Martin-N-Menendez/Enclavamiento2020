@@ -15,6 +15,7 @@ use work.my_package.all;
 		port(
 			Clock :  in std_logic;
 			Reset :  in std_logic;
+			paquete_ok : in std_logic;
 			Paquete_i :  in std_logic_vector(23-1 downto 0);
 			Paquete_o :  out std_logic_vector(17-1 downto 0)
 		);
@@ -32,6 +33,7 @@ architecture Behavioral of enclavamiento is
 			Clock :  in std_logic;
 			Reset :  in std_logic;
 			Paquete :  in std_logic_vector(23-1 downto 0);
+			paquete_ok : in std_logic;
 			Ocupacion :  out std_logic_vector(6-1 downto 0);
 			semaforos :  out sems_type;
 			barreras :  out std_logic_vector(2-1 downto 0);
@@ -84,6 +86,7 @@ begin
 		Clock => Clock,
 		Reset => Reset,
 		Paquete => Paquete_i,
+		paquete_ok => paquete_ok,
 		Ocupacion => cv_s,
 		semaforos => sem_s_i,
 		barreras => pan_s_i,
