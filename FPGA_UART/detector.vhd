@@ -86,7 +86,7 @@ begin
           when lectura => 
             paquete_ready <= '0';  
             --if contador = "00001001" then -- 9 (asi entran 8)
-            if contador = "00011000" then -- 23 (asi entran 22)
+            if contador = "00011000" then -- 24 (asi entran 23)
                 if r_data = "00111110" then --  r_data = '>'                  
                   estado_siguiente <= final;
                 else
