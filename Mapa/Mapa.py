@@ -31,8 +31,8 @@ archivos = [
             ['Estaciones/con_4.txt','Estaciones/pos_4.txt'],
             ['Estaciones/con_5.txt','Estaciones/pos_5.txt'],
             ['Estaciones/con_6.txt','Estaciones/pos_6.txt'],
-            ['Estaciones/con_7.txt','Estaciones/pos_7.txt'],
-            ['Estaciones/con_8.txt','Estaciones/pos_8.txt']
+            ['Estaciones/con_7.txt','Estaciones/pos_7.txt']
+            #['Estaciones/con_8.txt','Estaciones/pos_8.txt']
             ]
 #%%
 def cargar_secciones(archivo_conexiones='conexiones.txt',archivo_posiciones='posiciones.txt'):
@@ -672,7 +672,7 @@ print("@"*25+" Analizador de grafos v"+str(v)+" "+"@"*25+"\n")
 for i in range(len(archivos)):
     
     # Falta corregir desvios
-    if i != 8:
+    if i != 1:
         continue
 
     N_rutas = 0
