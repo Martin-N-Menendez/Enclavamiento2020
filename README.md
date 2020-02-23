@@ -1,8 +1,19 @@
-## Enclavamiento2020
+### Enclavamiento2020
 
-- [x] Analizador de topologías
-- [ ] Analizador de topologías
+## Analizador de topologias
+- [x] Deteccion de nodos extremos absolutos
+- [x] Deteccion de nodos extremos relativos
+- [x] Deteccion de cambios
+- [x] Deteccion de cambio directo
+- [x] Deteccion de cambio desvio
+- [x] Deteccion de cambio raiz
+- [ ] Deteccion de barreras
+- [x] Deteccion de nodo simple
+- [x] Asignacion de semaforos
+- [x] Correccion de semaforos por herencia
 
+
+ 
 ![Mapa_0](https://github.com/Martin-N-Menendez/Enclavamiento2020/blob/master/Mapa/Mapas/Mapa_0.png)
 # Playa de maniobras
 ![Mapa_1](https://github.com/Martin-N-Menendez/Enclavamiento2020/blob/master/Mapa/Mapas/Mapa_1.png)
