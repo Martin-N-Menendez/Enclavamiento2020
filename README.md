@@ -11,8 +11,39 @@
 - [x] Deteccion de nodo simple
 - [x] Asignacion de semaforos
 - [x] Correccion de semaforos por herencia
-
-
+- [x] Deteccion de rutas
+- [x] Optimizacion de rutas
+## Tabla de enclavamiento
+- [x] Enumeracion de rutas
+- [x] Deteccion de semaforo de inicio y fin de ruta
+- [x] Deteccion de secciones intermedias
+- [ ] Identificacion de cambio involucrado en ruta
+- [ ] Identificacion de estado del cambio involucrado en ruta
+- [ ] Identificacion de barrera involucrada en ruta
+## Generacion de codigo en VHDL
+- [x] Generacion de wrapper
+- [x] Generacion de mediador
+- [x] Generacion de separador
+- [x] Generacion de nodos
+- [x] Generacion de cambios
+- [x] Interconexion de nodos sin cambios
+- [x] Interconexion de nodos en redes de un cambio
+- [ ] Inteconexion de nodos en redes de N cambios
+- [ ] Generacion de barreras
+- [ ] Comportamiento de semaforo en funcion del estado propio
+- [ ] Comportamiento de semaforo en funcion del estado vecino cercano
+- [ ] Comportamiento de semaforo en funcion del estado vecino lejano
+## Implementacion de UART
+- [ ] Implementacion de UART automatizada para pruebas en Arty Z7 10
+- [ ] Implementacion de codigo python para enviar/recibir tramas adaptadas
+- [ ] Implementacion de codigo python para procesar las tramas recibidas y layout
+- [ ] Adaptacion del codigo para compatibilidad con CNEA
+## Testing
+- [ ] COCOTB para nodo
+- [ ] COCOTB para cambio
+- [ ] COCOTB para red
+- [ ] COCOTB para comunicacion UART
+- [ ] COCOTB para casos funcionalidades
  
 ![Mapa_0](https://github.com/Martin-N-Menendez/Enclavamiento2020/blob/master/Mapa/Mapas/Mapa_0.png)
 # Playa de maniobras
