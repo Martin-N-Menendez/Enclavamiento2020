@@ -1,5 +1,7 @@
 # Enclavamiento2020
 
+![Mapa_0](https://github.com/Martin-N-Menendez/Enclavamiento2020/blob/master/Mapa/Mapas/Mapa_0.png)
+
 ## Analizador de topologias
 - [x] Deteccion de nodos extremos absolutos
 - [x] Deteccion de nodos extremos relativos
@@ -45,7 +47,7 @@
 - [ ] COCOTB para comunicacion UART
 - [ ] COCOTB para casos funcionalidades
  
-![Mapa_0](https://github.com/Martin-N-Menendez/Enclavamiento2020/blob/master/Mapa/Mapas/Mapa_0.png)
+
 # Playa de maniobras
 ![Mapa_1](https://github.com/Martin-N-Menendez/Enclavamiento2020/blob/master/Mapa/Mapas/Mapa_1.png)
 # Bypass
