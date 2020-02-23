@@ -6,65 +6,65 @@ use IEEE.numeric_std.all;
 use work.my_package.all;
 	entity sistema is
 		generic(
-			N : natural := 39;
-			N_SEM : natural := 12;
-			N_MDC : natural := 2;
-			N_CVS : natural := 13
+			N : natural := 119;
+			N_SEM : natural := 36;
+			N_MDC : natural := 14;
+			N_CVS : natural := 33
 		);
 		port(
 			Clock :  in std_logic;
-			Paquete_i :  in std_logic_vector(39-1 downto 0);
-			Paquete_o :  out std_logic_vector(26-1 downto 0);
+			Paquete_i :  in std_logic_vector(119-1 downto 0);
+			Paquete_o :  out std_logic_vector(86-1 downto 0);
 			Reset :  in std_logic
 		);
 	end entity sistema;
 architecture Behavioral of sistema is
 	component separador is
 		generic(
-			N : natural := 39;
-			N_SEM : natural := 12;
-			N_MDC : natural := 2;
-			N_CVS : natural := 13
+			N : natural := 119;
+			N_SEM : natural := 36;
+			N_MDC : natural := 14;
+			N_CVS : natural := 33
 		);
 		port(
 			Clock :  in std_logic;
-			Paquete :  in std_logic_vector(39-1 downto 0);
-			Ocupacion :  out std_logic_vector(13-1 downto 0);
+			Paquete :  in std_logic_vector(119-1 downto 0);
+			Ocupacion :  out std_logic_vector(33-1 downto 0);
 			semaforos :  out sems_type;
-			Cambios :  out std_logic_vector(2-1 downto 0);
+			Cambios :  out std_logic_vector(14-1 downto 0);
 			Reset :  in std_logic
 		);
 	end component separador;
 	component red is
 		generic(
-			N : natural := 39;
-			N_SEM : natural := 12;
-			N_MDC : natural := 2;
-			N_CVS : natural := 13
+			N : natural := 119;
+			N_SEM : natural := 36;
+			N_MDC : natural := 14;
+			N_CVS : natural := 33
 		);
 		port(
 			Clock :  in std_logic;
-			Ocupacion :  in std_logic_vector(13-1 downto 0);
+			Ocupacion :  in std_logic_vector(33-1 downto 0);
 			semaforos_i :  in sems_type;
 			semaforos_o :  out sems_type;
-			Cambios_i :  in std_logic_vector(2-1 downto 0);
-			Cambios_o :  out std_logic_vector(2-1 downto 0);
+			Cambios_i :  in std_logic_vector(14-1 downto 0);
+			Cambios_o :  out std_logic_vector(14-1 downto 0);
 			Reset :  in std_logic
 		);
 	end component red;
 	component mediador is
 		generic(
-			N : natural := 39;
-			N_CVS : natural := 13;
-			N_SEM : natural := 12;
+			N : natural := 119;
+			N_CVS : natural := 33;
+			N_SEM : natural := 36;
 			N_PAN : natural := 0;
-			N_MDC : natural := 2
+			N_MDC : natural := 14
 		);
 		port(
 			Clock :  in std_logic;
 			semaforos :  in sems_type;
-			Cambios :  in std_logic_vector(2-1 downto 0);
-			Salida :  out std_logic_vector(26-1 downto 0);
+			Cambios :  in std_logic_vector(14-1 downto 0);
+			Salida :  out std_logic_vector(86-1 downto 0);
 			Reset :  in std_logic
 		);
 	end component mediador;

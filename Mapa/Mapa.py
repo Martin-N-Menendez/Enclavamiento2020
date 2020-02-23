@@ -23,6 +23,14 @@ df = []
 global N_rutas
 N_rutas = 0
 
+global tabla
+tabla = {'Ruta': [],
+        'Inicial': [],
+        'Final': [],
+        'Secuencia': [],
+        'Sentido' : []
+        }
+
 archivos = [
             ['Estaciones/con_0.txt','Estaciones/pos_0.txt'],
             ['Estaciones/con_1.txt','Estaciones/pos_1.txt'],
@@ -689,91 +697,88 @@ def analizar_tabla(tabla):
     print ("Rutas optimizadas: {}".format(n))
     return tabla2
 #%%
-
-v = 0.5
-
-print("@"*25+" Analizador de grafos v"+str(v)+" "+"@"*25+"\n")
-
-for i in range(len(archivos)):
+def generar_mapa(tabla):
+    v = 0.5
+    
+    print("@"*25+" Analizador de grafos v"+str(v)+" "+"@"*25+"\n")
+    
+    for i in range(len(archivos)):
+            
+        # Falta corregir desvios
+        if i != 7:
+            continue
+    
+        secciones.clear()
+        conexiones.clear()
+        ax = plt.gca()
+        ax.cla() # clear things for fresh plot
+    
+        print("%"*25+" Mapa_"+str(i)+' '+"%"*25)  
+            
+        cargar_secciones(archivos[i][0],archivos[i][1])
         
-    # Falta corregir desvios
-    if i != 1:
-        continue
-
-    N_rutas = 0
-    
-    tabla = {'Ruta': [],
-        'Inicial': [],
-        'Final': [],
-        'Secuencia': [],
-        'Sentido' : []
-        }
-    
-    secciones.clear()
-    conexiones.clear()
-    ax = plt.gca()
-    ax.cla() # clear things for fresh plot
-
-    print("%"*25+" Mapa_"+str(i)+' '+"%"*25)  
+        axis = [[-0.5,10.5],[-2.5,2.5]]
         
-    cargar_secciones(archivos[i][0],archivos[i][1])
-    
-    axis = [[-0.5,10.5],[-2.5,2.5]]
-    
-    axis = calcular_ejes(secciones)
-    
-    #print(axis)
-    
-    adj = 0.75 
-    ax.set_xlim((axis[0][0]-3*r, axis[0][1]+3*r))
-    ax.set_ylim((axis[1][0]-adj, axis[1][1]+adj))
+        axis = calcular_ejes(secciones)
         
-    if axis[0][1] > 7:
-        ajuste = 4
-    else:
-        ajuste = 3
-    
-    buscar_vecinos()
-    
-    clasificar_vecinos()
-    
-    asignar_tipo()
-
-    cambios_herencia()
-
-    asignar_semaforos()
-    
-    dibujar_secciones(secciones, ajuste)
-    
-    #imprimir_estados()
-    
-    imprimir_semaforos(secciones,ajuste)    
-    
-    conectar_secciones(secciones)
-    
-    #proximo_semaforo(secciones)
-    
-    detectar_rutas(secciones,True)
+        #print(axis)
         
-    #dibujar_barrera(5.5,-1, b = 1, h = 3, c = [0.85,0.85,0.85])
+        adj = 0.75 
+        ax.set_xlim((axis[0][0]-3*r, axis[0][1]+3*r))
+        ax.set_ylim((axis[1][0]-adj, axis[1][1]+adj))
+            
+        if axis[0][1] > 7:
+            ajuste = 4
+        else:
+            ajuste = 3
         
-    ax.axis('off')
-    plt.savefig('Mapas/Mapa_'+str(i)+'.png',dpi = 100)
-    plt.show()
+        buscar_vecinos()
+        
+        clasificar_vecinos()
+        
+        asignar_tipo()
+    
+        cambios_herencia()
+    
+        asignar_semaforos()
+        
+        dibujar_secciones(secciones, ajuste)
+        
+        #imprimir_estados()
+        
+        imprimir_semaforos(secciones,ajuste)    
+        
+        conectar_secciones(secciones)
+        
+        #proximo_semaforo(secciones)
+        
+        detectar_rutas(secciones,True)
+            
+        #dibujar_barrera(5.5,-1, b = 1, h = 3, c = [0.85,0.85,0.85])
+            
+        ax.axis('off')
+        plt.savefig('Mapas/Mapa_'+str(i)+'.png',dpi = 100)
+        plt.show()
+    
+        #print(tabla)
+        
+        tabla = analizar_tabla(tabla)
+        analizar_tabla(tabla)
+        
+        #print(tabla)
+        
+        (df).append(pd.DataFrame(tabla, columns = ['Ruta', 'Inicial', 'Final', 'Secuencia','Sentido']))
+        
+        crear_modulo_vhdl(secciones,tabla)
+        
+    exportar_tablas(df)
 
-    #print(tabla)
+#%%  
+def main():
+    print("HOLA")
+    generar_mapa(tabla)
     
-    tabla = analizar_tabla(tabla)
-    analizar_tabla(tabla)
-    
-    #print(tabla)
-    
-    (df).append(pd.DataFrame(tabla, columns = ['Ruta', 'Inicial', 'Final', 'Secuencia','Sentido']))
-    
-    crear_modulo_vhdl(secciones,tabla)
-    
-exportar_tablas(df)
-  
-  
+if __name__ == "__main__":
+    main()
     
     

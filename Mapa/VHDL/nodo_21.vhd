@@ -1,10 +1,10 @@
--- nodo_1.vhdl : Achivo VHDL generado automaticamente
+-- nodo_21.vhdl : Achivo VHDL generado automaticamente
 library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
 --Declare the package
 use work.my_package.all;
-	entity nodo_1 is
+	entity nodo_21 is
 		generic(
 			N : natural := 119;
 			N_SEM : natural := 36;
@@ -22,8 +22,8 @@ use work.my_package.all;
 			Semaforo_lejano :  out sem_type;
 			Estado_o :  out std_logic
 		);
-	end entity nodo_1;
-architecture Behavioral of nodo_1 is
+	end entity nodo_21;
+architecture Behavioral of nodo_21 is
 begin
 	process(Clock,Reset)
 	begin
