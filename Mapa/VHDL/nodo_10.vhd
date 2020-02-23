@@ -6,11 +6,11 @@ use IEEE.numeric_std.all;
 use work.my_package.all;
 	entity nodo_10 is
 		generic(
-			N : natural := 41;
+			N : natural := 39;
 			N_CVS : natural := 13;
 			N_SEM : natural := 12;
-			N_PAN : natural := 3;
-			N_MDC : natural := 1
+			N_PAN : natural := 0;
+			N_MDC : natural := 2
 		);
 		port(
 			Clock :  in std_logic;
@@ -20,7 +20,6 @@ use work.my_package.all;
 			Estado_post :  out std_logic;
 			Semaforo_cercano :  out sem_type;
 			Semaforo_lejano :  out sem_type;
-			Barrera :  out std_logic;
 			Estado_o :  out std_logic
 		);
 	end entity nodo_10;

@@ -1,16 +1,16 @@
--- cambio_1.vhdl : Achivo VHDL generado automaticamente
+-- cambio_4.vhdl : Achivo VHDL generado automaticamente
 library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
 --Declare the package
 use work.my_package.all;
-	entity cambio_1 is
+	entity cambio_4 is
 		generic(
-			N : natural := 39;
-			N_CVS : natural := 13;
+			N : natural := 40;
+			N_CVS : natural := 12;
 			N_SEM : natural := 12;
 			N_PAN : natural := 0;
-			N_MDC : natural := 2
+			N_MDC : natural := 4
 		);
 		port(
 			Clock :  in std_logic;
@@ -24,8 +24,8 @@ use work.my_package.all;
 			Cambio_i :  in std_logic;
 			Cambio_o :  out std_logic
 		);
-	end entity cambio_1;
-architecture Behavioral of cambio_1 is
+	end entity cambio_4;
+architecture Behavioral of cambio_4 is
 begin
 	process(Clock,Reset)
 	begin

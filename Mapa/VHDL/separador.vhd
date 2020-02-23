@@ -6,27 +6,24 @@ use IEEE.numeric_std.all;
 use work.my_package.all;
 	entity separador is
 		generic(
-			N : natural := 41;
-			N_CVS : natural := 13;
+			N : natural := 39;
 			N_SEM : natural := 12;
-			N_PAN : natural := 3;
-			N_MDC : natural := 1
+			N_MDC : natural := 2;
+			N_CVS : natural := 13
 		);
 		port(
 			Clock :  in std_logic;
-			Reset :  in std_logic;
 			Paquete :  in std_logic_vector(N-1 downto 0);
 			Ocupacion :  out std_logic_vector(N_CVS-1 downto 0);
 			semaforos :  out sems_type;
-			barreras :  out std_logic_vector(N_PAN-1 downto 0);
-			Cambios :  out std_logic
+			Cambios :  out std_logic_vector(N_MDC-1 downto 0);
+			Reset :  in std_logic
 		);
 	end entity separador;
 architecture Behavioral of separador is
 	Signal cv_s : std_logic_vector(N_CVS-1 downto 0);
 	Signal sem_s_i,sem_s_o : sems_type;
-	Signal pan_s_i,pan_s_o : std_logic_vector(N_PAN-1 downto 0);
-	Signal mdc_s_i,mdc_s_o : std_logic;
+	Signal mdc_s_i,mdc_s_o : std_logic_vector(N_MDC-1 downto 0);
 begin
 	process(Clock,Reset)
 	begin
@@ -35,8 +32,7 @@ begin
 				Ocupacion <= "0000000000000";
 				semaforos.lsb <= "000000000000";
 				semaforos.msb <= "000000000000";
-				barreras <= "000";
-				Cambios <= '0';
+				Cambios <= "00";
 			else
 				Ocupacion <= Paquete(13-1 downto 0);
 				semaforos.msb(0) <= Paquete(13);
@@ -63,8 +59,7 @@ begin
 				semaforos.lsb(10) <= Paquete(34);
 				semaforos.msb(11) <= Paquete(35);
 				semaforos.lsb(11) <= Paquete(36);
-				barreras <= Paquete(40-1 downto 37);
-				Cambios <= Paquete(41-1);
+				Cambios <= Paquete(39-1 downto 37);
 			end if;
 		end if;
 	end process;

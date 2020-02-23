@@ -6,19 +6,17 @@ use IEEE.numeric_std.all;
 use work.my_package.all;
 	entity mediador is
 		generic(
-			N : natural := 41;
-			N_CVS : natural := 13;
+			N : natural := 39;
 			N_SEM : natural := 12;
-			N_PAN : natural := 3;
-			N_MDC : natural := 1
+			N_MDC : natural := 2;
+			N_CVS : natural := 13
 		);
 		port(
 			Clock :  in std_logic;
-			Reset :  in std_logic;
 			semaforos :  in sems_type;
-			barreras :  in std_logic_vector(3-1 downto 0);
-			Cambios :  in std_logic_vector(1-1 downto 0);
-			Salida :  out std_logic_vector(28-1 downto 0)
+			Cambios :  in std_logic_vector(2-1 downto 0);
+			Salida :  out std_logic_vector(26-1 downto 0);
+			Reset :  in std_logic
 		);
 	end entity mediador;
 architecture Behavioral of mediador is
@@ -27,7 +25,7 @@ begin
 	begin
 		if (Clock = '1' and Clock'Event) then
 			if (Reset = '1') then
-				Salida <= "0000000000000000000000000000";
+				Salida <= "00000000000000000000000000";
 			else
 				Salida(0) <= semaforos.lsb(0);
 				Salida(1) <= semaforos.msb(0);
@@ -53,8 +51,7 @@ begin
 				Salida(21) <= semaforos.msb(10);
 				Salida(22) <= semaforos.lsb(11);
 				Salida(23) <= semaforos.msb(11);
-				Salida (27-1 downto 24) <= barreras;
-				Salida (28-1 downto 27) <= Cambios;
+				Salida (26-1 downto 24) <= Cambios;
 			end if;
 		end if;
 	end process;

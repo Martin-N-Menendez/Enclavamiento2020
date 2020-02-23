@@ -50,9 +50,9 @@ def calcular_paquete(secciones):
     M = n_semaforos + n_pans + n_cambios
     
     print ("Paquete > N : {} | M : {}".format(N,M))
-    print ("Paquete > CVS : {} | SEM : {} | PAN : {} | MDC : {}".format(n_vias,n_semaforos,n_pans,int(n_cambios/2)))
+    print ("Paquete > CVS : {} | SEM : {} | PAN : {} | MDC : {}".format(n_vias,n_semaforos,n_pans,n_cambios))
     
-    return [n_vias,n_semaforos,n_pans,int(n_cambios/2)]
+    return [n_vias,n_semaforos,n_pans,n_cambios]
 #%%
 def incluir_librerias(f,paquete = False):
     
@@ -108,7 +108,7 @@ def creando_paquete(secciones,objetos):
 #%%    
 def creando_wrapper(secciones,objetos):        
     
-    print("Wrapper > Creando") 
+    print("Sistema > Creando") 
     
     N_CVS = objetos[0]
     N_SEM = objetos[1]
@@ -127,49 +127,55 @@ def creando_wrapper(secciones,objetos):
     
     incluir_librerias(f,True) # Incluir librerias
         
-    wrapper = "wrapper"
+    wrapper = "sistema"
     f.write("\t"+"entity "+wrapper+" is\n")
     f.write("\t\t"+"generic(\n")
-    f.write("\t\t\t"+"N"+" : "+"natural"+" := "+str(N)+";\n")
-    f.write("\t\t\t"+"N_CVS"+" : "+"natural"+" := "+str(N_CVS)+";\n")
+    f.write("\t\t\t"+"N"+" : "+"natural"+" := "+str(N)+";\n")  
     f.write("\t\t\t"+"N_SEM"+" : "+"natural"+" := "+str(N_SEM)+";\n")
-    f.write("\t\t\t"+"N_PAN"+" : "+"natural"+" := "+str(N_PAN)+";\n")
-    f.write("\t\t\t"+"N_MDC"+" : "+"natural"+" := "+str(N_MDC)+"\n")
+    if N_PAN > 0:
+        f.write("\t\t\t"+"N_PAN"+" : "+"natural"+" := "+str(N_PAN)+";\n")
+    if N_MDC > 0:         
+        f.write("\t\t\t"+"N_MDC"+" : "+"natural"+" := "+str(N_MDC)+";\n")
+    f.write("\t\t\t"+"N_CVS"+" : "+"natural"+" := "+str(N_CVS)+"\n")
     f.write("\t\t"+");\n")
     f.write("\t\t"+"port("+"\n")
     f.write("\t\t\t"+"Clock"+   " : "+" in "+"std_logic;"+"\n")
-    f.write("\t\t\t"+"Reset"+   " : "+" in "+"std_logic;"+"\n")
-    f.write("\t\t\t"+"Paquete_i"+ " : "+" in "+"std_logic_vector("+str(N)+"-1 downto 0);"+"\n")
-    f.write("\t\t\t"+"Paquete_o"+    " : "+" out "+"std_logic_vector("+str(M)+"-1 downto 0)"+"\n")
+    
+    f.write("\t\t\t"+"Paquete_i"+ " : "+" in "+"std_logic_vector("+str(N)+"-1 downto 0)"+";\n")
+    f.write("\t\t\t"+"Paquete_o"+    " : "+" out "+"std_logic_vector("+str(M)+"-1 downto 0)"+";\n")
+    f.write("\t\t\t"+"Reset"+   " : "+" in "+"std_logic"+"\n")
     f.write("\t\t"+");\n")
-    f.write("\t"+"end entity wrapper;\n")
+    f.write("\t"+"end entity "+wrapper+";\n")
    
-    f.write("architecture Behavioral of wrapper is\r\n") 
+    f.write("architecture Behavioral of "+wrapper+" is\r\n") 
     
     # componente separador
     separador = "separador"
     f.write("\t"+"component "+separador+" is\n")
     f.write("\t\t"+"generic(\n")
     f.write("\t\t\t"+"N"+" : "+"natural"+" := "+str(N)+";\n")
-    f.write("\t\t\t"+"N_CVS"+" : "+"natural"+" := "+str(N_CVS)+";\n")
     f.write("\t\t\t"+"N_SEM"+" : "+"natural"+" := "+str(N_SEM)+";\n")
-    f.write("\t\t\t"+"N_PAN"+" : "+"natural"+" := "+str(N_PAN)+";\n")
-    f.write("\t\t\t"+"N_MDC"+" : "+"natural"+" := "+str(N_MDC)+"\n")
+    if N_PAN > 0:
+        f.write("\t\t\t"+"N_PAN"+" : "+"natural"+" := "+str(N_PAN)+";\n")
+    if N_MDC > 0:    
+        f.write("\t\t\t"+"N_MDC"+" : "+"natural"+" := "+str(N_MDC)+";\n")
+    f.write("\t\t\t"+"N_CVS"+" : "+"natural"+" := "+str(N_CVS)+"\n")
     f.write("\t\t"+");\n")
     f.write("\t\t"+"port("+"\n")
     f.write("\t\t\t"+"Clock"+   " : "+" in "+"std_logic;"+"\n")
-    f.write("\t\t\t"+"Reset"+   " : "+" in "+"std_logic;"+"\n")
+    
     f.write("\t\t\t"+"Paquete"+    " : "+" in "+"std_logic_vector("+str(N)+"-1 downto 0);"+"\n")
     f.write("\t\t\t"+"Ocupacion"+    " : "+" out "+"std_logic_vector("+str(N_CVS)+"-1 downto 0);"+"\n")
     f.write("\t\t\t"+"semaforos"+ " : "+" out "+"sems_type;"+"\n")
     if N_PAN > 1:
         f.write("\t\t\t"+"barreras"+ " : "+" out "+"std_logic_vector("+str(N_PAN)+"-1 downto 0);"+"\n")
-    else:
+    if N_PAN == 1:
         f.write("\t\t\t"+"barreras"+ " : "+" out "+"std_logic;"+"\n")
     if N_MDC > 1:
-        f.write("\t\t\t"+"Cambios"+ " : "+" out "+"std_logic_vector("+str(N_MDC)+"-1 downto 0)"+"\n")    
-    else:
-        f.write("\t\t\t"+"Cambios"+ " : "+" out "+"std_logic"+"\n")
+        f.write("\t\t\t"+"Cambios"+ " : "+" out "+"std_logic_vector("+str(N_MDC)+"-1 downto 0)"+";\n")    
+    if N_MDC == 1:
+        f.write("\t\t\t"+"Cambios"+ " : "+" out "+"std_logic"+";\n")
+    f.write("\t\t\t"+"Reset"+   " : "+" in "+"std_logic"+"\n")    
     f.write("\t\t"+");\n")
     f.write("\t"+"end component "+separador+";\r\n")
      
@@ -178,29 +184,34 @@ def creando_wrapper(secciones,objetos):
     f.write("\t"+"component "+red+" is\n")
     f.write("\t\t"+"generic(\n")
     f.write("\t\t\t"+"N"+" : "+"natural"+" := "+str(N)+";\n")
-    f.write("\t\t\t"+"N_CVS"+" : "+"natural"+" := "+str(N_CVS)+";\n")
+    
     f.write("\t\t\t"+"N_SEM"+" : "+"natural"+" := "+str(N_SEM)+";\n")
-    f.write("\t\t\t"+"N_PAN"+" : "+"natural"+" := "+str(N_PAN)+";\n")
-    f.write("\t\t\t"+"N_MDC"+" : "+"natural"+" := "+str(N_MDC)+"\n")
+    if N_PAN > 0:
+        f.write("\t\t\t"+"N_PAN"+" : "+"natural"+" := "+str(N_PAN)+";\n")
+    if N_MDC > 0:    
+        f.write("\t\t\t"+"N_MDC"+" : "+"natural"+" := "+str(N_MDC)+";\n")
+    f.write("\t\t\t"+"N_CVS"+" : "+"natural"+" := "+str(N_CVS)+"\n")
     f.write("\t\t"+");\n")
     f.write("\t\t"+"port("+"\n")
     f.write("\t\t\t"+"Clock"+   " : "+" in "+"std_logic;"+"\n")
-    f.write("\t\t\t"+"Reset"+   " : "+" in "+"std_logic;"+"\n")
-    f.write("\t\t\t"+"Ocupacion"+    " : "+" in "+"std_logic_vector("+str(N_CVS)+"-1 downto 0);"+"\n")
+    
+    f.write("\t\t\t"+"Ocupacion"+    " : "+" in "+"std_logic_vector("+str(N_CVS)+"-1 downto 0)"+";\n") 
     f.write("\t\t\t"+"semaforos_i"+ " : "+" in "+"sems_type;"+"\n")
     f.write("\t\t\t"+"semaforos_o"+ " : "+" out "+"sems_type;"+"\n")
     if N_PAN > 1:
         f.write("\t\t\t"+"barreras_i"+ " : "+" in "+"std_logic_vector("+str(N_PAN)+"-1 downto 0);"+"\n")
         f.write("\t\t\t"+"barreras_o"+ " : "+" out "+"std_logic_vector("+str(N_PAN)+"-1 downto 0);"+"\n")
-    else:
+    if N_PAN == 1:
         f.write("\t\t\t"+"barreras_i"+ " : "+" in "+"std_logic;"+"\n")
         f.write("\t\t\t"+"barreras_o"+ " : "+" out "+"std_logic;"+"\n")
     if N_MDC > 1:
-        f.write("\t\t\t"+"Cambios_i"+ " : "+" in "+"std_logic_vector("+str(N_MDC)+"-1 downto 0);"+"\n")  
-        f.write("\t\t\t"+"Cambios_o"+ " : "+" out "+"std_logic_vector("+str(N_MDC)+"-1 downto 0)"+"\n")
-    else:
-        f.write("\t\t\t"+"Cambios_i"+ " : "+" in "+"std_logic;"+"\n")  
-        f.write("\t\t\t"+"Cambios_o"+ " : "+" out "+"std_logic"+"\n")
+        f.write("\t\t\t"+"Cambios_i"+ " : "+" in "+"std_logic_vector("+str(N_MDC)+"-1 downto 0)"+";\n")  
+        f.write("\t\t\t"+"Cambios_o"+ " : "+" out "+"std_logic_vector("+str(N_MDC)+"-1 downto 0)"+";\n")
+    if N_MDC == 1:
+        f.write("\t\t\t"+"Cambios_i"+ " : "+" in "+"std_logic"+";\n")  
+        f.write("\t\t\t"+"Cambios_o"+ " : "+" out "+"std_logic"+";\n")
+    
+    f.write("\t\t\t"+"Reset"+   " : "+" in "+"std_logic"+"\n")
     f.write("\t\t"+");\n")
     f.write("\t"+"end component "+red+";\r\n")
     
@@ -216,35 +227,40 @@ def creando_wrapper(secciones,objetos):
     f.write("\t\t"+");\n")
     f.write("\t\t"+"port("+"\n")
     f.write("\t\t\t"+"Clock"+   " : "+" in "+"std_logic;"+"\n")
-    f.write("\t\t\t"+"Reset"+   " : "+" in "+"std_logic;"+"\n")
+    
     f.write("\t\t\t"+"semaforos"+ " : "+" in "+"sems_type;"+"\n")
     if N_PAN > 1:
         f.write("\t\t\t"+"barreras"+ " : "+" in "+"std_logic_vector("+str(N_PAN)+"-1 downto 0);"+"\n")
-    else:
+    if N_PAN == 1:
         f.write("\t\t\t"+"barreras"+ " : "+" in "+"std_logic;"+"\n")
     if N_MDC > 1:
         f.write("\t\t\t"+"Cambios"+ " : "+" in "+"std_logic_vector("+str(N_MDC)+"-1 downto 0);"+"\n")
-    else:
+    if N_MDC == 1:
         f.write("\t\t\t"+"Cambios"+ " : "+" in "+"std_logic;"+"\n")
-    f.write("\t\t\t"+"Salida"+    " : "+" out "+"std_logic_vector("+str(M)+"-1 downto 0)"+"\n")
+    f.write("\t\t\t"+"Salida"+    " : "+" out "+"std_logic_vector("+str(M)+"-1 downto 0)"+";\n")
+    f.write("\t\t\t"+"Reset"+   " : "+" in "+"std_logic"+"\n")
     f.write("\t\t"+");\n")
     f.write("\t"+"end component "+mediador+";\r\n")
       
     f.write("\tSignal cv_s : std_logic_vector(N_CVS-1 downto 0);\n")    
     f.write("\tSignal sem_s_i,sem_s_o : sems_type;\n")
-    f.write("\tSignal pan_s_i,pan_s_o : std_logic_vector(N_PAN-1 downto 0);\n")
+    if N_PAN > 1:
+        f.write("\tSignal pan_s_i,pan_s_o : std_logic_vector(N_PAN-1 downto 0);\n")
+    if N_PAN == 1:
+        f.write("\tSignal pan_s_i,pan_s_o : std_logic;\n")
+        
     if N_MDC > 1:
         f.write("\tSignal mdc_s_i,mdc_s_o : std_logic_vector(N_MDC-1 downto 0);\n")
-    else:
+    if N_MDC == 1:
         f.write("\tSignal mdc_s_i,mdc_s_o : std_logic;\n")
     
-    f.write("begin\r\n")  
+    f.write("\nbegin\r\n")  
        
-    instanciar_separador(f,separador)
+    instanciar_separador(f,separador,objetos)
     
-    instanciar_mediador(f,mediador)
+    instanciar_mediador(f,mediador,objetos)
     
-    instanciar_red(f,"red")
+    instanciar_red(f,"red",objetos)
     
     f.write("end Behavioral;\r\n") 
     
@@ -276,38 +292,43 @@ def creando_separador(secciones,objetos):
     separador = "separador"
     f.write("\t"+"entity "+separador+" is\n")
     f.write("\t\t"+"generic(\n")
-    f.write("\t\t\t"+"N"+" : "+"natural"+" := "+str(N)+";\n")
-    f.write("\t\t\t"+"N_CVS"+" : "+"natural"+" := "+str(N_CVS)+";\n")
+    f.write("\t\t\t"+"N"+" : "+"natural"+" := "+str(N)+";\n")   
     f.write("\t\t\t"+"N_SEM"+" : "+"natural"+" := "+str(N_SEM)+";\n")
-    f.write("\t\t\t"+"N_PAN"+" : "+"natural"+" := "+str(N_PAN)+";\n")
-    f.write("\t\t\t"+"N_MDC"+" : "+"natural"+" := "+str(N_MDC)+"\n")
+    if N_PAN > 0:
+        f.write("\t\t\t"+"N_PAN"+" : "+"natural"+" := "+str(N_PAN)+";\n")
+    if N_MDC > 0:    
+        f.write("\t\t\t"+"N_MDC"+" : "+"natural"+" := "+str(N_MDC)+";\n")
+    f.write("\t\t\t"+"N_CVS"+" : "+"natural"+" := "+str(N_CVS)+"\n")
     f.write("\t\t"+");\n")
     f.write("\t\t"+"port("+"\n")
     f.write("\t\t\t"+"Clock"+   " : "+" in "+"std_logic;"+"\n")
-    f.write("\t\t\t"+"Reset"+   " : "+" in "+"std_logic;"+"\n")
+    
     f.write("\t\t\t"+"Paquete"+    " : "+" in "+"std_logic_vector(N-1 downto 0);"+"\n")
     f.write("\t\t\t"+"Ocupacion"+    " : "+" out "+"std_logic_vector(N_CVS-1 downto 0);"+"\n")
     f.write("\t\t\t"+"semaforos"+ " : "+" out "+"sems_type;"+"\n")
     if N_PAN > 1:
         f.write("\t\t\t"+"barreras"+ " : "+" out "+"std_logic_vector(N_PAN-1 downto 0);"+"\n")
-    else:
+    if N_PAN == 1:
         f.write("\t\t\t"+"barreras"+ " : "+" out "+"std_logic;"+"\n")
     if N_MDC > 1:
-        f.write("\t\t\t"+"Cambios"+ " : "+" out "+"std_logic_vector(N_MDC-1 downto 0)"+"\n")  
-    else:
-        f.write("\t\t\t"+"Cambios"+ " : "+" out "+"std_logic"+"\n")   
+        f.write("\t\t\t"+"Cambios"+ " : "+" out "+"std_logic_vector(N_MDC-1 downto 0)"+";\n")  
+    if N_MDC == 1:
+        f.write("\t\t\t"+"Cambios"+ " : "+" out "+"std_logic"+";\n")  
+    f.write("\t\t\t"+"Reset"+   " : "+" in "+"std_logic"+"\n")
     f.write("\t\t"+");\n")
     f.write("\t"+"end entity "+separador+";\r\n")
    
     f.write("architecture Behavioral of "+separador+" is\r\n") 
-     
-      
+        
     f.write("\tSignal cv_s : std_logic_vector(N_CVS-1 downto 0);\n")    
     f.write("\tSignal sem_s_i,sem_s_o : sems_type;\n")
-    f.write("\tSignal pan_s_i,pan_s_o : std_logic_vector(N_PAN-1 downto 0);\n")
+    if N_PAN > 1:
+        f.write("\tSignal pan_s_i,pan_s_o : std_logic_vector(N_PAN-1 downto 0);\n")
+    if N_PAN == 1:
+        f.write("\tSignal pan_s_i,pan_s_o : std_logic;\n")    
     if N_MDC > 1:
         f.write("\tSignal mdc_s_i,mdc_s_o : std_logic_vector(N_MDC-1 downto 0);\n")
-    else:
+    if N_MDC == 1:
         f.write("\tSignal mdc_s_i,mdc_s_o : std_logic;\n")
     f.write("begin\r\n")  
     
@@ -319,12 +340,15 @@ def creando_separador(secciones,objetos):
     f.write("\t\t\t"+"if (Reset = '1') then\n")
     f.write("\t\t\t\t"+"Ocupacion <= \""+str("0"*N_CVS)+"\";"+"\n")
     f.write("\t\t\t\t"+"semaforos.lsb <= \""+str("0"*N_SEM)+"\";"+"\n")
-    f.write("\t\t\t\t"+"semaforos.msb <= \""+str("0"*N_SEM)+"\";"+"\n")  
-    f.write("\t\t\t\t"+"barreras <= \""+str("0"*N_PAN)+"\";"+"\n")
+    f.write("\t\t\t\t"+"semaforos.msb <= \""+str("0"*N_SEM)+"\";"+"\n") 
+    if N_PAN > 1:
+        f.write("\t\t\t\t"+"barreras <= \""+str("0"*N_PAN)+"\";"+"\n")
+    if N_PAN == 1:
+        f.write("\t\t\t\t"+"barreras <= '0'"+";\n")    
     if N_MDC > 1:
         f.write("\t\t\t\t"+"Cambios <= \""+str("0"*N_MDC)+"\";"+"\n")
-    else:
-        f.write("\t\t\t\t"+"Cambios <= '0';"+"\n")
+    if N_MDC == 1:
+        f.write("\t\t\t\t"+"Cambios <= '0'"+";\n")
     f.write("\t\t\t"+"else\n")
     f.write("\t\t\t\t"+"Ocupacion <= Paquete("+str(N_CVS)+"-1 downto 0);"+"\n")
     
@@ -335,11 +359,15 @@ def creando_separador(secciones,objetos):
         else:
             #print ("MSB: {}".format(i+1))
             f.write("\t\t\t\t"+"semaforos.msb("+str(int(i/2))+") <= Paquete("+str(N_CVS+i)+");"+"\n")
-        
-    f.write("\t\t\t\t"+"barreras <= Paquete("+str(N_CVS+2*N_SEM+N_PAN)+"-1 downto "+str(N_CVS+2*N_SEM)+");"+"\n")
+   
+    if N_PAN > 1:
+        f.write("\t\t\t\t"+"barreras <= Paquete("+str(N_CVS+2*N_SEM+N_PAN)+"-1 downto "+str(N_CVS+2*N_SEM)+");"+"\n")
+    if N_PAN == 1:
+        f.write("\t\t\t\t"+"barreras <= Paquete("+str(N_CVS+2*N_SEM+N_PAN)+"-1);"+"\n")
+          
     if N_MDC > 1:
         f.write("\t\t\t\t"+"Cambios <= Paquete("+str(N_CVS+2*N_SEM+N_PAN+N_MDC)+"-1 downto "+str(N_CVS+2*N_SEM+N_PAN)+");"+"\n")
-    else:
+    if N_MDC == 1:
         f.write("\t\t\t\t"+"Cambios <= Paquete("+str(N_CVS+2*N_SEM+N_PAN+N_MDC)+"-1);"+"\n")
         
     f.write("\t\t\t"+"end if;\n")
@@ -373,30 +401,39 @@ def creando_mediador(secciones,objetos):
     f.write("-- " + NODO + ".vhdl : Achivo VHDL generado automaticamente\r\n")      
     
     incluir_librerias(f,True) # Incluir librerias
-    
-       
+        
     # componente mediador
     mediador = "mediador"
     f.write("\t"+"entity "+mediador+" is\n")
     f.write("\t\t"+"generic(\n")
     f.write("\t\t\t"+"N"+" : "+"natural"+" := "+str(N)+";\n")
-    f.write("\t\t\t"+"N_CVS"+" : "+"natural"+" := "+str(N_CVS)+";\n")
+    
     f.write("\t\t\t"+"N_SEM"+" : "+"natural"+" := "+str(N_SEM)+";\n")
-    f.write("\t\t\t"+"N_PAN"+" : "+"natural"+" := "+str(N_PAN)+";\n")
-    f.write("\t\t\t"+"N_MDC"+" : "+"natural"+" := "+str(N_MDC)+"\n")
+    if N_PAN > 0:
+        f.write("\t\t\t"+"N_PAN"+" : "+"natural"+" := "+str(N_PAN)+";\n")
+    if N_MDC > 0:    
+        f.write("\t\t\t"+"N_MDC"+" : "+"natural"+" := "+str(N_MDC)+";\n")
+    f.write("\t\t\t"+"N_CVS"+" : "+"natural"+" := "+str(N_CVS)+"\n")    
     f.write("\t\t"+");\n")
     f.write("\t\t"+"port("+"\n")
-    f.write("\t\t\t"+"Clock"+   " : "+" in "+"std_logic;"+"\n")
-    f.write("\t\t\t"+"Reset"+   " : "+" in "+"std_logic;"+"\n")
-    f.write("\t\t\t"+"semaforos"+ " : "+" in "+"sems_type;"+"\n")
-    f.write("\t\t\t"+"barreras"+ " : "+" in "+"std_logic_vector("+str(N_PAN)+"-1 downto 0);"+"\n")
-    f.write("\t\t\t"+"Cambios"+ " : "+" in "+"std_logic_vector("+str(N_MDC)+"-1 downto 0);"+"\n")
-    f.write("\t\t\t"+"Salida"+    " : "+" out "+"std_logic_vector("+str(M)+"-1 downto 0)"+"\n")
+    f.write("\t\t\t"+"Clock"+   " : "+" in "+"std_logic"+";\n")
+    
+    f.write("\t\t\t"+"semaforos"+ " : "+" in "+"sems_type"+";\n")
+    if N_PAN > 1:
+        f.write("\t\t\t"+"barreras"+ " : "+" in "+"std_logic_vector("+str(N_PAN)+"-1 downto 0)"+";\n")
+    if N_PAN == 1:
+        f.write("\t\t\t"+"barreras"+ " : "+" in "+"std_logic"+";\n")
+    if N_MDC > 1:
+        f.write("\t\t\t"+"Cambios"+ " : "+" in "+"std_logic_vector("+str(N_MDC)+"-1 downto 0)"+";\n")
+    if N_MDC == 1:
+        f.write("\t\t\t"+"Cambios"+ " : "+" in "+"std_logic"+";\n") 
+    
+    f.write("\t\t\t"+"Salida"+    " : "+" out "+"std_logic_vector("+str(M)+"-1 downto 0)"+";\n")
+    f.write("\t\t\t"+"Reset"+   " : "+" in "+"std_logic"+"\n")
     f.write("\t\t"+");\n")
     f.write("\t"+"end entity "+mediador+";\r\n") 
    
-    f.write("architecture Behavioral of "+mediador+" is\r\n") 
-     
+    f.write("architecture Behavioral of "+mediador+" is\r\n")      
     
     f.write("begin\r\n")  
     
@@ -419,9 +456,11 @@ def creando_mediador(secciones,objetos):
         else:
             #print ("LSB: {}".format(i+1))
             f.write("\t\t\t\t"+"Salida("+str(i)+") <= semaforos.lsb("+str(int((i+1)/2))+");"+"\n")
-        
-    f.write("\t\t\t\t"+"Salida ("+str(2*N_SEM+N_PAN)+"-1 downto "+str(2*N_SEM)+") <= barreras;"+"\n")
-    f.write("\t\t\t\t"+"Salida ("+str(2*N_SEM+N_PAN+N_MDC)+"-1 downto "+str(2*N_SEM+N_PAN)+") <= Cambios;"+"\n")
+    
+    if N_PAN > 0:    
+        f.write("\t\t\t\t"+"Salida ("+str(2*N_SEM+N_PAN)+"-1 downto "+str(2*N_SEM)+") <= barreras;"+"\n")
+    if N_MDC > 0:
+        f.write("\t\t\t\t"+"Salida ("+str(2*N_SEM+N_PAN+N_MDC)+"-1 downto "+str(2*N_SEM+N_PAN)+") <= Cambios;"+"\n")
     
     f.write("\t\t\t"+"end if;\n")
     f.write("\t\t"+"end if;\n")
@@ -433,56 +472,76 @@ def creando_mediador(secciones,objetos):
     
     print("Mediador > Finalizado")
 #%%   
-def instanciar_separador(f,nombre):   
+def instanciar_separador(f,nombre,objetos):   
+    
+    N_CVS = objetos[0]
+    N_SEM = objetos[1]
+    N_PAN = objetos[2]
+    N_MDC = objetos[3]
     
     # instanciar separador
     f.write("\t"+nombre+"_i:"+nombre+" port map(\n")
     
     f.write("\t\t"+"Clock"+" => "+"Clock"+",\n")
-    f.write("\t\t"+"Reset"+" => "+"Reset"+",\n")
+    
     f.write("\t\t"+"Paquete"+" => "+"Paquete_i"+",\n")
     
     f.write("\t\t"+"Ocupacion => cv_s,\n")
     f.write("\t\t"+"semaforos => sem_s_i,\n")
-    f.write("\t\t"+"barreras => pan_s_i,\n")
-    f.write("\t\t"+"Cambios => mdc_s_i\n")
-        
+    if N_PAN > 0:
+        f.write("\t\t"+"barreras => pan_s_i,\n")
+    if N_MDC > 0:    
+        f.write("\t\t"+"Cambios => mdc_s_i,\n")
+    f.write("\t\t"+"Reset"+" => "+"Reset"+"\n")    
     f.write("\t\t);\r\n")
         
 #%%   
-def instanciar_mediador(f,nombre):   
+def instanciar_mediador(f,nombre,objetos):   
+    
+    N_CVS = objetos[0]
+    N_SEM = objetos[1]
+    N_PAN = objetos[2]
+    N_MDC = objetos[3]
     
     # instanciar mediador
     f.write("\t"+nombre+"_i:"+nombre+" port map(\n")
     
     f.write("\t\t"+"Clock"+" => "+"Clock"+",\n")
-    f.write("\t\t"+"Reset"+" => "+"Reset"+",\n")
+    
     
     f.write("\t\t"+"semaforos => sem_s_o,\n")
-    f.write("\t\t"+"barreras => pan_s_o,\n")
-    f.write("\t\t"+"Cambios => mdc_s_o,\n")
+    if N_PAN > 0:
+        f.write("\t\t"+"barreras => pan_s_o,\n")
+    if N_MDC > 0:     
+        f.write("\t\t"+"Cambios => mdc_s_o,\n")
             
-    f.write("\t\t"+"Salida => Paquete_o\n")
-        
+    f.write("\t\t"+"Salida => Paquete_o,\n")
+    f.write("\t\t"+"Reset"+" => "+"Reset"+"\n")    
     f.write("\t\t);\r\n")
 
 #%%   
-def instanciar_red(f,nombre):   
+def instanciar_red(f,nombre,objetos):   
+    
+    N_CVS = objetos[0]
+    N_SEM = objetos[1]
+    N_PAN = objetos[2]
+    N_MDC = objetos[3]
     
     # instanciar red
     f.write("\t"+nombre+"_i:"+nombre+" port map(\n")
     
     f.write("\t\t"+"Clock"+" => "+"Clock"+",\n")
-    f.write("\t\t"+"Reset"+" => "+"Reset"+",\n")
-    
     f.write("\t\t"+"Ocupacion => cv_s,\n")
     f.write("\t\t"+"semaforos_i => sem_s_i,\n")
     f.write("\t\t"+"semaforos_o => sem_s_o,\n")
-    f.write("\t\t"+"barreras_i => pan_s_i,\n")
-    f.write("\t\t"+"barreras_o => pan_s_o,\n")
-    f.write("\t\t"+"Cambios_i => mdc_s_i,\n")
-    f.write("\t\t"+"Cambios_o => mdc_s_o\n") 
-        
+    if N_PAN > 0:
+        f.write("\t\t"+"barreras_i => pan_s_i,\n")
+        f.write("\t\t"+"barreras_o => pan_s_o,\n")
+    if N_MDC > 0:    
+        f.write("\t\t"+"Cambios_i => mdc_s_i,\n")
+        f.write("\t\t"+"Cambios_o => mdc_s_o,\n") 
+    f.write("\t\t"+"Reset"+" => "+"Reset"+"\n")
+    
     f.write("\t\t);\r\n")
         
  #%%    
@@ -661,7 +720,7 @@ def creando_red(secciones,objetos,tabla):
             #print ("Cambio nodo : {}".format(i+1))
             # Si > :
             if (secciones[i].desvio_inf_dir == ">" or secciones[i].desvio_sup_dir == ">"):
-                print ("Nodo : {} > Cambio".format(i+1))
+                print ("Nodo : {} > Cambio_{}".format(i+1,"r"))
                 f.write("\t\t"+"Estado_post => mdc_ante_o_"+str(cambio_index)+",\n")
                 cambios_vecinos.append(i+1)
                 #print ("ACA {}".format(cambios_vecinos))

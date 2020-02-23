@@ -84,7 +84,7 @@ class Estaciones:
         self.ocupado = False
         
         self.cambio = False
-        self.cambio_raiz = True
+        self.cambio_raiz = False
 
         #self.cambio_orden = ""
         #self.cambio_estado = True

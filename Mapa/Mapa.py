@@ -71,11 +71,12 @@ def cargar_secciones(archivo_conexiones='conexiones.txt',archivo_posiciones='pos
             else:
                 extremo = False
 
-            if barrera == 'b':
-                barrera = True
-            else:
-                barrera = False
-
+            #if barrera == 'b':
+            #    barrera = True
+            #else:
+            #    barrera = False
+            barrera = False  ## SIN BARRERAS!
+            
             secciones.append(Estaciones(str(nombre),int(indice),float(pos_x),float(pos_y),str(sentido),barrera,extremo))
 #%%            
 def buscar_vecinos(test = False):
@@ -166,35 +167,55 @@ def imprimir_estados():
 #%%
 def asignar_tipo():
     for i in range(len(secciones)):
+        # Extremos
         if(len(secciones[i].vecinos) == 1):
             secciones[i].tipo = "Extremo"
-        if(len(secciones[i].vecinos) == 2 and secciones[i].tipo == ""):
+        # Simples
+        if(len(secciones[i].vecinos) == 2):
             secciones[i].tipo = "Simple"
+          
+        # Cruces    
         if(len(secciones[i].vecinos) == 3 or len(secciones[i].vecinos) == 4):
             secciones[i].tipo = "Cruce"
             secciones[i].cambio = True
 
-            if random.randint(0, 1) > 0:
-                estado = True
-            else:
-                estado = False
+            #if random.randint(0, 1) > 0:
+            estado = True
+            #else:
+                #estado = False
 
             secciones[i].cambio_estado = estado
                 
-            for j in range(len(secciones[i].vecinos)):
-                if(secciones[secciones[i].vecinos[j]-1].pos_y != secciones[i].pos_y):
-
-
-                    secciones[secciones[i].vecinos[j]-1].tipo = "Cruce"
-                    secciones[secciones[i].vecinos[j]-1].cambio = True
-                    secciones[secciones[i].vecinos[j]-1].cambio_estado = estado
-                     
-                    print("{} tiene de vecino a {}".format(i+1,secciones[secciones[i].vecinos[j]-1].id))
+            
+        # Especiales        
+        for j in range(len(secciones[i].vecinos)):
+            if (secciones[secciones[i].vecinos[j]-1].cambio == True):
+                #print("{} tiene de vecino a {}".format(i+1,secciones[i].vecinos[j]))     
+                
+                if (secciones[secciones[i].id-1].anterior != ""):
+                    if (secciones[secciones[i].anterior-1].cambio == True):
+                        if (secciones[secciones[i].vecinos[j]-1].desvio_sup_dir == ">" or secciones[secciones[i].vecinos[j]-1].desvio_inf_dir == ">"):
+                            #print("{} es el directo de {}".format(i+1,secciones[i].vecinos[j]))  
+                            secciones[i].tipo = "Directo"
+                
+                if (secciones[secciones[i].id-1].posterior != ""):
+                    if (secciones[secciones[i].posterior-1].cambio == True):
+                        if (secciones[secciones[i].vecinos[j]-1].desvio_sup_dir == "<" or secciones[secciones[i].vecinos[j]-1].desvio_inf_dir == "<"):
+                            #print("{} es el directo de {}".format(i+1,secciones[i].vecinos[j]))  
+                            secciones[i].tipo = "Directo"
+                            
+                if (secciones[secciones[i].vecinos[j]-1].desvio_sup == i+1):
+                    #print("{} es el desvio de {}".format(i+1,secciones[i].vecinos[j])) 
+                    secciones[i].tipo = "Desvio"
+                    
+                if (secciones[secciones[i].vecinos[j]-1].desvio_inf == i+1):
+                    #print("{} es el desvio de {}".format(i+1,secciones[i].vecinos[j])) 
+                    secciones[i].tipo = "Desvio"
 #%%
 def cambios_herencia():
 
     for i in range(len(secciones)):
-        if secciones[i].tipo == "Cruce":
+        if secciones[i].cambio == True:
             vecinos_totales = secciones[i].N_vecinos
 
             vecinos_secundarios = 0
@@ -207,6 +228,7 @@ def cambios_herencia():
 
             if vecinos_principales > vecinos_secundarios:
                 secciones[i].cambio_raiz = True
+                #print("{} es un cambio raiz".format(i+1))
             else:
                 secciones[i].cambio_raiz = False
 
@@ -215,18 +237,21 @@ def cambios_herencia():
 #%%
 def asignar_semaforos():
     for i in range(len(secciones)):
-        if(secciones[i].tipo == "Cruce" ):
+        #if(secciones[i].tipo == "Cruce" or secciones[i].tipo == "Desvio" ):
+        if(secciones[i].cambio == True or secciones[i].tipo == "Desvio" ):    
             secciones[i].semaforo = True
             if (secciones[i].cambio_raiz == True):
 
                 if(secciones[i].posterior != "" and secciones[i].anterior != "" and secciones[i].N_vecinos == 3):
 
-                    if ( secciones[secciones[i].anterior-1].tipo != "Cruce"):
+                    #if (secciones[secciones[i].anterior-1].tipo != "Cruce"):
+                    if (secciones[secciones[i].anterior-1].cambio == False):
                         (secciones[i].sem_sentido).append("<")
                         (secciones[i].N_aspectos).append("3")
                         (secciones[i].aspecto).append("Rojo")
 
-                    if ( secciones[secciones[i].posterior-1].tipo != "Cruce"):
+                    #if (secciones[secciones[i].posterior-1].tipo != "Cruce"):
+                    if (secciones[secciones[i].posterior-1].cambio == False):    
                         (secciones[i].sem_sentido).append(">")
                         (secciones[i].N_aspectos).append("3")
                         (secciones[i].aspecto).append("Rojo")
@@ -427,11 +452,11 @@ def detectar_rutas(secciones, test = False):
     for i in range(len(secciones)):
         inicial = i+1
                
-        if (secciones[i].tipo == "Cruce"):
+        if (secciones[i].tipo == "Cruce" or secciones[i].tipo == "Desvio"):
 
             #print("Iniciales: {}".format(inicial))
-            if (secciones[i].anterior != "" and secciones[secciones[i].anterior-1].tipo == "Cruce" and
-                 secciones[i].posterior != "" and secciones[secciones[i].posterior-1].tipo == "Cruce"):
+            if (secciones[i].anterior != "" and (secciones[secciones[i].anterior-1].tipo == "Cruce" or secciones[secciones[i].anterior-1].tipo == "Desvio") and
+                 secciones[i].posterior != "" and (secciones[secciones[i].posterior-1].tipo == "Cruce" or secciones[secciones[i].posterior-1].tipo == "Desvio")):
                 continue
                 
             if ('<' in secciones[i].sem_sentido and secciones[i].posterior != ""):# and secciones[secciones[i].posterior-1].tipo != "Cruce"):        
@@ -475,7 +500,7 @@ def semaforo_anterior(inicial,intermedio = None, desvio = None,recorrido = [], t
         anterior = inicio.anterior
         recorrido.append(anterior)
         if (secciones[anterior-1].tipo == "Extremo" or 
-            (secciones[anterior-1].tipo == "Cruce" and 
+            ((secciones[anterior-1].tipo == "Cruce" or secciones[anterior-1].tipo == "Desvio") and 
              secciones[secciones[anterior-1].posterior-1].semaforo == False)):
             
             recorrido.insert(0,inicial)
@@ -541,7 +566,7 @@ def semaforo_siguiente(inicial,intermedio = None, desvio = None, recorrido = [],
         posterior = inicio.posterior
         recorrido.append(posterior)
         if (secciones[posterior-1].tipo == "Extremo" or 
-            (secciones[posterior-1].tipo == "Cruce" and 
+            ((secciones[posterior-1].tipo == "Cruce" or secciones[posterior-1].tipo == "Desvio") and 
              secciones[secciones[posterior-1].anterior-1].semaforo == False)):
             
             if (recorrido[0] != inicial):
@@ -670,7 +695,7 @@ v = 0.5
 print("@"*25+" Analizador de grafos v"+str(v)+" "+"@"*25+"\n")
 
 for i in range(len(archivos)):
-    
+        
     # Falta corregir desvios
     if i != 1:
         continue
@@ -690,7 +715,7 @@ for i in range(len(archivos)):
     ax.cla() # clear things for fresh plot
 
     print("%"*25+" Mapa_"+str(i)+' '+"%"*25)  
-    
+        
     cargar_secciones(archivos[i][0],archivos[i][1])
     
     axis = [[-0.5,10.5],[-2.5,2.5]]
@@ -720,7 +745,7 @@ for i in range(len(archivos)):
     
     dibujar_secciones(secciones, ajuste)
     
-    imprimir_estados()
+    #imprimir_estados()
     
     imprimir_semaforos(secciones,ajuste)    
     

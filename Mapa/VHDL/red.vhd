@@ -6,11 +6,11 @@ use IEEE.numeric_std.all;
 use work.my_package.all;
 	entity red is
 		generic(
-			N : natural := 41;
+			N : natural := 39;
 			N_CVS : natural := 13;
 			N_SEM : natural := 12;
-			N_PAN : natural := 3;
-			N_MDC : natural := 1
+			N_PAN : natural := 0;
+			N_MDC : natural := 2
 		);
 		port(
 			Clock :  in std_logic;
@@ -18,20 +18,20 @@ use work.my_package.all;
 			Ocupacion :  in std_logic_vector(13-1 downto 0);
 			semaforos_i :  in sems_type;
 			semaforos_o :  out sems_type;
-			barreras_i :  in std_logic_vector(3-1 downto 0);
-			barreras_o :  out std_logic_vector(3-1 downto 0);
-			Cambios_i :  in std_logic_vector(1-1 downto 0);
-			Cambios_o :  out std_logic_vector(1-1 downto 0)
+			barreras_i :  in std_logic_vector(0-1 downto 0);
+			barreras_o :  out std_logic_vector(0-1 downto 0);
+			Cambios_i :  in std_logic_vector(2-1 downto 0);
+			Cambios_o :  out std_logic_vector(2-1 downto 0)
 		);
 	end entity red;
 architecture Behavioral of red is
 	component cambio_1 is
 		generic(
-			N : natural := 41;
+			N : natural := 39;
 			N_CVS : natural := 13;
 			N_SEM : natural := 12;
-			N_PAN : natural := 3;
-			N_MDC : natural := 1
+			N_PAN : natural := 0;
+			N_MDC : natural := 2
 		);
 		port(
 			Clock :  in std_logic;
@@ -46,13 +46,34 @@ architecture Behavioral of red is
 			Cambio_o :  out std_logic
 		);
 	end component cambio_1;
-	component nodo_1 is
+	component cambio_2 is
 		generic(
-			N : natural := 41;
+			N : natural := 39;
 			N_CVS : natural := 13;
 			N_SEM : natural := 12;
-			N_PAN : natural := 3;
-			N_MDC : natural := 1
+			N_PAN : natural := 0;
+			N_MDC : natural := 2
+		);
+		port(
+			Clock :  in std_logic;
+			Reset :  in std_logic;
+			Estado_ante_i :  in std_logic;
+			Estado_post_i :  in std_logic;
+			Estado_desv_i :  in std_logic;
+			Estado_ante_o :  out std_logic;
+			Estado_post_o :  out std_logic;
+			Estado_desv_o :  out std_logic;
+			Cambio_i :  in std_logic;
+			Cambio_o :  out std_logic
+		);
+	end component cambio_2;
+	component nodo_1 is
+		generic(
+			N : natural := 39;
+			N_CVS : natural := 13;
+			N_SEM : natural := 12;
+			N_PAN : natural := 0;
+			N_MDC : natural := 2
 		);
 		port(
 			Clock :  in std_logic;
@@ -67,11 +88,11 @@ architecture Behavioral of red is
 	end component nodo_1;
 	component nodo_2 is
 		generic(
-			N : natural := 41;
+			N : natural := 39;
 			N_CVS : natural := 13;
 			N_SEM : natural := 12;
-			N_PAN : natural := 3;
-			N_MDC : natural := 1
+			N_PAN : natural := 0;
+			N_MDC : natural := 2
 		);
 		port(
 			Clock :  in std_logic;
@@ -93,11 +114,11 @@ architecture Behavioral of red is
 	end component nodo_2;
 	component nodo_3 is
 		generic(
-			N : natural := 41;
+			N : natural := 39;
 			N_CVS : natural := 13;
 			N_SEM : natural := 12;
-			N_PAN : natural := 3;
-			N_MDC : natural := 1
+			N_PAN : natural := 0;
+			N_MDC : natural := 2
 		);
 		port(
 			Clock :  in std_logic;
@@ -111,11 +132,11 @@ architecture Behavioral of red is
 	end component nodo_3;
 	component nodo_4 is
 		generic(
-			N : natural := 41;
+			N : natural := 39;
 			N_CVS : natural := 13;
 			N_SEM : natural := 12;
-			N_PAN : natural := 3;
-			N_MDC : natural := 1
+			N_PAN : natural := 0;
+			N_MDC : natural := 2
 		);
 		port(
 			Clock :  in std_logic;
@@ -128,11 +149,11 @@ architecture Behavioral of red is
 	end component nodo_4;
 	component nodo_5 is
 		generic(
-			N : natural := 41;
+			N : natural := 39;
 			N_CVS : natural := 13;
 			N_SEM : natural := 12;
-			N_PAN : natural := 3;
-			N_MDC : natural := 1
+			N_PAN : natural := 0;
+			N_MDC : natural := 2
 		);
 		port(
 			Clock :  in std_logic;
@@ -148,11 +169,11 @@ architecture Behavioral of red is
 	end component nodo_5;
 	component nodo_6 is
 		generic(
-			N : natural := 41;
+			N : natural := 39;
 			N_CVS : natural := 13;
 			N_SEM : natural := 12;
-			N_PAN : natural := 3;
-			N_MDC : natural := 1
+			N_PAN : natural := 0;
+			N_MDC : natural := 2
 		);
 		port(
 			Clock :  in std_logic;
@@ -165,11 +186,11 @@ architecture Behavioral of red is
 	end component nodo_6;
 	component nodo_7 is
 		generic(
-			N : natural := 41;
+			N : natural := 39;
 			N_CVS : natural := 13;
 			N_SEM : natural := 12;
-			N_PAN : natural := 3;
-			N_MDC : natural := 1
+			N_PAN : natural := 0;
+			N_MDC : natural := 2
 		);
 		port(
 			Clock :  in std_logic;
@@ -177,17 +198,16 @@ architecture Behavioral of red is
 			Estado_i :  in std_logic;
 			Estado_ante :  out std_logic;
 			Estado_post :  out std_logic;
-			Barrera :  out std_logic;
 			Estado_o :  out std_logic
 		);
 	end component nodo_7;
 	component nodo_8 is
 		generic(
-			N : natural := 41;
+			N : natural := 39;
 			N_CVS : natural := 13;
 			N_SEM : natural := 12;
-			N_PAN : natural := 3;
-			N_MDC : natural := 1
+			N_PAN : natural := 0;
+			N_MDC : natural := 2
 		);
 		port(
 			Clock :  in std_logic;
@@ -195,17 +215,16 @@ architecture Behavioral of red is
 			Estado_i :  in std_logic;
 			Estado_ante :  out std_logic;
 			Estado_post :  out std_logic;
-			Barrera :  out std_logic;
 			Estado_o :  out std_logic
 		);
 	end component nodo_8;
 	component nodo_9 is
 		generic(
-			N : natural := 41;
+			N : natural := 39;
 			N_CVS : natural := 13;
 			N_SEM : natural := 12;
-			N_PAN : natural := 3;
-			N_MDC : natural := 1
+			N_PAN : natural := 0;
+			N_MDC : natural := 2
 		);
 		port(
 			Clock :  in std_logic;
@@ -221,11 +240,11 @@ architecture Behavioral of red is
 	end component nodo_9;
 	component nodo_10 is
 		generic(
-			N : natural := 41;
+			N : natural := 39;
 			N_CVS : natural := 13;
 			N_SEM : natural := 12;
-			N_PAN : natural := 3;
-			N_MDC : natural := 1
+			N_PAN : natural := 0;
+			N_MDC : natural := 2
 		);
 		port(
 			Clock :  in std_logic;
@@ -233,17 +252,16 @@ architecture Behavioral of red is
 			Estado_i :  in std_logic;
 			Estado_ante :  out std_logic;
 			Estado_post :  out std_logic;
-			Barrera :  out std_logic;
 			Estado_o :  out std_logic
 		);
 	end component nodo_10;
 	component nodo_11 is
 		generic(
-			N : natural := 41;
+			N : natural := 39;
 			N_CVS : natural := 13;
 			N_SEM : natural := 12;
-			N_PAN : natural := 3;
-			N_MDC : natural := 1
+			N_PAN : natural := 0;
+			N_MDC : natural := 2
 		);
 		port(
 			Clock :  in std_logic;
@@ -257,11 +275,11 @@ architecture Behavioral of red is
 	end component nodo_11;
 	component nodo_12 is
 		generic(
-			N : natural := 41;
+			N : natural := 39;
 			N_CVS : natural := 13;
 			N_SEM : natural := 12;
-			N_PAN : natural := 3;
-			N_MDC : natural := 1
+			N_PAN : natural := 0;
+			N_MDC : natural := 2
 		);
 		port(
 			Clock :  in std_logic;
@@ -277,11 +295,11 @@ architecture Behavioral of red is
 	end component nodo_12;
 	component nodo_13 is
 		generic(
-			N : natural := 41;
+			N : natural := 39;
 			N_CVS : natural := 13;
 			N_SEM : natural := 12;
-			N_PAN : natural := 3;
-			N_MDC : natural := 1
+			N_PAN : natural := 0;
+			N_MDC : natural := 2
 		);
 		port(
 			Clock :  in std_logic;
@@ -369,12 +387,6 @@ architecture Behavioral of red is
 	Signal sem_msb_i_12 : std_logic;
 	Signal sem_lsb_o_12 : std_logic;
 	Signal sem_msb_o_12 : std_logic;
-	Signal pan_i_1 : std_logic;
-	Signal pan_o_1 : std_logic;
-	Signal pan_i_2 : std_logic;
-	Signal pan_o_2 : std_logic;
-	Signal pan_i_3 : std_logic;
-	Signal pan_o_3 : std_logic;
 	Signal mdc_i_1 : std_logic;
 	Signal mdc_o_1 : std_logic;
 	Signal mdc_ante_i_1 : std_logic;
@@ -383,6 +395,14 @@ architecture Behavioral of red is
 	Signal mdc_post_o_1 : std_logic;
 	Signal mdc_desv_i_1 : std_logic;
 	Signal mdc_desv_o_1 : std_logic;
+	Signal mdc_i_2 : std_logic;
+	Signal mdc_o_2 : std_logic;
+	Signal mdc_ante_i_2 : std_logic;
+	Signal mdc_ante_o_2 : std_logic;
+	Signal mdc_post_i_2 : std_logic;
+	Signal mdc_post_o_2 : std_logic;
+	Signal mdc_desv_i_2 : std_logic;
+	Signal mdc_desv_o_2 : std_logic;
 	Signal cosa : std_logic;
 begin
 	nodo_1_i:nodo_1 port map(
@@ -458,7 +478,7 @@ begin
 		);
 	nodo_6_i:nodo_6 port map(
 		Clock => Clock,
-		Estado_ante => mdc_post_o_1,
+		Estado_ante => conector_5,
 		Estado_post => conector_8,
 		Estado_i => ocupacion_6,
 		Estado_o => conector_6,
@@ -483,7 +503,6 @@ begin
 	nodo_9_i:nodo_9 port map(
 		Clock => Clock,
 		Estado_post => conector_10,
-		Estado_ante => mdc_desv_o_1,
 		Semaforo_propio_i_1.lsb => sem_lsb_i_7,
 		Semaforo_propio_i_1.msb => sem_msb_i_7,
 		Semaforo_propio_o_1.lsb => sem_lsb_o_7,
@@ -555,6 +574,18 @@ begin
 		Estado_desv_o => mdc_desv_o_1,
 		Reset => Reset
 		);
+	cambio_2_i:cambio_2 port map(
+		Clock => Clock,
+		Cambio_i => mdc_i_2,
+		Cambio_o => mdc_o_2,
+		Estado_ante_i => conector_2,
+		Estado_ante_o => mdc_ante_o_2,
+		Estado_post_i => conector_3,
+		Estado_post_o => mdc_post_o_2,
+		Estado_desv_i => conector_5,
+		Estado_desv_o => mdc_desv_o_2,
+		Reset => Reset
+		);
 		barreras_o <= barreras_i;
 		cosa <= '0';
 		ocupacion_1 <= Ocupacion(0);
@@ -572,8 +603,12 @@ begin
 		ocupacion_13 <= Ocupacion(12);
 		mdc_i_1 <= Cambios_i(0);
 		Cambios_o(0) <= mdc_o_1;
+		mdc_i_2 <= Cambios_i(1);
+		Cambios_o(1) <= mdc_o_2;
 		pan_i_1 <= Barreras_i(0);
 		Barreras_o(0) <= pan_o_1;
+		pan_i_2 <= Barreras_i(1);
+		Barreras_o(1) <= pan_o_2;
 		sem_lsb_i_1 <= semaforos_i.lsb(0);
 		sem_msb_i_1 <= semaforos_i.msb(0);
 		semaforos_o.lsb(0) <= sem_lsb_o_1;

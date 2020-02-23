@@ -130,8 +130,15 @@ def dibujar_secciones(secciones,ajuste = 5):
             dibujar_seccion(secciones[i].pos_x,secciones[i].pos_y,secciones[i].id,c = violet,centro = secciones[i].ocupado, ajuste = ajuste)
         if(secciones[i].tipo == "Simple"):
             dibujar_seccion(secciones[i].pos_x,secciones[i].pos_y,secciones[i].id,c = 'b',centro = secciones[i].ocupado, ajuste = ajuste)
-        if(secciones[i].tipo == "Cruce"):
+        
+        if(secciones[i].tipo == "Directo"):
+            dibujar_seccion(secciones[i].pos_x,secciones[i].pos_y,secciones[i].id,c = 'y',centro = secciones[i].ocupado, ajuste = ajuste)
+        if(secciones[i].tipo == "Desvio"):
+            dibujar_seccion(secciones[i].pos_x,secciones[i].pos_y,secciones[i].id,c = 'r',centro = secciones[i].ocupado, ajuste = ajuste)    
+        if(secciones[i].cambio == True):
             dibujar_seccion(secciones[i].pos_x,secciones[i].pos_y,secciones[i].id,c = 'g',centro = secciones[i].ocupado, ajuste = ajuste)
+        if(secciones[i].tipo == ""):
+            dibujar_seccion(secciones[i].pos_x,secciones[i].pos_y,secciones[i].id,c = 'k',centro = secciones[i].ocupado, ajuste = ajuste)     
         if(secciones[i].barrera == True):
             dibujar_seccion(secciones[i].pos_x,secciones[i].pos_y,secciones[i].id,c = 'c',centro = secciones[i].ocupado, ajuste = ajuste)
  #%%             
