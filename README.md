@@ -30,7 +30,9 @@
 - [x] Generacion de cambios
 - [x] Interconexion de nodos sin cambios
 - [x] Interconexion de nodos en redes de un cambio
-- [ ] Inteconexion de nodos en redes de N cambios
+- [x] Interconexion de nodos en redes de N cambios superiores
+- [ ] Interconexion de nodos en redes de N cambios inferiores
+- [ ] Interconexion de nodos en redes de N cambios genericos
 - [ ] Generacion de barreras
 - [ ] Comportamiento de semaforo en funcion del estado propio
 - [ ] Comportamiento de semaforo en funcion del estado vecino cercano
