@@ -14,6 +14,7 @@ from Estaciones import *
 from Plotear import *
 from Tabla import *
 from vhdl import *
+from comunicacion import *
 
 secciones = []
 conexiones = []
@@ -773,10 +774,18 @@ def generar_mapa(tabla):
         
     exportar_tablas(df)
 
+#%% 
+def conectar_terminal():
+    print("UART > Conectando")    
+    uart_main()
+    
 #%%  
 def main():
-    print("HOLA")
+
     generar_mapa(tabla)
+    
+    conectar_terminal()
+    
     
 if __name__ == "__main__":
     main()
