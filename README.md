@@ -34,12 +34,13 @@
 - [ ] Interconexion de nodos en redes de N cambios inferiores
 - [ ] Interconexion de nodos en redes de N cambios genericos
 - [ ] Generacion de barreras
+- [ ] Comportamiento de semaforo en cortocircuito
 - [ ] Comportamiento de semaforo en funcion del estado propio
 - [ ] Comportamiento de semaforo en funcion del estado vecino cercano
 - [ ] Comportamiento de semaforo en funcion del estado vecino lejano
 ## Implementacion de UART
 - [ ] Implementacion de UART automatizada para pruebas en Arty Z7 10
-- [ ] Implementacion de codigo python para enviar/recibir tramas adaptadas
+- [*] Implementacion de codigo python para enviar/recibir tramas adaptadas
 - [ ] Implementacion de codigo python para procesar las tramas recibidas y layout
 - [ ] Adaptacion del codigo para compatibilidad con CNEA
 ## Testing
