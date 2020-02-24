@@ -6,10 +6,10 @@ use IEEE.numeric_std.all;
 use work.my_package.all;
 	entity nodo_4 is
 		generic(
-			N : natural := 119;
-			N_SEM : natural := 36;
-			N_MDC : natural := 14;
-			N_CVS : natural := 33
+			N : natural := 21;
+			N_SEM : natural := 7;
+			N_MDC : natural := 1;
+			N_CVS : natural := 6
 		);
 		port(
 			Clock :  in std_logic;
@@ -19,10 +19,6 @@ use work.my_package.all;
 			Estado_post :  out std_logic;
 			Semaforo_propio_i_1 :  in sem_type;
 			Semaforo_propio_o_1 :  out sem_type;
-			Semaforo_propio_i_2 :  in sem_type;
-			Semaforo_propio_o_2 :  out sem_type;
-			Semaforo_propio_i_3 :  in sem_type;
-			Semaforo_propio_o_3 :  out sem_type;
 			Semaforo_cercano :  out sem_type;
 			Semaforo_lejano :  out sem_type;
 			Estado_o :  out std_logic
@@ -37,18 +33,10 @@ begin
 				Estado_o <= '0';
 				Semaforo_propio_o_1.msb <= '0';
 				Semaforo_propio_o_1.lsb <= '0';
-				Semaforo_propio_o_2.msb <= '0';
-				Semaforo_propio_o_2.lsb <= '0';
-				Semaforo_propio_o_3.msb <= '0';
-				Semaforo_propio_o_3.lsb <= '0';
 			else
 				Estado_o <= Estado_i;
 				Semaforo_propio_o_1.msb <= Semaforo_propio_i_1.msb;
 				Semaforo_propio_o_1.lsb <= Semaforo_propio_i_1.lsb;
-				Semaforo_propio_o_2.msb <= Semaforo_propio_i_2.msb;
-				Semaforo_propio_o_2.lsb <= Semaforo_propio_i_2.lsb;
-				Semaforo_propio_o_3.msb <= Semaforo_propio_i_3.msb;
-				Semaforo_propio_o_3.lsb <= Semaforo_propio_i_3.lsb;
 			end if;
 		end if;
 	end process;

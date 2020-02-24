@@ -6,10 +6,10 @@ use IEEE.numeric_std.all;
 use work.my_package.all;
 	entity nodo_1 is
 		generic(
-			N : natural := 119;
-			N_SEM : natural := 36;
-			N_MDC : natural := 14;
-			N_CVS : natural := 33
+			N : natural := 21;
+			N_SEM : natural := 7;
+			N_MDC : natural := 1;
+			N_CVS : natural := 6
 		);
 		port(
 			Clock :  in std_logic;

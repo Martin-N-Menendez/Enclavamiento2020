@@ -14,7 +14,7 @@ from Estaciones import *
 from Plotear import *
 from Tabla import *
 from vhdl import *
-from comunicacion import *
+#from comunicacion import *
 
 secciones = []
 conexiones = []
@@ -40,8 +40,8 @@ archivos = [
             ['Estaciones/con_4.txt','Estaciones/pos_4.txt'],
             ['Estaciones/con_5.txt','Estaciones/pos_5.txt'],
             ['Estaciones/con_6.txt','Estaciones/pos_6.txt'],
-            ['Estaciones/con_7.txt','Estaciones/pos_7.txt']
-            #['Estaciones/con_8.txt','Estaciones/pos_8.txt']
+            ['Estaciones/con_7.txt','Estaciones/pos_7.txt'],
+            ['Estaciones/con_8.txt','Estaciones/pos_8.txt']
             ]
 #%%
 def cargar_secciones(archivo_conexiones='conexiones.txt',archivo_posiciones='posiciones.txt'):
@@ -706,7 +706,7 @@ def generar_mapa(tabla):
     for i in range(len(archivos)):
             
         # Falta corregir desvios
-        if i != 7:
+        if i != 8:
             continue
     
         secciones.clear()
@@ -784,7 +784,7 @@ def main():
 
     generar_mapa(tabla)
     
-    conectar_terminal()
+    #conectar_terminal()
     
     
 if __name__ == "__main__":
