@@ -39,7 +39,7 @@ architecture Behavioral of red is
 			Estado_desv_o :  out std_logic;
 			Cambio_i :  in std_logic;
 			Cambio_o :  out std_logic;
-			Reset :  in std_logic;
+			Reset :  in std_logic
 		);
 	end component cambio_1;
 	component nodo_1 is
@@ -300,8 +300,6 @@ begin
 		ocupacion_4 <= Ocupacion(3);
 		ocupacion_5 <= Ocupacion(4);
 		ocupacion_6 <= Ocupacion(5);
-		mdc_i_1 <= Cambios_i(0);
-		Cambios_o(0) <= mdc_o_1;
 		sem_lsb_i_1 <= semaforos_i.lsb(0);
 		sem_msb_i_1 <= semaforos_i.msb(0);
 		semaforos_o.lsb(0) <= sem_lsb_o_1;

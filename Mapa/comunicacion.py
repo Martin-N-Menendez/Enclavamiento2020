@@ -67,6 +67,8 @@ DP_MAX	= round(PD_MAX - PS_MAX, 2)   # Diferenca de presion máxima (Float)
 DP_PROM	= round(PD_PROM - PS_PROM, 2) # Diferenca de presion promedio (Float)
 DP_MIN	= round(PD_MIN - PS_MIN, 2)   # Diferenca de presion mínima (Float)
 
+global ser
+ser = serial.Serial()
 
 # Funciones -------------------------------------------------------------------
 
@@ -211,6 +213,7 @@ def cmd_h():
    print( "   '0' Enviar un dato aleatorio del equipo con ID0." )
    print( "   '1' Enviar un dato aleatorio del equipo con ID1." )
    print( "   'r' (random) Enviar un dato aleatorio de un equipo aleatorio." )
+   print( "   't' Tren de mapa_8." )
    print( "--------------------------------------------------------------------\n" )
    return
 
@@ -233,16 +236,31 @@ def cmd_r():
    sendDataFromID( IDrandom )
    return
 
+def cmd_t(  ):
+
+   command = "<1010101010101010101010>"
+   ser.write(command.encode("ascii"))
+   print( 'Dato enviado:' )
+   print( command )
+   print( '' )
+   
+   rawString = ser.readline()
+   print( 'Dato recibido:' )
+   print( rawString )
+   print( '' )
+
+
+   return
 
 # Inicializa y abre el puertos serie ------------------------------------------
 
 def uart_main():
-    ser = serial.Serial()
+    
     
     print( "\nconexión al puerto serie ----------------------------------------\n" )
     
     print("Ingrese el puerto serie, ejemplos: /dev/ttyUSB0 , COM1")
-    print("O bien ingrese 'l' para /dev/ttyUSB0, o 'w' para COM3")
+    print("O bien ingrese 'l' para /dev/ttyUSB0, o 'w' para COM4")
     
     receive = input()
     
@@ -254,7 +272,7 @@ def uart_main():
        else:
           ser.port = receive
        
-    ser.baudrate = 19600
+    ser.baudrate = 19200
     ser.bytesize = serial.EIGHTBITS    # number of bits per bytes # SEVENBITS
     ser.parity = serial.PARITY_NONE    # set parity check: no parity # PARITY_ODD
     ser.stopbits = serial.STOPBITS_ONE # number of stop bits # STOPBITS_TWO
@@ -270,7 +288,7 @@ def uart_main():
        ser.open()
     except Exception as e:
        print("Error abriendo puerto serie.\n" + str(e) + '\nFin de programa.')
-       #exit()
+       exit()
     
     # Si pudo abrir el puerto -----------------------------------------------------
     
@@ -316,7 +334,10 @@ def uart_main():
     
              elif command == 'r':
                 cmd_r()
-    
+                
+             elif command == 't':
+                cmd_t()  
+                
              else:
                 print("Comando no conocido.")
     
@@ -325,4 +346,4 @@ def uart_main():
     
     else:
        print("No se puede abrir el puerto serie.")
-       #exit()
+       exit()

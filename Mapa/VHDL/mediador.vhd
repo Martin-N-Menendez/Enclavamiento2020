@@ -41,7 +41,7 @@ begin
 				Salida(11) <= semaforos.msb(5);
 				Salida(12) <= semaforos.lsb(6);
 				Salida(13) <= semaforos.msb(6);
-				Salida (15-1 downto 14) <= Cambios;
+				Salida (14) <= Cambios;
 			end if;
 		end if;
 	end process;

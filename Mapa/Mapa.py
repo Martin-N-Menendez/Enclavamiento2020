@@ -2,7 +2,7 @@
 """
 Created on Sat Oct 26 11:24:17 2019
 
-@author: jinnkay
+@author: 
 """
 
 import matplotlib.pyplot as plt
@@ -14,7 +14,9 @@ from Estaciones import *
 from Plotear import *
 from Tabla import *
 from vhdl import *
-#from comunicacion import *
+from comunicacion import *
+
+from Serial import *
 
 secciones = []
 conexiones = []
@@ -784,8 +786,9 @@ def main():
 
     generar_mapa(tabla)
     
-    #conectar_terminal()
+    conectar_terminal()
     
+    #serial_main()
     
 if __name__ == "__main__":
     main()
