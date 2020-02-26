@@ -47,6 +47,7 @@
 - [ ] Implementacion de codigo python para procesar las tramas recibidas y layout
 - [ ] Adaptacion del codigo para compatibilidad con CNEA
 ## Testing
+- [x] Testbench sistema
 - [ ] COCOTB para nodo
 - [ ] COCOTB para cambio
 - [ ] COCOTB para red
