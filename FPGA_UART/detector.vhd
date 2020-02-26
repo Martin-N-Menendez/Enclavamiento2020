@@ -9,7 +9,7 @@ entity detector is
 		r_data: in std_logic_vector(8-1 downto 0);
 		led_rgb_1  : out std_logic_vector(3-1 downto 0);
 		led_rgb_2  : out std_logic_vector(3-1 downto 0);
-		paquete: out std_logic_vector(23-1 downto 0);
+		paquete: out std_logic_vector(21-1 downto 0);
 		paquete_ok : out std_logic;
 		w_data: out std_logic_vector(8-1 downto 0)
 	);
@@ -24,7 +24,7 @@ architecture Behavioral of detector is
     
     signal contador: std_logic_vector(8-1 downto 0);
     
-    signal paquete_aux : std_logic_vector(23-1 downto 0);
+    signal paquete_aux : std_logic_vector(21-1 downto 0);
     signal paquete_ready : std_logic;
     
 begin
@@ -50,18 +50,23 @@ begin
                     contador <= (others => '0');
                 else
                     if r_data /= "00111100" then -- r_data = '<'
-                        char_data <= r_data;
+                        
                         if char_data /= r_data then
-                            contador <= std_logic_vector(unsigned(contador) + 1);
-                            --if to_integer(unsigned(contador)) > 0 then
+                            if estado = lectura then
+                    
+                            if contador /= "00010101" then
                                 if r_data = "00110001" then
                                     paquete_aux(to_integer(unsigned(contador))) <= '1';
                                 end if;
                                 if r_data = "00110000" then
                                     paquete_aux(to_integer(unsigned(contador))) <= '0';
                                 end if;
-                             --end if; 
-                        end if;  
+                            end if;   
+                                contador <= std_logic_vector(unsigned(contador) + 1);
+                             
+                             end if;
+                        end if; 
+                        char_data <= r_data; 
                     end if; 
                 end if;
             end if;
@@ -86,10 +91,10 @@ begin
           when lectura => 
             paquete_ready <= '0';  
             --if contador = "00001001" then -- 9 (asi entran 8)
-            if contador = "00011000" then -- 24 (asi entran 23)
+            if contador = "00010110" then -- 21 (asi entran 21)
                 if r_data = "00111110" then --  r_data = '>'                  
                   estado_siguiente <= final;
-                else
+                else    
                   estado_siguiente <= error;                
                end if;                      
             else
