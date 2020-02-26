@@ -14,6 +14,7 @@ architecture tb of tb_registro is
 	port(
 		clk_i: in std_logic;
         	rst_i: in std_logic;
+		paquete_ok : in std_logic;
         	paquete_i: in std_logic_vector(15-1 downto 0);
         	w_data: out std_logic_vector(8-1 downto 0)
 	);
@@ -21,6 +22,7 @@ architecture tb of tb_registro is
 
     signal clk_i     : std_logic;
     signal rst_i     : std_logic;
+    signal paquete_ok     : std_logic;
     signal paquete_i   : std_logic_vector (15-1 downto 0); 
     signal w_data    : std_logic_vector (8-1 downto 0);
 
@@ -34,6 +36,7 @@ begin
     port map (clk_i      => clk_i,
               rst_i      => rst_i,
               paquete_i   => paquete_i,
+              paquete_ok => paquete_ok,
               w_data     => w_data);
 
     -- Clock generation
@@ -62,6 +65,7 @@ begin
     datos : process
     begin
         
+        paquete_ok <= '1';
 	wait for 50 ns;
         paquete_i <= "101010101010101";
  	wait for 200 ns;
