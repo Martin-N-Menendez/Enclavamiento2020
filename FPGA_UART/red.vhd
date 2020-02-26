@@ -6,36 +6,31 @@ use IEEE.numeric_std.all;
 use work.my_package.all;
 	entity red is
 		generic(
-			N : natural := 23;
-			N_CVS : natural := 6;
+			N : natural := 21;
 			N_SEM : natural := 7;
-			N_PAN : natural := 2;
-			N_MDC : natural := 1
+			N_MDC : natural := 1;
+			N_CVS : natural := 6
 		);
 		port(
 			Clock :  in std_logic;
-			Reset :  in std_logic;
-			Ocupacion :  in std_logic_vector(6-1 downto 0);
+			Ocupacion :  in std_logic_vector(N_CVS-1 downto 0);
 			semaforos_i :  in sems_type;
 			semaforos_o :  out sems_type;
-			barreras_i :  in std_logic_vector(2-1 downto 0);
-			barreras_o :  out std_logic_vector(2-1 downto 0);
-			Cambios_i :  in std_logic_vector(1-1 downto 0);
-			Cambios_o :  out std_logic_vector(1-1 downto 0)
+			Cambios_i :  in std_logic;
+			Cambios_o :  out std_logic;
+			Reset :  in std_logic
 		);
 	end entity red;
 architecture Behavioral of red is
 	component cambio_1 is
 		generic(
-			N : natural := 23;
-			N_CVS : natural := 6;
+			N : natural := 21;
 			N_SEM : natural := 7;
-			N_PAN : natural := 2;
-			N_MDC : natural := 1
+			N_MDC : natural := 1;
+			N_CVS : natural := 6
 		);
 		port(
 			Clock :  in std_logic;
-			Reset :  in std_logic;
 			Estado_ante_i :  in std_logic;
 			Estado_post_i :  in std_logic;
 			Estado_desv_i :  in std_logic;
@@ -43,16 +38,16 @@ architecture Behavioral of red is
 			Estado_post_o :  out std_logic;
 			Estado_desv_o :  out std_logic;
 			Cambio_i :  in std_logic;
-			Cambio_o :  out std_logic
+			Cambio_o :  out std_logic;
+			Reset :  in std_logic
 		);
 	end component cambio_1;
 	component nodo_1 is
 		generic(
-			N : natural := 23;
-			N_CVS : natural := 6;
+			N : natural := 21;
 			N_SEM : natural := 7;
-			N_PAN : natural := 2;
-			N_MDC : natural := 1
+			N_MDC : natural := 1;
+			N_CVS : natural := 6
 		);
 		port(
 			Clock :  in std_logic;
@@ -67,11 +62,10 @@ architecture Behavioral of red is
 	end component nodo_1;
 	component nodo_2 is
 		generic(
-			N : natural := 23;
-			N_CVS : natural := 6;
+			N : natural := 21;
 			N_SEM : natural := 7;
-			N_PAN : natural := 2;
-			N_MDC : natural := 1
+			N_MDC : natural := 1;
+			N_CVS : natural := 6
 		);
 		port(
 			Clock :  in std_logic;
@@ -90,11 +84,10 @@ architecture Behavioral of red is
 	end component nodo_2;
 	component nodo_3 is
 		generic(
-			N : natural := 23;
-			N_CVS : natural := 6;
+			N : natural := 21;
 			N_SEM : natural := 7;
-			N_PAN : natural := 2;
-			N_MDC : natural := 1
+			N_MDC : natural := 1;
+			N_CVS : natural := 6
 		);
 		port(
 			Clock :  in std_logic;
@@ -107,11 +100,10 @@ architecture Behavioral of red is
 	end component nodo_3;
 	component nodo_4 is
 		generic(
-			N : natural := 23;
-			N_CVS : natural := 6;
+			N : natural := 21;
 			N_SEM : natural := 7;
-			N_PAN : natural := 2;
-			N_MDC : natural := 1
+			N_MDC : natural := 1;
+			N_CVS : natural := 6
 		);
 		port(
 			Clock :  in std_logic;
@@ -126,11 +118,10 @@ architecture Behavioral of red is
 	end component nodo_4;
 	component nodo_5 is
 		generic(
-			N : natural := 23;
-			N_CVS : natural := 6;
+			N : natural := 21;
 			N_SEM : natural := 7;
-			N_PAN : natural := 2;
-			N_MDC : natural := 1
+			N_MDC : natural := 1;
+			N_CVS : natural := 6
 		);
 		port(
 			Clock :  in std_logic;
@@ -140,17 +131,15 @@ architecture Behavioral of red is
 			Semaforo_propio_i_1 :  in sem_type;
 			Semaforo_propio_o_1 :  out sem_type;
 			Semaforo_cercano :  out sem_type;
-			Barrera :  out std_logic;
 			Estado_o :  out std_logic
 		);
 	end component nodo_5;
 	component nodo_6 is
 		generic(
-			N : natural := 23;
-			N_CVS : natural := 6;
+			N : natural := 21;
 			N_SEM : natural := 7;
-			N_PAN : natural := 2;
-			N_MDC : natural := 1
+			N_MDC : natural := 1;
+			N_CVS : natural := 6
 		);
 		port(
 			Clock :  in std_logic;
@@ -160,7 +149,6 @@ architecture Behavioral of red is
 			Semaforo_propio_i_1 :  in sem_type;
 			Semaforo_propio_o_1 :  out sem_type;
 			Semaforo_cercano :  out sem_type;
-			Barrera :  out std_logic;
 			Estado_o :  out std_logic
 		);
 	end component nodo_6;
@@ -204,10 +192,6 @@ architecture Behavioral of red is
 	Signal sem_msb_i_7 : std_logic;
 	Signal sem_lsb_o_7 : std_logic;
 	Signal sem_msb_o_7 : std_logic;
-	Signal pan_i_1 : std_logic;
-	Signal pan_o_1 : std_logic;
-	Signal pan_i_2 : std_logic;
-	Signal pan_o_2 : std_logic;
 	Signal mdc_i_1 : std_logic;
 	Signal mdc_o_1 : std_logic;
 	Signal mdc_ante_i_1 : std_logic;
@@ -233,8 +217,8 @@ begin
 		);
 	nodo_2_i:nodo_2 port map(
 		Clock => Clock,
-		Estado_post => mdc_ante_o_1,
 		Estado_ante => conector_1,
+		Estado_post => mdc_ante_o_1,
 		Semaforo_propio_i_1.lsb => sem_lsb_i_2,
 		Semaforo_propio_i_1.msb => sem_msb_i_2,
 		Semaforo_propio_o_1.lsb => sem_lsb_o_2,
@@ -261,8 +245,8 @@ begin
 		);
 	nodo_4_i:nodo_4 port map(
 		Clock => Clock,
-		Estado_post => conector_6,
 		Estado_ante => mdc_desv_o_1,
+		Estado_post => conector_6,
 		Semaforo_propio_i_1.lsb => sem_lsb_i_5,
 		Semaforo_propio_i_1.msb => sem_msb_i_5,
 		Semaforo_propio_o_1.lsb => sem_lsb_o_5,
@@ -299,8 +283,8 @@ begin
 		);
 	cambio_1_i:cambio_1 port map(
 		Clock => Clock,
-		Cambio_i => mdc_i_1,
-		Cambio_o => mdc_o_1,
+		Cambio_i => Cambios_i,
+		Cambio_o => Cambios_o,
 		Estado_ante_i => conector_2,
 		Estado_ante_o => mdc_ante_o_1,
 		Estado_post_i => conector_3,
@@ -309,7 +293,6 @@ begin
 		Estado_desv_o => mdc_desv_o_1,
 		Reset => Reset
 		);
-		barreras_o <= barreras_i;
 		cosa <= '0';
 		ocupacion_1 <= Ocupacion(0);
 		ocupacion_2 <= Ocupacion(1);
@@ -317,10 +300,6 @@ begin
 		ocupacion_4 <= Ocupacion(3);
 		ocupacion_5 <= Ocupacion(4);
 		ocupacion_6 <= Ocupacion(5);
-		mdc_i_1 <= Cambios_i(0);
-		Cambios_o(0) <= mdc_o_1;
-		pan_i_1 <= Barreras_i(0);
-		Barreras_o(0) <= pan_o_1;
 		sem_lsb_i_1 <= semaforos_i.lsb(0);
 		sem_msb_i_1 <= semaforos_i.msb(0);
 		semaforos_o.lsb(0) <= sem_lsb_o_1;

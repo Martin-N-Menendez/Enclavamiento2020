@@ -80,244 +80,244 @@ begin
 	wait for 100 ns;
 	-- 21
         r_data <= "00111100"; -- <
- 	wait for 50 ns;
+ 	wait for 407*TbPeriod;				-- 407* TbPeriod
 	r_data <= "00110001"; -- 1
-	wait for 50 ns;
+	wait for 407*TbPeriod;
 	r_data <= "00110000"; -- 0
-	wait for 50 ns;
+	wait for 407*TbPeriod;
 	r_data <= "00110001"; -- 1
-	wait for 50 ns;
+	wait for 407*TbPeriod;
 	r_data <= "00110000"; -- 0
-	wait for 50 ns;
+	wait for 407*TbPeriod;
 	r_data <= "00110001"; -- 1
-	wait for 50 ns;
+	wait for 407*TbPeriod;
 	r_data <= "00110000"; -- 0
-	wait for 50 ns;
+	wait for 407*TbPeriod;
 	r_data <= "00110001"; -- 1
-	wait for 50 ns;
+	wait for 407*TbPeriod;
 	r_data <= "00110000"; -- 0
-	wait for 50 ns;
+	wait for 407*TbPeriod;
 	r_data <= "00110001"; -- 1
-	wait for 50 ns;
+	wait for 407*TbPeriod;
 	r_data <= "00110000"; -- 0
-	wait for 50 ns;
+	wait for 407*TbPeriod;
 	r_data <= "00110001"; -- 1
-	wait for 50 ns;
+	wait for 407*TbPeriod;
 	r_data <= "00110000"; -- 0
-	wait for 50 ns;
+	wait for 407*TbPeriod;
 	r_data <= "00110001"; -- 1
-	wait for 50 ns;
+	wait for 407*TbPeriod;
 	r_data <= "00110000"; -- 0
-	wait for 50 ns;
+	wait for 407*TbPeriod;
 	r_data <= "00110001"; -- 1
-	wait for 50 ns;
+	wait for 407*TbPeriod;
 	r_data <= "00110000"; -- 0
-	wait for 50 ns;
+	wait for 407*TbPeriod;
 	r_data <= "00110001"; -- 1
-	wait for 50 ns;
+	wait for 407*TbPeriod;
 	r_data <= "00110000"; -- 0
-	wait for 50 ns;
+	wait for 407*TbPeriod;
 	r_data <= "00110001"; -- 1
-	wait for 50 ns;
+	wait for 407*TbPeriod;
 	r_data <= "00110000"; -- 0
-	wait for 50 ns;
+	wait for 407*TbPeriod;
 	r_data <= "00110001"; -- 1
-	wait for 50 ns;
+	wait for 407*TbPeriod;
 	r_data <= "00111110"; -- >
 
 	wait for 100 ns;
 	-- 22
         r_data <= "00111100"; -- <
- 	wait for 50 ns;
+ 	wait for 407*TbPeriod;
 	r_data <= "00110001"; -- 1
-	wait for 50 ns;
+	wait for 407*TbPeriod;
 	r_data <= "00110000"; -- 0
-	wait for 50 ns;
+	wait for 407*TbPeriod;
 	r_data <= "00110001"; -- 1
-	wait for 50 ns;
+	wait for 407*TbPeriod;
 	r_data <= "00110000"; -- 0
-	wait for 50 ns;
+	wait for 407*TbPeriod;
 	r_data <= "00110001"; -- 1
-	wait for 50 ns;
+	wait for 407*TbPeriod;
 	r_data <= "00110000"; -- 0
-	wait for 50 ns;
+	wait for 407*TbPeriod;
 	r_data <= "00110001"; -- 1
-	wait for 50 ns;
+	wait for 407*TbPeriod;
 	r_data <= "00110000"; -- 0
-	wait for 50 ns;
+	wait for 407*TbPeriod;
 	r_data <= "00110001"; -- 1
-	wait for 50 ns;
+	wait for 407*TbPeriod;
 	r_data <= "00110000"; -- 0
-	wait for 50 ns;
+	wait for 407*TbPeriod;
 	r_data <= "00110001"; -- 1
-	wait for 50 ns;
+	wait for 407*TbPeriod;
 	r_data <= "00110000"; -- 0
-	wait for 50 ns;
+	wait for 407*TbPeriod;
 	r_data <= "00110001"; -- 1
-	wait for 50 ns;
+	wait for 407*TbPeriod;
 	r_data <= "00110000"; -- 0
-	wait for 50 ns;
+	wait for 407*TbPeriod;
 	r_data <= "00110001"; -- 1
-	wait for 50 ns;
+	wait for 407*TbPeriod;
 	r_data <= "00110000"; -- 0
-	wait for 50 ns;
+	wait for 407*TbPeriod;
 	r_data <= "00110001"; -- 1
-	wait for 50 ns;
+	wait for 407*TbPeriod;
 	r_data <= "00110000"; -- 0
-	wait for 50 ns;
+	wait for 407*TbPeriod;
 	r_data <= "00110001"; -- 1
-	wait for 50 ns;
+	wait for 407*TbPeriod;
 	r_data <= "00110000"; -- 0
-	wait for 50 ns;
+	wait for 407*TbPeriod;
 	r_data <= "00110001"; -- 1
-	wait for 50 ns;
+	wait for 407*TbPeriod;
 	r_data <= "00110000"; -- 0
-	wait for 50 ns;
+	wait for 407*TbPeriod;
 	r_data <= "00111110"; -- >
 	
 	wait for 100 ns;
 	-- 23
         r_data <= "00111100"; -- <
- 	wait for 50 ns;
+ 	wait for 407*TbPeriod;
 	r_data <= "00110001"; -- 1
-	wait for 50 ns;
+	wait for 407*TbPeriod;
 	r_data <= "00110000"; -- 0
-	wait for 50 ns;
+	wait for 407*TbPeriod;
 	r_data <= "00110001"; -- 1
-	wait for 50 ns;
+	wait for 407*TbPeriod;
 	r_data <= "00110000"; -- 0
-	wait for 50 ns;
+	wait for 407*TbPeriod;
 	r_data <= "00110001"; -- 1
-	wait for 50 ns;
+	wait for 407*TbPeriod;
 	r_data <= "00110000"; -- 0
-	wait for 50 ns;
+	wait for 407*TbPeriod;
 	r_data <= "00110001"; -- 1
-	wait for 50 ns;
+	wait for 407*TbPeriod;
 	r_data <= "00110000"; -- 0
-	wait for 50 ns;
+	wait for 407*TbPeriod;
 	r_data <= "00110001"; -- 1
-	wait for 50 ns;
+	wait for 407*TbPeriod;
 	r_data <= "00110000"; -- 0
-	wait for 50 ns;
+	wait for 407*TbPeriod;
 	r_data <= "00110001"; -- 1
-	wait for 50 ns;
+	wait for 407*TbPeriod;
 	r_data <= "00110000"; -- 0
-	wait for 50 ns;
+	wait for 407*TbPeriod;
 	r_data <= "00110001"; -- 1
-	wait for 50 ns;
+	wait for 407*TbPeriod;
 	r_data <= "00110000"; -- 0
-	wait for 50 ns;
+	wait for 407*TbPeriod;
 	r_data <= "00110001"; -- 1
-	wait for 50 ns;
+	wait for 407*TbPeriod;
 	r_data <= "00110000"; -- 0
-	wait for 50 ns;
+	wait for 407*TbPeriod;
 	r_data <= "00110001"; -- 1
-	wait for 50 ns;
+	wait for 407*TbPeriod;
 	r_data <= "00110000"; -- 0
-	wait for 50 ns;
+	wait for 407*TbPeriod;
 	r_data <= "00110001"; -- 1
-	wait for 50 ns;
+	wait for 407*TbPeriod;
 	r_data <= "00110000"; -- 0
-	wait for 50 ns;
+	wait for 407*TbPeriod;
 	r_data <= "00110001"; -- 1
-	wait for 50 ns;
+	wait for 407*TbPeriod;
 	r_data <= "00110000"; -- 0
-	wait for 50 ns;
+	wait for 407*TbPeriod;
 	r_data <= "00110001"; -- 1
-	wait for 50 ns;
+	wait for 407*TbPeriod;
 	r_data <= "00111110"; -- >
 
 
 	wait for 100 ns;
 	--7
         r_data <= "00111100"; -- <
- 	wait for 50 ns;
+ 	wait for 407*TbPeriod;
 	r_data <= "00110001"; -- 1
-	wait for 50 ns;
+	wait for 407*TbPeriod;
 	r_data <= "00110010"; -- 2
-	wait for 50 ns;
+	wait for 407*TbPeriod;
 	r_data <= "00110011"; -- 3
-	wait for 50 ns;
+	wait for 407*TbPeriod;
 	r_data <= "00110100"; -- 4
-	wait for 50 ns;
+	wait for 407*TbPeriod;
 	r_data <= "00110101"; -- 5
-	wait for 50 ns;
+	wait for 407*TbPeriod;
 	r_data <= "00110110"; -- 6
-	wait for 50 ns;
+	wait for 407*TbPeriod;
 	r_data <= "00110111"; -- 7
-	wait for 50 ns;
+	wait for 407*TbPeriod;
 	r_data <= "00111110"; -- >
 
 	wait for 100 ns;
 	--8
         r_data <= "00111100"; -- <
- 	wait for 50 ns;
+ 	wait for 407*TbPeriod;
 	r_data <= "00110001"; -- 1
-	wait for 50 ns;
+	wait for 407*TbPeriod;
 	r_data <= "00110010"; -- 2
-	wait for 50 ns;
+	wait for 407*TbPeriod;
 	r_data <= "00110011"; -- 3
-	wait for 50 ns;
+	wait for 407*TbPeriod;
 	r_data <= "00110100"; -- 4
-	wait for 50 ns;
+	wait for 407*TbPeriod;
 	r_data <= "00110101"; -- 5
-	wait for 50 ns;
+	wait for 407*TbPeriod;
 	r_data <= "00110110"; -- 6
-	wait for 50 ns;
+	wait for 407*TbPeriod;
 	r_data <= "00110111"; -- 7
-	wait for 50 ns;
+	wait for 407*TbPeriod;
 	r_data <= "00111000"; -- 8
-	wait for 50 ns;
+	wait for 407*TbPeriod;
 	r_data <= "00111110"; -- >
 
 	wait for 100 ns;
 	--9
         r_data <= "00111100"; -- <
- 	wait for 50 ns;
+ 	wait for 407*TbPeriod;
 	r_data <= "00110001"; -- 1
-	wait for 50 ns;
+	wait for 407*TbPeriod;
 	r_data <= "00110010"; -- 2
-	wait for 50 ns;
+	wait for 407*TbPeriod;
 	r_data <= "00110011"; -- 3
-	wait for 50 ns;
+	wait for 407*TbPeriod;
 	r_data <= "00110100"; -- 4
-	wait for 50 ns;
+	wait for 407*TbPeriod;
 	r_data <= "00110101"; -- 5
-	wait for 50 ns;
+	wait for 407*TbPeriod;
 	r_data <= "00110110"; -- 6
-	wait for 50 ns;
+	wait for 407*TbPeriod;
 	r_data <= "00110111"; -- 7
-	wait for 50 ns;
+	wait for 407*TbPeriod;
 	r_data <= "00111000"; -- 8
-	wait for 50 ns;
+	wait for 407*TbPeriod;
 	r_data <= "00111001"; -- 9
-	wait for 50 ns;
+	wait for 407*TbPeriod;
 	r_data <= "00111110"; -- >
 
 	wait for 100 ns;
 	--10
         r_data <= "00111100"; -- <
- 	wait for 50 ns;
+ 	wait for 407*TbPeriod;
 	r_data <= "00110001"; -- 1
-	wait for 50 ns;
+	wait for 407*TbPeriod;
 	r_data <= "00110010"; -- 2
-	wait for 50 ns;
+	wait for 407*TbPeriod;
 	r_data <= "00110011"; -- 3
-	wait for 50 ns;
+	wait for 407*TbPeriod;
 	r_data <= "00110100"; -- 4
-	wait for 50 ns;
+	wait for 407*TbPeriod;
 	r_data <= "00110101"; -- 5
-	wait for 50 ns;
+	wait for 407*TbPeriod;
 	r_data <= "00110110"; -- 6
-	wait for 50 ns;
+	wait for 407*TbPeriod;
 	r_data <= "00110111"; -- 7
-	wait for 50 ns;
+	wait for 407*TbPeriod;
 	r_data <= "00111000"; -- 8
-	wait for 50 ns;
+	wait for 407*TbPeriod;
 	r_data <= "00111001"; -- 9
-	wait for 50 ns;
+	wait for 407*TbPeriod;
 	r_data <= "01000001"; -- A
-	wait for 50 ns;
+	wait for 407*TbPeriod;
 	r_data <= "00111110"; -- >
 
         wait for 100 * TbPeriod;
