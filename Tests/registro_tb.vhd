@@ -14,14 +14,14 @@ architecture tb of tb_registro is
 	port(
 		clk_i: in std_logic;
         	rst_i: in std_logic;
-        	paquete_i: in std_logic_vector(17-1 downto 0);
+        	paquete_i: in std_logic_vector(15-1 downto 0);
         	w_data: out std_logic_vector(8-1 downto 0)
 	);
     end component;
 
     signal clk_i     : std_logic;
     signal rst_i     : std_logic;
-    signal paquete_i   : std_logic_vector (17-1 downto 0); 
+    signal paquete_i   : std_logic_vector (15-1 downto 0); 
     signal w_data    : std_logic_vector (8-1 downto 0);
 
     constant TbPeriod : time := 8 ns; -- EDIT Put right period here
@@ -63,9 +63,9 @@ begin
     begin
         
 	wait for 50 ns;
-        paquete_i <= "10101010101010101";
+        paquete_i <= "101010101010101";
  	wait for 200 ns;
-	paquete_i <= "11111111110000001";
+	paquete_i <= "111111111100001";
  	wait for 200 ns;
 
 	

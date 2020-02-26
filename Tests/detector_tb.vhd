@@ -16,7 +16,7 @@ architecture tb of tb_detector is
               r_data    : in std_logic_vector (8-1 downto 0);
               led_rgb_1 : out std_logic_vector (3-1 downto 0);
               led_rgb_2 : out std_logic_vector (3-1 downto 0);
-              paquete   : out std_logic_vector (23-1 downto 0);
+              paquete   : out std_logic_vector (21-1 downto 0);
 	      paquete_ok : out std_logic;
               w_data    : out std_logic_vector (8-1 downto 0));
     end component;
@@ -26,7 +26,7 @@ architecture tb of tb_detector is
     signal r_data    : std_logic_vector (8-1 downto 0);
     signal led_rgb_1 : std_logic_vector (3-1 downto 0);
     signal led_rgb_2 : std_logic_vector (3-1 downto 0);
-    signal paquete   : std_logic_vector (23-1 downto 0); 
+    signal paquete   : std_logic_vector (21-1 downto 0); 
     signal paquete_ok : std_logic;
     signal w_data    : std_logic_vector (8-1 downto 0);
 

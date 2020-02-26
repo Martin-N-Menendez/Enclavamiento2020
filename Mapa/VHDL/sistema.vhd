@@ -44,6 +44,7 @@ architecture Behavioral of sistema is
 	port(
 		clk_i: in std_logic;
         rst_i: in std_logic;
+        paquete_ok : in std_logic;
         paquete_i: in std_logic_vector(15-1 downto 0);
         w_data: out std_logic_vector(8-1 downto 0)
 	);
@@ -92,6 +93,7 @@ begin
 		port map(
 			clk_i 		=>  clk_i,
 			rst_i       =>  rst_i,
+			paquete_ok  => paquete_ok_s,
 			paquete_i   => paquete_o,
 			w_data     => w_data_2
 		);	
