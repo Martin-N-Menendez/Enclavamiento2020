@@ -73,6 +73,16 @@ architecture Behavioral of sistema is
 	);
     end component;
     
+    component registro is
+	port(
+		clk_i: in std_logic;
+        rst_i: in std_logic;
+        paquete_ok : in std_logic;
+        paquete_i: in std_logic_vector(15-1 downto 0);
+        w_data: out std_logic_vector(8-1 downto 0)
+	);
+    end component;
+    
     signal paquete_i : std_logic_vector(21-1 downto 0);
     signal paquete_o : std_logic_vector(15-1 downto 0);
     signal prueba : std_logic_vector(15-1 downto 0);
@@ -102,15 +112,25 @@ begin
 			Paquete_o     => paquete_o
 		);	
 	
-	fifo_enclavamiento_i: fifo_enclavamiento
+	   fifo_enclavamiento_i: fifo_enclavamiento
 		port map(
 			clk_i 		=>  clk_i,
 			rst_i       =>  rst_i,
 			paquete_ok  => paquete_ok_s,
-			--paquete_i   => paquete_o,
-			paquete_i   => prueba,
+			paquete_i   => paquete_o,
+			--paquete_i   => prueba,
 			w_data     => w_data_aux
 		);	
+		
+		registro_i: registro
+		port map(
+			clk_i 		=>  clk_i,
+			rst_i       =>  rst_i,
+			paquete_ok  => paquete_ok_s,
+			paquete_i   => paquete_o,
+			--paquete_i   => prueba,
+			w_data     => w_data_2
+		);
 		
 		retardador_i: retardador
 		port map(
@@ -119,7 +139,7 @@ begin
 			paquete_ok  => paquete_ok_s,
 			r_data   => w_data_aux,
 			--r_data   => prueba,
-			w_data     => w_data_2
+			w_data     => open
 		);	
 		
 		conector_test_i: conector_test

@@ -5,10 +5,10 @@
 library ieee;
 use ieee.std_logic_1164.all;
 
-entity tb_registro is
-end tb_registro;
+entity tb_fifo_enclavamiento is
+end tb_fifo_enclavamiento;
 
-architecture tb of tb_registro is
+architecture tb of tb_fifo_enclavamiento is
 
     component fifo_enclavamiento is
 	port(
@@ -86,7 +86,7 @@ end tb;
 
 -- Configuration block below is required by some simulators. Usually no need to edit.
 
-configuration cfg_tb_registro of tb_registro is
+configuration cfg_tb_fifo_enclavamiento of tb_fifo_enclavamiento is
     for tb
     end for;
-end cfg_tb_registro;
+end cfg_tb_fifo_enclavamiento;

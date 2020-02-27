@@ -10,7 +10,7 @@ end tb_registro;
 
 architecture tb of tb_registro is
 
-    component fifo_enclavamiento is
+    component registro is
 	port(
 		clk_i: in std_logic;
         	rst_i: in std_logic;
@@ -32,7 +32,7 @@ architecture tb of tb_registro is
 
 begin
 
-    dut : fifo_enclavamiento
+    dut : registro
     port map (clk_i      => clk_i,
               rst_i      => rst_i,
               paquete_i   => paquete_i,
@@ -45,6 +45,8 @@ begin
     -- EDIT: Check that clk_i is really your main clock signal
     clk_i <= TbClock;
 
+    paquete_i <= "101010101010101";
+	
     stimuli : process
     begin
         -- EDIT Adapt initialization as needed
@@ -55,28 +57,30 @@ begin
         rst_i <= '1';
         wait for 20 ns;
         rst_i <= '0';
-        wait for 1000 * TbPeriod;
+	wait for 1 ns;
+	paquete_ok <= '1';
+        wait for 10000 * TbPeriod;
 
         -- Stop the clock and hence terminate the simulation
         TbSimEnded <= '1';
         wait;
     end process;
 
-    datos : process
-    begin
-        
-        paquete_ok <= '1';
-	wait for 50 ns;
-        paquete_i <= "101010101010101";
- 	wait for 200 ns;
-	paquete_i <= "111111111100001";
- 	wait for 200 ns;
-
-	
-
-        wait for 100 * TbPeriod;
-	TbSimEnded <= '1';
-    end process;
+--    datos : process
+--    begin
+--        
+--        
+--        paquete_i <= "101010101010101";
+-- 	wait for 8 ns ;
+--
+--	--paquete_i <= "111111111100001";
+-- 	--wait for 200 ns;
+--
+--	
+--
+--        --wait for 100 * TbPeriod;
+--	--TbSimEnded <= '1';
+--    end process;
 	
 end tb;
 
