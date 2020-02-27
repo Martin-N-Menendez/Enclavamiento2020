@@ -193,6 +193,7 @@ begin
             if rst_i = '1' then          
                 pulsos <= 0;
                 escritos <= 0;
+                w_data <= "00000000";
             else 
                 
                 if nuevo_aux /= nuevo then
