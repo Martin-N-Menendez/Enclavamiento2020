@@ -16,12 +16,13 @@ architecture tb of tb_uart_loop is
 		rst_i: in std_logic;
 		uart_rxd_i: in std_logic;
 		uart_txd_o: out std_logic;
-		leds  : out std_logic_vector(2-1 downto 0);
+		leds  : out std_logic_vector(4-1 downto 0);
 		rgb_1  : out std_logic_vector(3-1 downto 0);
 		rgb_2  : out std_logic_vector(3-1 downto 0);
-		empty_o: out std_logic;
-		switch : in std_logic;
-		full_o: out std_logic
+		--empty_o: out std_logic;
+		--full_o: out std_logic;
+		switch1 : in std_logic;
+		switch2 : in std_logic
 	);
     end component;
 
@@ -30,12 +31,12 @@ architecture tb of tb_uart_loop is
     signal rst_i     	 : std_logic;
     signal uart_rxd_i    : std_logic;
     signal uart_txd_o    : std_logic;
-    signal leds      	 : std_logic_vector(2-1 downto 0);
+    signal leds      	 : std_logic_vector(4-1 downto 0);
     signal rgb_1   	 : std_logic_vector (3-1 downto 0);
     signal rgb_2 	 : std_logic_vector (3-1 downto 0);
-    signal empty_o	 : std_logic;
-    signal switch	 : std_logic;
-    signal full_o	 : std_logic;
+    signal switch1	 : std_logic;
+    signal switch2	 : std_logic;
+    --signal full_o	 : std_logic;
 
     constant TbPeriod : time := 8 ns; -- EDIT Put right period here
     signal TbClock : std_logic := '0';
@@ -75,9 +76,10 @@ begin
 	      leds 	 => leds,
               rgb_1 	 => rgb_1,
               rgb_2  	 => rgb_2,
-	      empty_o 	 => empty_o,
-	      switch	 => switch,
-    	      full_o	 => full_o
+	      --empty_o 	 => empty_o,
+	      switch1	 => switch1,
+	      switch2	 => switch2
+    	      --full_o	 => full_o
               );
 
     -- Clock generation
@@ -96,7 +98,8 @@ begin
         rst_i <= '1';
         wait for 100 ns;
         rst_i <= '0';
-	switch <= '1';
+	switch1 <= '0';
+	switch2 <= '0';
         wait for 100000 * TbPeriod;
 
         -- Stop the clock and hence terminate the simulation

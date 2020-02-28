@@ -126,9 +126,10 @@ begin
 		port map(
 			clk_i 		=>  clk_i,
 			rst_i       =>  rst_i,
-			paquete_ok  => paquete_ok_s,
-			paquete_i   => paquete_o,
-			--paquete_i   => prueba,
+			--paquete_ok  => paquete_ok_s,
+			paquete_ok  => '1',
+			--paquete_i   => paquete_o,
+			paquete_i   => prueba,
 			w_data     => w_data_2
 		);
 		
@@ -155,7 +156,7 @@ begin
 		
 		w_data <= w_data_3;
 		--prueba <= "0011001" & btn;
-		prueba <= "10101010101010" & btn;	
+		prueba <= "101010101010101" when btn = '1' else "110011001100110";	
         --w_data <= r_data;
         
 end Behavioral;

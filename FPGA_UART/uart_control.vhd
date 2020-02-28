@@ -7,7 +7,7 @@ use IEEE.numeric_std.all;
 entity uart_control is
 	port(
 		clk_i: in std_logic;
-
+        rst_i: in std_logic;
 
 		empty_o: in std_logic;
 		rd_uart: out std_logic;
@@ -22,16 +22,26 @@ signal emptySignal: std_logic;
 begin
     process(clk_i)
         variable count: integer := 0;
+        variable N: integer := 0;
     begin
-        if rising_edge(clk_i) then
-            if empty_o = '0' then
+        if (clk_i = '1' and clk_i'event) then
+            if rst_i = '1' then          
+                N := 0; 
+            elsif empty_o = '0' then   -- Tiene datos
                 count := count + 1;
-                if count = 100E6 then
+                             
+                if count = 125E4 then    -- Cuento 10 mseg
                     count := 0;
-                    rd_uart <= '1';
+                    rd_uart <= '1';     -- Pido el dato
                     wr_uart <= '1';
+                    N := N + 1;
+                else                    
+                    rd_uart <= '0';
+                    wr_uart <= '0';
                 end if;
-            else
+                                
+            else                    -- No tiene datos
+
                 rd_uart <= '0';
                 wr_uart <= '0';
             end if;

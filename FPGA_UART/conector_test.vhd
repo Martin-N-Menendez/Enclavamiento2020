@@ -7,7 +7,7 @@ entity conector_test is
 		clk_i: in std_logic;
         rst_i: in std_logic;
         switch : in std_logic;
-        leds : out std_logic_vector(2-1 downto 0);
+        --leds : out std_logic_vector(2-1 downto 0);
         w_data_1: in std_logic_vector(8-1 downto 0);
         w_data_2: in std_logic_vector(8-1 downto 0);
         w_data_3: out std_logic_vector(8-1 downto 0)
@@ -23,10 +23,10 @@ begin
         if (clk_i = '1' and clk_i'event) then
             if switch = '1' then                 
                 w_data_3 <= w_data_2; 
-                leds <= "10";
+                --leds <= "10";
             else
                 w_data_3 <= w_data_1; 
-                leds <= "01";
+                --leds <= "01";
             end if;
         end if;
     end process;  

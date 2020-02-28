@@ -45,7 +45,7 @@ begin
     -- EDIT: Check that clk_i is really your main clock signal
     clk_i <= TbClock;
 
-    paquete_i <= "101010101010101";
+    
 	
     stimuli : process
     begin
@@ -59,28 +59,28 @@ begin
         rst_i <= '0';
 	wait for 1 ns;
 	paquete_ok <= '1';
-        wait for 10000 * TbPeriod;
+        wait for 1000000 * TbPeriod;
 
         -- Stop the clock and hence terminate the simulation
-        TbSimEnded <= '1';
-        wait;
+        --TbSimEnded <= '1';
+        --wait;
     end process;
 
---    datos : process
---    begin
---        
---        
---        paquete_i <= "101010101010101";
--- 	wait for 8 ns ;
---
---	--paquete_i <= "111111111100001";
--- 	--wait for 200 ns;
---
---	
---
---        --wait for 100 * TbPeriod;
---	--TbSimEnded <= '1';
---    end process;
+    datos : process
+    begin
+        
+        
+        paquete_i <= "101010101010101";
+ 	wait for 60000 ns ;
+
+	paquete_i <= "110110110110110";
+ 	wait for 1000000 * TbPeriod;
+
+	
+
+        --wait for 100 * TbPeriod;
+	--TbSimEnded <= '1';
+    end process;
 	
 end tb;
 

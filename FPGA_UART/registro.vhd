@@ -21,8 +21,7 @@ architecture Behavioral of registro is
     signal paquete_aux: std_logic_vector(15-1 downto 0);
     signal nuevo : std_logic;
     signal nuevo_aux : std_logic;
-    
-    
+
     signal aux_0 : std_logic_vector(8-1 downto 0);
     signal aux_1 : std_logic_vector(8-1 downto 0);
     signal aux_2 : std_logic_vector(8-1 downto 0);
@@ -183,6 +182,9 @@ begin
                 if leidos = 15 then
                     leidos <= 0;
                 end if;
+                if nuevo = '0' then
+                    leidos <= 0;
+                end if;
             end if;
         end if;
     end process;
@@ -238,7 +240,8 @@ begin
                             escritos <= 0;     
                     end case;
                     pulsos <= 0;
-                    escritos <= escritos + 1;             
+                    escritos <= escritos + 1;    
+    
                 else   
                     if nuevo = '1' then
                         pulsos <= pulsos + 1;
@@ -267,6 +270,9 @@ begin
                 end if;
                 paquete_aux <= paquete_i;
                 
+                if paquete_ok = '1' then
+                    nuevo <= '1';
+                end if;
                 if escritos = 16 then
                     nuevo <= '0';
                 end if;
