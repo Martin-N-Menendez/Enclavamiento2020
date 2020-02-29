@@ -43,7 +43,7 @@ architecture tb of tb_uart_loop is
     signal TbSimEnded : std_logic := '0';
 
     -- 1/19200:
-    constant c_BIT_PERIOD : time := 3256 ns;
+    constant c_BIT_PERIOD : time := 407 * TbPeriod;
 
 	 -- Low-level byte-write
   	procedure UART_WRITE_BYTE (

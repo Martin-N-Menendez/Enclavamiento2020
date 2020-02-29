@@ -26,12 +26,14 @@ architecture UART_loop_arq of UART_loop is
 	signal led_s : std_logic_vector(4-1 downto 0);
 	signal led_rgb_1 : std_logic_vector(3-1 downto 0);
 	signal led_rgb_2 : std_logic_vector(3-1 downto 0);
+	signal N_s : integer;
 	
 	component uart_control is
 	port(
 		clk_i: in std_logic;
 		rst_i: in std_logic;
 		empty_o: in std_logic;
+		N : out integer;
 		rd_uart: out std_logic;
 		wr_uart: out std_logic
 	);
@@ -45,6 +47,7 @@ architecture UART_loop_arq of UART_loop is
 		r_data: in std_logic_vector(8-1 downto 0);
 		switch1 : in std_logic;
 		switch2 : in std_logic;
+		N : in integer;
 		leds : out std_logic_vector(4-1 downto 0);
 		led_rgb_1  : out std_logic_vector(3-1 downto 0);
 		led_rgb_2  : out std_logic_vector(3-1 downto 0);
@@ -82,6 +85,7 @@ begin
 		port map(
 			clk_i 		=>  clk_i,
 			rst_i 		=> reset_uart,
+			N           => N_s,
 			empty_o     =>  emptySignal,
 			rd_uart     => rd_uart_signal,
 			wr_uart     => wr_uart_signal
@@ -96,6 +100,7 @@ begin
 			r_data      => r_dataSignal,
 			switch1      => switch1,
 			switch2      => switch2,
+			N           => N_s,
 			leds        => led_s,
 			led_rgb_1   => led_rgb_1,
 			led_rgb_2   => led_rgb_2,

@@ -43,7 +43,7 @@ architecture tb of tb_uart_loop is
     signal TbSimEnded : std_logic := '0';
 
     -- 1/19200:
-    constant c_BIT_PERIOD : time := 3256 ns;
+    constant c_BIT_PERIOD : time := 407* TbPeriod;
 
 	 -- Low-level byte-write
   	procedure UART_WRITE_BYTE (
@@ -100,7 +100,7 @@ begin
         rst_i <= '0';
 	switch1 <= '0';
 	switch2 <= '0';
-        wait for 100000 * TbPeriod;
+        wait for 1000 * TbPeriod;
 
         -- Stop the clock and hence terminate the simulation
         TbSimEnded <= '1';

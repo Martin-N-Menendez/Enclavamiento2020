@@ -8,7 +8,7 @@ entity uart_control is
 	port(
 		clk_i: in std_logic;
         rst_i: in std_logic;
-
+        N : out integer;
 		empty_o: in std_logic;
 		rd_uart: out std_logic;
 		wr_uart: out std_logic
@@ -22,11 +22,11 @@ signal emptySignal: std_logic;
 begin
     process(clk_i)
         variable count: integer := 0;
-        variable N: integer := 0;
+        variable L : integer := 0;
     begin
         if (clk_i = '1' and clk_i'event) then
             if rst_i = '1' then          
-                N := 0; 
+                L := 0; 
             elsif empty_o = '0' then   -- Tiene datos
                 count := count + 1;
                              
@@ -34,18 +34,21 @@ begin
                     count := 0;
                     rd_uart <= '1';     -- Pido el dato
                     wr_uart <= '1';
-                    N := N + 1;
+                    L := L + 1;
                 else                    
                     rd_uart <= '0';
                     wr_uart <= '0';
                 end if;
                                 
             else                    -- No tiene datos
-
+                N <= L;
                 rd_uart <= '0';
                 wr_uart <= '0';
             end if;
         end if;
+        
+        
+        
     end process;
     
 end Behavioral;
