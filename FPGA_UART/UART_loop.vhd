@@ -22,17 +22,21 @@ architecture UART_loop_arq of UART_loop is
 
 	signal w_data_signal, r_dataSignal: std_logic_vector(7 downto 0);
 	signal rd_uart_signal, wr_uart_signal: std_logic;
-	signal emptySignal,switch_s,reset_s,reset_uart: std_logic;
+	signal emptySignal,full_s,switch_s,reset_s,reset_uart: std_logic;
 	signal led_s : std_logic_vector(4-1 downto 0);
 	signal led_rgb_1 : std_logic_vector(3-1 downto 0);
 	signal led_rgb_2 : std_logic_vector(3-1 downto 0);
 	signal N_s : integer;
+	signal leer_s,escribir_s : std_logic;
 	
 	component uart_control is
 	port(
 		clk_i: in std_logic;
 		rst_i: in std_logic;
+		leer : in std_logic;
+        escribir : in std_logic;
 		empty_o: in std_logic;
+		full_o: in std_logic;
 		N : out integer;
 		rd_uart: out std_logic;
 		wr_uart: out std_logic
@@ -44,6 +48,9 @@ architecture UART_loop_arq of UART_loop is
 		clk_i: in std_logic;
         rst_i: in std_logic;
         reset_uart : out std_logic;
+        r_disponible : in std_logic;
+		leer : out std_logic;
+		escribir : out std_logic;
 		r_data: in std_logic_vector(8-1 downto 0);
 		switch1 : in std_logic;
 		switch2 : in std_logic;
@@ -75,7 +82,7 @@ begin
 			wr_uart 	=> wr_uart_signal,
 			rx 			=> uart_rxd_i,
 			w_data 		=> w_data_signal,
-			--tx_full 	=> full_o,
+			tx_full 	=> full_s,
 			rx_empty	=> emptySignal,
 			r_data  	=> r_dataSignal,
 			tx  		=> uart_txd_o	   
@@ -85,8 +92,11 @@ begin
 		port map(
 			clk_i 		=>  clk_i,
 			rst_i 		=> reset_uart,
+			leer        =>     leer_s,
+			escribir    => escribir_s,
 			N           => N_s,
 			empty_o     =>  emptySignal,
+			full_o      => full_s,
 			rd_uart     => rd_uart_signal,
 			wr_uart     => wr_uart_signal
 		);	
@@ -97,6 +107,9 @@ begin
 			clk_i 		=>  clk_i,
 			rst_i       =>  rst_i,
 			reset_uart       =>  reset_s,
+			r_disponible         => rd_uart_signal,
+			leer        => leer_s,
+			escribir    => escribir_s,
 			r_data      => r_dataSignal,
 			switch1      => switch1,
 			switch2      => switch2,
