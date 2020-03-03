@@ -26,6 +26,8 @@ architecture Behavioral of detector is
     
     signal data_ok: std_logic;
     
+    signal r_aux: std_logic;
+    
     signal contador : integer range 0 to 30 := 0;
     signal ticks : integer range 0 to 407 := 0;
     
@@ -46,154 +48,165 @@ architecture Behavioral of detector is
 
 begin
     
-    cambio_estados : process(clk_i)
-    begin
-        if (clk_i = '1' and clk_i'event) then
-            if rst_i = '1' then          
-                estado <= inicio;
-            else
-                estado <= estado_siguiente;       
-            end if;
-        end if;
-    end process;
+--    cambio_estados : process(clk_i)
+--    begin
+--        if (clk_i = '1' and clk_i'event) then
+--            if rst_i = '1' then          
+--                estado <= inicio;
+--            else
+--                estado <= estado_siguiente;       
+--            end if;
+--        end if;
+--    end process;
    
    procesamiento : process(clk_i) 
    begin 
         if (clk_i = '1' and clk_i'event) then
             if rst_i = '1' then          
                 contador <= 0; 
+                paquete_aux <= (others => '0');
             else
                 
-                if estado = lectura then         
-          
+                --if estado = lectura then
+                  r_aux <= r_disponible;         
+                  if (r_disponible = '1' and r_aux /= r_disponible) then 
                         if contador < 22 then
-                            if r_data = char_0 then
+                            if r_data = "00110000" then
                                 paquete_aux(contador) <= '0';
                             end if;
-                            if r_data = char_1 then
+                            if r_data = "00110001" then
                                 paquete_aux(contador) <= '1';
                             end if; 
                             contador <= contador + 1;        
                         end if;
-                        
-                        if contador = 22 then
+                        if contador < 22 then
                             contador <= contador + 1;
                         end if; 
-                             
-
-                end if;
-                if estado = final or estado = error then
+                        if contador = 23 then
+                            paquete <= paquete_aux;
+                            contador <= 0;
+                        end if; 
+                  end if;
+                
+                  if contador < 22 then
+                    contador <= contador + 1;
+                  end if; 
+                  if contador = 23 then
+                    paquete <= paquete_aux;
                     contador <= 0;
-                end if;                      
+                  end if; 
+                --if estado = final or estado = error then
+                --    contador <= 0;
+                --end if;                      
            end if;
         end if;
              
     end process;
    
-     estados : process(clk_i,estado)      
-     begin
-        if (clk_i = '1' and clk_i'event) then
-            if rst_i = '1' then          
-                estado_siguiente <= inicio; 
-            else
+--     estados : process(clk_i,estado)      
+--     begin
+--        if (clk_i = '1' and clk_i'event) then
+--            if rst_i = '1' then          
+--                estado_siguiente <= inicio; 
+--            else
             
-                estado_siguiente <= estado;   
-                -- LED4 = RGB2 | LED5 => RGB1
-                -- BGR -> 001 = R | 010 = G | 100 = B
-                case(estado) is                  
+--                estado_siguiente <= estado;   
+--                -- LED4 = RGB2 | LED5 => RGB1
+--                -- BGR -> 001 = R | 010 = G | 100 = B
+--                case(estado) is                  
                             
-                  when inicio =>    
-                    --paquete_ready <= '0'; 
+--                  when inicio =>    
+--                    --paquete_ready <= '0'; 
                        
-                    --led_rgb_1 <= "100";   -- azul LD5
-                    if r_data = tag_inicial then -- r_data = '<'
-                        tags_izq <= '1';
-                        estado_siguiente <= lectura;                    
-                    end if;               
-                  when lectura => 
-                    paquete_ready <= '0';  
-                    if contador = 23 then -- 21 (asi entran 21)
-                        if r_data = tag_final then --  r_data = '>'
-                            tags_der <= '1';  
-                            --contador <= 0;                
-                            estado_siguiente <= final;
-                        else 
-                            --tags_izq <= '0';
-                            tags_der <= '0';  
-                            --contador <= 0;    
-                            estado_siguiente <= error;                       
-                        end if;                      
-                    else
-                        --led_rgb_1 <= "101"; -- azul
-                        --led_rgb_2 <= "100"; -- azul
-                    end if; 
-                  when final =>  
-                    --led_rgb_1 <= "111"; -- blanco   
-                    --led_rgb_2 <= "010"; -- verde
-                    paquete_ready <= '1';
-                    if r_data = tag_inicial then -- r_data = '<'
-                        tags_izq <= '1';
-                        estado_siguiente <= lectura;                    
-                    end if;           
-                  when error => 
-                    --led_rgb_1 <= "111"; -- blanco        
-                    --led_rgb_2 <= "001"; -- rojo
-                    paquete_aux <= (others => '0');
-                    if r_data = tag_inicial then -- r_data = '<'
-                        tags_izq <= '1';
-                        estado_siguiente <= lectura;                    
-                    end if;                
-                  when others => null;
-                end case;
-             end if;
-          end if;
-      end process;
+--                    --led_rgb_1 <= "100";   -- azul LD5
+--                    if r_data = tag_inicial then -- r_data = '<'
+--                        tags_izq <= '1';
+--                        estado_siguiente <= lectura;                    
+--                    end if;               
+--                  when lectura => 
+--                    paquete_ready <= '0';  
+--                    if contador = 23 then -- 21 (asi entran 21)
+--                        if r_data = tag_final then --  r_data = '>'
+--                            tags_der <= '1';  
+--                            --contador <= 0;                
+--                            estado_siguiente <= final;
+--                        else 
+--                            --tags_izq <= '0';
+--                            tags_der <= '0';  
+--                            --contador <= 0;    
+--                            estado_siguiente <= error;                       
+--                        end if;                      
+--                    --else
+--                        --led_rgb_1 <= "101"; -- azul
+--                        --led_rgb_2 <= "100"; -- azul
+--                    end if; 
+--                  when final =>  
+--                    --led_rgb_1 <= "111"; -- blanco   
+--                    --led_rgb_2 <= "010"; -- verde
+--                    paquete_ready <= '1';
+--                    if r_data = tag_inicial then -- r_data = '<'
+--                        tags_izq <= '1';
+--                        estado_siguiente <= lectura;                    
+--                    end if;           
+--                  when error => 
+--                    --led_rgb_1 <= "111"; -- blanco        
+--                    --led_rgb_2 <= "001"; -- rojo
+--                    paquete_aux <= (others => '0');
+--                    if r_data = tag_inicial then -- r_data = '<'
+--                        tags_izq <= '1';
+--                        estado_siguiente <= lectura;                    
+--                    end if;                
+--                  when others => null;
+--                end case;
+--             end if;
+--          end if;
+--      end process;
     
-    lector_datos : process(clk_i)
-    begin
-        if (clk_i = '1' and clk_i'event) then
-            if rst_i = '1' then
-                data_in := (others => '0'); 
-            else  
-                if r_disponible = '1' and r_data /= "00000000" then
-                    data_in := r_data; 
-                end if;
-            end if;
-        end if;
-    end process;
+--    lector_datos : process(clk_i)
+--    begin
+--        if (clk_i = '1' and clk_i'event) then
+--            if rst_i = '1' then
+--                data_in := (others => '0'); 
+--            else  
+--                if r_disponible = '1' and r_data /= "00000000" then
+--                    data_in := r_data; 
+--                end if;
+--            end if;
+--        end if;
+--    end process;
     
-    analizar_tags : process(clk_i)
-    begin
-        if (clk_i = '1' and clk_i'event) then
-            if rst_i = '1' then
-                tags_ok <= '0'; 
-                tags_izq <= '0'; 
-                tags_der <= '0'; 
-                led_rgb_1 <= "001"; -- rojo
-                led_rgb_2 <= "001"; -- rojo
-            else  
-                --tags_ok <= tags_izq and tags_der;
+--    analizar_tags : process(clk_i)
+--    begin
+--        if (clk_i = '1' and clk_i'event) then
+--            if rst_i = '1' then
+--                tags_ok <= '0'; 
+--                tags_izq <= '0'; 
+--                tags_der <= '0'; 
+--                led_rgb_1 <= "001"; -- rojo
+--                led_rgb_2 <= "001"; -- rojo
+--            else  
+--                --tags_ok <= tags_izq and tags_der;
                 
-                if tags_izq = '1' then
-                    led_rgb_1 <= "010"; -- verde
-                else
-                    led_rgb_1 <= "100"; -- rojo
-                end if;
-                
-                if tags_der = '1' then
-                    led_rgb_2 <= "010"; -- verde
-                else
-                    led_rgb_2 <= "100"; -- rojo
-                end if;
-
---                if tags_ok = '1' then
+--                if tags_izq = '1' then
 --                    led_rgb_1 <= "010"; -- verde
 --                else
---                    led_rgb_1 <= "001"; -- rojo
+--                    led_rgb_1 <= "100"; -- rojo
 --                end if;
-            end if;
-        end if;
-    end process;
+                
+--                if tags_der = '1' then
+--                    led_rgb_2 <= "010"; -- verde
+--                else
+--                    led_rgb_2 <= "100"; -- rojo
+--                end if;
+
+----                if tags_ok = '1' then
+----                    led_rgb_1 <= "010"; -- verde
+----                else
+----                    led_rgb_1 <= "001"; -- rojo
+----                end if;
+--            end if;
+--        end if;
+--    end process;
     
     analizar_largo : process(clk_i)
     begin
