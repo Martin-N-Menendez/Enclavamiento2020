@@ -28,11 +28,8 @@ architecture Behavioral of sistema is
 	port(
 		clk_i: in std_logic;
         rst_i: in std_logic;
-		r_data: in std_logic_vector(8-1 downto 0);	
-		leer : out std_logic;
-		escribir : out std_logic;
+		r_data: in std_logic_vector(8-1 downto 0);
 		r_disponible : in std_logic;
-		reset_uart : out std_logic;
 		led_rgb_1  : out std_logic_vector(3-1 downto 0);
 		led_rgb_2  : out std_logic_vector(3-1 downto 0);
 		paquete: out std_logic_vector(21-1 downto 0);
@@ -57,9 +54,8 @@ architecture Behavioral of sistema is
 		clk_i: in std_logic;
         rst_i: in std_logic;
         switch : in std_logic;
-        N : in integer;
-        escribir_2 : in std_logic;
-        escribir_3 : out std_logic;
+        leds : out std_logic_vector(2-1 downto 0);
+        wr_uart : out std_logic;
         w_data_1: in std_logic_vector(8-1 downto 0);
         w_data_2: in std_logic_vector(8-1 downto 0);
         w_data_3: out std_logic_vector(8-1 downto 0)
@@ -90,12 +86,12 @@ begin
 			rst_i       =>  rst_i,
 			r_data     => r_data,
 			r_disponible => r_disponible,
-			leer       =>   leer,
-			escribir   => escribir_s,
+			--leer       =>   leer,
+			--escribir   => escribir_s,
 			led_rgb_1 => led_rgb_1,
 			led_rgb_2 => led_rgb_2,
 			N        => N,
-			reset_uart => reset_uart,
+			--reset_uart => reset_uart,
 			paquete_ok => paquete_ok_s,
 			paquete  => paquete_i,
 			w_data     => w_data_1
@@ -128,11 +124,12 @@ begin
 			clk_i 		=>  clk_i,
 			rst_i       =>  rst_i,
 			switch      => switch1,
-			escribir_2 => escribir_s,
-			escribir_3 => escribir,
-			N          => N,
+			--escribir_2 => escribir_s,
+			--escribir_3 => escribir,
+			--N          => N,
 			--leds(0)       => leds(0),
 			--leds(1)       => leds(1),
+			wr_uart      => escribir,
 			w_data_1     => w_data_1,
 			w_data_2     => w_data_2,
 			w_data_3     => w_data_3
@@ -156,26 +153,26 @@ begin
             end if;
         end process;  
     
---        process(clk_i)
---        variable contador: integer := 0;
---            begin
---                if (clk_i = '1' and clk_i'event) then
---                    if rst_i = '1' then          
---                        reset_uart <= '0'; 
---                    else 
---                        contador := contador + 1;
+        process(clk_i)
+        variable contador: integer := 0;
+            begin
+                if (clk_i = '1' and clk_i'event) then
+                    if rst_i = '1' then          
+                        reset_uart <= '0'; 
+                    else 
+                        contador := contador + 1;
                       
---                        if contador = 10*125E6 then    -- Cuento 5 mseg
---                            contador := 0;
---                            reset_uart <= '1'; 
---                        else
---                            reset_uart <= '0'; 
---                        end if;
+                        if contador = 10*125E6 then    -- Cuento 5 mseg
+                            contador := 0;
+                            reset_uart <= '1'; 
+                        else
+                            reset_uart <= '0'; 
+                        end if;
 
---                    end if;
---                end if;
+                    end if;
+                end if;
   
---            end process;
+            end process;
     
         
 end Behavioral;

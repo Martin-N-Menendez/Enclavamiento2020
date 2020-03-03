@@ -43,7 +43,7 @@ architecture tb of tb_uart_loop is
     signal TbSimEnded : std_logic := '0';
 
     -- 1/19200:
-    constant c_BIT_PERIOD : time := 407 * TbPeriod;
+    constant c_BIT_PERIOD : time := 6510 * TbPeriod; --6510
 
 	 -- Low-level byte-write
   	procedure UART_WRITE_BYTE (
@@ -100,21 +100,24 @@ begin
         rst_i <= '0';
 	switch1 <= '0';
 	switch2 <= '0';
-        wait for 1000 * TbPeriod;
+        wait for 1000000 * TbPeriod;
 
         -- Stop the clock and hence terminate the simulation
-        TbSimEnded <= '1';
-        wait;
+        --TbSimEnded <= '1';
+        --wait;
     end process;
 
     datos : process
     begin
         
-	wait for 200 ns;
+	--wait for 200 ns;
 	--21
-	UART_WRITE_BYTE(X"3C", uart_rxd_i);
+	UART_WRITE_BYTE("00111100", uart_rxd_i); -- <
+	UART_WRITE_BYTE("00110001", uart_rxd_i); -- 1
+	UART_WRITE_BYTE("00110000", uart_rxd_i); -- 0
+	UART_WRITE_BYTE("00110001", uart_rxd_i); -- >
 
-	wait for 200 ns;
+	wait for 500 * TbPeriod;
 	
 --	wait for 100 ns;
 --	-- 21
@@ -164,110 +167,10 @@ begin
 --	wait for 50 ns;
 --	r_data <= "00111110"; -- >
 --
---	wait for 100 ns;
---	-- 22
---        r_data <= "00111100"; -- <
--- 	wait for 50 ns;
---	r_data <= "00110001"; -- 1
---	wait for 50 ns;
---	r_data <= "00110000"; -- 0
---	wait for 50 ns;
---	r_data <= "00110001"; -- 1
---	wait for 50 ns;
---	r_data <= "00110000"; -- 0
---	wait for 50 ns;
---	r_data <= "00110001"; -- 1
---	wait for 50 ns;
---	r_data <= "00110000"; -- 0
---	wait for 50 ns;
---	r_data <= "00110001"; -- 1
---	wait for 50 ns;
---	r_data <= "00110000"; -- 0
---	wait for 50 ns;
---	r_data <= "00110001"; -- 1
---	wait for 50 ns;
---	r_data <= "00110000"; -- 0
---	wait for 50 ns;
---	r_data <= "00110001"; -- 1
---	wait for 50 ns;
---	r_data <= "00110000"; -- 0
---	wait for 50 ns;
---	r_data <= "00110001"; -- 1
---	wait for 50 ns;
---	r_data <= "00110000"; -- 0
---	wait for 50 ns;
---	r_data <= "00110001"; -- 1
---	wait for 50 ns;
---	r_data <= "00110000"; -- 0
---	wait for 50 ns;
---	r_data <= "00110001"; -- 1
---	wait for 50 ns;
---	r_data <= "00110000"; -- 0
---	wait for 50 ns;
---	r_data <= "00110001"; -- 1
---	wait for 50 ns;
---	r_data <= "00110000"; -- 0
---	wait for 50 ns;
---	r_data <= "00110001"; -- 1
---	wait for 50 ns;
---	r_data <= "00110000"; -- 0
---	wait for 50 ns;
---	r_data <= "00111110"; -- >
---	
---	wait for 100 ns;
---	-- 23
---        r_data <= "00111100"; -- <
--- 	wait for 50 ns;
---	r_data <= "00110001"; -- 1
---	wait for 50 ns;
---	r_data <= "00110000"; -- 0
---	wait for 50 ns;
---	r_data <= "00110001"; -- 1
---	wait for 50 ns;
---	r_data <= "00110000"; -- 0
---	wait for 50 ns;
---	r_data <= "00110001"; -- 1
---	wait for 50 ns;
---	r_data <= "00110000"; -- 0
---	wait for 50 ns;
---	r_data <= "00110001"; -- 1
---	wait for 50 ns;
---	r_data <= "00110000"; -- 0
---	wait for 50 ns;
---	r_data <= "00110001"; -- 1
---	wait for 50 ns;
---	r_data <= "00110000"; -- 0
---	wait for 50 ns;
---	r_data <= "00110001"; -- 1
---	wait for 50 ns;
---	r_data <= "00110000"; -- 0
---	wait for 50 ns;
---	r_data <= "00110001"; -- 1
---	wait for 50 ns;
---	r_data <= "00110000"; -- 0
---	wait for 50 ns;
---	r_data <= "00110001"; -- 1
---	wait for 50 ns;
---	r_data <= "00110000"; -- 0
---	wait for 50 ns;
---	r_data <= "00110001"; -- 1
---	wait for 50 ns;
---	r_data <= "00110000"; -- 0
---	wait for 50 ns;
---	r_data <= "00110001"; -- 1
---	wait for 50 ns;
---	r_data <= "00110000"; -- 0
---	wait for 50 ns;
---	r_data <= "00110001"; -- 1
---	wait for 50 ns;
---	r_data <= "00110000"; -- 0
---	wait for 50 ns;
---	r_data <= "00110001"; -- 1
---	wait for 50 ns;
---	r_data <= "00111110"; -- >
 
-        wait for 10000 * TbPeriod;
-	TbSimEnded <= '1';
+
+ --       wait for 10000 * TbPeriod;
+	--TbSimEnded <= '1';
     end process;
 	
 end tb;
