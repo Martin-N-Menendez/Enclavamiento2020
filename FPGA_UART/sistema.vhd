@@ -148,7 +148,10 @@ begin
                 if switch2 = '1' then  
                     leds <= std_logic_vector(to_unsigned(N,4));                
                 else
-                    leds <= "101" & paquete_ok_s; 
+                    leds(3) <= paquete_i(3);
+                    leds(2) <= paquete_i(2); 
+                    leds(1) <= paquete_i(1); 
+                    leds(0) <= paquete_i(0);  
                 end if;
             end if;
         end process;  

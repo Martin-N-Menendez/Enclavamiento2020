@@ -67,10 +67,10 @@ begin
                 if estado = lectura then         
           
                         if contador < 22 then
-                            if data_in = char_0 then
+                            if r_data = char_0 then
                                 paquete_aux(contador) <= '0';
                             end if;
-                            if data_in = char_1 then
+                            if r_data = char_1 then
                                 paquete_aux(contador) <= '1';
                             end if; 
                             contador <= contador + 1;        
@@ -106,7 +106,7 @@ begin
                     --paquete_ready <= '0'; 
                        
                     --led_rgb_1 <= "100";   -- azul LD5
-                    if data_in = tag_inicial then -- r_data = '<'
+                    if r_data = tag_inicial then -- r_data = '<'
                         tags_izq <= '1';
                         estado_siguiente <= lectura;                    
                     end if;               
@@ -131,7 +131,7 @@ begin
                     --led_rgb_1 <= "111"; -- blanco   
                     --led_rgb_2 <= "010"; -- verde
                     paquete_ready <= '1';
-                    if data_in = tag_inicial then -- r_data = '<'
+                    if r_data = tag_inicial then -- r_data = '<'
                         tags_izq <= '1';
                         estado_siguiente <= lectura;                    
                     end if;           
@@ -139,7 +139,7 @@ begin
                     --led_rgb_1 <= "111"; -- blanco        
                     --led_rgb_2 <= "001"; -- rojo
                     paquete_aux <= (others => '0');
-                    if data_in = tag_inicial then -- r_data = '<'
+                    if r_data = tag_inicial then -- r_data = '<'
                         tags_izq <= '1';
                         estado_siguiente <= lectura;                    
                     end if;                
@@ -230,7 +230,7 @@ begin
     
     w_data <= r_data;
     
-    --w_data <= data_in;   
+    --w_data <= data_in;    -- Agrega 0 y rompe todo
 
        
 end Behavioral;
