@@ -27,7 +27,7 @@ architecture Behavioral of uart_control is
             if rst_i = '1' then          
                 L := 0; 
                 rd_uart <= '0';
-                --wr_uart <= '0';
+                wr_uart <= '0';
             elsif vacio_in = '0' then   -- Tiene datos
                 contador_i := contador_i + 1;
                              

@@ -13,10 +13,9 @@ architecture tb of tb_detector is
     component detector
         port(
 		clk_i: in std_logic;
-        rst_i: in std_logic;
+        	rst_i: in std_logic;
 		r_data: in std_logic_vector(8-1 downto 0);
 		r_disponible : in std_logic;
-		leer         : out std_logic;
 		led_rgb_1  : out std_logic_vector(3-1 downto 0);
 		led_rgb_2  : out std_logic_vector(3-1 downto 0);
 		paquete: out std_logic_vector(21-1 downto 0);
@@ -29,7 +28,6 @@ architecture tb of tb_detector is
     signal clk_i     : std_logic;
     signal rst_i     : std_logic;
     signal r_data    : std_logic_vector (8-1 downto 0);
-    signal leer      : std_logic;
     signal r_disponible      : std_logic;
     signal led_rgb_1 : std_logic_vector (3-1 downto 0);
     signal led_rgb_2 : std_logic_vector (3-1 downto 0);
@@ -55,6 +53,7 @@ architecture tb of tb_detector is
 		wait for TbPeriod;
 		r_disponible <= '1';
 		wait for TbPeriod;
+		r_disponible <= '0';
 
   	end Enviar_char;
 
@@ -65,7 +64,6 @@ begin
               rst_i      => rst_i,
               r_data     => r_data,
 	      r_disponible => r_disponible,
-	      leer 	 => leer,
               led_rgb_1  => led_rgb_1,
               led_rgb_2  => led_rgb_2,
               paquete    => paquete,
