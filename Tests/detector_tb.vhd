@@ -85,6 +85,8 @@ begin
         -- Reset generation
         -- EDIT: Check that rst_i is really your reset signal
         rst_i <= '1';
+	--r_data <= "00000000";
+	--r_disponible <= '0';
         wait for 100 ns;
         rst_i <= '0';
 
@@ -99,12 +101,16 @@ begin
     datos : process
     begin
         
+	r_data <= "00000000";
+	r_disponible <= '0';
+
 	wait for 100 ns;
+
 	-- 21
 	N <= 23; 	
 	Enviar_char("00111100",r_data,r_disponible); -- < 	
 	Enviar_char("00110001",r_data,r_disponible); -- 1 	
-	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110001",r_data,r_disponible); -- 1
  	Enviar_char("00110001",r_data,r_disponible); -- 1 	
 	Enviar_char("00110000",r_data,r_disponible); -- 0
 	Enviar_char("00110001",r_data,r_disponible); -- 1 	
@@ -121,12 +127,40 @@ begin
 	Enviar_char("00110000",r_data,r_disponible); -- 0
 	Enviar_char("00110001",r_data,r_disponible); -- 1 	
 	Enviar_char("00110000",r_data,r_disponible); -- 0
-	Enviar_char("00110001",r_data,r_disponible); -- 1 	
-	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110001",r_data,r_disponible); -- 1
 	Enviar_char("00110001",r_data,r_disponible); -- 1 	
 	Enviar_char("00111110",r_data,r_disponible); -- >
 
-	wait for 407 * TbPeriod;
+	wait for 100 * TbPeriod;
+
+	-- 21
+	N <= 23; 	
+	Enviar_char("00111100",r_data,r_disponible); -- < 	
+	Enviar_char("00110001",r_data,r_disponible); -- 1 	
+	Enviar_char("00110001",r_data,r_disponible); -- 1
+ 	Enviar_char("00110001",r_data,r_disponible); -- 1 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110001",r_data,r_disponible); -- 1 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110001",r_data,r_disponible); -- 1 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110001",r_data,r_disponible); -- 1 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110001",r_data,r_disponible); -- 1 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110001",r_data,r_disponible); -- 1 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110001",r_data,r_disponible); -- 1 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110001",r_data,r_disponible); -- 1 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110001",r_data,r_disponible); -- 1
+	Enviar_char("00110001",r_data,r_disponible); -- 1 	
+	Enviar_char("00111110",r_data,r_disponible); -- >
+
+	wait for 100 * TbPeriod;
 
 	-- 22
 	N <= 24; 	
@@ -155,60 +189,35 @@ begin
 	Enviar_char("00110000",r_data,r_disponible); -- 0	
 	Enviar_char("00111110",r_data,r_disponible); -- >
 	
---	wait for 100 ns;
---	-- 23
---        r_data <= "00111100"; -- <
--- 	wait for 50 ns;
---	r_data <= "00110001"; -- 1
---	wait for 50 ns;
---	r_data <= "00110000"; -- 0
---	wait for 50 ns;
---	r_data <= "00110001"; -- 1
---	wait for 50 ns;
---	r_data <= "00110000"; -- 0
---	wait for 50 ns;
---	r_data <= "00110001"; -- 1
---	wait for 50 ns;
---	r_data <= "00110000"; -- 0
---	wait for 50 ns;
---	r_data <= "00110001"; -- 1
---	wait for 50 ns;
---	r_data <= "00110000"; -- 0
---	wait for 50 ns;
---	r_data <= "00110001"; -- 1
---	wait for 50 ns;
---	r_data <= "00110000"; -- 0
---	wait for 50 ns;
---	r_data <= "00110001"; -- 1
---	wait for 50 ns;
---	r_data <= "00110000"; -- 0
---	wait for 50 ns;
---	r_data <= "00110001"; -- 1
---	wait for 50 ns;
---	r_data <= "00110000"; -- 0
---	wait for 50 ns;
---	r_data <= "00110001"; -- 1
---	wait for 50 ns;
---	r_data <= "00110000"; -- 0
---	wait for 50 ns;
---	r_data <= "00110001"; -- 1
---	wait for 50 ns;
---	r_data <= "00110000"; -- 0
---	wait for 50 ns;
---	r_data <= "00110001"; -- 1
---	wait for 50 ns;
---	r_data <= "00110000"; -- 0
---	wait for 50 ns;
---	r_data <= "00110001"; -- 1
---	wait for 50 ns;
---	r_data <= "00110000"; -- 0
---	wait for 50 ns;
---	r_data <= "00110001"; -- 1
---	wait for 50 ns;
---	r_data <= "00111110"; -- >
+	wait for 100 * TbPeriod;
+
+	-- 21
+	N <= 23; 	
+	Enviar_char("00111100",r_data,r_disponible); -- < 	
+	Enviar_char("00110001",r_data,r_disponible); -- 1 	
+	Enviar_char("00110001",r_data,r_disponible); -- 1
+ 	Enviar_char("00110001",r_data,r_disponible); -- 1 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110001",r_data,r_disponible); -- 1 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110001",r_data,r_disponible); -- 1 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110001",r_data,r_disponible); -- 1 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110001",r_data,r_disponible); -- 1 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110001",r_data,r_disponible); -- 1 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110001",r_data,r_disponible); -- 1 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110001",r_data,r_disponible); -- 1 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110001",r_data,r_disponible); -- 1
+	Enviar_char("00110001",r_data,r_disponible); -- 1 	
+	Enviar_char("00111110",r_data,r_disponible); -- >
 
 
-	
         wait for 100 * TbPeriod;
 	TbSimEnded <= '1';
     end process;
