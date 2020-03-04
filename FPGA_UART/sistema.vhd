@@ -35,6 +35,8 @@ architecture Behavioral of sistema is
 		paquete: out std_logic_vector(21-1 downto 0);
 		paquete_ok : out std_logic;
 		N : in integer;
+		N_1 : out integer;
+		N_2 : out integer;
 		w_data: out std_logic_vector(8-1 downto 0)
 	);
     end component;
@@ -55,7 +57,10 @@ architecture Behavioral of sistema is
         rst_i: in std_logic;
         switch : in std_logic;
         leds : out std_logic_vector(2-1 downto 0);
-        wr_uart : out std_logic;
+        wr_uart_3 : out std_logic;
+        N_1 : in integer;
+        N_2 : in integer;
+        paquete_ok : in std_logic;
         w_data_1: in std_logic_vector(8-1 downto 0);
         w_data_2: in std_logic_vector(8-1 downto 0);
         w_data_3: out std_logic_vector(8-1 downto 0)
@@ -78,6 +83,8 @@ architecture Behavioral of sistema is
     
     signal w_data_1,w_data_2,w_data_3,w_data_aux : std_logic_vector(8-1 downto 0);
     signal paquete_ok_s,escribir_s : std_logic;
+    signal N_1_s,N_2_s : integer;
+    
 begin
     
     detector_i: detector
@@ -86,8 +93,8 @@ begin
 			rst_i       =>  rst_i,
 			r_data     => r_data,
 			r_disponible => r_disponible,
-			--leer       =>   leer,
-			--escribir   => escribir_s,
+			N_1  => N_1_s,
+		    N_2  => N_2_s,
 			led_rgb_1 => led_rgb_1,
 			led_rgb_2 => led_rgb_2,
 			N        => N,
@@ -124,12 +131,15 @@ begin
 			clk_i 		=>  clk_i,
 			rst_i       =>  rst_i,
 			switch      => switch1,
+			paquete_ok => paquete_ok_s,
 			--escribir_2 => escribir_s,
 			--escribir_3 => escribir,
 			--N          => N,
 			--leds(0)       => leds(0),
 			--leds(1)       => leds(1),
-			wr_uart      => escribir,
+			N_1    => N_1_s,
+			N_2    => N_2_s,
+			wr_uart_3      => escribir,
 			w_data_1     => w_data_1,
 			w_data_2     => w_data_2,
 			w_data_3     => w_data_3

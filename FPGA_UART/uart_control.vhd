@@ -19,7 +19,7 @@ architecture Behavioral of uart_control is
     
     begin
     
-    process(clk_i)
+    lectura : process(clk_i)
         variable contador_i: integer := 0;
         variable L : integer := 0;
     begin
@@ -27,29 +27,42 @@ architecture Behavioral of uart_control is
             if rst_i = '1' then          
                 L := 0; 
                 rd_uart <= '0';
-                wr_uart <= '0';
+                --wr_uart <= '0';
             elsif vacio_in = '0' then   -- Tiene datos
                 contador_i := contador_i + 1;
                              
                 if contador_i = 125E3 then    -- Cuento 100 mseg
                     contador_i := 0;
                     rd_uart <= '1';     -- Pido el dato
-                    wr_uart <= '1';
+                    --wr_uart <= '1';
                     L := L + 1;
                 else                    
                     rd_uart <= '0';
-                    wr_uart <= '0';
+                    --wr_uart <= '0';
                 end if;
                          
             else                    -- No tiene datos
                     N <= L;
                     rd_uart <= '0';
-                    wr_uart <= '0';
+                    --wr_uart <= '0';
             end if;
         end if;
      end process;
       
-
+    escritura : process(clk_i)
+        variable contador_j: integer := 0;
+        --variable L : integer := 0;
+    begin
+        if (clk_i = '1' and clk_i'event) then
+            if rst_i = '1' then          
+                --L := 0; 
+                --rd_uart <= '0';
+                wr_uart <= '0';
+            else
+                wr_uart <= escribir;
+            end if;
+        end if;
+     end process;
     
     
 end Behavioral;
