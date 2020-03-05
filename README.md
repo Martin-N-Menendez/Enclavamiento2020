@@ -2,6 +2,12 @@
 
 ![Mapa_0](https://github.com/Martin-N-Menendez/Enclavamiento2020/blob/master/Mapa/Mapas/Mapa_0.png)
 
+
+| Primer encabezado | Segundo encabezado |
+| ------------- | ------------- |
+| Contenido de la celda  | Contenido de la celda  |
+| Contenido de la celda  | Contenido de la celda  |
+
 ## Implementado en FPGA:
 ![Mapa_8](https://github.com/Martin-N-Menendez/Enclavamiento2020/blob/master/Mapa/Mapas/Mapa_8.png)
 
