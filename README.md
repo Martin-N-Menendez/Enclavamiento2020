@@ -5,7 +5,7 @@
 
 | x | x | x | x | x | x |
 | - | - | - | - | - | - |
-| x | x | x | x | x | x |
+| Rx | Tx | x | x | GND | x |
 
 
 ## Implementado en FPGA:
