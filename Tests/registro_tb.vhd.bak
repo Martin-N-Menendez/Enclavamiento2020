@@ -14,9 +14,10 @@ architecture tb of tb_registro is
 	port(
 		clk_i: in std_logic;
         	rst_i: in std_logic;
-		paquete_ok : in std_logic;
+        	paquete_ok : in std_logic;
         	paquete_i: in std_logic_vector(15-1 downto 0);
-        	w_data: out std_logic_vector(8-1 downto 0)
+        	w_data: out std_logic_vector(8-1 downto 0);
+        	wr_uart : out std_logic  -- "char_disp"
 	);
     end component;
 
@@ -25,6 +26,7 @@ architecture tb of tb_registro is
     signal paquete_ok     : std_logic;
     signal paquete_i   : std_logic_vector (15-1 downto 0); 
     signal w_data    : std_logic_vector (8-1 downto 0);
+    signal wr_uart : std_logic;
 
     constant TbPeriod : time := 8 ns; -- EDIT Put right period here
     signal TbClock : std_logic := '0';
@@ -37,7 +39,8 @@ begin
               rst_i      => rst_i,
               paquete_i   => paquete_i,
               paquete_ok => paquete_ok,
-              w_data     => w_data);
+              w_data     => w_data,
+ 	      wr_uart    => wr_uart);
 
     -- Clock generation
     TbClock <= not TbClock after TbPeriod/2 when TbSimEnded /= '1' else '0';
@@ -58,7 +61,7 @@ begin
         wait for 20 ns;
         rst_i <= '0';
 	wait for 1 ns;
-	paquete_ok <= '1';
+	
         wait for 1000000 * TbPeriod;
 
         -- Stop the clock and hence terminate the simulation
@@ -71,10 +74,16 @@ begin
         
         
         paquete_i <= "101010101010101";
- 	wait for 10000 ns ;
+	paquete_ok <= '1';
+ 	wait for 1000 * TbPeriod;
+	paquete_ok <= '0';
+	
+	wait for 1000 * TbPeriod;
 
 	paquete_i <= "110110110110110";
- 	wait for 1000000 * TbPeriod;
+ 	paquete_ok <= '1';
+ 	wait for 1000 * TbPeriod;
+	paquete_ok <= '0';
 
 	
 

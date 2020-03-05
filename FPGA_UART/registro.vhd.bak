@@ -2,10 +2,7 @@ library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
 
-
--- AGREGAR salida que mate paquete_ok;
-
-entity registro is
+    entity registro is
 	port(
 		clk_i: in std_logic;
         rst_i: in std_logic;
@@ -36,7 +33,7 @@ begin
         if (clk_i = '1' and clk_i'event) then
             if rst_i = '1' then
                 mux_s <= "0000";
-            elsif (ena_s = '1') then        
+            else          
                if (mux_s = "1111") then
                    mux_s <= "0000";
                else

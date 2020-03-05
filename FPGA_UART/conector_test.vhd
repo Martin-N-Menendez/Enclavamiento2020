@@ -11,7 +11,8 @@ entity conector_test is
         wr_uart_3 : out std_logic;
         N_1 : in integer;
         N_2 : in integer;
-        r_disponible : in std_logic;
+        wr_uart_1 : in std_logic;
+        wr_uart_2 : in std_logic;
         w_data_1: in std_logic_vector(8-1 downto 0);
         w_data_2: in std_logic_vector(8-1 downto 0);
         w_data_3: out std_logic_vector(8-1 downto 0)
@@ -42,7 +43,7 @@ begin
                     
                     w_data_3 <= disp_aux_2;
                                  
-                    wr_uart_3 <= r_disponible;
+                    wr_uart_3 <= wr_uart_2;
             
                     
                     --leds <= "10";
@@ -53,7 +54,7 @@ begin
                     
                     w_data_3 <= disp_aux_1;
                                  
-                    wr_uart_3 <= r_disponible;
+                    wr_uart_3 <= wr_uart_1;
                         
      
                                        
