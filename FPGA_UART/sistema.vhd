@@ -99,7 +99,6 @@ begin
 			led_rgb_1 => led_rgb_1,
 			led_rgb_2 => led_rgb_2,
 			N        => N,
-			--reset_uart => reset_uart,
 		    wr_uart     => escribir_s,
 			paquete_ok => paquete_ok_s,
 			paquete  => paquete_i,
@@ -121,9 +120,7 @@ begin
 			rst_i       =>  rst_i,
 			paquete_ok  => paquete_ok_s,
 			paquete_i   => paquete_o,
-			--paquete_i   => prueba,
 			w_data     => w_data_2
-			--w_data     => open
 		);
 		
 
@@ -133,11 +130,6 @@ begin
 			clk_i 		=>  clk_i,
 			rst_i       =>  rst_i,
 			switch      => switch1,
-			--escribir_2 => escribir_s,
-			--escribir_3 => escribir,
-			--N          => N,
-			--leds(0)       => leds(0),
-			--leds(1)       => leds(1),
 			N_1    => N_1_s,
 			N_2    => N_2_s,
 			r_disponible => escribir_s,
@@ -148,9 +140,7 @@ begin
 		);
 		
 		w_data <= w_data_3;
-		--prueba <= "0011001" & btn;
-		--prueba <= "101010101010101";	
-        --w_data <= r_data;
+
         
         process(clk_i)
         --variable contador : integer range 0 to 125e6 := 0;
@@ -160,10 +150,10 @@ begin
                 if switch2 = '1' then  
                     leds <= std_logic_vector(to_unsigned(N,4));                
                 else
-                    leds(3) <= paquete_i(3);
-                    leds(2) <= paquete_i(2); 
-                    leds(1) <= paquete_i(1); 
-                    leds(0) <= paquete_i(0);  
+                    leds(3) <= paquete_o(3);
+                    leds(2) <= paquete_o(2); 
+                    leds(1) <= paquete_o(1); 
+                    leds(0) <= paquete_o(0);  
                 end if;
             end if;
         end process;  

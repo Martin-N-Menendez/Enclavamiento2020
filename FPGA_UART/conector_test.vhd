@@ -37,21 +37,21 @@ begin
                 contador := 0; 
             else 
                 if switch = '1' then                 
-                    w_data_3 <= w_data_2; 
+                    
+                    disp_aux_2 <= w_data_2;
+                    
+                    w_data_3 <= disp_aux_2;
+                                 
+                    wr_uart_3 <= r_disponible;
+            
+                    
                     --leds <= "10";
                 else   
  
-     
-                              
-                    
-                    
-                    
+       
                     disp_aux_1 <= w_data_1;
-                    disp_aux_2 <= disp_aux_1;
-                    disp_aux_3 <= disp_aux_2; 
-                    disp_aux_4 <= disp_aux_3;
                     
-                    w_data_3 <= disp_aux_4;
+                    w_data_3 <= disp_aux_1;
                                  
                     wr_uart_3 <= r_disponible;
                         
