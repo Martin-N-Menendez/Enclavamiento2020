@@ -2,7 +2,12 @@ library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
 
-entity conector_test is
+entity tb_conector_test is
+end tb_conector_test;
+
+architecture tb of tb_conector_test is
+
+    component conector_test is
 	port(
 		clk_i: in std_logic;
         rst_i: in std_logic;
@@ -11,19 +16,14 @@ entity conector_test is
         wr_uart_3 : out std_logic;
         N_1 : in integer;
         N_2 : in integer;
-        r_disponible : in std_logic;
+        paquete_ok : in std_logic;
         w_data_1: in std_logic_vector(8-1 downto 0);
         w_data_2: in std_logic_vector(8-1 downto 0);
         w_data_3: out std_logic_vector(8-1 downto 0)
 	);
-    end entity;
+    end component;
 
 architecture Behavioral of conector_test is
-  
-  signal disp_aux_1 : std_logic_vector(8-1 downto 0);
-  signal disp_aux_2 : std_logic_vector(8-1 downto 0);
-  signal disp_aux_3 : std_logic_vector(8-1 downto 0);
-  signal disp_aux_4 : std_logic_vector(8-1 downto 0);
         
 begin
      
@@ -40,21 +40,29 @@ begin
                     w_data_3 <= w_data_2; 
                     --leds <= "10";
                 else   
- 
-     
-                              
-                    
-                    
-                    
-                    disp_aux_1 <= w_data_1;
-                    disp_aux_2 <= disp_aux_1;
-                    disp_aux_3 <= disp_aux_2; 
-                    disp_aux_4 <= disp_aux_3;
-                    
-                    w_data_3 <= disp_aux_4;
+                   if paquete_ok = '1' then
+                        w_data_3 <= w_data_1;
+                   end if;
+                   
+                   if N_1 > 0 and N_1 < 50 and N_1 > N_total then             
+                        if paquete_ok = '1' then 
+                            contador := contador + 1;
                                  
-                    wr_uart_3 <= r_disponible;
-                        
+                            if contador = 125E3 then    -- Cuento 100 mseg
+                                contador := 0;   
+                                N_total := N_total + 1;
+                                
+                                wr_uart_3 <= '1';
+                            else                    
+                                wr_uart_3 <= '0';                    
+                            end if;
+                        else
+                            wr_uart_3 <= '0';
+                            N_total := 0; 
+                        end if;
+                    else
+                        wr_uart_3 <= '0';  
+                    end if;
      
                                        
       

@@ -15,7 +15,7 @@ entity detector is
 		N : in integer;
 		N_1 : out integer;
 		N_2 : out integer;
-		--wr_uart : out std_logic;
+		wr_uart : out std_logic;
 		w_data: out std_logic_vector(8-1 downto 0)
 	);
 end detector;
@@ -262,7 +262,7 @@ begin
     
     
     w_data <= r_data;
-    --wr_uart <= nuevo;
+    wr_uart <= r_disponible;
     
     --w_data <= data_in;    -- Agrega 0 y rompe todo
 

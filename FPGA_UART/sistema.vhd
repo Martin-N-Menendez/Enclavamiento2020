@@ -37,6 +37,7 @@ architecture Behavioral of sistema is
 		N : in integer;
 		N_1 : out integer;
 		N_2 : out integer;
+		wr_uart : out std_logic;
 		w_data: out std_logic_vector(8-1 downto 0)
 	);
     end component;
@@ -60,7 +61,7 @@ architecture Behavioral of sistema is
         wr_uart_3 : out std_logic;
         N_1 : in integer;
         N_2 : in integer;
-        paquete_ok : in std_logic;
+        r_disponible : in std_logic;
         w_data_1: in std_logic_vector(8-1 downto 0);
         w_data_2: in std_logic_vector(8-1 downto 0);
         w_data_3: out std_logic_vector(8-1 downto 0)
@@ -99,6 +100,7 @@ begin
 			led_rgb_2 => led_rgb_2,
 			N        => N,
 			--reset_uart => reset_uart,
+		    wr_uart     => escribir_s,
 			paquete_ok => paquete_ok_s,
 			paquete  => paquete_i,
 			w_data     => w_data_1
@@ -131,7 +133,6 @@ begin
 			clk_i 		=>  clk_i,
 			rst_i       =>  rst_i,
 			switch      => switch1,
-			paquete_ok => paquete_ok_s,
 			--escribir_2 => escribir_s,
 			--escribir_3 => escribir,
 			--N          => N,
@@ -139,6 +140,7 @@ begin
 			--leds(1)       => leds(1),
 			N_1    => N_1_s,
 			N_2    => N_2_s,
+			r_disponible => escribir_s,
 			wr_uart_3      => escribir,
 			w_data_1     => w_data_1,
 			w_data_2     => w_data_2,
