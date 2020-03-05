@@ -2,8 +2,8 @@
 
 ![Mapa_0](https://github.com/Martin-N-Menendez/Enclavamiento2020/blob/master/Mapa/Mapas/Mapa_0.png)
 
-# Progreso
-:white_square_button::white_square_button::white_square_button::black_square_button:
+## Progreso
+:white_square_button::white_square_button::white_square_button::white_square_button::black_square_button::black_square_button::black_square_button::black_square_button::black_square_button::black_square_button:
 
 
 ## Implementado en FPGA:
