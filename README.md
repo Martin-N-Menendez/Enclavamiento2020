@@ -2,10 +2,8 @@
 
 ![Mapa_0](https://github.com/Martin-N-Menendez/Enclavamiento2020/blob/master/Mapa/Mapas/Mapa_0.png)
 
-
-| x | x | x | x | x | x |
-| - | - | - | - | - | - |
-| Rx | Tx | x | x | GND | x |
+# Progreso
+:white_square_button::white_square_button::white_square_button::black_square_button:
 
 
 ## Implementado en FPGA:
@@ -60,6 +58,10 @@
 - [ ] COCOTB para comunicacion UART
 - [ ] COCOTB para casos funcionalidades
  
+# UART
+| x | x | x | x | x | x |
+| - | - | - | - | - | - |
+| Rx | Tx | x | x | GND | x |
 
 # Playa de maniobras
 ![Mapa_1](https://github.com/Martin-N-Menendez/Enclavamiento2020/blob/master/Mapa/Mapas/Mapa_1.png)
