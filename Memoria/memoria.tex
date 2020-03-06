@@ -86,22 +86,22 @@ headsepline, % Uncomment to get a line under the header
 %	INFORMACIÓN DE LA MEMORIA
 %----------------------------------------------------------------------------------------
 
-\thesistitle{Título del trabajo} % El títulos de la memoria, se usa en la carátula y se puede usar el cualquier lugar del documento con el comando \ttitle
-\degree{Especialista en Sistemas Embebidos } % Nombre del grado, se usa en la carátula y se puede usar el cualquier lugar del documento con el comando \degreename
-\author{Nombre del Autor} % Tu nombre, se usa en la carátula y se puede usar el cualquier lugar del documento con el comando \authorname
-\supervisor{Nombre del Director (pertenencia)} % El nombre del director, se usa en la carátula y se puede usar el cualquier lugar del documento con el comando \supname
+\thesistitle{Sistema ferroviario de enclavamiento electrónico en FPGA} % El títulos de la memoria, se usa en la carátula y se puede usar el cualquier lugar del documento con el comando \ttitle
+\degree{Maestría en Sistemas Embebidos} % Nombre del grado, se usa en la carátula y se puede usar el cualquier lugar del documento con el comando \degreename
+\author{Martín Nicolás Menéndez} % Tu nombre, se usa en la carátula y se puede usar el cualquier lugar del documento con el comando \authorname
+\supervisor{Ariel Lutenberg (CONICET-FIUBA)} % El nombre del director, se usa en la carátula y se puede usar el cualquier lugar del documento con el comando \supname
 \juradoUNO{Nombre del jurado 1 (pertenencia)} % Nombre y pertenencia del un jurado se usa en la carátula y se puede usar el cualquier lugar del documento con el comando \jur1name
 \juradoDOS{Nombre del jurado 2 (pertenencia)} % Nombre y pertenencia del un jurado se usa en la carátula y se puede usar el cualquier lugar del documento con el comando \jur2name
 \juradoTRES{Nombre del jurado 3 (pertenencia)} % Nombre y pertenencia del un jurado se usa en la carátula y se puede usar el cualquier lugar del documento con el comando \jur3name
-\fechaINICIO{enero de 2016}
-\fechaFINAL{diciembre de 2016}
+\fechaINICIO{marzo de 2019}
+\fechaFINAL{abril de 2020}
 
-\subject{Memoria del Trabajo Final de la Carrera de Especialización en Sistemas Embebidos de la UBA} % Your subject area, this is not currently used anywhere in the template, print it elsewhere with \subjectname
+\subject{Memoria del Trabajo Final de la Carrera de Maestría en Sistemas Embebidos de la UBA} % Your subject area, this is not currently used anywhere in the template, print it elsewhere with \subjectname
 \keywords{Sistemas Embebidos, CESE, FIUBA} % Keywords for your thesis, this is not currently used anywhere in the template, print it elsewhere with \keywordnames
 \university{Universidad de Buenos Aires} % Your university's name and URL, this is used in the title page and abstract, print it elsewhere with \univname
 \faculty{{Facultad de Ingeniería}} % Your faculty's name and URL, this is used in the title page and abstract, print it elsewhere with \facname
 \department{Departamento de Electrónica} % Your department's name and URL, this is used in the title page and abstract, print it elsewhere with \deptname
-\group{{Laboratorio de Sistemas Embebidos}} % Your research group's name and URL, this is used in the title page, print it elsewhere with \groupname
+\group{{GICSAFe}} % Your research group's name and URL, this is used in the title page, print it elsewhere with \groupname
 
 
 \hypersetup{pdftitle=\ttitle} % Set the PDF's title to your title
@@ -137,7 +137,7 @@ headsepline, % Uncomment to get a line under the header
 
 {\scshape\LARGE UNIVERSIDAD DE BUENOS AIRES\par}\vspace{0.1cm} % University name
 {\scshape\LARGE FACULTAD DE INGENIERÍA\par}\vspace{0.1cm} % Faculty name
-{\scshape\LARGE Carrera de Especialización en Sistemas Embebidos\par}\vspace{1cm} % Thesis type
+{\scshape\LARGE Carrera de Maestría en Sistemas Embebidos\par}\vspace{1cm} % Thesis type
 
 \includegraphics[width=.3\textwidth]{./Figures/logoFIUBA.png}
 \vspace{1cm}
@@ -155,8 +155,10 @@ headsepline, % Uncomment to get a line under the header
 \large
 \vspace{10px}
 {Director:} \\
-{\supname} % Supervisor name
- 
+{\supname}\\ % Supervisor name
+{Codirector:} \\
+{Facundo Larosa (UTN)} % Supervisor name
+
 \vspace{1cm}
 Jurados:\\
 \jurunoname\\
@@ -179,7 +181,10 @@ Jurados:\\
 %The Thesis Abstract is written here (and usually kept to just this page). The page is kept centered vertically so can expand into the blank space above the title too\ldots
 \centering
 
-El resumen debe escribirse en uno o dos párrafo.  Debe ser breve y conciso sin ningún elemento de formato en el texto como cursiva o negrita. Palabras que no sean del castellano deben ir en itálicas o cursiva. Tampoco se deben usar siglas ni acrónimos que no resulten obvios para un lector promedio de la memoria, ni referencias bibliográficas o notas al pie de página.  No debe faltar qué es lo que se hizo/logró, qué importancia/valor tiene el proyecto/resultado, qué va a encontrar el lector en la memoria y qué contenidos de la Especialización/Maestría se aplicaron en el proyecto.
+Un enclavamiento es un sistema ferroviario que controla automáticamente que los cambios en las rutas se gestionen de forma segura, evitando choques y descarrilamientos de trenes. En base al análisis de sistemas de enclavameintos comerciales se propuso un enfoque de desarrollo para el diseño y la implementación  en tecnología FPGA. Se aplicaron técnicas apropiadas para lograr el nivel de seguridad requerido y se analizó la escalabilidad del diseño para dicha plataforma.				
+			
+Para el desarrollo del trabajo resultó necesario aplicar conocimientos en lenguajes de descripción de hardware para la implementación del sistema sobre plataforma de lógica programable. Además, se trabajó el firmware bajo control de versiones y se aplicó el modelo de máquinas de estados finitos para la lógica del sistema. Se documentan las estrategias de testing adoptadas para validar los módulos. Finalmente, fueron fundamentales los conocimientos de sistemas críticos y ferroviarios.
+						
 
 \end{abstract}
 
