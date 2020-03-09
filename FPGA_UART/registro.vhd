@@ -9,7 +9,8 @@ entity registro is
 	port(
 		clk_i: in std_logic;
         rst_i: in std_logic;
-        paquete_ok : in std_logic;
+        procesar : in std_logic;
+        procesado : out std_logic;
         paquete_i: in std_logic_vector(15-1 downto 0);
         w_data: out std_logic_vector(8-1 downto 0);
         wr_uart : out std_logic  -- "char_disp"
@@ -90,7 +91,7 @@ begin
         end if;
     end process;
     
-    FSM : process(paquete_ok,estado,mux_s)
+    FSM : process(procesar,estado,mux_s)
     begin
         estado_siguiente <= estado;
         
@@ -99,8 +100,9 @@ begin
                 wr_uart <= '0';
                 rst_s <= '1';
                 ena_s <= '0';
+                procesado <= '0';
                 
-                if paquete_ok = '1' then
+                if procesar = '1' then
                     estado_siguiente <= CICLO_1;
                 end if;
                 
@@ -108,18 +110,22 @@ begin
                 wr_uart <= '0';
                 rst_s <= '0';
                 ena_s <= '0';
+                --procesado <= '0';
                 
                 estado_siguiente <= CICLO_2;
                 
             when CICLO_2 =>
                 wr_uart <= '1';
                 rst_s <= '0';
-                ena_s <= '1';
+                ena_s <= '1';              
+                procesado <= '0';
                 
                 if mux_s = "1110" then
-                    estado_siguiente <= REINICIO;
+                    procesado <= '1';
+                    estado_siguiente <= REINICIO;           
                 else
                     estado_siguiente <= CICLO_1;
+
                 end if;
             when others => null;
         end case;

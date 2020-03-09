@@ -11,7 +11,8 @@ entity detector is
 		led_rgb_1  : out std_logic_vector(3-1 downto 0);
 		led_rgb_2  : out std_logic_vector(3-1 downto 0);
 		paquete: out std_logic_vector(21-1 downto 0);
-		paquete_ok : out std_logic;
+		procesar : in std_logic;
+		procesado : out std_logic;
 		N : in integer;
 		N_1 : out integer;
 		N_2 : out integer;
@@ -150,20 +151,23 @@ begin
                   when final =>  
                     --led_rgb_1 <= "111"; -- blanco   
                     --led_rgb_2 <= "010"; -- verde
-                    if r_data = tag_inicial then -- r_data = '<'
-                        tags_izq <= '1';
-                        estado_siguiente <= lectura;                    
-                    end if;           
+--                    if r_data = tag_inicial then -- r_data = '<'
+--                        tags_izq <= '1';
+--                        estado_siguiente <= lectura;                    
+--                    end if; 
+                       if procesar = '1' then
+                            estado_siguiente <= inicio;
+                       end if;          
                   when error => 
                     --led_rgb_1 <= "111"; -- blanco        
                     --led_rgb_2 <= "001"; -- rojo
                     tags_izq <= '0';
                     tags_der <= '0';
                     
-                    if r_data = tag_inicial then -- r_data = '<'
-                        tags_izq <= '1';
-                        estado_siguiente <= lectura;                    
-                    end if;                
+                    --if r_data = tag_inicial then -- r_data = '<'
+                    --    tags_izq <= '1';
+                        estado_siguiente <= inicio;                    
+                    --end if;                
                   when others => null;
                 end case;
              end if;
@@ -187,12 +191,12 @@ begin
     begin
         if (clk_i = '1' and clk_i'event) then
             if rst_i = '1' then
-                paquete_ok <= '0';  
+                procesado <= '0';  
             else  
-                if estado = final then 
-                    paquete_ok <= largo_ok and tags_ok;                 
+                if estado = final then          
+                        procesado <= largo_ok and tags_ok;                                 
                 else
-                    paquete_ok <= '0';   
+                    procesado <= '0';   
                 end if;
             end if;
         end if;

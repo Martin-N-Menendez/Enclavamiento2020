@@ -33,7 +33,8 @@ architecture Behavioral of sistema is
 		led_rgb_1  : out std_logic_vector(3-1 downto 0);
 		led_rgb_2  : out std_logic_vector(3-1 downto 0);
 		paquete: out std_logic_vector(21-1 downto 0);
-		paquete_ok : out std_logic;
+		procesar : in std_logic;
+		procesado : out std_logic;
 		N : in integer;
 		N_1 : out integer;
 		N_2 : out integer;
@@ -73,7 +74,8 @@ architecture Behavioral of sistema is
 	port(
 		clk_i: in std_logic;
         rst_i: in std_logic;
-        paquete_ok : in std_logic;
+        procesar : in std_logic;
+        procesado : out std_logic;
         paquete_i: in std_logic_vector(15-1 downto 0);
         w_data: out std_logic_vector(8-1 downto 0);
         wr_uart : out std_logic  -- "char_disp"
@@ -83,6 +85,8 @@ architecture Behavioral of sistema is
     signal paquete_i : std_logic_vector(21-1 downto 0);
     signal paquete_o : std_logic_vector(15-1 downto 0);
     signal prueba : std_logic_vector(15-1 downto 0);
+    
+    signal loop_s : std_logic;
     
     signal w_data_1,w_data_2,w_data_3,w_data_aux : std_logic_vector(8-1 downto 0);
     signal paquete_ok_s,escribir_s,wr_uart_2_s : std_logic;
@@ -104,7 +108,8 @@ begin
 			led_rgb_2 => led_rgb_2,
 			N        => N,
 		    wr_uart     => escribir_s,
-			paquete_ok => paquete_ok_s,
+		    procesar => paquete_ok_s,
+			procesado => loop_s,
 			paquete  => paquete_i,
 			w_data     => w_data_1
 		);	
@@ -122,7 +127,8 @@ begin
 		port map(
 			clk_i 		=>  clk_i,
 			rst_i       =>  rst_i,
-			paquete_ok  => paquete_ok_s,
+			procesar  => loop_s,
+			procesado => paquete_ok_s,
 			paquete_i   => paquete_o,
 			w_data     => w_data_2,
 			wr_uart => wr_uart_2_s
