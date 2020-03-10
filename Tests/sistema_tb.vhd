@@ -15,9 +15,13 @@ architecture tb of tb_sistema is
 		clk_i: in std_logic;
         	rst_i: in std_logic;
 		r_data: in std_logic_vector(8-1 downto 0);
+		r_disponible : in std_logic;
+		leer : out std_logic;
+		escribir : out std_logic;
 		switch1 : in std_logic;
 		switch2 : in std_logic;
-		--btn : in std_logic;
+		reset_uart : out std_logic;
+		N : in integer;
 		--leds : out std_logic_vector(2-1 downto 0);
 		leds : out std_logic_vector(4-1 downto 0);
 		led_rgb_1  : out std_logic_vector(3-1 downto 0);
@@ -30,8 +34,13 @@ architecture tb of tb_sistema is
     signal clk_i     : std_logic;
     signal rst_i     : std_logic;
     signal r_data    : std_logic_vector (8-1 downto 0);
+    signal r_disponible : std_logic;
+    signal leer : std_logic;
+    signal escribir : std_logic;
     signal switch1    : std_logic;
     signal switch2   : std_logic;
+    signal reset_uart : std_logic;
+    signal N : integer;
     signal leds      : std_logic_vector(4-1 downto 0);
     signal led_rgb_1 : std_logic_vector (3-1 downto 0);
     signal led_rgb_2 : std_logic_vector (3-1 downto 0);
@@ -42,14 +51,36 @@ architecture tb of tb_sistema is
     signal TbClock : std_logic := '0';
     signal TbSimEnded : std_logic := '0';
 
+	 -- Low-level byte-write
+  	procedure Enviar_char (
+    		data       : in  std_logic_vector(8-1 downto 0);
+    		signal r_data : out std_logic_vector(8-1 downto 0);
+		signal r_disponible : out std_logic) is
+  	begin
+
+   		r_disponible <= '0';
+		wait for TbPeriod;
+        	r_data <= data;
+		wait for TbPeriod;
+		r_disponible <= '1';
+		wait for TbPeriod;
+		r_disponible <= '0';
+
+  	end Enviar_char;
+
 begin
 
     dut : sistema
     port map (clk_i      => clk_i,
               rst_i      => rst_i,
               r_data     => r_data,
+	      r_disponible => r_disponible,
+	      leer       => leer,
+ 	      escribir   => escribir,
 	      switch1    => switch1,
 	      switch2    => switch2,
+	      reset_uart => reset_uart,
+   	      N          => N,
 	      leds 	 => leds,
               led_rgb_1  => led_rgb_1,
               led_rgb_2  => led_rgb_2,
@@ -83,159 +114,122 @@ begin
     datos : process
     begin
         
-	wait for 100 ns;
-	-- 21
-        r_data <= "00111100"; -- <
- 	wait for 407*TbPeriod;				-- 407* TbPeriod
-	r_data <= "00110001"; -- 1
-	wait for 407*TbPeriod;
-	r_data <= "00110000"; -- 0
-	wait for 407*TbPeriod;
-	r_data <= "00110001"; -- 1
-	wait for 407*TbPeriod;
-	r_data <= "00110000"; -- 0
-	wait for 407*TbPeriod;
-	r_data <= "00110001"; -- 1
-	wait for 407*TbPeriod;
-	r_data <= "00110000"; -- 0
-	wait for 407*TbPeriod;
-	r_data <= "00110001"; -- 1
-	wait for 407*TbPeriod;
-	r_data <= "00110000"; -- 0
-	wait for 407*TbPeriod;
-	r_data <= "00110001"; -- 1
-	wait for 407*TbPeriod;
-	r_data <= "00110000"; -- 0
-	wait for 407*TbPeriod;
-	r_data <= "00110001"; -- 1
-	wait for 407*TbPeriod;
-	r_data <= "00110000"; -- 0
-	wait for 407*TbPeriod;
-	r_data <= "00110001"; -- 1
-	wait for 407*TbPeriod;
-	r_data <= "00110000"; -- 0
-	wait for 407*TbPeriod;
-	r_data <= "00110001"; -- 1
-	wait for 407*TbPeriod;
-	r_data <= "00110000"; -- 0
-	wait for 407*TbPeriod;
-	r_data <= "00110001"; -- 1
-	wait for 407*TbPeriod;
-	r_data <= "00110000"; -- 0
-	wait for 407*TbPeriod;
-	r_data <= "00110001"; -- 1
-	wait for 407*TbPeriod;
-	r_data <= "00110000"; -- 0
-	wait for 407*TbPeriod;
-	r_data <= "00110001"; -- 1
-	wait for 407*TbPeriod;
-	r_data <= "00111110"; -- >
-	wait for 407*TbPeriod;
+	r_data <= "00000000";
+	r_disponible <= '0';
 
-	wait for 30*407*TbPeriod;
+	wait for 100 ns;
+
+	-- 21
+	N <= 23; 	
+	Enviar_char("00111100",r_data,r_disponible); -- < 	
+	Enviar_char("00110001",r_data,r_disponible); -- 1 	
+	Enviar_char("00110001",r_data,r_disponible); -- 1
+ 	Enviar_char("00110001",r_data,r_disponible); -- 1 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110001",r_data,r_disponible); -- 1 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110001",r_data,r_disponible); -- 1 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110001",r_data,r_disponible); -- 1 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110001",r_data,r_disponible); -- 1 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110001",r_data,r_disponible); -- 1 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110001",r_data,r_disponible); -- 1 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110001",r_data,r_disponible); -- 1 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110001",r_data,r_disponible); -- 1
+	Enviar_char("00110001",r_data,r_disponible); -- 1 	
+	Enviar_char("00111110",r_data,r_disponible); -- >
+
+	wait for 100 * TbPeriod;
+
+	-- 21
+	N <= 23; 	
+	Enviar_char("00111100",r_data,r_disponible); -- < 	
+	Enviar_char("00110001",r_data,r_disponible); -- 1 	
+	Enviar_char("00110001",r_data,r_disponible); -- 1
+ 	Enviar_char("00110001",r_data,r_disponible); -- 1 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110001",r_data,r_disponible); -- 1 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110001",r_data,r_disponible); -- 1 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110001",r_data,r_disponible); -- 1 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110001",r_data,r_disponible); -- 1 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110001",r_data,r_disponible); -- 1 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110001",r_data,r_disponible); -- 1 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110001",r_data,r_disponible); -- 1 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110001",r_data,r_disponible); -- 1
+	Enviar_char("00110001",r_data,r_disponible); -- 1 	
+	Enviar_char("00111110",r_data,r_disponible); -- >
+
+	wait for 100 * TbPeriod;
 
 	-- 22
-        r_data <= "00111100"; -- <
- 	wait for 407*TbPeriod;
-	r_data <= "00110001"; -- 1
-	wait for 407*TbPeriod;
-	r_data <= "00110000"; -- 0
-	wait for 407*TbPeriod;
-	r_data <= "00110001"; -- 1
-	wait for 407*TbPeriod;
-	r_data <= "00110000"; -- 0
-	wait for 407*TbPeriod;
-	r_data <= "00110001"; -- 1
-	wait for 407*TbPeriod;
-	r_data <= "00110000"; -- 0
-	wait for 407*TbPeriod;
-	r_data <= "00110001"; -- 1
-	wait for 407*TbPeriod;
-	r_data <= "00110000"; -- 0
-	wait for 407*TbPeriod;
-	r_data <= "00110001"; -- 1
-	wait for 407*TbPeriod;
-	r_data <= "00110000"; -- 0
-	wait for 407*TbPeriod;
-	r_data <= "00110001"; -- 1
-	wait for 407*TbPeriod;
-	r_data <= "00110000"; -- 0
-	wait for 407*TbPeriod;
-	r_data <= "00110001"; -- 1
-	wait for 407*TbPeriod;
-	r_data <= "00110000"; -- 0
-	wait for 407*TbPeriod;
-	r_data <= "00110001"; -- 1
-	wait for 407*TbPeriod;
-	r_data <= "00110000"; -- 0
-	wait for 407*TbPeriod;
-	r_data <= "00110001"; -- 1
-	wait for 407*TbPeriod;
-	r_data <= "00110000"; -- 0
-	wait for 407*TbPeriod;
-	r_data <= "00110001"; -- 1
-	wait for 407*TbPeriod;
-	r_data <= "00110000"; -- 0
-	wait for 407*TbPeriod;
-	r_data <= "00110001"; -- 1
-	wait for 407*TbPeriod;
-	r_data <= "00110000"; -- 0
-	wait for 407*TbPeriod;
-	r_data <= "00111110"; -- >
-	wait for 407*TbPeriod;
+	N <= 24; 	
+	Enviar_char("00111100",r_data,r_disponible); -- < 	
+	Enviar_char("00110001",r_data,r_disponible); -- 1 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+ 	Enviar_char("00110001",r_data,r_disponible); -- 1 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110001",r_data,r_disponible); -- 1 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110001",r_data,r_disponible); -- 1 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110001",r_data,r_disponible); -- 1 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110001",r_data,r_disponible); -- 1 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110001",r_data,r_disponible); -- 1 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110001",r_data,r_disponible); -- 1 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110001",r_data,r_disponible); -- 1 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110001",r_data,r_disponible); -- 1 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110001",r_data,r_disponible); -- 1 
+	Enviar_char("00110000",r_data,r_disponible); -- 0	
+	Enviar_char("00111110",r_data,r_disponible); -- >
+	
+	wait for 100 * TbPeriod;
 
-	wait for 100 ns;
-	-- 23
-        r_data <= "00111100"; -- <
- 	wait for 407*TbPeriod;
-	r_data <= "00110001"; -- 1
-	wait for 407*TbPeriod;
-	r_data <= "00110000"; -- 0
-	wait for 407*TbPeriod;
-	r_data <= "00110001"; -- 1
-	wait for 407*TbPeriod;
-	r_data <= "00110000"; -- 0
-	wait for 407*TbPeriod;
-	r_data <= "00110001"; -- 1
-	wait for 407*TbPeriod;
-	r_data <= "00110000"; -- 0
-	wait for 407*TbPeriod;
-	r_data <= "00110001"; -- 1
-	wait for 407*TbPeriod;
-	r_data <= "00110000"; -- 0
-	wait for 407*TbPeriod;
-	r_data <= "00110001"; -- 1
-	wait for 407*TbPeriod;
-	r_data <= "00110000"; -- 0
-	wait for 407*TbPeriod;
-	r_data <= "00110001"; -- 1
-	wait for 407*TbPeriod;
-	r_data <= "00110000"; -- 0
-	wait for 407*TbPeriod;
-	r_data <= "00110001"; -- 1
-	wait for 407*TbPeriod;
-	r_data <= "00110000"; -- 0
-	wait for 407*TbPeriod;
-	r_data <= "00110001"; -- 1
-	wait for 407*TbPeriod;
-	r_data <= "00110000"; -- 0
-	wait for 407*TbPeriod;
-	r_data <= "00110001"; -- 1
-	wait for 407*TbPeriod;
-	r_data <= "00110000"; -- 0
-	wait for 407*TbPeriod;
-	r_data <= "00110001"; -- 1
-	wait for 407*TbPeriod;
-	r_data <= "00110000"; -- 0
-	wait for 407*TbPeriod;
-	r_data <= "00110001"; -- 1
-	wait for 407*TbPeriod;
-	r_data <= "00110000"; -- 0
-	wait for 407*TbPeriod;
-	r_data <= "00110001"; -- 1
-	wait for 407*TbPeriod;
-	r_data <= "00111110"; -- >
-	wait for 407*TbPeriod;
+	-- 21
+	N <= 23; 	
+	Enviar_char("00111100",r_data,r_disponible); -- < 	
+	Enviar_char("00110001",r_data,r_disponible); -- 1 	
+	Enviar_char("00110001",r_data,r_disponible); -- 1
+ 	Enviar_char("00110001",r_data,r_disponible); -- 1 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110001",r_data,r_disponible); -- 1 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110001",r_data,r_disponible); -- 1 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110001",r_data,r_disponible); -- 1 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110001",r_data,r_disponible); -- 1 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110001",r_data,r_disponible); -- 1 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110001",r_data,r_disponible); -- 1 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110001",r_data,r_disponible); -- 1 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110001",r_data,r_disponible); -- 1
+	Enviar_char("00110001",r_data,r_disponible); -- 1 	
+	Enviar_char("00111110",r_data,r_disponible); -- >
+
 
         wait for 100 * TbPeriod;
 	TbSimEnded <= '1';
@@ -245,7 +239,7 @@ end tb;
 
 -- Configuration block below is required by some simulators. Usually no need to edit.
 
-configuration cfg_tb_sistema of tb_sistema is
-    for tb
-    end for;
-end cfg_tb_sistema;
+--configuration cfg_tb_sistema of tb_sistema is
+--    for tb
+--    end for;
+--end cfg_tb_sistema;

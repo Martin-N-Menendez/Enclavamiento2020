@@ -13,14 +13,18 @@ architecture tb of tb_detector is
     component detector
         port(
 		clk_i: in std_logic;
-        	rst_i: in std_logic;
+       		rst_i: in std_logic;
 		r_data: in std_logic_vector(8-1 downto 0);
 		r_disponible : in std_logic;
 		led_rgb_1  : out std_logic_vector(3-1 downto 0);
 		led_rgb_2  : out std_logic_vector(3-1 downto 0);
 		paquete: out std_logic_vector(21-1 downto 0);
-		paquete_ok : out std_logic;
+		procesar : in std_logic;
+		procesado : out std_logic;
 		N : in integer;
+		N_1 : out integer;
+		N_2 : out integer;
+		wr_uart : out std_logic;
 		w_data: out std_logic_vector(8-1 downto 0)
 	);
     end component;
@@ -32,8 +36,10 @@ architecture tb of tb_detector is
     signal led_rgb_1 : std_logic_vector (3-1 downto 0);
     signal led_rgb_2 : std_logic_vector (3-1 downto 0);
     signal paquete   : std_logic_vector (21-1 downto 0); 
-    signal paquete_ok : std_logic;
-    signal N : integer;
+    signal procesar : std_logic;
+    signal procesado : std_logic;
+    signal N,N_1,N_2 : integer;
+    signal wr_uart : std_logic;
     signal w_data    : std_logic_vector (8-1 downto 0);
 
     constant TbPeriod : time := 8 ns; -- EDIT Put right period here
@@ -67,8 +73,12 @@ begin
               led_rgb_1  => led_rgb_1,
               led_rgb_2  => led_rgb_2,
               paquete    => paquete,
+	      procesar   => procesar,
+      	      procesado  => procesado,
 	      N 	 => N,
-	      paquete_ok => paquete_ok,
+              N_1        => N_1,
+ 	      N_2 	 => N_2,
+	      wr_uart    => wr_uart,
               w_data     => w_data);
 
     -- Clock generation
@@ -226,7 +236,7 @@ end tb;
 
 -- Configuration block below is required by some simulators. Usually no need to edit.
 
-configuration cfg_tb_detector of tb_detector is
-    for tb
-    end for;
-end cfg_tb_detector;
+--configuration cfg_tb_detector of tb_detector is
+--    for tb
+--    end for;
+--end cfg_tb_detector;

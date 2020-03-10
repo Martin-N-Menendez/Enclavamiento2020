@@ -5,7 +5,7 @@ use IEEE.numeric_std.all;
 entity detector is
 	port(
 		clk_i: in std_logic;
-        rst_i: in std_logic;
+        	rst_i: in std_logic;
 		r_data: in std_logic_vector(8-1 downto 0);
 		r_disponible : in std_logic;
 		led_rgb_1  : out std_logic_vector(3-1 downto 0);
@@ -58,7 +58,12 @@ begin
             if rst_i = '1' then          
                 estado <= inicio;
             else
-                estado <= estado_siguiente;       
+            if procesar = '1' then
+                estado <= inicio;
+            else
+                estado <= estado_siguiente; 
+            end if;
+                      
             end if;
         end if;
     end process;
@@ -156,6 +161,7 @@ begin
 --                        estado_siguiente <= lectura;                    
 --                    end if; 
                        if procesar = '1' then
+                            tags_izq <= '0'; 
                             estado_siguiente <= inicio;
                        end if;          
                   when error => 
@@ -194,7 +200,7 @@ begin
                 procesado <= '0';  
             else  
                 if estado = final then          
-                        procesado <= largo_ok and tags_ok;                                 
+                    procesado <= largo_ok and tags_ok;                                 
                 else
                     procesado <= '0';   
                 end if;

@@ -191,20 +191,20 @@ begin
   
             end process;
     
-        paquete_o(0) <= paquete_i(0);
-        paquete_o(1) <= paquete_i(1);
-        paquete_o(2) <= paquete_i(2);
-        paquete_o(3) <= paquete_i(3);
-        paquete_o(4) <= paquete_i(4);
-        paquete_o(5) <= paquete_i(5);
-        paquete_o(6) <= paquete_i(6);
+        paquete_o(0) <= paquete_i(14);
+        paquete_o(1) <= paquete_i(13);
+        paquete_o(2) <= paquete_i(12);
+        paquete_o(3) <= paquete_i(11);
+        paquete_o(4) <= paquete_i(10);
+        paquete_o(5) <= paquete_i(9);
+        paquete_o(6) <= paquete_i(8);
         paquete_o(7) <= paquete_i(7);
-        paquete_o(8) <= paquete_i(8);
-        paquete_o(9) <= paquete_i(9);
-        paquete_o(10) <= paquete_i(10);
-        paquete_o(11) <= paquete_i(11);
-        paquete_o(12) <= paquete_i(12);
-        paquete_o(13) <= paquete_i(13);
-        paquete_o(14) <= paquete_i(14);
+        paquete_o(8) <= paquete_i(6);
+        paquete_o(9) <= paquete_i(5);
+        paquete_o(10) <= paquete_i(4);
+        paquete_o(11) <= paquete_i(3);
+        paquete_o(12) <= paquete_i(2);
+        paquete_o(13) <= paquete_i(1);
+        paquete_o(14) <= paquete_i(0);
         
 end Behavioral;

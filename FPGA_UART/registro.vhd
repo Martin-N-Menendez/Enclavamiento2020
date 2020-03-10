@@ -84,9 +84,13 @@ begin
     begin
         if (clk_i = '1' and clk_i'event) then
             if rst_i = '1' then
-                estado <= reinicio;          
-            else          
-               estado <= estado_siguiente;
+                estado <= REINICIO;          
+            else
+                if procesar = '1' then          
+                    estado <= estado_siguiente;
+                else
+                    estado <= REINICIO;
+                end if;
             end if; 
         end if;
     end process;
@@ -132,3 +136,4 @@ begin
     end process;
         
 end Behavioral;
+
