@@ -29,22 +29,15 @@ begin
 	process(Clock,Reset)
 	begin
 		if (Clock = '1' and Clock'Event) then
-			if (Reset = '1') then
-				Estado_ante_o <= '0';
-				Estado_post_o <= '0';
+			Cambio_o <= Cambio_i;
+			if (Cambio_i = '0') then
+				Estado_ante_o <= Estado_post_i;
+				Estado_post_o <= Estado_ante_i;
 				Estado_desv_o <= '0';
-				Cambio_o <= '0';
 			else
-				Cambio_o <= Cambio_i;
-				if (Cambio_i = '0') then
-					Estado_ante_o <= Estado_post_i;
-					Estado_post_o <= Estado_ante_i;
-					Estado_desv_o <= '0';
-			else
-					Estado_ante_o <= Estado_desv_i;
-					Estado_post_o <= '0';
-					Estado_desv_o <= Estado_ante_i;
-				end if;
+				Estado_ante_o <= Estado_desv_i;
+				Estado_post_o <= '0';
+				Estado_desv_o <= Estado_ante_i;
 			end if;
 		end if;
 	end process;

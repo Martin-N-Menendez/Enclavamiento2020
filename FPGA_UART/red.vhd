@@ -1,9 +1,13 @@
 -- red.vhdl : Achivo VHDL generado automaticamente
+
 library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
+
 --Declare the package
+
 use work.my_package.all;
+
 	entity red is
 		generic(
 			N : natural := 21;
@@ -14,7 +18,7 @@ use work.my_package.all;
 		port(
 			Clock :  in std_logic;
 			procesar :  in std_logic;
-			procesado : out std_logic;
+			procesado :  out std_logic;
 			Ocupacion :  in std_logic_vector(N_CVS-1 downto 0);
 			semaforos_i :  in sems_type;
 			semaforos_o :  out sems_type;
@@ -24,6 +28,7 @@ use work.my_package.all;
 		);
 	end entity red;
 architecture Behavioral of red is
+
 	component cambio_1 is
 		generic(
 			N : natural := 21;
@@ -44,6 +49,7 @@ architecture Behavioral of red is
 			Reset :  in std_logic
 		);
 	end component cambio_1;
+	
 	component nodo_1 is
 		generic(
 			N : natural := 21;
@@ -62,6 +68,7 @@ architecture Behavioral of red is
 			Estado_o :  out std_logic
 		);
 	end component nodo_1;
+	
 	component nodo_2 is
 		generic(
 			N : natural := 21;
@@ -84,6 +91,7 @@ architecture Behavioral of red is
 			Estado_o :  out std_logic
 		);
 	end component nodo_2;
+	
 	component nodo_3 is
 		generic(
 			N : natural := 21;
@@ -100,6 +108,7 @@ architecture Behavioral of red is
 			Estado_o :  out std_logic
 		);
 	end component nodo_3;
+	
 	component nodo_4 is
 		generic(
 			N : natural := 21;
@@ -118,6 +127,7 @@ architecture Behavioral of red is
 			Estado_o :  out std_logic
 		);
 	end component nodo_4;
+	
 	component nodo_5 is
 		generic(
 			N : natural := 21;
@@ -136,6 +146,7 @@ architecture Behavioral of red is
 			Estado_o :  out std_logic
 		);
 	end component nodo_5;
+	
 	component nodo_6 is
 		generic(
 			N : natural := 21;
@@ -154,6 +165,7 @@ architecture Behavioral of red is
 			Estado_o :  out std_logic
 		);
 	end component nodo_6;
+	
 	Signal conector_1 : std_logic;
 	Signal ocupacion_1 : std_logic;
 	Signal conector_2 : std_logic;
@@ -204,6 +216,7 @@ architecture Behavioral of red is
 	Signal mdc_desv_o_1 : std_logic;
 	Signal cosa : std_logic;
 begin
+
 	nodo_1_i:nodo_1 port map(
 		Clock => Clock,
 		Estado_post => conector_2,
@@ -217,6 +230,7 @@ begin
 		Estado_o => conector_1,
 		Reset => Reset
 		);
+		
 	nodo_2_i:nodo_2 port map(
 		Clock => Clock,
 		Estado_ante => conector_1,
@@ -237,6 +251,7 @@ begin
 		Estado_o => conector_2,
 		Reset => Reset
 		);
+		
 	nodo_3_i:nodo_3 port map(
 		Clock => Clock,
 		Estado_ante => mdc_post_o_1,
@@ -245,6 +260,7 @@ begin
 		Estado_o => conector_3,
 		Reset => Reset
 		);
+		
 	nodo_4_i:nodo_4 port map(
 		Clock => Clock,
 		Estado_ante => mdc_desv_o_1,
@@ -257,6 +273,7 @@ begin
 		Estado_o => conector_4,
 		Reset => Reset
 		);
+		
 	nodo_5_i:nodo_5 port map(
 		Clock => Clock,
 		Estado_ante => conector_3,
@@ -270,6 +287,7 @@ begin
 		Estado_o => conector_5,
 		Reset => Reset
 		);
+		
 	nodo_6_i:nodo_6 port map(
 		Clock => Clock,
 		Estado_ante => conector_4,
@@ -283,6 +301,7 @@ begin
 		Estado_o => conector_6,
 		Reset => Reset
 		);
+		
 	cambio_1_i:cambio_1 port map(
 		Clock => Clock,
 		Cambio_i => Cambios_i,
@@ -330,8 +349,7 @@ begin
 		sem_lsb_i_7 <= semaforos_i.lsb(6);
 		sem_msb_i_7 <= semaforos_i.msb(6);
 		semaforos_o.lsb(6) <= sem_lsb_o_7;
-		semaforos_o.msb(6) <= sem_msb_o_7;
-		
-		procesado <= procesar;
-		
+		semaforos_o.msb(6) <= sem_msb_o_7;	
+		procesado <= procesar;	
 end Behavioral;
+

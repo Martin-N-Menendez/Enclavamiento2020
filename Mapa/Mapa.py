@@ -786,7 +786,7 @@ def main():
 
     generar_mapa(tabla)
     
-    conectar_terminal()
+    #conectar_terminal()
     
     #serial_main()
     
