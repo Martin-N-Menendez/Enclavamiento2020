@@ -29,7 +29,7 @@ architecture Behavioral of registro is
     signal rst_s : std_logic;  
     signal mux_s : std_logic_vector(4-1 downto 0);
 
-    --signal mux_s : integer;
+    signal reg_aux : std_logic;
    
 begin    
    --<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -38,12 +38,17 @@ begin
         if (clk_i = '1' and clk_i'event) then
             if rst_i = '1' then
                 mux_s <= "0000";
-            elsif (ena_s = '1') then        
-               if (mux_s = "1111") then
-                   mux_s <= "0000";
-               else
-                   mux_s <= std_logic_vector(to_unsigned(to_integer(unsigned(mux_s)) + 1 , 4));         
-               end if;
+            else
+                if (ena_s = '1') then        
+                    if (mux_s = "1111") then
+                        mux_s <= "0000";                
+                    else
+                        mux_s <= std_logic_vector(to_unsigned(to_integer(unsigned(mux_s)) + 1 , 4));         
+                    end if;
+                end if;
+                if (estado = REINICIO) then
+                    mux_s <= "0000";   
+                end if;             
             end if; 
         end if;
     end process;
@@ -86,8 +91,9 @@ begin
         if (clk_i = '1' and clk_i'event) then
             if rst_i = '1' then
                 estado <= REINICIO;          
-            else
-                if procesar = '1' then          
+            else   
+                
+                if (procesar = '1') then          
                     estado <= estado_siguiente;
                 else
                     estado <= REINICIO;
@@ -106,8 +112,9 @@ begin
                 rst_s <= '1';
                 ena_s <= '0';
                 procesado <= '0';
-                
-                if procesar = '1' then
+                reg_aux <= '0';
+  
+                if (procesar = '1' and mux_s /= "1111" ) then
                     estado_siguiente <= CICLO_1;
                 end if;
                 
@@ -124,9 +131,11 @@ begin
                 rst_s <= '0';
                 ena_s <= '1';              
                 procesado <= '0';
+                reg_aux <= '0';
                 
                 if mux_s = "1110" then
                     procesado <= '1';
+                    reg_aux <= '1';
                     estado_siguiente <= REINICIO;           
                 else
                     estado_siguiente <= CICLO_1;
