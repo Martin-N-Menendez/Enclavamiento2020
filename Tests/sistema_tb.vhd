@@ -51,6 +51,8 @@ architecture tb of tb_sistema is
     signal TbClock : std_logic := '0';
     signal TbSimEnded : std_logic := '0';
 
+    constant periodo : integer := 100;
+
 	 -- Low-level byte-write
   	procedure Enviar_char (
     		data       : in  std_logic_vector(8-1 downto 0);
@@ -99,6 +101,8 @@ begin
 
         -- Reset generation
         -- EDIT: Check that rst_i is really your reset signal
+	switch1 <= '1';
+	switch2 <= '1';
         rst_i <= '1';
         wait for 100 ns;
         rst_i <= '0';
@@ -119,61 +123,622 @@ begin
 
 	wait for 100 ns;
 
-	-- 21
+	-- 21 - 21 - todos 1
 	N <= 23; 	
 	Enviar_char("00111100",r_data,r_disponible); -- < 	
 	Enviar_char("00110001",r_data,r_disponible); -- 1 	
 	Enviar_char("00110001",r_data,r_disponible); -- 1
  	Enviar_char("00110001",r_data,r_disponible); -- 1 	
-	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110001",r_data,r_disponible); -- 1
 	Enviar_char("00110001",r_data,r_disponible); -- 1 	
-	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110001",r_data,r_disponible); -- 1
 	Enviar_char("00110001",r_data,r_disponible); -- 1 	
-	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110001",r_data,r_disponible); -- 1
 	Enviar_char("00110001",r_data,r_disponible); -- 1 	
-	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110001",r_data,r_disponible); -- 1
 	Enviar_char("00110001",r_data,r_disponible); -- 1 	
-	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110001",r_data,r_disponible); -- 1
 	Enviar_char("00110001",r_data,r_disponible); -- 1 	
-	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110001",r_data,r_disponible); -- 1
 	Enviar_char("00110001",r_data,r_disponible); -- 1 	
-	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110001",r_data,r_disponible); -- 1
 	Enviar_char("00110001",r_data,r_disponible); -- 1 	
-	Enviar_char("00110000",r_data,r_disponible); -- 0
-	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110001",r_data,r_disponible); -- 1
+	Enviar_char("00110001",r_data,r_disponible); -- 1 	
 	Enviar_char("00110001",r_data,r_disponible); -- 1
 	Enviar_char("00110001",r_data,r_disponible); -- 1 	
 	Enviar_char("00111110",r_data,r_disponible); -- >
 
-	wait for 100 * TbPeriod;
+	wait for periodo * TbPeriod;
 
-	-- 21
+	-- 21 - 1
+	N <= 23; 	
+	Enviar_char("00111100",r_data,r_disponible); -- < 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+ 	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110001",r_data,r_disponible); -- 1 	
+	Enviar_char("00111110",r_data,r_disponible); -- >
+
+	wait for periodo * TbPeriod;
+
+	-- 21 - 2
+	N <= 23; 	
+	Enviar_char("00111100",r_data,r_disponible); -- < 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+ 	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110001",r_data,r_disponible); -- 1
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00111110",r_data,r_disponible); -- >
+
+	wait for periodo * TbPeriod;
+
+	-- 21 - 3
+	N <= 23; 	
+	Enviar_char("00111100",r_data,r_disponible); -- < 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+ 	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110001",r_data,r_disponible); -- 1 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00111110",r_data,r_disponible); -- >
+
+	wait for periodo * TbPeriod;
+
+	-- 21 - 4
+	N <= 23; 	
+	Enviar_char("00111100",r_data,r_disponible); -- < 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+ 	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110001",r_data,r_disponible); -- 1
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00111110",r_data,r_disponible); -- >
+
+	wait for periodo * TbPeriod;
+
+	-- 21 - 5
+	N <= 23; 	
+	Enviar_char("00111100",r_data,r_disponible); -- < 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+ 	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110001",r_data,r_disponible); -- 1 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00111110",r_data,r_disponible); -- >
+
+	wait for periodo * TbPeriod;
+
+	-- 21 - 6
+	N <= 23; 	
+	Enviar_char("00111100",r_data,r_disponible); -- < 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+ 	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110001",r_data,r_disponible); -- 1
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00111110",r_data,r_disponible); -- >
+
+	wait for periodo * TbPeriod;
+
+	-- 21 - 7
+	N <= 23; 	
+	Enviar_char("00111100",r_data,r_disponible); -- < 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+ 	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110001",r_data,r_disponible); -- 1 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00111110",r_data,r_disponible); -- >
+
+
+	wait for periodo * TbPeriod;
+
+	-- 21 - 8
+	N <= 23; 	
+	Enviar_char("00111100",r_data,r_disponible); -- < 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+ 	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110001",r_data,r_disponible); -- 1
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00111110",r_data,r_disponible); -- >
+
+	wait for periodo * TbPeriod;
+
+	-- 21 - 9
+	N <= 23; 	
+	Enviar_char("00111100",r_data,r_disponible); -- < 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+ 	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110001",r_data,r_disponible); -- 1 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00111110",r_data,r_disponible); -- >
+
+	wait for periodo * TbPeriod;
+
+	-- 21 - 10
+	N <= 23; 	
+	Enviar_char("00111100",r_data,r_disponible); -- < 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+ 	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110001",r_data,r_disponible); -- 1
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00111110",r_data,r_disponible); -- >
+
+	wait for periodo * TbPeriod;
+
+	-- 21 - 11
+	N <= 23; 	
+	Enviar_char("00111100",r_data,r_disponible); -- < 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+ 	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110001",r_data,r_disponible); -- 1 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00111110",r_data,r_disponible); -- >
+
+	wait for periodo * TbPeriod;
+
+	-- 21 - 12
+	N <= 23; 	
+	Enviar_char("00111100",r_data,r_disponible); -- < 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+ 	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110001",r_data,r_disponible); -- 1
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00111110",r_data,r_disponible); -- >
+
+	wait for periodo * TbPeriod;
+
+	-- 21 - 13
+	N <= 23; 	
+	Enviar_char("00111100",r_data,r_disponible); -- < 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+ 	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110001",r_data,r_disponible); -- 1 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00111110",r_data,r_disponible); -- >
+
+	wait for periodo * TbPeriod;
+
+	-- 21 - 14
+	N <= 23; 	
+	Enviar_char("00111100",r_data,r_disponible); -- < 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+ 	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110001",r_data,r_disponible); -- 1
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00111110",r_data,r_disponible); -- >
+
+	wait for periodo * TbPeriod;
+
+	-- 21 - 15
+	N <= 23; 	
+	Enviar_char("00111100",r_data,r_disponible); -- < 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+ 	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110001",r_data,r_disponible); -- 1 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00111110",r_data,r_disponible); -- >
+
+	wait for periodo * TbPeriod;
+
+	-- 21 - 16
+	N <= 23; 	
+	Enviar_char("00111100",r_data,r_disponible); -- < 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+ 	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110001",r_data,r_disponible); -- 1
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00111110",r_data,r_disponible); -- >
+
+	wait for periodo * TbPeriod;
+
+	-- 21 - 17
+	N <= 23; 	
+	Enviar_char("00111100",r_data,r_disponible); -- < 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+ 	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110001",r_data,r_disponible); -- 1 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00111110",r_data,r_disponible); -- >
+
+	wait for periodo * TbPeriod;
+
+	-- 21 - 18
+	N <= 23; 	
+	Enviar_char("00111100",r_data,r_disponible); -- < 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+ 	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110001",r_data,r_disponible); -- 1
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00111110",r_data,r_disponible); -- >
+
+	wait for periodo * TbPeriod;
+
+	-- 21 - 19
+	N <= 23; 	
+	Enviar_char("00111100",r_data,r_disponible); -- < 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+ 	Enviar_char("00110001",r_data,r_disponible); -- 1 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00111110",r_data,r_disponible); -- >
+
+	wait for periodo * TbPeriod;
+
+	-- 21 - 20
+	N <= 23; 	
+	Enviar_char("00111100",r_data,r_disponible); -- < 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110001",r_data,r_disponible); -- 1
+ 	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00111110",r_data,r_disponible); -- >
+
+	wait for periodo * TbPeriod;
+
+	-- 21 - 21
 	N <= 23; 	
 	Enviar_char("00111100",r_data,r_disponible); -- < 	
 	Enviar_char("00110001",r_data,r_disponible); -- 1 	
-	Enviar_char("00110001",r_data,r_disponible); -- 1
- 	Enviar_char("00110001",r_data,r_disponible); -- 1 	
 	Enviar_char("00110000",r_data,r_disponible); -- 0
-	Enviar_char("00110001",r_data,r_disponible); -- 1 	
-	Enviar_char("00110000",r_data,r_disponible); -- 0
-	Enviar_char("00110001",r_data,r_disponible); -- 1 	
-	Enviar_char("00110000",r_data,r_disponible); -- 0
-	Enviar_char("00110001",r_data,r_disponible); -- 1 	
-	Enviar_char("00110000",r_data,r_disponible); -- 0
-	Enviar_char("00110001",r_data,r_disponible); -- 1 	
-	Enviar_char("00110000",r_data,r_disponible); -- 0
-	Enviar_char("00110001",r_data,r_disponible); -- 1 	
-	Enviar_char("00110000",r_data,r_disponible); -- 0
-	Enviar_char("00110001",r_data,r_disponible); -- 1 	
-	Enviar_char("00110000",r_data,r_disponible); -- 0
-	Enviar_char("00110001",r_data,r_disponible); -- 1 	
+ 	Enviar_char("00110000",r_data,r_disponible); -- 0 	
 	Enviar_char("00110000",r_data,r_disponible); -- 0
 	Enviar_char("00110000",r_data,r_disponible); -- 0 	
-	Enviar_char("00110001",r_data,r_disponible); -- 1
-	Enviar_char("00110001",r_data,r_disponible); -- 1 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
+	Enviar_char("00110000",r_data,r_disponible); -- 0
+	Enviar_char("00110000",r_data,r_disponible); -- 0 	
 	Enviar_char("00111110",r_data,r_disponible); -- >
 
-	wait for 100 * TbPeriod;
+	wait for periodo * TbPeriod;
 
 	-- 22
 	N <= 24; 	
@@ -202,36 +767,7 @@ begin
 	Enviar_char("00110000",r_data,r_disponible); -- 0	
 	Enviar_char("00111110",r_data,r_disponible); -- >
 	
-	wait for 100 * TbPeriod;
-
-	-- 21
-	N <= 23; 	
-	Enviar_char("00111100",r_data,r_disponible); -- < 	
-	Enviar_char("00110001",r_data,r_disponible); -- 1 	
-	Enviar_char("00110001",r_data,r_disponible); -- 1
- 	Enviar_char("00110001",r_data,r_disponible); -- 1 	
-	Enviar_char("00110000",r_data,r_disponible); -- 0
-	Enviar_char("00110001",r_data,r_disponible); -- 1 	
-	Enviar_char("00110000",r_data,r_disponible); -- 0
-	Enviar_char("00110001",r_data,r_disponible); -- 1 	
-	Enviar_char("00110000",r_data,r_disponible); -- 0
-	Enviar_char("00110001",r_data,r_disponible); -- 1 	
-	Enviar_char("00110000",r_data,r_disponible); -- 0
-	Enviar_char("00110001",r_data,r_disponible); -- 1 	
-	Enviar_char("00110000",r_data,r_disponible); -- 0
-	Enviar_char("00110001",r_data,r_disponible); -- 1 	
-	Enviar_char("00110000",r_data,r_disponible); -- 0
-	Enviar_char("00110001",r_data,r_disponible); -- 1 	
-	Enviar_char("00110000",r_data,r_disponible); -- 0
-	Enviar_char("00110001",r_data,r_disponible); -- 1 	
-	Enviar_char("00110000",r_data,r_disponible); -- 0
-	Enviar_char("00110000",r_data,r_disponible); -- 0 	
-	Enviar_char("00110001",r_data,r_disponible); -- 1
-	Enviar_char("00110001",r_data,r_disponible); -- 1 	
-	Enviar_char("00111110",r_data,r_disponible); -- >
-
-
-        wait for 100 * TbPeriod;
+        wait for periodo * TbPeriod;
 	TbSimEnded <= '1';
     end process;
 	

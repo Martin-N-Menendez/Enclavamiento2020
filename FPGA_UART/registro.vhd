@@ -29,6 +29,7 @@ architecture Behavioral of registro is
     signal rst_s : std_logic;  
     signal mux_s : std_logic_vector(4-1 downto 0);
 
+    --signal mux_s : integer;
    
 begin    
    --<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<

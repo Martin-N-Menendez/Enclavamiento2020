@@ -13,7 +13,8 @@ use work.my_package.all;
 		);
 		port(
 			Clock :  in std_logic;
-			paquete_ok :  in std_logic;
+			procesar :  in std_logic;
+			procesado :  out std_logic;
 			Paquete_i :  in std_logic_vector(21-1 downto 0);
 			Paquete_o :  out std_logic_vector(15-1 downto 0);
 			Reset :  in std_logic
@@ -29,7 +30,8 @@ architecture Behavioral of enclavamiento is
 		);
 		port(
 			Clock :  in std_logic;
-			paquete_ok :  in std_logic;
+			procesar :  in std_logic;
+			procesado : out std_logic;
 			Paquete :  in std_logic_vector(21-1 downto 0);
 			Ocupacion :  out std_logic_vector(6-1 downto 0);
 			semaforos :  out sems_type;
@@ -46,6 +48,8 @@ architecture Behavioral of enclavamiento is
 		);
 		port(
 			Clock :  in std_logic;
+			procesar :  in std_logic;
+			procesado : out std_logic;
 			Ocupacion :  in std_logic_vector(6-1 downto 0);
 			semaforos_i :  in sems_type;
 			semaforos_o :  out sems_type;
@@ -63,7 +67,8 @@ architecture Behavioral of enclavamiento is
 		);
 		port(
 			Clock :  in std_logic;
-			paquete_ok :  in std_logic;
+			procesar :  in std_logic;
+			procesado : out std_logic;
 			semaforos :  in sems_type;
 			Cambios :  in std_logic;
 			Salida :  out std_logic_vector(15-1 downto 0);
@@ -73,12 +78,14 @@ architecture Behavioral of enclavamiento is
 	Signal cv_s : std_logic_vector(N_CVS-1 downto 0);
 	Signal sem_s_i,sem_s_o : sems_type;
 	Signal mdc_s_i,mdc_s_o : std_logic;
-
+    Signal procesar_sep_enc, procesar_enc_med : std_logic;
+    
 begin
 	separador_i:separador port map(
 		Clock => Clock,
 		Paquete => Paquete_i,
-		paquete_ok => paquete_ok,
+		procesar => procesar,
+		procesado => procesar_sep_enc,
 		Ocupacion => cv_s,
 		semaforos => sem_s_i,
 		Cambios => mdc_s_i,
@@ -86,7 +93,8 @@ begin
 		);
 	mediador_i:mediador port map(
 		Clock => Clock,
-		paquete_ok => paquete_ok,
+		procesar => procesar_enc_med,
+		procesado => procesado,
 		semaforos => sem_s_o,
 		Cambios => mdc_s_o,
 		Salida => Paquete_o,
@@ -95,6 +103,8 @@ begin
 	red_i:red port map(
 		Clock => Clock,
 		Ocupacion => cv_s,
+		procesar => procesar_sep_enc,
+		procesado => procesar_enc_med,
 		semaforos_i => sem_s_i,
 		semaforos_o => sem_s_o,
 		Cambios_i => mdc_s_i,

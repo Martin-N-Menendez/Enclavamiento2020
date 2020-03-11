@@ -28,7 +28,6 @@ begin
 		if (Clock = '1' and Clock'Event) then
 			if (Reset = '1') then
 				Salida <= (others => '0'); 
-				procesado <= '0';
 			else
 			    procesado <= procesar;
 			    if procesar = '1' then

@@ -13,7 +13,8 @@ use work.my_package.all;
 		);
 		port(
 			Clock :  in std_logic;
-			paquete_ok :  in std_logic;
+			procesar :  in std_logic;
+			procesado : out std_logic;
 			semaforos :  in sems_type;
 			Cambios :  in std_logic;
 			Salida :  out std_logic_vector(15-1 downto 0);
@@ -27,8 +28,10 @@ begin
 		if (Clock = '1' and Clock'Event) then
 			if (Reset = '1') then
 				Salida <= (others => '0'); 
+				procesado <= '0';
 			else
-			    if paquete_ok = '1' then
+			    procesado <= procesar;
+			    if procesar = '1' then
                     Salida(0) <= semaforos.msb(0);
                     Salida(1) <= semaforos.lsb(0);
                     Salida(2) <= semaforos.msb(1);
@@ -43,7 +46,7 @@ begin
                     Salida(11) <= semaforos.lsb(5);
                     Salida(12) <= semaforos.msb(6);
                     Salida(13) <= semaforos.lsb(6);
-                    Salida (14) <= Cambios;
+                    Salida(14) <= Cambios;
                 end if;    
 			end if;
 		end if;

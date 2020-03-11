@@ -35,7 +35,6 @@ begin
 				semaforos.lsb <= "0000000";
 				semaforos.msb <= "0000000";
 				Cambios <= '0';
-				procesado <= '0';
 			else
 			    procesado <= procesar;
 				if procesar = '1' then -- DAR VUELTA!

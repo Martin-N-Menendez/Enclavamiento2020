@@ -14,8 +14,6 @@ entity detector is
 		procesar : in std_logic;
 		procesado : out std_logic;
 		N : in integer;
-		N_1 : out integer;
-		N_2 : out integer;
 		wr_uart : out std_logic;
 		w_data: out std_logic_vector(8-1 downto 0)
 	);
@@ -240,11 +238,9 @@ begin
                 if N = 23 then
                     largo_ok <= '1'; 
                     led_rgb_2 <= "010"; -- verde 
-                    N_1 <= N;
                 else
                     largo_ok <= '0';
                     led_rgb_2 <= "001"; -- rojo  
-                    N_1 <= 0;  
                 end if;
                 
                 if estado = lectura then

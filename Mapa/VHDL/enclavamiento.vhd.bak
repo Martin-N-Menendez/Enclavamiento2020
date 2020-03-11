@@ -59,7 +59,6 @@ architecture Behavioral of enclavamiento is
 			N : natural := 21;
 			N_CVS : natural := 6;
 			N_SEM : natural := 7;
-			N_PAN : natural := 0;
 			N_MDC : natural := 1
 		);
 		port(

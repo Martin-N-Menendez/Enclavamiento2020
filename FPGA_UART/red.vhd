@@ -13,6 +13,8 @@ use work.my_package.all;
 		);
 		port(
 			Clock :  in std_logic;
+			procesar :  in std_logic;
+			procesado : out std_logic;
 			Ocupacion :  in std_logic_vector(N_CVS-1 downto 0);
 			semaforos_i :  in sems_type;
 			semaforos_o :  out sems_type;
@@ -293,6 +295,7 @@ begin
 		Estado_desv_o => mdc_desv_o_1,
 		Reset => Reset
 		);
+		
 		cosa <= '0';
 		ocupacion_1 <= Ocupacion(0);
 		ocupacion_2 <= Ocupacion(1);
@@ -328,4 +331,7 @@ begin
 		sem_msb_i_7 <= semaforos_i.msb(6);
 		semaforos_o.lsb(6) <= sem_lsb_o_7;
 		semaforos_o.msb(6) <= sem_msb_o_7;
+		
+		procesado <= procesar;
+		
 end Behavioral;
