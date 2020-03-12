@@ -42,9 +42,9 @@ architecture Behavioral of uart_control is
                 end if;
                          
             else                    -- No tiene datos
-                    N <= L;
-                    rd_uart <= '0';
-                    --wr_uart <= '0';
+                N <= L;
+                rd_uart <= '0';
+                --wr_uart <= '0';
             end if;
         end if;
      end process;

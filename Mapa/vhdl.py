@@ -9,9 +9,9 @@ def crear_modulo_vhdl(secciones,tabla):
     
     creando_paquete(secciones,objetos)
     
-    #creando_global(secciones,objetos) # FALTA
+    creando_global(secciones,objetos)
     
-    #creando_uart_control(secciones,objetos) # FALTA
+    creando_uart_control(secciones,objetos) # FALTA
     
     #creando_uart_instancia(secciones,objetos) # FALTA
     
@@ -25,7 +25,7 @@ def crear_modulo_vhdl(secciones,tabla):
     
     #creando_fifo(secciones,objetos) # FALTA
     
-    #creando_sistema(secciones,objetos) # FALTA
+    creando_sistema(secciones,objetos) # FALTA
     
     #creando_detector(secciones,objetos) # FALTA
     
@@ -131,7 +131,7 @@ def creando_paquete(secciones,objetos):
 #%%    
 def creando_enclavamiento(secciones,objetos):        
     
-    print("Sistema > Creando") 
+    print("Enclavamiento > Creando") 
     
     N_CVS = objetos[0]
     N_SEM = objetos[1]
@@ -297,7 +297,7 @@ def creando_enclavamiento(secciones,objetos):
     
     f.close()  # Close header file    
     
-    print("Wrapper > Finalizado")
+    print("Enclavamiento > Finalizado")
 
 #%%    
 def creando_separador(secciones,objetos):        
@@ -1040,7 +1040,7 @@ def creando_nodo(secciones,objetos):
 #%%   
 def creando_cambio(secciones,objetos):   
     
-    print("Nodo > Creando") 
+    print("Cambios > Creando") 
     
     N_CVS = objetos[0]
     N_SEM = objetos[1]
@@ -1122,7 +1122,7 @@ def creando_cambio(secciones,objetos):
         
         f.close()  # Close header file    
     
-    print("Nodo > Finalizado")
+    print("Cambios > Finalizado")
     
 #%%
 def calcular_semaforos(secciones,objetos,tabla):
@@ -1200,9 +1200,9 @@ def calcular_semaforos(secciones,objetos,tabla):
     return sem_cant,sem_actual,sem_anterior
  
 #%%    
-def creando_ejemplo(secciones,objetos):        
+def creando_sistema(secciones,objetos):        
     
-    print("Ejemplo > Creando") 
+    print("Sistema > Creando") 
     
     N_CVS = objetos[0]
     N_SEM = objetos[1]
@@ -1213,87 +1213,430 @@ def creando_ejemplo(secciones,objetos):
     
     M = 2*N_SEM + N_PAN + N_MDC
     
-    NODO = "ejemplo"
+    NODO = "Sistema"
     f = open("VHDL/"+NODO+".vhd", "w")
 
     # Comentario inicial
     f.write("-- " + NODO + ".vhdl : Achivo VHDL generado automaticamente\r\n")      
     
-    incluir_librerias(f,True) # Incluir librerias
+    incluir_librerias(f,False) # Incluir librerias
         
-#    # componente mediador
-#    mediador = "ejemplo"
-#    f.write("\t"+"entity "+mediador+" is\n")
-#    f.write("\t\t"+"generic(\n")
-#    f.write("\t\t\t"+"N"+" : "+"natural"+" := "+str(N)+";\n")
-#    
-#    f.write("\t\t\t"+"N_SEM"+" : "+"natural"+" := "+str(N_SEM)+";\n")
-#    if N_PAN > 0:
-#        f.write("\t\t\t"+"N_PAN"+" : "+"natural"+" := "+str(N_PAN)+";\n")
-#    if N_MDC > 0:    
-#        f.write("\t\t\t"+"N_MDC"+" : "+"natural"+" := "+str(N_MDC)+";\n")
-#    f.write("\t\t\t"+"N_CVS"+" : "+"natural"+" := "+str(N_CVS)+"\n")    
-#    f.write("\t\t"+");\n")
-#    f.write("\t\t"+"port("+"\n")
-#    f.write("\t\t\t"+"Clock"+   " : "+" in "+"std_logic"+";\n")
-#    f.write("\t\t\t"+"procesar"+   " : "+" in "+"std_logic"+";\n")
-#    f.write("\t\t\t"+"procesado"+   " : "+" out "+"std_logic"+";\n")
-#    f.write("\t\t\t"+"semaforos"+ " : "+" in "+"sems_type"+";\n")
-#    if N_PAN > 1:
-#        f.write("\t\t\t"+"barreras"+ " : "+" in "+"std_logic_vector("+str(N_PAN)+"-1 downto 0)"+";\n")
-#    if N_PAN == 1:
-#        f.write("\t\t\t"+"barreras"+ " : "+" in "+"std_logic"+";\n")
-#    if N_MDC > 1:
-#        f.write("\t\t\t"+"Cambios"+ " : "+" in "+"std_logic_vector("+str(N_MDC)+"-1 downto 0)"+";\n")
-#    if N_MDC == 1:
-#        f.write("\t\t\t"+"Cambios"+ " : "+" in "+"std_logic"+";\n") 
-#    
-#    f.write("\t\t\t"+"Salida"+    " : "+" out "+"std_logic_vector("+str(M)+"-1 downto 0)"+";\n")
-#    f.write("\t\t\t"+"Reset"+   " : "+" in "+"std_logic"+"\n")
-#    f.write("\t\t"+");\n")
-#    f.write("\t"+"end entity "+mediador+";\r\n") 
-#   
-#    f.write("architecture Behavioral of "+mediador+" is\r\n")      
-#    
-#    f.write("begin\r\n")  
-#    
-##    # Ocupacion | semaforos | Pan | Camcio  
-##    
-#    f.write("\t"+"process(Clock,Reset)\n")
-#    f.write("\t"+"begin\n")
-#    f.write("\t\t"+"if (Clock = '1' and Clock'Event) then\n")
-#    f.write("\t\t\t"+"if (Reset = '1') then\n")
-#    f.write("\t\t\t\t"+"Salida <= (others => '0');"+"\n")  
-#    f.write("\t\t\t\t"+"procesado <= '0';"+"\n")   
-#    f.write("\t\t\t"+"else\n")
-#    #f.write("\t\t\t\t"+"Salida <= Paquete("+str(N_CVS)+"-1 downto 0);"+"\n")
-#    
-#    #f.write("\t\t\t\t"+"Salida <= \""+str("1"*M)+"\";"+"\n")
-#    
-#    f.write("\t\t\t\t"+"procesado <= procesar;"+"\n")
-#    f.write("\t\t\t\t"+"if (procesar = '1') then\n")
-#    for i in range(2*N_SEM):
-#        if i%2:
-#            #print ("MSB: {}".format(i+1))
-#            f.write("\t\t\t\t\t"+"Salida("+str(i)+") <= semaforos.lsb("+str(int((i+1)/2-1))+");"+"\n")
-#        else:
-#            #print ("LSB: {}".format(i+1))
-#            f.write("\t\t\t\t\t"+"Salida("+str(i)+") <= semaforos.msb("+str(int((i+1)/2))+");"+"\n")
-#    
-#    if N_PAN > 0:    
-#        f.write("\t\t\t\t\t"+"Salida("+str(2*N_SEM+N_PAN)+"-1 downto "+str(2*N_SEM)+") <= barreras;"+"\n")
-#    if N_MDC > 1:
-#        f.write("\t\t\t\t\t"+"Salida("+str(2*N_SEM+N_PAN+N_MDC)+"-1 downto "+str(2*N_SEM+N_PAN)+") <= Cambios;"+"\n")
-#    if N_MDC == 1:
-#        f.write("\t\t\t\t\t"+"Salida("+str(2*N_SEM+N_PAN)+") <= Cambios;"+"\n")    
-#    
-#    f.write("\t\t\t\t"+"end if;\n")
-#    f.write("\t\t\t"+"end if;\n")
-#    f.write("\t\t"+"end if;\n")
-#    f.write("\t"+"end process;\r\n")   
-#         
-#    f.write("end Behavioral;\r\n") 
-#    
-#    f.close()  # Close header file    
+    # entidad sistema
+    sistema = "sistema"
+    f.write("\t"+"entity "+sistema+" is\n")
+    f.write("\t\t"+"port("+"\n")
+    f.write("\t\t\t"+"Clock"+   " : "+" in "+"std_logic"+";\n")
+    f.write("\t\t\t"+"r_data"+   " : "+" in "+"std_logic_vector(8-1 downto 0)"+";\n")
+    f.write("\t\t\t"+"r_disponible"+   " : "+" in "+"std_logic"+";\n")
+    f.write("\t\t\t"+"leer"+   " : "+" out "+"std_logic"+";\n")
+    f.write("\t\t\t"+"escribir"+   " : "+" out "+"std_logic"+";\n")
+    f.write("\t\t\t"+"switch1"+   " : "+" in "+"std_logic"+";\n")
+    f.write("\t\t\t"+"switch2"+   " : "+" in "+"std_logic"+";\n")
+    f.write("\t\t\t"+"reset_uart"+   " : "+" out "+"std_logic"+";\n")
+    f.write("\t\t\t"+"N"+   " : "+" in "+"integer"+";\n")
+    f.write("\t\t\t"+"leds"+   " : "+" out "+"std_logic_vector(4-1 downto 0)"+";\n")
+    f.write("\t\t\t"+"led_rgb_1"+   " : "+" out "+"std_logic_vector(3-1 downto 0)"+";\n")
+    f.write("\t\t\t"+"led_rgb_2"+   " : "+" out "+"std_logic_vector(3-1 downto 0)"+";\n")
+    f.write("\t\t\t"+"w_data"+   " : "+" out "+"std_logic_vector(8-1 downto 0)"+";\n")
+    f.write("\t\t\t"+"Reset"+   " : "+" in "+"std_logic"+"\n")
+    f.write("\t\t"+");\n")
+    f.write("\t"+"end entity "+sistema+";\r\n") 
+   
+    f.write("architecture Behavioral of "+sistema+" is\r\n")            
+
+    # componente detector
+    detector = "detector"
+    f.write("\t"+"component "+detector+" is\n")
+    f.write("\t\t"+"port("+"\n")
+    f.write("\t\t\t"+"Clock"+   " : "+" in "+"std_logic;"+"\n")
+    f.write("\t\t\t"+"r_data"+   " : "+" in "+"std_logic_vector(8-1 downto 0);"+"\n")
+    f.write("\t\t\t"+"r_disponible"+   " : "+" in "+"std_logic;"+"\n")
+    f.write("\t\t\t"+"led_rgb_1"+    " : "+" out "+"std_logic_vector(3-1 downto 0)"+";\n") 
+    f.write("\t\t\t"+"led_rgb_2"+ " : "+" out "+"std_logic_vector(3-1 downto 0);"+"\n")
+    f.write("\t\t\t"+"paquete"+ " : "+" out "+"std_logic_vector("+str(N)+"-1 downto 0);"+"\n")
+    f.write("\t\t\t"+"procesar"+ " : "+" in "+"std_logic;"+"\n")
+    f.write("\t\t\t"+"procesado"+ " : "+" out "+"std_logic;"+"\n")
+    f.write("\t\t\t"+"N"+ " : "+" in "+"integer;"+"\n")
+    f.write("\t\t\t"+"wr_uart"+ " : "+" out "+"std_logic;"+"\n")
+    f.write("\t\t\t"+"w_data"+ " : "+" out "+"std_logic_vector(8-1 downto 0);"+"\n")    
+    f.write("\t\t\t"+"Reset"+   " : "+" in "+"std_logic"+"\n")
+    f.write("\t\t"+");\n")
+    f.write("\t"+"end component "+detector+";\r\n")
     
-    print("Mediador > Finalizado")
+    # componente enclavamiento
+    enclavamiento = "enclavamiento"
+    f.write("\t"+"component "+enclavamiento+" is\n")
+    f.write("\t\t"+"port("+"\n")
+    f.write("\t\t\t"+"Clock"+   " : "+" in "+"std_logic;"+"\n")
+    f.write("\t\t\t"+"procesar"+ " : "+" in "+"std_logic;"+"\n")
+    f.write("\t\t\t"+"procesado"+ " : "+" out "+"std_logic;"+"\n")
+    f.write("\t\t\t"+"Paquete_i"+ " : "+" in "+"std_logic_vector("+str(N)+"-1 downto 0);"+"\n")
+    f.write("\t\t\t"+"Paquete_o"+ " : "+" out "+"std_logic_vector("+str(M)+"-1 downto 0);"+"\n")    
+    f.write("\t\t\t"+"Reset"+   " : "+" in "+"std_logic"+"\n")
+    f.write("\t\t"+");\n")
+    f.write("\t"+"end component "+enclavamiento+";\r\n")
+    
+    # componente selector
+    selector = "selector"
+    f.write("\t"+"component "+selector+" is\n")
+    f.write("\t\t"+"port("+"\n")
+    f.write("\t\t\t"+"Clock"+   " : "+" in "+"std_logic;"+"\n")
+    f.write("\t\t\t"+"switch"+ " : "+" in "+"std_logic;"+"\n")
+    f.write("\t\t\t"+"leds"+ " : "+" out "+"std_logic_vector(2-1 downto 0);"+"\n")
+    f.write("\t\t\t"+"wr_uart_1"+ " : "+" in "+"std_logic;"+"\n")
+    f.write("\t\t\t"+"wr_uart_2"+ " : "+" in "+"std_logic;"+"\n")
+    f.write("\t\t\t"+"wr_uart_3"+ " : "+" out "+"std_logic;"+"\n")
+    f.write("\t\t\t"+"w_data_1"+ " : "+" in "+"std_logic_vector(8-1 downto 0);"+"\n")
+    f.write("\t\t\t"+"w_data_2"+ " : "+" in "+"std_logic_vector(8-1 downto 0);"+"\n")
+    f.write("\t\t\t"+"w_data_3"+ " : "+" out "+"std_logic_vector(8-1 downto 0);"+"\n")
+    f.write("\t\t\t"+"Reset"+   " : "+" in "+"std_logic"+"\n")
+    f.write("\t\t"+");\n")
+    f.write("\t"+"end component "+selector+";\r\n")
+    
+    # componente registro
+    registro = "registro"
+    f.write("\t"+"component "+registro+" is\n")
+    f.write("\t\t"+"port("+"\n")
+    f.write("\t\t\t"+"Clock"+   " : "+" in "+"std_logic;"+"\n")
+    f.write("\t\t\t"+"procesar"+ " : "+" in "+"std_logic;"+"\n")
+    f.write("\t\t\t"+"procesado"+ " : "+" out "+"std_logic;"+"\n")
+    f.write("\t\t\t"+"paquete_i"+ " : "+" in "+"std_logic_vector("+str(M)+"-1 downto 0);"+"\n")
+    f.write("\t\t\t"+"w_data"+ " : "+" out "+"std_logic_vector(8-1 downto 0);"+"\n")
+    f.write("\t\t\t"+"wr_uart"+ " : "+" out "+"std_logic;"+"\n")
+    f.write("\t\t\t"+"Reset"+   " : "+" in "+"std_logic"+"\n")
+    f.write("\t\t"+");\n")
+    f.write("\t"+"end component "+registro+";\r\n")
+    
+    f.write("\t"+"Signal paquete_i : std_logic_vector("+str(N)+"-1 downto 0);\n")
+    f.write("\t"+"Signal paquete_o : std_logic_vector("+str(N)+"-1 downto 0);\n")
+    
+    f.write("\t"+"Signal w_data_1,w_data_2,w_data_3 : std_logic_vector(8-1 downto 0);\n")
+    f.write("\t"+"Signal wr_uart_1_s,wr_uart_2_s : std_logic;\n")
+    f.write("\t"+"Signal pro_enc_reg,pro_det_enc,pro_reg_det : std_logic;\n\r")
+    
+    
+    f.write("begin\r\n")
+    
+    f.write("\t"+detector+"_i : "+detector+"\n")
+    f.write("\t\t"+"port map("+"\n")
+    f.write("\t\t\t"+"Clock"+" => "+"Clock"+",\n")
+    f.write("\t\t\t"+"Reset"+" => "+"Reset"+",\n")
+    f.write("\t\t\t"+"r_data"+" => "+"r_data"+",\n")
+    f.write("\t\t\t"+"r_disponible"+" => "+"r_disponible"+",\n")
+    f.write("\t\t\t"+"led_rgb_1"+" => "+"led_rgb_1"+",\n")
+    f.write("\t\t\t"+"led_rgb_2"+" => "+"led_rgb_2"+",\n")
+    f.write("\t\t\t"+"N"+" => "+"N"+",\n")
+    f.write("\t\t\t"+"wr_uart"+" => "+"wr_uart_1_s"+",\n")
+    f.write("\t\t\t"+"procesar"+" => "+"pro_reg_det"+",\n")
+    f.write("\t\t\t"+"procesado"+" => "+"pro_det_enc"+",\n")
+    f.write("\t\t\t"+"paquete"+" => "+"paquete_i"+",\n")
+    f.write("\t\t\t"+"w_data"+" => "+"w_data_1"+"\n")
+    f.write("\t\t"+");"+"\r\n")
+    
+    f.write("\t"+enclavamiento+"_i : "+enclavamiento+"\n")
+    f.write("\t\t"+"port map("+"\n")
+    f.write("\t\t\t"+"Clock"+" => "+"Clock"+",\n")
+    f.write("\t\t\t"+"Reset"+" => "+"Reset"+",\n")
+    f.write("\t\t\t"+"procesar"+" => "+"pro_det_enc"+",\n")
+    f.write("\t\t\t"+"procesado"+" => "+"pro_enc_reg"+",\n")
+    f.write("\t\t\t"+"Paquete_i"+" => "+"paquete_i"+",\n")
+    f.write("\t\t\t"+"Paquete_o"+" => "+"paquete_o"+"\n")
+    f.write("\t\t"+");"+"\r\n")
+    
+    f.write("\t"+registro+"_i : "+registro+"\n")
+    f.write("\t\t"+"port map("+"\n")
+    f.write("\t\t\t"+"Clock"+" => "+"Clock"+",\n")
+    f.write("\t\t\t"+"Reset"+" => "+"Reset"+",\n")
+    f.write("\t\t\t"+"procesar"+" => "+"pro_enc_reg"+",\n")
+    f.write("\t\t\t"+"procesado"+" => "+"pro_reg_det"+",\n")
+    f.write("\t\t\t"+"paquete_i"+" => "+"paquete_o"+",\n")
+    f.write("\t\t\t"+"w_data"+" => "+"w_data_2"+",\n")
+    f.write("\t\t\t"+"wr_uart"+" => "+"wr_uart_2_s"+"\n")
+    f.write("\t\t"+");"+"\r\n")
+    
+    f.write("\t"+selector+"_i : "+selector+"\n")
+    f.write("\t\t"+"port map("+"\n")
+    f.write("\t\t\t"+"Clock"+" => "+"Clock"+",\n")
+    f.write("\t\t\t"+"Reset"+" => "+"Reset"+",\n")
+    f.write("\t\t\t"+"switch"+" => "+"switch1"+",\n")
+    f.write("\t\t\t"+"wr_uart_1"+" => "+"wr_uart_1_s"+",\n")
+    f.write("\t\t\t"+"wr_uart_2"+" => "+"wr_uart_2_s"+",\n")
+    f.write("\t\t\t"+"wr_uart_3"+" => "+"escribir"+",\n")
+    f.write("\t\t\t"+"w_data_1"+" => "+"w_data_1"+",\n")
+    f.write("\t\t\t"+"w_data_2"+" => "+"w_data_2"+",\n")
+    f.write("\t\t\t"+"w_data_3"+" => "+"w_data_3"+"\n")
+    f.write("\t\t"+");"+"\r\n")
+    
+    f.write("\t\t"+"w_data <= w_data_3;"+"\r\n")
+     
+    f.write("\t\t"+"process(Clock)"+"\n")
+    f.write("\t\t"+"begin"+"\n")
+    f.write("\t\t\t"+"if (Clock = '1' and Clock'event) then"+"\n")               
+    f.write("\t\t\t\t"+"if switch2 = '1' then"+"\n")
+    f.write("\t\t\t\t\t"+"leds <= std_logic_vector(to_unsigned(N,4));"+"\n")                
+    f.write("\t\t\t\t"+"else"+"\n")
+    f.write("\t\t\t\t\t"+"leds(3) <= paquete_i(3);"+"\n")
+    f.write("\t\t\t\t\t"+"leds(2) <= paquete_i(2);"+"\n")
+    f.write("\t\t\t\t\t"+"leds(1) <= paquete_i(1);"+"\n") 
+    f.write("\t\t\t\t\t"+"leds(0) <= paquete_i(0);"+"\n")  
+    f.write("\t\t\t\t"+"end if;"+"\n")
+    f.write("\t\t\t"+"end if;"+"\n")
+    f.write("\t\t"+"end process;"+"\r\n") 
+        
+    f.write("\t\t"+"process(Clock)"+"\n")
+    f.write("\t\t"+"variable contador: integer := 0;"+"\n")
+    f.write("\t\t"+"begin"+"\n")
+    f.write("\t\t\t"+"if (Clock = '1' and Clock'event) then"+"\n")               
+    f.write("\t\t\t\t"+"if Reset = '1' then"+"\n")
+    f.write("\t\t\t\t\t"+"reset_uart <= '0';"+"\n")                
+    f.write("\t\t\t\t"+"else"+"\n")
+    f.write("\t\t\t\t\t"+"contador := contador + 1;"+"\n")
+    f.write("\t\t\t\t\t"+"if contador = 10*125E6 then"+"\n")
+    f.write("\t\t\t\t\t\t"+"contador := 0;"+"\n") 
+    f.write("\t\t\t\t\t\t"+"reset_uart <= '1';"+"\n")  
+    f.write("\t\t\t\t\t"+"else"+"\n")
+    f.write("\t\t\t\t\t\t"+"reset_uart <= '0';"+"\n")
+    f.write("\t\t\t\t\t"+"end if;"+"\n")
+    f.write("\t\t\t\t"+"end if;"+"\n")
+    f.write("\t\t\t"+"end if;"+"\n")
+    f.write("\t\t"+"end process;"+"\r\n") 
+        
+    f.write("end Behavioral;\r\n") 
+    
+    f.close()  # Close header file    
+    
+    print("Sistema > Finalizado")
+    
+#%%    
+def creando_global(secciones,objetos):        
+    
+    print("Global > Creando") 
+    
+    N_CVS = objetos[0]
+    N_SEM = objetos[1]
+    N_PAN = objetos[2]
+    N_MDC = objetos[3]
+    
+    N = N_CVS + 2*N_SEM + N_PAN + N_MDC
+    
+    M = 2*N_SEM + N_PAN + N_MDC
+    
+    NODO = "global"
+    f = open("VHDL/"+NODO+".vhd", "w")
+
+    # Comentario inicial
+    f.write("-- " + NODO + ".vhdl : Achivo VHDL generado automaticamente\r\n")      
+    
+    incluir_librerias(f,False) # Incluir librerias
+        
+    # entidad sistema
+    wrapper = "global"
+    f.write("\t"+"entity "+wrapper+" is\n")
+    f.write("\t\t"+"port("+"\n")
+    f.write("\t\t\t"+"clk_i"+" : "+" in "+"std_logic"+";\n")
+    f.write("\t\t\t"+"uart_rxd_i"+" : "+" in "+"std_logic"+";\n")
+    f.write("\t\t\t"+"uart_txd_o"+   " : "+" out "+"std_logic"+";\n")
+    f.write("\t\t\t"+"leds"+   " : "+" out "+"std_logic_vector(4-1 downto 0)"+";\n")
+    f.write("\t\t\t"+"rgb_1"+   " : "+" out "+"std_logic_vector(3-1 downto 0)"+";\n")
+    f.write("\t\t\t"+"rgb_2"+   " : "+" out "+"std_logic_vector(3-1 downto 0)"+";\n")
+    f.write("\t\t\t"+"switch1"+   " : "+" in "+"std_logic"+";\n")
+    f.write("\t\t\t"+"switch2"+   " : "+" in "+"std_logic"+";\n")
+    f.write("\t\t\t"+"rst_i"+   " : "+" in "+"std_logic"+"\n")
+    f.write("\t\t"+");\n")
+    f.write("\t"+"end entity "+wrapper+";\r\n") 
+   
+    f.write("architecture Behavioral of "+wrapper+" is\r\n")            
+
+    # componente uart_control
+    uart_control = "uart_control"
+    f.write("\t"+"component "+uart_control+" is\n")
+    f.write("\t\t"+"port("+"\n")
+    f.write("\t\t\t"+"clk_i"+   " : "+" in "+"std_logic"+";\n")
+    f.write("\t\t\t"+"N"+   " : "+" out "+"integer"+";\n")
+    f.write("\t\t\t"+"escribir"+   " : "+" in "+"std_logic"+";\n")
+    f.write("\t\t\t"+"vacio_in"+    " : "+" in "+"std_logic"+";\n") 
+    f.write("\t\t\t"+"rd_uart"+ " : "+" out "+"std_logic"+";\n")
+    f.write("\t\t\t"+"wr_uart"+ " : "+" out "+"std_logic"+";\n")  
+    f.write("\t\t\t"+"rst_i"+   " : "+" in "+"std_logic"+"\n")
+    f.write("\t\t"+");\n")
+    f.write("\t"+"end component "+uart_control+";\r\n")
+    
+    # componente sistema
+    sistema = "sistema"
+    f.write("\t"+"component "+sistema+" is\n")
+    f.write("\t\t"+"port("+"\n")
+    f.write("\t\t\t"+"clk_i"+   " : "+" in "+"std_logic;"+"\n")
+    
+    f.write("\t\t\t"+"reset_uart"+ " : "+" out "+"std_logic;"+"\n")
+    f.write("\t\t\t"+"r_disponible"+ " : "+" in "+"std_logic;"+"\n")
+    f.write("\t\t\t"+"leer"+ " : "+" out "+"std_logic;"+"\n")
+    f.write("\t\t\t"+"escribir"+ " : "+" out "+"std_logic;"+"\n")
+    f.write("\t\t\t"+"r_data"+ " : "+" in "+"std_logic_vector(8-1 downto 0);"+"\n")
+    f.write("\t\t\t"+"switch1"+ " : "+" in "+"std_logic;"+"\n")
+    f.write("\t\t\t"+"switch2"+ " : "+" in "+"std_logic;"+"\n")
+    f.write("\t\t\t"+"N"+ " : "+" in "+"integer;"+"\n")
+    f.write("\t\t\t"+"leds"+ " : "+" out "+"std_logic_vector(4-1 downto 0);"+"\n")
+    f.write("\t\t\t"+"led_rgb_1"+ " : "+" out "+"std_logic_vector(3-1 downto 0);"+"\n")
+    f.write("\t\t\t"+"led_rgb_2"+ " : "+" out "+"std_logic_vector(3-1 downto 0);"+"\n")
+    f.write("\t\t\t"+"w_data"+ " : "+" out "+"std_logic_vector(8-1 downto 0);"+"\n")
+   
+    f.write("\t\t\t"+"rst_i"+   " : "+" in "+"std_logic"+"\n")
+    f.write("\t\t"+");\n")
+    f.write("\t"+"end component "+sistema+";\r\n")
+    
+    f.write("\t"+"Signal w_data_signal, r_dataSignal: std_logic_vector(7 downto 0);\n")
+    f.write("\t"+"Signal rd_uart_signal, wr_uart_signal: std_logic;\n")  
+    f.write("\t"+"Signal emptySignal,empty_s,tx_empty_s,switch_s,reset_s,reset_uart: std_logic;\n")
+    f.write("\t"+"Signal led_s : std_logic_vector(4-1 downto 0);\n")
+    f.write("\t"+"Signal led_rgb_1,led_rgb_2 : std_logic_vector(3-1 downto 0);\n\r")
+    f.write("\t"+"Signal N_s : integer;\n")
+    f.write("\t"+"Signal leer_s,escribir_s : std_logic;\n")
+    
+    f.write("begin\r\n")
+    
+    f.write("\t"+"uart_inst : entity work.uart"+"\n")
+    
+    f.write("\t\t"+"generic map("+"\n")
+    f.write("\t\t\t"+"DVSR      => 407,	-- baud rate divisor DVSR = 100M / (16 * baud rate) baud rate = 19200"+"\n")
+    f.write("\t\t\t"+"DVSR_BIT  => 9,   --  bits of DVSR"+"\n")
+    f.write("\t\t\t"+"FIFO_W	=> 6 	--  addr bits of FIFO words in FIFO=2^FIFO_W "+"\n")			
+    f.write("\t\t"+")"+"\n")
+    f.write("\t\t"+"port map("+"\n")
+    f.write("\t\t\t"+"clk 		=> clk_i,"+"\n")
+    f.write("\t\t\t"+"reset 		=> rst_i,"+"\n")
+    f.write("\t\t\t"+"rd_uart 	=> rd_uart_signal,"+"\n")
+    f.write("\t\t\t"+"wr_uart 	=> wr_uart_signal,"+"\n")
+    f.write("\t\t\t"+"rx 			=> uart_rxd_i,"+"\n")
+    f.write("\t\t\t"+"w_data 		=> w_data_signal,"+"\n")
+    f.write("\t\t\t"+"rx_empty	=> emptySignal,"+"\n")
+    f.write("\t\t\t"+"r_data  	=> r_dataSignal,"+"\n")
+    f.write("\t\t\t"+"tx  		=> uart_txd_o"+"\n")	   
+    f.write("\t\t"+");"+"\n")
+       
+    f.write("\t"+uart_control+"_i : "+uart_control+"\n")
+    f.write("\t\t"+"port map("+"\n")
+    f.write("\t\t\t"+"clk_i"+" => "+"clk_i"+",\n")
+    f.write("\t\t\t"+"rst_i"+" => "+"reset_uart"+",\n")
+    f.write("\t\t\t"+"N"+" => "+"N_s"+",\n")
+    f.write("\t\t\t"+"escribir"+" => "+"escribir_s"+",\n")
+    f.write("\t\t\t"+"vacio_in"+" => "+"emptySignal"+",\n")
+    f.write("\t\t\t"+"rd_uart"+" => "+"rd_uart_signal"+",\n")
+    f.write("\t\t\t"+"wr_uart"+" => "+"wr_uart_signal"+"\n")
+    f.write("\t\t"+");"+"\r\n")
+    
+    f.write("\t"+sistema+"_i : "+sistema+"\n")
+    f.write("\t\t"+"port map("+"\n")
+    f.write("\t\t\t"+"clk_i"+" => "+"clk_i"+",\n")
+    f.write("\t\t\t"+"rst_i"+" => "+"rst_i"+",\n")
+    f.write("\t\t\t"+"reset_uart"+" => "+"reset_s"+",\n")
+    f.write("\t\t\t"+"r_disponible"+" => "+"rd_uart_signal"+",\n")
+    f.write("\t\t\t"+"leer"+" => "+"leer_s"+",\n")
+    f.write("\t\t\t"+"escribir"+" => "+"escribir_s"+",\n")
+    f.write("\t\t\t"+"r_data"+" => "+"r_dataSignal"+",\n")
+    f.write("\t\t\t"+"switch1"+" => "+"switch1"+",\n")
+    f.write("\t\t\t"+"switch2"+" => "+"switch2"+",\n")
+    f.write("\t\t\t"+"N"+" => "+"N_s"+",\n")
+    f.write("\t\t\t"+"leds"+" => "+"led_s"+",\n")
+    f.write("\t\t\t"+"led_rgb_1"+" => "+"led_rgb_1"+",\n")
+    f.write("\t\t\t"+"led_rgb_2"+" => "+"led_rgb_2"+",\n")
+    f.write("\t\t\t"+"w_data"+" => "+"w_data_signal"+"\n")
+    f.write("\t\t"+");"+"\r\n")  
+    
+    
+    f.write("\t"+"rgb_1 <= led_rgb_1;"+"\n")
+    f.write("\t"+"rgb_2 <= led_rgb_2;"+"\n")
+    f.write("\t"+"leds <= led_s;"+"\n")
+    f.write("\t"+"reset_uart <= rst_i or reset_s;"+"\r\n") 
+        
+    f.write("end Behavioral;\r\n") 
+    
+    f.close()  # Close header file    
+    
+    print("Global > Finalizado")
+    
+    
+#%%    
+def creando_uart_control(secciones,objetos):        
+    
+    print("Uart_control > Creando") 
+    
+    N_CVS = objetos[0]
+    N_SEM = objetos[1]
+    N_PAN = objetos[2]
+    N_MDC = objetos[3]
+    
+    N = N_CVS + 2*N_SEM + N_PAN + N_MDC
+    
+    M = 2*N_SEM + N_PAN + N_MDC
+    
+    NODO = "uart_control"
+    f = open("VHDL/"+NODO+".vhd", "w")
+
+    # Comentario inicial
+    f.write("-- " + NODO + ".vhdl : Achivo VHDL generado automaticamente\r\n")      
+    
+    incluir_librerias(f,False) # Incluir librerias
+        
+    # entidad sistema
+    uart_control = "uart_control"
+    f.write("\t"+"entity "+uart_control+" is\n")
+    f.write("\t\t"+"port("+"\n")
+    f.write("\t\t\t"+"clk_i"+" : "+" in "+"std_logic"+";\n")
+    f.write("\t\t\t"+"N"+" : "+" out "+"integer"+";\n")
+    f.write("\t\t\t"+"escribir"+   " : "+" in "+"std_logic"+";\n")
+    f.write("\t\t\t"+"vacio_in"+   " : "+" in "+"std_logic"+";\n")
+    f.write("\t\t\t"+"rd_uart"+   " : "+" out "+"std_logic"+";\n")
+    f.write("\t\t\t"+"wr_uart"+   " : "+" out "+"std_logic"+";\n")
+    f.write("\t\t\t"+"rst_i"+   " : "+" in "+"std_logic"+"\n")
+    f.write("\t\t"+");\n")
+    f.write("\t"+"end entity "+uart_control+";\r\n") 
+   
+    f.write("architecture Behavioral of "+uart_control+" is\r\n")            
+    
+    f.write("begin\r\n")
+   
+       
+    f.write("\t"+"lectura : process(clk_i)"+"\n")
+    f.write("\t\t"+"variable contador_i: integer := 0;"+"\n")
+    f.write("\t\t"+"variable L : integer := 0;"+"\n")
+    f.write("\t"+"begin"+"\n")   
+    f.write("\t\t"+"if (clk_i = '1' and clk_i'event) then"+"\n")
+    f.write("\t\t\t"+"if rst_i = '1' then"+"\n")          
+    f.write("\t\t\t\t"+"L := 0;"+"\n") 
+    f.write("\t\t\t\t"+"rd_uart <= '0';"+"\n")
+    f.write("\t\t\t"+"elsif vacio_in = '0' then   -- Tiene datos"+"\n")
+    f.write("\t\t\t\t"+"contador_i := contador_i + 1;"+"\n")                          
+    f.write("\t\t\t\t"+"if contador_i = 125E3 then    -- Cuento 100 mseg"+"\n")
+    f.write("\t\t\t\t\t"+"contador_i := 0;"+"\n")
+    f.write("\t\t\t\t\t"+"rd_uart <= '1';     -- Pido el dato"+"\n")
+    f.write("\t\t\t\t\t"+"L := L + 1;"+"\n")
+    f.write("\t\t\t\t"+"else"+"\n")                    
+    f.write("\t\t\t\t\t"+"rd_uart <= '0'"+"\n");
+    f.write("\t\t\t\t"+"end if;"+"\n")                     
+    f.write("\t\t\t"+"else                    -- No tiene datos"+"\n")
+    f.write("\t\t\t\t"+"N <= L;"+"\n")
+    f.write("\t\t\t\t"+"rd_uart <= '0';"+"\n")
+    f.write("\t\t\t"+"end if;"+"\n")
+    f.write("\t\t"+"end if;"+"\n")
+    f.write("\t"+"end process;"+"\r\n")
+    
+    
+    f.write("\t"+"escritura : process(clk_i)"+"\n")
+    f.write("\t\t"+"variable contador_j: integer := 0;"+"\n")
+    f.write("\t"+"begin"+"\n")   
+    f.write("\t\t"+"if (clk_i = '1' and clk_i'event) then"+"\n")
+    f.write("\t\t\t"+"if rst_i = '1' then"+"\n")          
+    f.write("\t\t\t\t"+"wr_uart <= '0';"+"\n")
+    f.write("\t\t\t"+"else"+"\n")                    
+    f.write("\t\t\t\t"+"wr_uart <= escribir"+"\n");
+    f.write("\t\t\t"+"end if;"+"\n")
+    f.write("\t\t"+"end if;"+"\n")
+    f.write("\t"+"end process;"+"\r\n")
+    
+    
+        
+    f.write("end Behavioral;\r\n") 
+    
+    f.close()  # Close header file    
+    
+    print("Uart_control > Finalizado")    

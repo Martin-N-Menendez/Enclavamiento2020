@@ -19,15 +19,6 @@ entity UART_loop is
 end;
 
 architecture UART_loop_arq of UART_loop is
-
-	signal w_data_signal, r_dataSignal: std_logic_vector(7 downto 0);
-	signal rd_uart_signal, wr_uart_signal: std_logic;
-	signal emptySignal,empty_s,tx_empty_s,switch_s,reset_s,reset_uart: std_logic;
-	signal led_s : std_logic_vector(4-1 downto 0);
-	signal led_rgb_1 : std_logic_vector(3-1 downto 0);
-	signal led_rgb_2 : std_logic_vector(3-1 downto 0);
-	signal N_s : integer;
-	signal leer_s,escribir_s : std_logic;
 	
 	component uart_control is
 	port(
@@ -61,9 +52,16 @@ architecture UART_loop_arq of UART_loop is
 	);
     end component;
 
+	signal w_data_signal, r_dataSignal: std_logic_vector(7 downto 0);
+	signal rd_uart_signal, wr_uart_signal: std_logic;
+	signal emptySignal,empty_s,tx_empty_s,switch_s,reset_s,reset_uart: std_logic;
+	signal led_s : std_logic_vector(4-1 downto 0);
+	signal led_rgb_1 : std_logic_vector(3-1 downto 0);
+	signal led_rgb_2 : std_logic_vector(3-1 downto 0);
+	signal N_s : integer;
+	signal leer_s,escribir_s : std_logic;
+	
 begin
-	
-	
 	
 	uart_inst: entity work.uart
 		generic map(
@@ -118,8 +116,6 @@ begin
 			led_rgb_2   => led_rgb_2,
 			w_data      => w_data_signal
 		);	
-		
-	--empty_o <= emptySignal;
 	
 	rgb_1       <= led_rgb_1;
 	rgb_2       <= led_rgb_2;

@@ -1,96 +1,91 @@
+-- Sistema.vhdl : Achivo VHDL generado automaticamente
+
 library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
 
-entity sistema is
-	port(
-		clk_i: in std_logic;
-        rst_i: in std_logic;
-		r_data: in std_logic_vector(8-1 downto 0);
-		r_disponible : in std_logic;
-		leer : out std_logic;
-		escribir : out std_logic;
-		switch1 : in std_logic;
-		switch2 : in std_logic;
-		reset_uart : out std_logic;
-		N : in integer;
-		--leds : out std_logic_vector(2-1 downto 0);
-		leds : out std_logic_vector(4-1 downto 0);
-		led_rgb_1  : out std_logic_vector(3-1 downto 0);
-		led_rgb_2  : out std_logic_vector(3-1 downto 0);
-		w_data: out std_logic_vector(8-1 downto 0)
-	);
-end sistema;
+	entity sistema is
+		port(
+			clk_i: in std_logic;		
+			r_data: in std_logic_vector(8-1 downto 0);
+			r_disponible : in std_logic;
+			leer : out std_logic;
+			escribir : out std_logic;
+			switch1 : in std_logic;
+			switch2 : in std_logic;
+			reset_uart : out std_logic;
+			N : in integer;
+			leds : out std_logic_vector(4-1 downto 0);
+			led_rgb_1  : out std_logic_vector(3-1 downto 0);
+			led_rgb_2  : out std_logic_vector(3-1 downto 0);
+			w_data: out std_logic_vector(8-1 downto 0);
+			rst_i: in std_logic
+		);
+	end sistema;
 
 architecture Behavioral of sistema is
 
     component detector is
-	port(
-		clk_i: in std_logic;
-        rst_i: in std_logic;
-		r_data: in std_logic_vector(8-1 downto 0);
-		r_disponible : in std_logic;
-		led_rgb_1  : out std_logic_vector(3-1 downto 0);
-		led_rgb_2  : out std_logic_vector(3-1 downto 0);
-		paquete: out std_logic_vector(21-1 downto 0);
-		procesar : in std_logic;
-		procesado : out std_logic;
-		N : in integer;
-		wr_uart : out std_logic;
-		w_data: out std_logic_vector(8-1 downto 0)
-	);
+		port(
+			clk_i: in std_logic;      
+			r_data: in std_logic_vector(8-1 downto 0);
+			r_disponible : in std_logic;
+			led_rgb_1  : out std_logic_vector(3-1 downto 0);
+			led_rgb_2  : out std_logic_vector(3-1 downto 0);
+			paquete: out std_logic_vector(21-1 downto 0);
+			procesar : in std_logic;
+			procesado : out std_logic;
+			N : in integer;
+			wr_uart : out std_logic;
+			w_data: out std_logic_vector(8-1 downto 0);
+			rst_i: in std_logic
+		);
     end component;
 
     component enclavamiento is
-	port(
-		Clock: in std_logic;
-        Reset: in std_logic;
-        procesar : in std_logic;
-        procesado :  out std_logic;
-        Paquete_i: in std_logic_vector(21-1 downto 0);
-        Paquete_o: out std_logic_vector(15-1 downto 0)
-	);
+		port(
+			Clock: in std_logic;		
+			procesar : in std_logic;
+			procesado :  out std_logic;
+			Paquete_i: in std_logic_vector(21-1 downto 0);
+			Paquete_o: out std_logic_vector(15-1 downto 0);
+			Reset: in std_logic
+		);
     end component;
         
     component conector_test is
 	port(
-		clk_i: in std_logic;
-        rst_i: in std_logic;
+		clk_i: in std_logic;      
         switch : in std_logic;
         leds : out std_logic_vector(2-1 downto 0);
-        wr_uart_3 : out std_logic;
-        wr_uart_1 : in std_logic;
+		wr_uart_1 : in std_logic;
         wr_uart_2 : in std_logic;
+        wr_uart_3 : out std_logic;      
         w_data_1: in std_logic_vector(8-1 downto 0);
         w_data_2: in std_logic_vector(8-1 downto 0);
-        w_data_3: out std_logic_vector(8-1 downto 0)
+        w_data_3: out std_logic_vector(8-1 downto 0);
+		rst_i: in std_logic
 	);
     end component;
     
     component registro is
-	port(
-		clk_i: in std_logic;
-        rst_i: in std_logic;
-        procesar : in std_logic;
-        procesado : out std_logic;
-        paquete_i: in std_logic_vector(15-1 downto 0);
-        w_data: out std_logic_vector(8-1 downto 0);
-        wr_uart : out std_logic  -- "char_disp"
-	);
+		port(
+			clk_i: in std_logic;			
+			procesar : in std_logic;
+			procesado : out std_logic;
+			paquete_i: in std_logic_vector(15-1 downto 0);
+			w_data: out std_logic_vector(8-1 downto 0);
+			wr_uart : out std_logic;
+			rst_i: in std_logic
+		);
     end component;
     
     signal paquete_i : std_logic_vector(21-1 downto 0);
     signal paquete_o : std_logic_vector(15-1 downto 0);
-    signal prueba : std_logic_vector(15-1 downto 0);
-    
-    signal loop_s : std_logic;
-    
-    signal w_data_1,w_data_2,w_data_3,w_data_aux : std_logic_vector(8-1 downto 0);
-    signal paquete_ok_s,escribir_s,wr_uart_2_s : std_logic;
-    signal N_1_s,N_2_s : integer;
-    signal pro_enc_reg : std_logic;
-    
-    signal paquete_aux : std_logic_vector(15-1 downto 0);
+       
+    signal w_data_1,w_data_2,w_data_3 : std_logic_vector(8-1 downto 0);
+    signal wr_uart_1_s,wr_uart_2_s : std_logic;
+    signal pro_enc_reg,pro_det_enc,pro_reg_det : std_logic;
     
 begin
     
@@ -103,9 +98,9 @@ begin
 			led_rgb_1 => led_rgb_1,
 			led_rgb_2 => led_rgb_2,
 			N        => N,
-		    wr_uart     => escribir_s,
-		    procesar => paquete_ok_s,
-			procesado => loop_s,
+		    wr_uart     => wr_uart_1_s,
+		    procesar => pro_reg_det,
+			procesado => pro_det_enc,
 			paquete  => paquete_i,
 			w_data     => w_data_1
 		);	
@@ -114,29 +109,29 @@ begin
 		port map(
 			Clock 		=>  clk_i,
 			Reset       =>  rst_i,
-			procesar  => loop_s,
+			procesar  => pro_det_enc,
 			procesado => pro_enc_reg,
 			Paquete_i     => paquete_i,
 			Paquete_o     => paquete_o
 		);	
 		
-		registro_i: registro
+	registro_i: registro
 		port map(
 			clk_i 		=>  clk_i,
 			rst_i       =>  rst_i,
 			procesar  => pro_enc_reg,
-			procesado => paquete_ok_s,
+			procesado => pro_reg_det,
 			paquete_i   => paquete_o,
 			w_data     => w_data_2,
 			wr_uart => wr_uart_2_s
 		);
 			
-		conector_test_i: conector_test
+	conector_test_i: conector_test
 		port map(
 			clk_i 		=>  clk_i,
 			rst_i       =>  rst_i,
 			switch      => switch1,
-			wr_uart_1 => escribir_s,
+			wr_uart_1 => wr_uart_1_s,
 			wr_uart_2 => wr_uart_2_s,
 			wr_uart_3      => escribir,
 			w_data_1     => w_data_1,
@@ -148,7 +143,6 @@ begin
 
         
         process(clk_i)
-        --variable contador : integer range 0 to 125e6 := 0;
         begin
             if (clk_i = '1' and clk_i'event) then
                 
