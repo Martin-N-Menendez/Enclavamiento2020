@@ -1,35 +1,27 @@
+-- registro.vhdl : Achivo VHDL generado automaticamente
+
 library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
 
-
--- AGREGAR salida que mate paquete_ok;
-
-entity registro is
-	port(
-		clk_i: in std_logic;
-        rst_i: in std_logic;
-        procesar : in std_logic;
-        procesado : out std_logic;
-        paquete_i: in std_logic_vector(15-1 downto 0);
-        w_data: out std_logic_vector(8-1 downto 0);
-        wr_uart : out std_logic  -- "char_disp"
-	);
+	entity registro is
+		port(
+			clk_i : in std_logic;			
+			procesar : in std_logic;
+			procesado : out std_logic;
+			paquete_i : in std_logic_vector(15-1 downto 0);
+			w_data : out std_logic_vector(8-1 downto 0);
+			wr_uart : out std_logic; -- "char_disp"
+			rst_i : in std_logic
+		);
     end entity;
 
 architecture Behavioral of registro is
     
     type estados_t is (REINICIO,CICLO_1,CICLO_2);
     signal estado, estado_siguiente : estados_t;
-  
-
-    --signal paquete_aux: std_logic_vector(15-1 downto 0);
-    signal mux_out_s : std_logic;
-    signal ena_s : std_logic;
-    signal rst_s : std_logic;  
+    signal mux_out_s,ena_s,rst_s,reg_aux : std_logic;
     signal mux_s : std_logic_vector(4-1 downto 0);
-
-    signal reg_aux : std_logic;
    
 begin    
    --<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -72,27 +64,17 @@ begin
             when "1101" => mux_out_s <= paquete_i(13);
             when "1110" => mux_out_s <= paquete_i(14);
             when others => mux_out_s <= '0';
-        end case;
-        
-    end process;
-    
---    bit_to_ascii : process(clk_i)
---    begin
---        if (clk_i = '1' and clk_i'event) then
---            if rst_i = '1' then
---                w_data <= (others => '0');
---            else                     
-               w_data <= "00110001" when mux_out_s = '1' else "00110000";
---            end if; 
---    end process;
-    
+        end case;       
+    end process;   
+                  
+    w_data <= "00110001" when mux_out_s = '1' else "00110000";
+
     FSM_reset : process(clk_i)
     begin
         if (clk_i = '1' and clk_i'event) then
             if rst_i = '1' then
                 estado <= REINICIO;          
-            else   
-                
+            else                
                 if (procesar = '1') then          
                     estado <= estado_siguiente;
                 else
@@ -104,8 +86,7 @@ begin
     
     FSM : process(procesar,estado,mux_s)
     begin
-        estado_siguiente <= estado;
-        
+        estado_siguiente <= estado;       
         case estado is
             when REINICIO =>
                 wr_uart <= '0';
@@ -113,33 +94,27 @@ begin
                 ena_s <= '0';
                 procesado <= '0';
                 reg_aux <= '0';
-  
                 if (procesar = '1' and mux_s /= "1111" ) then
                     estado_siguiente <= CICLO_1;
-                end if;
-                
+                end if;              
             when CICLO_1 =>
                 wr_uart <= '0';
                 rst_s <= '0';
                 ena_s <= '0';
-                --procesado <= '0';
-                
-                estado_siguiente <= CICLO_2;
-                
+                --procesado <= '0';             
+                estado_siguiente <= CICLO_2;            
             when CICLO_2 =>
                 wr_uart <= '1';
                 rst_s <= '0';
                 ena_s <= '1';              
                 procesado <= '0';
-                reg_aux <= '0';
-                
+                reg_aux <= '0';               
                 if mux_s = "1110" then
                     procesado <= '1';
                     reg_aux <= '1';
                     estado_siguiente <= REINICIO;           
                 else
                     estado_siguiente <= CICLO_1;
-
                 end if;
             when others => null;
         end case;

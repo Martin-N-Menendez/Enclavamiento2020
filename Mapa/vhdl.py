@@ -11,7 +11,7 @@ def crear_modulo_vhdl(secciones,tabla):
     
     creando_global(secciones,objetos)
     
-    creando_uart_control(secciones,objetos) # FALTA
+    creando_uart_control(secciones,objetos) 
     
     #creando_uart_instancia(secciones,objetos) # FALTA
     
@@ -25,9 +25,9 @@ def crear_modulo_vhdl(secciones,tabla):
     
     #creando_fifo(secciones,objetos) # FALTA
     
-    creando_sistema(secciones,objetos) # FALTA
+    creando_sistema(secciones,objetos)
     
-    #creando_detector(secciones,objetos) # FALTA
+    creando_detector(secciones,objetos)
     
     creando_enclavamiento(secciones,objetos)
     
@@ -41,7 +41,7 @@ def crear_modulo_vhdl(secciones,tabla):
     
     creando_cambio(secciones,objetos)
     
-    #creando_registro(secciones,objetos) # FALTA
+    creando_registro(secciones,objetos) # FALTA generalizar!
     
     #creando_conector(secciones,objetos) # FALTA
     
@@ -1553,8 +1553,7 @@ def creando_global(secciones,objetos):
     f.close()  # Close header file    
     
     print("Global > Finalizado")
-    
-    
+        
 #%%    
 def creando_uart_control(secciones,objetos):        
     
@@ -1594,7 +1593,6 @@ def creando_uart_control(secciones,objetos):
     f.write("architecture Behavioral of "+uart_control+" is\r\n")            
     
     f.write("begin\r\n")
-   
        
     f.write("\t"+"lectura : process(clk_i)"+"\n")
     f.write("\t\t"+"variable contador_i: integer := 0;"+"\n")
@@ -1620,7 +1618,6 @@ def creando_uart_control(secciones,objetos):
     f.write("\t\t"+"end if;"+"\n")
     f.write("\t"+"end process;"+"\r\n")
     
-    
     f.write("\t"+"escritura : process(clk_i)"+"\n")
     f.write("\t\t"+"variable contador_j: integer := 0;"+"\n")
     f.write("\t"+"begin"+"\n")   
@@ -1631,12 +1628,404 @@ def creando_uart_control(secciones,objetos):
     f.write("\t\t\t\t"+"wr_uart <= escribir"+"\n");
     f.write("\t\t\t"+"end if;"+"\n")
     f.write("\t\t"+"end if;"+"\n")
-    f.write("\t"+"end process;"+"\r\n")
-    
-    
+    f.write("\t"+"end process;"+"\r\n") 
         
     f.write("end Behavioral;\r\n") 
     
     f.close()  # Close header file    
     
-    print("Uart_control > Finalizado")    
+    print("Uart_control > Finalizado")  
+    
+#%%    
+def creando_detector(secciones,objetos):        
+    
+    print("Detector > Creando") 
+    
+    N_CVS = objetos[0]
+    N_SEM = objetos[1]
+    N_PAN = objetos[2]
+    N_MDC = objetos[3]
+    
+    N = N_CVS + 2*N_SEM + N_PAN + N_MDC
+    
+    M = 2*N_SEM + N_PAN + N_MDC
+    
+    NODO = "detector"
+    f = open("VHDL/"+NODO+".vhd", "w")
+
+    # Comentario inicial
+    f.write("-- " + NODO + ".vhdl : Achivo VHDL generado automaticamente\r\n")      
+    
+    incluir_librerias(f,False) # Incluir librerias
+        
+    # entidad sistema
+    detector = "detector"
+    f.write("\t"+"entity "+detector+" is\n")
+    f.write("\t\t"+"port("+"\n")
+    f.write("\t\t\t"+"clk_i"+" : "+"in"+" "+"std_logic"+";\n")
+    f.write("\t\t\t"+"r_data"+" : "+"in"+" "+"std_logic_vector(8-1 downto 0)"+";\n")
+    f.write("\t\t\t"+"r_disponible"+" : "+"in"+" "+"std_logic"+";\n")
+    f.write("\t\t\t"+"led_rgb_1"+" : "+"out"+" "+"std_logic_vector(3-1 downto 0)"+";\n")
+    f.write("\t\t\t"+"led_rgb_2"+" : "+"out"+" "+"std_logic_vector(3-1 downto 0)"+";\n")
+    f.write("\t\t\t"+"paquete"+" : "+"out"+" "+"std_logic_vector("+str(N)+"-1 downto 0)"+";\n")
+    f.write("\t\t\t"+"procesar"+" : "+"in"+" "+"std_logic"+";\n")
+    f.write("\t\t\t"+"procesado"+" : "+"out"+" "+"std_logic"+";\n")
+    f.write("\t\t\t"+"N"+" : "+"in"+" "+"integer"+";\n")
+    f.write("\t\t\t"+"wr_uart"+   " : "+"out"+" "+"std_logic"+";\n")
+    f.write("\t\t\t"+"w_data"+" : "+"out"+" "+"std_logic_vector(8-1 downto 0)"+";\n")
+    f.write("\t\t\t"+"rst_i"+   " : "+"in"+" "+"std_logic"+"\n")
+    f.write("\t\t"+");\n")
+    f.write("\t"+"end entity "+detector+";\r\n") 
+   
+    f.write("architecture Behavioral of "+detector+" is\r\n")            
+    
+    
+    f.write("\t"+"type estados_t is (inicio,lectura,final,error);"+"\n") 
+    f.write("\t"+"signal estado, estado_siguiente : estados_t;"+"\n") 
+  
+    f.write("\t"+"shared variable contador : integer range 0 to "+str(round(N*1.5))+" := 0;"+"\n")
+    
+    f.write("\t"+"signal paquete_aux : std_logic_vector("+str(N)+"-1 downto 0);"+"\n")   
+    f.write("\t"+"signal nuevo : std_logic;"+"\n")
+    f.write("\t"+"signal largo_ok,tags_ok : std_logic;"+"\n")
+    f.write("\t"+"signal tags_izq,tags_der : std_logic;"+"\n")
+    
+    f.write("\t"+"constant tag_inicial : std_logic_vector(8-1 downto 0) := \"00111100\"; -- r_data = '<'"+"\n")
+    f.write("\t"+"constant tag_final : std_logic_vector(8-1 downto 0) := \"00111110\"; -- r_data = '>'"+"\n")
+    f.write("\t"+"constant char_0 : std_logic_vector(8-1 downto 0) := \"00110000\"; -- r_data = '0'"+"\n")
+    f.write("\t"+"constant char_1 : std_logic_vector(8-1 downto 0) := \"00110001\"; -- r_data = '1' "+"\r\n")
+
+    f.write("begin\r\n")
+       
+    f.write("\t"+"cambio_estados : process(clk_i)"+"\n")
+    f.write("\t"+"begin"+"\n")   
+    f.write("\t\t"+"if (clk_i = '1' and clk_i'event) then"+"\n")
+    f.write("\t\t\t"+"if rst_i = '1' then"+"\n")          
+    f.write("\t\t\t\t"+"estado <= inicio;"+"\n") 
+    f.write("\t\t\t"+"else"+"\n")
+    f.write("\t\t\t\t"+"if procesar = '1' then"+"\n")
+    f.write("\t\t\t\t\t"+"estado <= inicio;"+"\n")   
+    f.write("\t\t\t\t"+"else"+"\n")
+    f.write("\t\t\t\t\t"+"estado <= estado_siguiente;"+"\n")  
+    f.write("\t\t\t\t"+"end if;"+"\n")                      
+    f.write("\t\t\t"+"end if;"+"\n")  
+    f.write("\t\t"+"end if;"+"\n")   
+    f.write("\t"+"end process;"+"\r\n")
+    
+    f.write("\t"+"incrementar_contador : process(clk_i)"+"\n")
+    f.write("\t"+"begin"+"\n")
+    f.write("\t\t"+"if (clk_i = '1' and clk_i'event) then"+"\n")
+    f.write("\t\t\t"+"if rst_i = '1' then"+"\n")          
+    f.write("\t\t\t\t"+"contador := 0;"+"\n") 
+    f.write("\t\t\t"+"else"+"\n")
+    f.write("\t\t\t\t"+"if r_disponible = '1' then"+"\n")
+    f.write("\t\t\t\t\t"+"if estado = lectura then"+"\n")
+    f.write("\t\t\t\t\t\t"+"if contador < "+str(N+2)+" then"+"\n") 
+    f.write("\t\t\t\t\t\t\t"+"contador := contador + 1;"+"\n")
+    f.write("\t\t\t\t\t\t"+"end if;"+"\n")
+    f.write("\t\t\t\t\t"+"end if;"+"\n")
+    f.write("\t\t\t\t"+"end if;"+"\n")  
+    f.write("\t\t\t\t"+"if contador > "+str(N)+" and contador < "+str(N+2)+" then"+"\n") 
+    f.write("\t\t\t\t\t"+"contador := contador + 1;"+"\n")
+    f.write("\t\t\t\t"+"end if;"+"\n")   
+    f.write("\t\t\t\t"+"if estado = final or estado = error then"+"\n")
+    f.write("\t\t\t\t\t"+"contador := 0;"+"\n")
+    f.write("\t\t\t\t"+"end if;"+"\n") 
+    f.write("\t\t\t"+"end if;"+"\n")
+    f.write("\t\t"+"end if;"+"\n")
+    f.write("\t"+"end process;"+"\r\n")
+    
+    f.write("\t"+"empaquetado : process(clk_i)"+"\n") 
+    f.write("\t"+"begin"+"\n") 
+    f.write("\t\t"+"if (clk_i = '1' and clk_i'event) then"+"\n")
+    f.write("\t\t\t"+"if rst_i = '1' then"+"\n")          
+    f.write("\t\t\t\t"+"paquete_aux <= (others => '0');"+"\n")
+    f.write("\t\t\t\t"+"nuevo <= '0';"+"\n")
+    f.write("\t\t\t"+"else"+"\n")
+    f.write("\t\t\t\t"+"if estado = lectura then"+"\n")
+    f.write("\t\t\t\t\t"+"if r_disponible = '1' then"+"\n")
+    f.write("\t\t\t\t\t\t"+"if contador < "+str(N+1)+" then"+"\n")
+    f.write("\t\t\t\t\t\t\t"+"if r_data = char_0 then"+"\n")
+    f.write("\t\t\t\t\t\t\t\t"+"paquete_aux("+str(N)+"-contador) <= '0';"+"\n")
+    f.write("\t\t\t\t\t\t\t"+"end if;"+"\n")
+    f.write("\t\t\t\t\t\t\t"+"if r_data = char_1 then"+"\n")
+    f.write("\t\t\t\t\t\t\t\t"+"paquete_aux("+str(N)+"-contador) <= '1';"+"\n")
+    f.write("\t\t\t\t\t\t\t"+"end if;"+"\n")
+    f.write("\t\t\t\t\t\t"+"end if;"+"\n")
+    f.write("\t\t\t\t\t\t"+"nuevo <= '1';"+"\n")
+    f.write("\t\t\t\t\t"+"else"+"\n")        
+    f.write("\t\t\t\t\t\t"+"nuevo <= '0';"+"\n")
+    f.write("\t\t\t\t\t"+"end if;"+"\n")
+    f.write("\t\t\t\t"+"end if;"+"\n")
+    f.write("\t\t\t"+"end if;"+"\n")
+    f.write("\t\t"+"end if;"+"\n")
+    f.write("\t"+"end process;"+"\r\n")
+    
+    f.write("\t"+"estados : process(clk_i,estado)"+"\n")      
+    f.write("\t"+"begin"+"\n")
+    f.write("\t\t"+"if (clk_i = '1' and clk_i'event) then"+"\n")
+    f.write("\t\t\t"+"if rst_i = '1' then"+"\n")          
+    f.write("\t\t\t\t"+"estado_siguiente <= inicio;"+"\n")
+    f.write("\t\t\t\t"+"tags_izq <= '0';"+"\n") 
+    f.write("\t\t\t\t"+"tags_der <= '0';"+"\n")
+    f.write("\t\t\t"+"else"+"\n")          
+    f.write("\t\t\t\t"+"estado_siguiente <= estado;"+"\n")   
+    f.write("\t\t\t\t"+"-- LED4 = RGB2 | LED5 => RGB1"+"\n")
+    f.write("\t\t\t\t"+"-- BGR -> 001 = R | 010 = G | 100 = B"+"\n")
+    f.write("\t\t\t\t"+"case(estado) is"+"\n")                                             
+    f.write("\t\t\t\t\t"+"when inicio =>"+"\n")            
+    f.write("\t\t\t\t\t\t"+"tags_izq <= '0';"+"\n") 
+    f.write("\t\t\t\t\t\t"+"if r_data = tag_inicial then -- r_data = '<'"+"\n")
+    f.write("\t\t\t\t\t\t\t"+"tags_izq <= '1';"+"\n")
+    f.write("\t\t\t\t\t\t\t"+"tags_der <= '0';"+"\n")
+    f.write("\t\t\t\t\t\t\t"+"estado_siguiente <= lectura;"+"\n")                    
+    f.write("\t\t\t\t\t\t"+"end if;"+"\n")               
+    f.write("\t\t\t\t\t"+"when lectura =>"+"\n") 
+    f.write("\t\t\t\t\t\t"+"if contador = "+str(N+2)+" then -- "+str(N)+" (asi entran "+str(N)+")"+"\n")
+    f.write("\t\t\t\t\t\t\t"+"if r_data = tag_final then --  r_data = '>'"+"\n")
+    f.write("\t\t\t\t\t\t\t\t"+"tags_der <= '1';"+"\n")               
+    f.write("\t\t\t\t\t\t\t\t"+"estado_siguiente <= final;"+"\n")
+    f.write("\t\t\t\t\t\t\t"+"else"+"\n") 
+    f.write("\t\t\t\t\t\t\t\t"+"tags_der <= '0';"+"\n")    
+    f.write("\t\t\t\t\t\t\t\t"+"estado_siguiente <= error;"+"\n")                       
+    f.write("\t\t\t\t\t\t\t"+"end if;"+"\n")                      
+    f.write("\t\t\t\t\t\t"+"else"+"\n")
+    f.write("\t\t\t\t\t\t\t"+"tags_der <= '0';"+"\n")
+    f.write("\t\t\t\t\t\t"+"end if;"+"\n") 
+    f.write("\t\t\t\t\t"+"when final =>"+"\n")  
+    f.write("\t\t\t\t\t\t"+"if procesar = '1' then"+"\n")
+    f.write("\t\t\t\t\t\t\t"+"estado_siguiente <= inicio;"+"\n")
+    f.write("\t\t\t\t\t\t"+"end if;"+"\n")          
+    f.write("\t\t\t\t\t"+"when error =>"+"\n") 
+    f.write("\t\t\t\t\t\t"+"tags_izq <= '0';"+"\n")
+    f.write("\t\t\t\t\t\t"+"tags_der <= '0';"+"\n")
+    f.write("\t\t\t\t\t\t"+"estado_siguiente <= inicio;"+"\n")                                       
+    f.write("\t\t\t\t\t"+"when others => null;"+"\n")
+    f.write("\t\t\t\t"+"end case;"+"\n")
+    f.write("\t\t\t"+"end if;"+"\n")
+    f.write("\t\t"+"end if;"+"\n")
+    f.write("\t"+"end process;"+"\r\n")
+     
+    f.write("\t"+"paquete_listo : process(clk_i)"+"\n")
+    f.write("\t"+"begin"+"\n")
+    f.write("\t\t"+"if (clk_i = '1' and clk_i'event) then"+"\n")
+    f.write("\t\t\t"+"if rst_i = '1' then"+"\n")
+    f.write("\t\t\t\t"+"procesado <= '0';"+"\n") 
+    f.write("\t\t\t"+"else"+"\n")  
+    f.write("\t\t\t\t"+"if estado = final then"+"\n")          
+    f.write("\t\t\t\t\t"+"procesado <= largo_ok and tags_ok;"+"\n")                                 
+    f.write("\t\t\t\t"+"else"+"\n")
+    f.write("\t\t\t\t\t"+"procesado <= '0';"+"\n")   
+    f.write("\t\t\t\t"+"end if;"+"\n")
+    f.write("\t\t\t"+"end if;"+"\n")
+    f.write("\t\t"+"end if;"+"\n")
+    f.write("\t"+"end process;"+"\r\n")  
+    
+    f.write("\t"+"analizar_tags : process(clk_i)"+"\n")
+    f.write("\t"+"begin"+"\n")
+    f.write("\t\t"+"if (clk_i = '1' and clk_i'event) then"+"\n")
+    f.write("\t\t\t"+"if rst_i = '1' then"+"\n")
+    f.write("\t\t\t\t"+"tags_ok <= '0';"+"\n") 
+    f.write("\t\t\t\t"+"led_rgb_1 <= \"001\"; -- rojo"+"\n")
+    f.write("\t\t\t"+"else"+"\n")  
+    f.write("\t\t\t\t"+"tags_ok <= tags_izq and tags_der;"+"\n")
+    f.write("\t\t\t\t"+"if tags_ok = '1' then"+"\n")
+    f.write("\t\t\t\t\t"+"led_rgb_1 <= \"010\"; -- verde"+"\n")
+    f.write("\t\t\t\t"+"else"+"\n")
+    f.write("\t\t\t\t\t"+"led_rgb_1 <= \"001\"; -- rojo"+"\n")
+    f.write("\t\t\t\t"+"end if;"+"\n")               
+    f.write("\t\t\t\t"+"if estado = lectura then"+"\n")
+    f.write("\t\t\t\t\t"+"led_rgb_1 <= \"001\"; -- rojo"+"\n")
+    f.write("\t\t\t\t"+"end if;"+"\n")
+    f.write("\t\t\t"+"end if;"+"\n")
+    f.write("\t\t"+"end if;"+"\n")
+    f.write("\t"+"end process;"+"\r\n")
+    
+    f.write("\t"+"analizar_largo : process(clk_i)"+"\n")
+    f.write("\t"+"begin"+"\n")
+    f.write("\t\t"+"if (clk_i = '1' and clk_i'event) then"+"\n")
+    f.write("\t\t\t"+"if rst_i = '1' then"+"\n")
+    f.write("\t\t\t\t"+"largo_ok <= '0';"+"\n") 
+    f.write("\t\t\t\t"+"led_rgb_2 <= \"001\"; -- rojo"+"\n") 
+    f.write("\t\t\t"+"else"+"\n")  
+    f.write("\t\t\t\t"+"if N = "+str(N+2)+" then"+"\n")
+    f.write("\t\t\t\t\t"+"largo_ok <= '1';"+"\n") 
+    f.write("\t\t\t\t\t"+"led_rgb_2 <= \"010\"; -- verde"+"\n") 
+    f.write("\t\t\t\t"+"else"+"\n")
+    f.write("\t\t\t\t\t"+"largo_ok <= '0';"+"\n")
+    f.write("\t\t\t\t\t"+"led_rgb_2 <= \"001\"; -- rojo"+"\n")  
+    f.write("\t\t\t\t"+"end if;"+"\n")                
+    f.write("\t\t\t\t"+"if estado = lectura then"+"\n")
+    f.write("\t\t\t\t\t"+"led_rgb_2 <= \"001\"; -- rojo"+"\n")
+    f.write("\t\t\t\t"+"end if;   "+"\n")           
+    f.write("\t\t\t"+"end if;"+"\n")
+    f.write("\t\t"+"end if;"+"\n")
+    f.write("\t"+"end process;"+"\r\n")
+    
+    f.write("\t"+"paquete_valido : process(clk_i)"+"\n")
+    f.write("\t"+"begin"+"\n")
+    f.write("\t\t"+"if (clk_i = '1' and clk_i'event) then"+"\n")
+    f.write("\t\t\t"+"if rst_i = '1' then"+"\n")
+    f.write("\t\t\t\t"+"paquete <= (others => '0');"+"\n") 
+    f.write("\t\t\t"+"else"+"\n")                      
+    f.write("\t\t\t\t"+"if estado = final and largo_ok = '1' and tags_ok = '1' then"+"\n")
+    f.write("\t\t\t\t\t"+"paquete <= paquete_aux;"+"\n")
+    f.write("\t\t\t\t"+"end if;"+"\n")                        
+    f.write("\t\t\t"+"end if;"+"\n")
+    f.write("\t\t"+"end if;"+"\n")
+    f.write("\t"+"end process;"+"\r\n")   
+    
+    f.write("\t"+"w_data <= r_data;"+"\n")
+    f.write("\t"+"wr_uart <= r_disponible;"+"\r\n")
+        
+    f.write("end Behavioral;\r\n") 
+    
+    f.close()  # Close header file    
+    
+    print("Detector > Finalizado")     
+    
+#%%    
+def creando_registro(secciones,objetos):        
+    
+    print("Registro > Creando") 
+    
+    N_CVS = objetos[0]
+    N_SEM = objetos[1]
+    N_PAN = objetos[2]
+    N_MDC = objetos[3]
+    
+    N = N_CVS + 2*N_SEM + N_PAN + N_MDC
+    
+    M = 2*N_SEM + N_PAN + N_MDC
+    
+    NODO = "registro"
+    f = open("VHDL/"+NODO+".vhd", "w")
+
+    # Comentario inicial
+    f.write("-- " + NODO + ".vhdl : Achivo VHDL generado automaticamente\r\n")      
+    
+    incluir_librerias(f,False) # Incluir librerias
+        
+    # entidad registro
+    registro = "registro"
+    f.write("\t"+"entity "+registro+" is\n")
+    f.write("\t\t"+"port("+"\n")
+    f.write("\t\t\t"+"clk_i"+" : "+"in"+" "+"std_logic"+";\n")
+    f.write("\t\t\t"+"procesar"+" : "+"in"+" "+"std_logic"+";\n")
+    f.write("\t\t\t"+"procesado"+" : "+"out"+" "+"std_logic"+";\n")
+    f.write("\t\t\t"+"paquete_i"+" : "+"in"+" "+"std_logic_vector("+str(M)+"-1 downto 0)"+";\n")
+    f.write("\t\t\t"+"w_data"+" : "+"out"+" "+"std_logic_vector(8-1 downto 0)"+";\n")
+    f.write("\t\t\t"+"wr_uart"+   " : "+"out"+" "+"std_logic"+"; -- \"char_disp\"\n")
+    f.write("\t\t\t"+"rst_i"+   " : "+"in"+" "+"std_logic"+"\n")
+    f.write("\t\t"+");\n")
+    f.write("\t"+"end entity "+registro+";\r\n") 
+   
+    f.write("architecture Behavioral of "+registro+" is\r\n")            
+     
+    f.write("\t"+"type estados_t is (REINICIO,CICLO_1,CICLO_2);"+"\n") 
+    f.write("\t"+"signal estado, estado_siguiente : estados_t;"+"\n") 
+    f.write("\t"+"signal mux_out_s,ena_s,rst_s,reg_aux : std_logic;"+"\n") 
+    f.write("\t"+"signal mux_s : std_logic_vector(4-1 downto 0);"+"\r\n")  ### TODO:
+  
+    f.write("begin\r\n")
+       
+    f.write("\t"+"contador : process(clk_i)"+"\n")
+    f.write("\t"+"begin"+"\n")
+    f.write("\t\t"+"if (clk_i = '1' and clk_i'event) then"+"\n")
+    f.write("\t\t\t"+"if rst_i = '1' then"+"\n")
+    f.write("\t\t\t\t"+"mux_s <= \"0000\";"+"\n")               ### TODO:
+    f.write("\t\t\t"+"else"+"\n")
+    f.write("\t\t\t\t"+"if (ena_s = '1') then"+"\n")        
+    f.write("\t\t\t\t\t"+"if (mux_s = \"1111\") then"+"\n")     ### TODO:
+    f.write("\t\t\t\t\t\t"+"mux_s <= \"0000\";"+"\n")           ### TODO:
+    f.write("\t\t\t\t\t"+"else"+"\n")
+    f.write("\t\t\t\t\t\t"+"mux_s <= std_logic_vector(to_unsigned(to_integer(unsigned(mux_s)) + 1 , 4));"+"\n")     ### TODO:     
+    f.write("\t\t\t\t\t"+"end if;"+"\n")
+    f.write("\t\t\t\t"+"end if;"+"\n")
+    f.write("\t\t\t\t"+"if (estado = REINICIO) then"+"\n")
+    f.write("\t\t\t\t\t"+"mux_s <= \"0000\";"+"\n")             ### TODO:
+    f.write("\t\t\t\t"+"end if;"+"\n")             
+    f.write("\t\t\t"+"end if;"+"\n") 
+    f.write("\t\t"+"end if;"+"\n")
+    f.write("\t"+"end process;"+"\r\n")
+    
+    f.write("\t"+"multiplexor : process(paquete_i,mux_s)"+"\n")
+    f.write("\t"+"begin"+"\n")
+    f.write("\t\t"+"case mux_s is"+"\n")
+    f.write("\t\t\t"+"when \"0000\" => mux_out_s <= paquete_i(0);"+"\n") ### TODO:
+    f.write("\t\t\t"+"when \"0001\" => mux_out_s <= paquete_i(1);"+"\n") ### TODO:
+    f.write("\t\t\t"+"when \"0010\" => mux_out_s <= paquete_i(2);"+"\n") ### TODO:
+    f.write("\t\t\t"+"when \"0011\" => mux_out_s <= paquete_i(3);"+"\n") ### TODO:
+    f.write("\t\t\t"+"when \"0100\" => mux_out_s <= paquete_i(4);"+"\n") ### TODO:
+    f.write("\t\t\t"+"when \"0101\" => mux_out_s <= paquete_i(5);"+"\n") ### TODO:
+    f.write("\t\t\t"+"when \"0110\" => mux_out_s <= paquete_i(6);"+"\n") ### TODO:
+    f.write("\t\t\t"+"when \"0111\" => mux_out_s <= paquete_i(7);"+"\n") ### TODO:
+    f.write("\t\t\t"+"when \"1000\" => mux_out_s <= paquete_i(8);"+"\n") ### TODO:
+    f.write("\t\t\t"+"when \"1001\" => mux_out_s <= paquete_i(9);"+"\n") ### TODO:
+    f.write("\t\t\t"+"when \"1010\" => mux_out_s <= paquete_i(10);"+"\n") ### TODO:
+    f.write("\t\t\t"+"when \"1011\" => mux_out_s <= paquete_i(11);"+"\n") ### TODO:
+    f.write("\t\t\t"+"when \"1100\" => mux_out_s <= paquete_i(12);"+"\n") ### TODO:
+    f.write("\t\t\t"+"when \"1101\" => mux_out_s <= paquete_i(13);"+"\n") ### TODO:
+    f.write("\t\t\t"+"when \"1110\" => mux_out_s <= paquete_i(14);"+"\n") ### TODO:
+    f.write("\t\t\t"+"when others => mux_out_s <= '0';"+"\n")
+    f.write("\t\t"+"end case;"+"\n")     
+    f.write("\t"+"end process;"+"\r\n")   
+                  
+    f.write("\t"+"w_data <= \"00110001\" when mux_out_s = '1' else \"00110000\";"+"\r\n")
+
+    f.write("\t"+"FSM_reset : process(clk_i)"+"\n") 
+    f.write("\t"+"begin"+"\n") 
+    f.write("\t\t"+"if (clk_i = '1' and clk_i'event) then"+"\n") 
+    f.write("\t\t\t"+"if rst_i = '1' then"+"\n") 
+    f.write("\t\t\t\t"+"estado <= REINICIO;"+"\n")           
+    f.write("\t\t\t"+"else"+"\n")                  
+    f.write("\t\t\t\t"+"if (procesar = '1') then"+"\n")           
+    f.write("\t\t\t\t\t"+"estado <= estado_siguiente;"+"\n") 
+    f.write("\t\t\t\t"+"else"+"\n") 
+    f.write("\t\t\t\t\t"+"estado <= REINICIO;"+"\n") 
+    f.write("\t\t\t\t"+"end if;"+"\n") 
+    f.write("\t\t\t"+"end if;"+"\n")  
+    f.write("\t\t"+"end if;"+"\n") 
+    f.write("\t"+"end process;"+"\r\n") 
+    
+    f.write("\t"+"FSM : process(procesar,estado,mux_s)"+"\n") 
+    f.write("\t"+"begin"+"\n") 
+    f.write("\t\t"+"estado_siguiente <= estado;"+"\n")    
+    f.write("\t\t"+"case estado is"+"\n") 
+    f.write("\t\t\t"+"when REINICIO =>"+"\n") 
+    f.write("\t\t\t\t"+"wr_uart <= '0';"+"\n") 
+    f.write("\t\t\t\t"+"rst_s <= '1';"+"\n") 
+    f.write("\t\t\t\t"+"ena_s <= '0';"+"\n") 
+    f.write("\t\t\t\t"+"procesado <= '0';"+"\n") 
+    f.write("\t\t\t\t"+"reg_aux <= '0';"+"\n")  
+    f.write("\t\t\t\t"+"if (procesar = '1' and mux_s /= \"1111\" ) then"+"\n") 
+    f.write("\t\t\t\t\t"+"estado_siguiente <= CICLO_1;"+"\n") 
+    f.write("\t\t\t\t"+"end if;"+"\n") 
+    f.write("\t\t\t"+"when CICLO_1 =>"+"\n") 
+    f.write("\t\t\t\t"+"wr_uart <= '0';"+"\n") 
+    f.write("\t\t\t\t"+"rst_s <= '0';"+"\n") 
+    f.write("\t\t\t\t"+"ena_s <= '0';"+"\n") 
+    f.write("\t\t\t\t"+"--procesado <= '0';"+"\n")                
+    f.write("\t\t\t\t"+"estado_siguiente <= CICLO_2;"+"\n")              
+    f.write("\t\t\t"+"when CICLO_2 =>"+"\n") 
+    f.write("\t\t\t\t"+"wr_uart <= '1';"+"\n") 
+    f.write("\t\t\t\t"+"rst_s <= '0';"+"\n") 
+    f.write("\t\t\t\t"+"ena_s <= '1';"+"\n")               
+    f.write("\t\t\t\t"+"procesado <= '0';"+"\n") 
+    f.write("\t\t\t\t"+"reg_aux <= '0';"+"\n")          
+    f.write("\t\t\t\t"+"if mux_s = \"1110\" then"+"\n") 
+    f.write("\t\t\t\t\t"+"procesado <= '1';"+"\n") 
+    f.write("\t\t\t\t\t"+"reg_aux <= '1';"+"\n") 
+    f.write("\t\t\t\t\t"+"estado_siguiente <= REINICIO;"+"\n")            
+    f.write("\t\t\t\t"+"else"+"\n") 
+    f.write("\t\t\t\t\t"+"estado_siguiente <= CICLO_1;"+"\n") 
+    f.write("\t\t\t\t"+"end if;"+"\n") 
+    f.write("\t\t\t"+"when others => null;"+"\n") 
+    f.write("\t\t"+"end case;"+"\n") 
+    f.write("\t"+"end process;"+"\r\n") 
+        
+    f.write("end Behavioral;\r\n") 
+    
+    f.close()  # Close header file    
+    
+    print("Registro > Finalizado")     

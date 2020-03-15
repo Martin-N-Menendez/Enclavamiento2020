@@ -1,52 +1,39 @@
+-- detector.vhdl : Achivo VHDL generado automaticamente
+
 library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
 
-entity detector is
-	port(
-		clk_i: in std_logic;
-        	rst_i: in std_logic;
-		r_data: in std_logic_vector(8-1 downto 0);
-		r_disponible : in std_logic;
-		led_rgb_1  : out std_logic_vector(3-1 downto 0);
-		led_rgb_2  : out std_logic_vector(3-1 downto 0);
-		paquete: out std_logic_vector(21-1 downto 0);
-		procesar : in std_logic;
-		procesado : out std_logic;
-		N : in integer;
-		wr_uart : out std_logic;
-		w_data: out std_logic_vector(8-1 downto 0)
-	);
-end detector;
+	entity detector is
+		port(
+			clk_i : in std_logic;     
+			r_data : in std_logic_vector(8-1 downto 0);
+			r_disponible : in std_logic;
+			led_rgb_1 : out std_logic_vector(3-1 downto 0);
+			led_rgb_2 : out std_logic_vector(3-1 downto 0);
+			paquete : out std_logic_vector(21-1 downto 0);
+			procesar : in std_logic;
+			procesado : out std_logic;
+			N : in integer;
+			wr_uart : out std_logic;
+			w_data : out std_logic_vector(8-1 downto 0);
+			rst_i : in std_logic
+		);
+	end detector;
 
 architecture Behavioral of detector is
     
     type estados_t is (inicio,lectura,final,error);
-    signal estado, estado_siguiente : estados_t; 
-  
-    signal data_in :  std_logic_vector(8-1 downto 0);
-    
-    --signal data_ok: std_logic;
-    
-    --signal r_aux: std_logic;
-    
+    signal estado, estado_siguiente : estados_t;  
     shared variable contador : integer range 0 to 30 := 0;
-    signal ticks : integer range 0 to 407 := 0;
-    
-    signal paquete_aux : std_logic_vector(21-1 downto 0);
-   -- signal paquete_ready : std_logic;
-    
+    signal paquete_aux : std_logic_vector(21-1 downto 0);   
     signal nuevo : std_logic;
-    signal largo_ok : std_logic;
-    signal tags_ok : std_logic;
-    signal tags_izq : std_logic;
-    signal tags_der : std_logic;
-    
+    signal largo_ok,tags_ok : std_logic;
+    signal tags_izq,tags_der : std_logic;   
     constant tag_inicial : std_logic_vector(8-1 downto 0) := "00111100"; -- r_data = '<'
     constant tag_final : std_logic_vector(8-1 downto 0) := "00111110"; -- r_data = '>'
     constant char_0 : std_logic_vector(8-1 downto 0) := "00110000"; -- r_data = '0'
-    constant char_1 : std_logic_vector(8-1 downto 0) := "00110001"; -- r_data = '1'
-    
+    constant char_1 : std_logic_vector(8-1 downto 0) := "00110001"; -- r_data = '1' 
 
 begin
     
@@ -56,17 +43,16 @@ begin
             if rst_i = '1' then          
                 estado <= inicio;
             else
-            if procesar = '1' then
-                estado <= inicio;
-            else
-                estado <= estado_siguiente; 
-            end if;
-                      
+				if procesar = '1' then
+					estado <= inicio;
+				else
+					estado <= estado_siguiente; 
+				end if;                
             end if;
         end if;
     end process;
    
-   incrementar_contador : process(clk_i)
+    incrementar_contador : process(clk_i)
     begin
         if (clk_i = '1' and clk_i'event) then
             if rst_i = '1' then          
@@ -80,7 +66,7 @@ begin
                     end if;
                 end if;  
                 if contador > 21 and contador < 23 then 
-                     contador := contador + 1;
+                    contador := contador + 1;
                 end if;   
                 if estado = final or estado = error then
                     contador := 0;
@@ -89,8 +75,8 @@ begin
         end if;
     end process;
     
-   empaquetado : process(clk_i) 
-   begin 
+    empaquetado : process(clk_i) 
+    begin 
         if (clk_i = '1' and clk_i'event) then
             if rst_i = '1' then          
                 paquete_aux <= (others => '0');
@@ -122,15 +108,12 @@ begin
                 estado_siguiente <= inicio;
                 tags_izq <= '0'; 
                 tags_der <= '0';
-            else
-            
+            else          
                 estado_siguiente <= estado;   
                 -- LED4 = RGB2 | LED5 => RGB1
                 -- BGR -> 001 = R | 010 = G | 100 = B
-                case(estado) is                  
-                            
+                case(estado) is                                             
                   when inicio =>            
-                    --led_rgb_1 <= "100";   -- azul LD5
                     tags_izq <= '0'; 
                     if r_data = tag_inicial then -- r_data = '<'
                         tags_izq <= '1';
@@ -147,49 +130,21 @@ begin
                             estado_siguiente <= error;                       
                         end if;                      
                     else
-                        tags_der <= '0';
-                        --led_rgb_1 <= "101"; -- azul
-                        --led_rgb_2 <= "100"; -- azul
+						tags_der <= '0';
                     end if; 
                   when final =>  
-                    --led_rgb_1 <= "111"; -- blanco   
-                    --led_rgb_2 <= "010"; -- verde
---                    if r_data = tag_inicial then -- r_data = '<'
---                        tags_izq <= '1';
---                        estado_siguiente <= lectura;                    
---                    end if; 
-                       if procesar = '1' then
-                            tags_izq <= '0'; 
-                            estado_siguiente <= inicio;
-                       end if;          
+					if procesar = '1' then
+						estado_siguiente <= inicio;
+					end if;          
                   when error => 
-                    --led_rgb_1 <= "111"; -- blanco        
-                    --led_rgb_2 <= "001"; -- rojo
                     tags_izq <= '0';
                     tags_der <= '0';
-                    
-                    --if r_data = tag_inicial then -- r_data = '<'
-                    --    tags_izq <= '1';
-                        estado_siguiente <= inicio;                    
-                    --end if;                
+                    estado_siguiente <= inicio;                                       
                   when others => null;
                 end case;
              end if;
           end if;
       end process;
-    
-    lector_datos : process(clk_i)
-    begin
-        if (clk_i = '1' and clk_i'event) then
-            if rst_i = '1' then
-                data_in <= (others => '0'); 
-            else  
-                if r_disponible = '1' and r_data /= "00000000" then
-                    data_in <= r_data; 
-                end if;
-            end if;
-        end if;
-    end process;
     
     paquete_listo : process(clk_i)
     begin
@@ -214,13 +169,11 @@ begin
                 led_rgb_1 <= "001"; -- rojo
             else  
                 tags_ok <= tags_izq and tags_der;
-
                 if tags_ok = '1' then
                     led_rgb_1 <= "010"; -- verde
                 else
                     led_rgb_1 <= "001"; -- rojo
-                end if;
-                
+                end if;               
                 if estado = lectura then
                     led_rgb_1 <= "001"; -- rojo
                 end if;
@@ -241,12 +194,10 @@ begin
                 else
                     largo_ok <= '0';
                     led_rgb_2 <= "001"; -- rojo  
-                end if;
-                
+                end if;              
                 if estado = lectura then
                     led_rgb_2 <= "001"; -- rojo
-                end if;
-                
+                end if;              
             end if;
         end if;
     end process;
@@ -256,21 +207,16 @@ begin
         if (clk_i = '1' and clk_i'event) then
             if rst_i = '1' then
                 paquete <= (others => '0'); 
-            else  
-                       
+            else                      
                 if estado = final and largo_ok = '1' and tags_ok = '1' then
                     paquete <= paquete_aux;
-                end if;
-                          
+                end if;                        
             end if;
         end if;
-    end process;
-    
+    end process;   
     
     w_data <= r_data;
     wr_uart <= r_disponible;
-    
-    --w_data <= data_in;    -- Agrega 0 y rompe todo
 
-       
 end Behavioral;
+
