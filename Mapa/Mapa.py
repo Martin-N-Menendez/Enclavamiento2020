@@ -774,7 +774,7 @@ def generar_mapa(tabla):
         
         crear_modulo_vhdl(secciones,tabla)
         
-    exportar_tablas(df)
+        exportar_tablas(df)
 
 #%% 
 def conectar_terminal():
