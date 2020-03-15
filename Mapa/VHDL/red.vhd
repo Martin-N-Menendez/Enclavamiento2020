@@ -331,4 +331,4 @@ begin
 		semaforos_o.lsb(6) <= sem_lsb_o_7;
 		semaforos_o.msb(6) <= sem_msb_o_7;
 		procesado <= procesar;
-end Behavioral;
+end Behavioral;

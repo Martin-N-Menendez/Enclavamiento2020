@@ -1,13 +1,11 @@
--- fifo.vhdl : Achivo VHDL generado automaticamente
-
+-- fifo.vhdl : Achivo VHDL generado automaticamente
 library IEEE;
 use IEEE.std_logic_1164.all;
-use IEEE.numeric_std.all;
-
+use IEEE.numeric_std.all;
 	entity fifo is
 		generic(
-			B : natural := 8; -- number of bits
-			W : natural := 4  -- number of address bits
+			B : natural := 8; -- number of bits;
+			W : natural := 4  -- number of address bits;
 		);
 		port(
 			clk, reset : in std_logic;
@@ -16,20 +14,16 @@ use IEEE.numeric_std.all;
 			empty, full : out std_logic;
 			r_data : out std_logic_vector(B-1 downto 0)
 		);
-	end fifo;
-
-architecture arch of fifo is
-
+	end entity fifo;
+architecture Behavioral of fifo is
 	type reg_file_type is array (2**W-1 downto 0) of std_logic_vector(B-1 downto 0);
 	signal array_reg: reg_file_type;
 	signal w_ptr_reg, w_ptr_next, w_ptr_succ: std_logic_vector(W-1 downto 0);
 	signal r_ptr_reg, r_ptr_next, r_ptr_succ: std_logic_vector(W-1 downto 0);
 	signal full_reg, empty_reg, full_next, empty_next: std_logic;
 	signal wr_op: std_logic_vector (1 downto 0);
-	signal wr_en: std_logic;
-
-begin
-
+	signal wr_en: std_logic;
+begin
 	----------------
 	-- register file
 	----------------
@@ -42,14 +36,11 @@ begin
 				array_reg(to_integer(unsigned(w_ptr_reg))) <= w_data;
 			end if;
 		end if;
-	end process;
-	
+		end process;
 	-- read port
-	r_data <= array_reg(to_integer(unsigned(r_ptr_reg)));
-	
+	r_data <= array_reg(to_integer(unsigned(r_ptr_reg)));
 	-- write enabled only when FIFO is not full
-	wr_en <= wr and (not full_reg);
-	
+	wr_en <= wr and (not full_reg);
 	--
 	-- fifo control logic
 	--
@@ -66,22 +57,19 @@ begin
 			r_ptr_reg <= r_ptr_next;
 			full_reg <= full_next;
 			empty_reg <= empty_next;
-		end if ;
-	end process;
-
+		end if;
+	end process
 	-- successive pointer values
 	w_ptr_succ <= std_logic_vector(unsigned(w_ptr_reg) + 1);
-	r_ptr_succ <= std_logic_vector(unsigned(r_ptr_reg) + 1);
-
+	r_ptr_succ <= std_logic_vector(unsigned(r_ptr_reg) + 1);
 	-- next-state logic for read and write pointers
-	wr_op <= wr & rd;
-	
+	wr_op <= wr & rd;
 	process (w_ptr_reg, w_ptr_succ, r_ptr_reg, r_ptr_succ ,wr_op, empty_reg, full_reg)
 	begin
 		w_ptr_next <= w_ptr_reg;
 		r_ptr_next <= r_ptr_reg;
 		full_next <= full_reg;
-		empty_next <= empty_reg;	
+		empty_next <= empty_reg;
 		case wr_op is
 			when "00" => -- no op
 			when "01" => -- read
@@ -104,10 +92,8 @@ begin
 				w_ptr_next <= w_ptr_succ;
 				r_ptr_next <= r_ptr_succ;
 		end case;
-	end process;
-
+	end process;
 	-- output
 	full <= full_reg;
-	empty <= empty_reg;
-	
-end arch;
+	empty <= empty_reg;
+end Behavioral;

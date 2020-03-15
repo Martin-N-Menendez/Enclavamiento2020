@@ -101,4 +101,4 @@ begin
 	rgb_2 <= led_rgb_2;
 	leds <= led_s;
 	reset_uart <= rst_i or reset_s;
-end Behavioral;
+end Behavioral;

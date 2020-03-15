@@ -155,4 +155,4 @@ architecture Behavioral of sistema is
 				end if;
 			end if;
 		end process;
-end Behavioral;
+end Behavioral;

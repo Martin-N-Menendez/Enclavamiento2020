@@ -111,4 +111,4 @@ begin
 		Cambios_o => mdc_s_o,
 		Reset => Reset
 		);
-end Behavioral;
+end Behavioral;

@@ -17,13 +17,11 @@ def crear_modulo_vhdl(secciones,tabla):
     
     #creando_uart_baud_gen(secciones,objetos) # FALTA
     
-    #creando_uart_rx(secciones,objetos) # FALTA
-    
     #creando_uart_tx(secciones,objetos) # FALTA
     
     #creando_uart_rx(secciones,objetos) # FALTA
     
-    #creando_fifo(secciones,objetos) # FALTA
+    creando_fifo(secciones,objetos)
     
     creando_sistema(secciones,objetos)
     
@@ -43,7 +41,7 @@ def crear_modulo_vhdl(secciones,tabla):
     
     creando_registro(secciones,objetos) # FALTA generalizar!
     
-    #creando_conector(secciones,objetos) # FALTA
+    creando_selector(secciones,objetos)
     
     print("%"*25+" Finalizando creacion de modulos "+"%"*25) 
 
@@ -293,7 +291,7 @@ def creando_enclavamiento(secciones,objetos):
     
     instanciar_red(f,"red",objetos)
     
-    f.write("end Behavioral;\r\n") 
+    f.write("end Behavioral;") 
     
     f.close()  # Close header file    
     
@@ -411,7 +409,7 @@ def creando_separador(secciones,objetos):
     f.write("\t\t"+"end if;\n")
     f.write("\t"+"end process;\r\n")    
     
-    f.write("end Behavioral;\r\n") 
+    f.write("end Behavioral;") 
     
     f.close()  # Close header file    
     
@@ -510,7 +508,7 @@ def creando_mediador(secciones,objetos):
     f.write("\t\t"+"end if;\n")
     f.write("\t"+"end process;\r\n")   
          
-    f.write("end Behavioral;\r\n") 
+    f.write("end Behavioral;") 
     
     f.close()  # Close header file    
     
@@ -945,7 +943,7 @@ def creando_red(secciones,objetos,tabla,test = False):
     
     f.write("\t\t"+"procesado <= procesar;\n")
     
-    f.write("end Behavioral;\r\n") 
+    f.write("end Behavioral;") 
     
     f.close()  # Close header file    
     
@@ -1032,7 +1030,7 @@ def creando_nodo(secciones,objetos):
         f.write("\t\t"+"end if;\n")
         f.write("\t"+"end process;\r\n")   
          
-        f.write("end Behavioral;\r\n") 
+        f.write("end Behavioral;") 
         
         f.close()  # Close header file    
     
@@ -1118,7 +1116,7 @@ def creando_cambio(secciones,objetos):
         f.write("\t\t"+"end if;\n")
         f.write("\t"+"end process;\r\n")   
          
-        f.write("end Behavioral;\r\n") 
+        f.write("end Behavioral;") 
         
         f.close()  # Close header file    
     
@@ -1401,7 +1399,7 @@ def creando_sistema(secciones,objetos):
     f.write("\t\t\t"+"end if;"+"\n")
     f.write("\t\t"+"end process;"+"\r\n") 
         
-    f.write("end Behavioral;\r\n") 
+    f.write("end Behavioral;") 
     
     f.close()  # Close header file    
     
@@ -1548,7 +1546,7 @@ def creando_global(secciones,objetos):
     f.write("\t"+"leds <= led_s;"+"\n")
     f.write("\t"+"reset_uart <= rst_i or reset_s;"+"\r\n") 
         
-    f.write("end Behavioral;\r\n") 
+    f.write("end Behavioral;") 
     
     f.close()  # Close header file    
     
@@ -1630,7 +1628,7 @@ def creando_uart_control(secciones,objetos):
     f.write("\t\t"+"end if;"+"\n")
     f.write("\t"+"end process;"+"\r\n") 
         
-    f.write("end Behavioral;\r\n") 
+    f.write("end Behavioral;") 
     
     f.close()  # Close header file    
     
@@ -1878,7 +1876,7 @@ def creando_detector(secciones,objetos):
     f.write("\t"+"w_data <= r_data;"+"\n")
     f.write("\t"+"wr_uart <= r_disponible;"+"\r\n")
         
-    f.write("end Behavioral;\r\n") 
+    f.write("end Behavioral;") 
     
     f.close()  # Close header file    
     
@@ -2024,8 +2022,217 @@ def creando_registro(secciones,objetos):
     f.write("\t\t"+"end case;"+"\n") 
     f.write("\t"+"end process;"+"\r\n") 
         
-    f.write("end Behavioral;\r\n") 
+    f.write("end Behavioral;") 
     
     f.close()  # Close header file    
     
-    print("Registro > Finalizado")     
+    print("Registro > Finalizado")
+
+#%%    
+def creando_selector(secciones,objetos):        
+    
+    print("Selector > Creando") 
+    
+    N_CVS = objetos[0]
+    N_SEM = objetos[1]
+    N_PAN = objetos[2]
+    N_MDC = objetos[3]
+    
+    N = N_CVS + 2*N_SEM + N_PAN + N_MDC
+    
+    M = 2*N_SEM + N_PAN + N_MDC
+    
+    NODO = "selector"
+    f = open("VHDL/"+NODO+".vhd", "w")
+
+    # Comentario inicial
+    f.write("-- " + NODO + ".vhdl : Achivo VHDL generado automaticamente\r\n")      
+    
+    incluir_librerias(f,False) # Incluir librerias
+        
+    # entidad selector
+    selector = "selector"
+    f.write("\t"+"entity "+selector+" is\n")
+    f.write("\t\t"+"port("+"\n")
+    f.write("\t\t\t"+"clk_i"+" : "+"in"+" "+"std_logic"+";\n")
+    f.write("\t\t\t"+"switch"+" : "+"in"+" "+"std_logic"+";\n")
+    f.write("\t\t\t"+"leds"+" : "+"out"+" "+"std_logic_vector(2-1 downto 0)"+";\n")
+    f.write("\t\t\t"+"wr_uart_1"+" : "+"in"+" "+"std_logic"+";\n")
+    f.write("\t\t\t"+"wr_uart_2"+" : "+"in"+" "+"std_logic"+";\n")
+    f.write("\t\t\t"+"wr_uart_3"+" : "+"out"+" "+"std_logic"+";\n")
+    f.write("\t\t\t"+"w_data_1"+" : "+"in"+" "+"std_logic_vector(8-1 downto 0)"+";\n")
+    f.write("\t\t\t"+"w_data_2"+" : "+"in"+" "+"std_logic_vector(8-1 downto 0)"+";\n")
+    f.write("\t\t\t"+"w_data_3"+" : "+"out"+" "+"std_logic_vector(8-1 downto 0)"+";\n")
+    f.write("\t\t\t"+"rst_i"+   " : "+"in"+" "+"std_logic"+"\n")
+    f.write("\t\t"+");\n")
+    f.write("\t"+"end entity "+selector+";\r\n") 
+   
+    f.write("architecture Behavioral of "+selector+" is\r\n")            
+     
+    f.write("\t"+"signal disp_aux : std_logic_vector(8-1 downto 0);"+"\r\n") 
+  
+    f.write("begin\r\n")
+       
+    f.write("\t"+"switches : process(clk_i)"+"\n")   
+    f.write("\t"+"begin"+"\n")
+    f.write("\t\t"+"if (clk_i = '1' and clk_i'event) then"+"\n")
+    f.write("\t\t\t"+"if rst_i = '1' then"+"\n")
+    f.write("\t\t\t\t"+"w_data_3 <= \"00000000\";"+"\n")
+    f.write("\t\t\t\t"+"wr_uart_3 <= '0';"+"\n")
+    f.write("\t\t\t"+"else"+"\n") 
+    f.write("\t\t\t\t"+"if switch = '1' then"+"\n")                                    
+    f.write("\t\t\t\t\t"+"disp_aux <= w_data_2;"+"\n")                  
+    f.write("\t\t\t\t\t"+"w_data_3 <= disp_aux;"+"\n")                               
+    f.write("\t\t\t\t\t"+"wr_uart_3 <= wr_uart_2;"+"\n")                            
+    f.write("\t\t\t\t\t"+"--leds <= \"10\";"+"\n")
+    f.write("\t\t\t\t"+"else"+"\n")         
+    f.write("\t\t\t\t\t"+"disp_aux <= w_data_1;"+"\n")                   
+    f.write("\t\t\t\t\t"+"w_data_3 <= disp_aux;"+"\n")                               
+    f.write("\t\t\t\t\t"+"wr_uart_3 <= wr_uart_1;"+"\n")
+    f.write("\t\t\t\t\t"+"--leds <= \"01\";"+"\n")
+    f.write("\t\t\t\t"+"end if;"+"\n")
+    f.write("\t\t\t"+"end if;"+"\n")
+    f.write("\t\t"+"end if;"+"\n")
+    f.write("\t"+"end process;"+"\r\n")
+        
+    f.write("end Behavioral;") 
+    
+    f.close()  # Close header file    
+    
+    print("Selector > Finalizado")    
+
+#%%    
+def creando_fifo(secciones,objetos):        
+    
+    print("FIFO > Creando") 
+    
+    N_CVS = objetos[0]
+    N_SEM = objetos[1]
+    N_PAN = objetos[2]
+    N_MDC = objetos[3]
+    
+    N = N_CVS + 2*N_SEM + N_PAN + N_MDC
+    
+    M = 2*N_SEM + N_PAN + N_MDC
+    
+    NODO = "fifo"
+    f = open("VHDL/"+NODO+".vhd", "w")
+
+    # Comentario inicial
+    f.write("-- " + NODO + ".vhdl : Achivo VHDL generado automaticamente\r\n")      
+    
+    incluir_librerias(f,False) # Incluir librerias
+        
+    # entidad fifo
+    fifo = "fifo"
+    f.write("\t"+"entity "+fifo+" is\n")
+    f.write("\t\t"+"generic("+"\n")
+    f.write("\t\t\t"+"B"+" : "+"natural"+" := "+"8; -- number of bits"+";\n")
+    f.write("\t\t\t"+"W"+" : "+"natural"+" := "+"4  -- number of address bits"+";\n")
+    f.write("\t\t"+");\n")
+    f.write("\t\t"+"port("+"\n")
+    f.write("\t\t\t"+"clk, reset"+" : "+"in"+" "+"std_logic"+";\n")
+    f.write("\t\t\t"+"rd, wr"+" : "+"in"+" "+"std_logic"+";\n")
+    f.write("\t\t\t"+"w_data"+" : "+"in"+" "+"std_logic_vector(B-1 downto 0)"+";\n")
+    f.write("\t\t\t"+"empty, full"+" : "+"out"+" "+"std_logic"+";\n")
+    f.write("\t\t\t"+"r_data"+   " : "+"out"+" "+"std_logic_vector(B-1 downto 0)"+"\n")
+    f.write("\t\t"+");\n")
+    f.write("\t"+"end entity "+fifo+";\r\n") 
+   
+    f.write("architecture Behavioral of "+fifo+" is\r\n")            
+       
+    f.write("\t"+"type reg_file_type is array (2**W-1 downto 0) of std_logic_vector(B-1 downto 0);"+"\n") 
+    f.write("\t"+"signal array_reg: reg_file_type;"+"\n")
+    f.write("\t"+"signal w_ptr_reg, w_ptr_next, w_ptr_succ: std_logic_vector(W-1 downto 0);"+"\n")
+    f.write("\t"+"signal r_ptr_reg, r_ptr_next, r_ptr_succ: std_logic_vector(W-1 downto 0);"+"\n")
+    f.write("\t"+"signal full_reg, empty_reg, full_next, empty_next: std_logic;"+"\n")
+    f.write("\t"+"signal wr_op: std_logic_vector (1 downto 0);"+"\n")
+    f.write("\t"+"signal wr_en: std_logic;"+"\r\n")
+    
+    f.write("begin\r\n")
+       
+    f.write("\t"+"----------------"+"\n")
+    f.write("\t"+"-- register file"+"\n")
+    f.write("\t"+"----------------"+"\n")
+    f.write("\t"+"process(clk, reset)"+"\n")
+    f.write("\t"+"begin"+"\n")
+    f.write("\t\t"+"if (reset = '1') then"+"\n")
+    f.write("\t\t\t"+"array_reg <= (others => (others => '0'));"+"\n")
+    f.write("\t\t"+"elsif (clk'event and clk = '1') then"+"\n")
+    f.write("\t\t\t"+"if wr_en = '1' then"+"\n")
+    f.write("\t\t\t\t"+"array_reg(to_integer(unsigned(w_ptr_reg))) <= w_data;"+"\n")
+    f.write("\t\t\t"+"end if;"+"\n")
+    f.write("\t\t"+"end if;"+"\n")
+    f.write("\t\t"+"end process;"+"\r\n")
+	
+    f.write("\t"+"-- read port"+"\n")
+    f.write("\t"+"r_data <= array_reg(to_integer(unsigned(r_ptr_reg)));"+"\r\n")
+	
+    f.write("\t"+"-- write enabled only when FIFO is not full"+"\n")
+    f.write("\t"+"wr_en <= wr and (not full_reg);"+"\r\n")
+         
+    f.write("\t"+"--"+"\n")
+    f.write("\t"+"-- fifo control logic"+"\n")
+    f.write("\t"+"--"+"\n")
+    f.write("\t"+"-- register for read and write pointers"+"\n")
+    f.write("\t"+"process(clk, reset)"+"\n")
+    f.write("\t"+"begin"+"\n")
+    f.write("\t\t"+"if (reset = '1') then"+"\n")
+    f.write("\t\t\t"+"w_ptr_reg <= ( others => '0');"+"\n")
+    f.write("\t\t\t"+"r_ptr_reg <= ( others => '0');"+"\n")
+    f.write("\t\t\t"+"full_reg <= '0';"+"\n")
+    f.write("\t\t\t"+"empty_reg <= '1';"+"\n")
+    f.write("\t\t"+"elsif (clk'event and clk = '1') then	"+"\n")
+    f.write("\t\t\t"+"w_ptr_reg <= w_ptr_next;"+"\n")
+    f.write("\t\t\t"+"r_ptr_reg <= r_ptr_next;"+"\n")
+    f.write("\t\t\t"+"full_reg <= full_next;"+"\n")
+    f.write("\t\t\t"+"empty_reg <= empty_next;"+"\n")
+    f.write("\t\t"+"end if;"+"\n")
+    f.write("\t"+"end process"+"\r\n")
+
+    f.write("\t"+"-- successive pointer values"+"\n")
+    f.write("\t"+"w_ptr_succ <= std_logic_vector(unsigned(w_ptr_reg) + 1);"+"\n")
+    f.write("\t"+"r_ptr_succ <= std_logic_vector(unsigned(r_ptr_reg) + 1);"+"\r\n")
+
+    f.write("\t"+"-- next-state logic for read and write pointers"+"\n")
+    f.write("\t"+"wr_op <= wr & rd;"+"\r\n")
+	
+    f.write("\t"+"process (w_ptr_reg, w_ptr_succ, r_ptr_reg, r_ptr_succ ,wr_op, empty_reg, full_reg)"+"\n")
+    f.write("\t"+"begin"+"\n")
+    f.write("\t\t"+"w_ptr_next <= w_ptr_reg;"+"\n")
+    f.write("\t\t"+"r_ptr_next <= r_ptr_reg;"+"\n")
+    f.write("\t\t"+"full_next <= full_reg;"+"\n")
+    f.write("\t\t"+"empty_next <= empty_reg;"+"\n")	
+    f.write("\t\t"+"case wr_op is"+"\n")
+    f.write("\t\t\t"+"when \"00\" => -- no op"+"\n")
+    f.write("\t\t\t"+"when \"01\" => -- read"+"\n")
+    f.write("\t\t\t\t"+"if (empty_reg /= '1') then -- not empty"+"\n")
+    f.write("\t\t\t\t\t"+"r_ptr_next <= r_ptr_succ;"+"\n")
+    f.write("\t\t\t\t\t"+"full_next <= '0';"+"\n")
+    f.write("\t\t\t\t\t"+"if (r_ptr_succ=w_ptr_reg) then"+"\n")
+    f.write("\t\t\t\t\t\t"+"empty_next <= '1';"+"\n")
+    f.write("\t\t\t\t\t"+"end if;"+"\n")
+    f.write("\t\t\t\t"+"end if;"+"\n")
+    f.write("\t\t\t"+"when \"10\" => -- write"+"\n")
+    f.write("\t\t\t\t"+"if (full_reg /= '1') then -- not full"+"\n")
+    f.write("\t\t\t\t\t"+"w_ptr_next <= w_ptr_succ;"+"\n")
+    f.write("\t\t\t\t\t"+"empty_next <= '0';"+"\n")
+    f.write("\t\t\t\t\t"+"if (w_ptr_succ = r_ptr_reg) then"+"\n")
+    f.write("\t\t\t\t\t\t"+"full_next <= '1';"+"\n")
+    f.write("\t\t\t\t\t"+"end if;"+"\n")
+    f.write("\t\t\t\t"+"end if;"+"\n")
+    f.write("\t\t\t"+"when others => -- write / read;"+"\n")
+    f.write("\t\t\t\t"+"w_ptr_next <= w_ptr_succ;"+"\n")
+    f.write("\t\t\t\t"+"r_ptr_next <= r_ptr_succ;"+"\n")
+    f.write("\t\t"+"end case;"+"\n")
+    f.write("\t"+"end process;"+"\r\n")
+
+    f.write("\t"+"-- output"+"\n")
+    f.write("\t"+"full <= full_reg;"+"\n")
+    f.write("\t"+"empty <= empty_reg;"+"\r\n")
+        
+    f.write("end Behavioral;") 
+    
+    f.close()  # Close header file    
+    
+    print("FIFO > Finalizado")    
