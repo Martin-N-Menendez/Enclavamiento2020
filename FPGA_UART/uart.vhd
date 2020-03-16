@@ -4,18 +4,15 @@ use ieee.numeric_std.all;
 
 entity uart is
 	generic(
-		-- Default setting:
 		-- 19200 baud, 8 data bits, 1 stop bit, 2^2 FIFO
-		DBIT: integer:= 8; -- # data bits
-		SB_TICK: integer:= 16; 	-- # ticks for stop bits, 16/24/32
+		DBIT: integer := 8; -- # data bits
+		SB_TICK: integer := 16;	-- # ticks for stop bits, 16/24/32
 								-- for 1/1.5/2 stop bits
-		-- DVSR: integer:= 163; 	-- baud rate divisor
-								-- -- DVSR = 50M / (16 * baud rate)
-		DVSR: integer:= 326; 	-- baud rate divisor
-								-- DVSR = 100M / (16 * baud rate)
-		-- DVSR_BIT: integer:= 8; 	-- # bits of DVSR
-		DVSR_BIT: integer:= 9; 	-- # bits of DVSR
-		FIFO_W: integer:= 4 	-- # addr bits of FIFO
+		DVSR: integer := 407; 	-- baud rate divisor
+								-- DVSR = 125M / (16 * baud rate)
+		DVSR_BIT: integer := 9; 	-- # bits of DVSR
+		FIFO_W_TX: integer := 4; 	-- # addr bits of FIFO_TX
+		FIFO_W_RX: integer := 4 	-- # addr bits of FIFO_TX
 								-- # words in FIFO=2^FIFO_W
 	);
 	port (
@@ -36,7 +33,9 @@ architecture str_arch of uart is
 	signal rx_data_out: std_logic_vector(7 downto 0);
 	signal tx_empty, tx_fifo_not_empty: std_logic;
 	signal tx_done_tick: std_logic;
+	
 begin
+
 	baud_gen_unit: entity work.mod_m_counter(arch)
 		generic map(M => DVSR, N => DVSR_BIT)
 		port map(clk => clk, reset => reset,
@@ -49,13 +48,13 @@ begin
 	             d_out => rx_data_out);
 				 
 	fifo_rx_unit: entity work.fifo(arch)
-		generic map(B => DBIT, W => FIFO_W)
+		generic map(B => DBIT, W => FIFO_W_RX)
 		port map(clk => clk, reset => reset, rd => rd_uart,
 				 wr => rx_done_tick, w_data => rx_data_out,
 				 empty => rx_empty, full => open, r_data => r_data);
 				 
 	fifo_tx_unit: entity work.fifo(arch)
-		generic map(B => DBIT, W => FIFO_W)
+		generic map(B => DBIT, W => FIFO_W_TX)
 		port map(clk => clk, reset => reset, rd => tx_done_tick,
 				 wr=>wr_uart, w_data=>w_data, empty => tx_empty,
 				 full=>tx_full, r_data=>tx_fifo_out);

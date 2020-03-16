@@ -65,12 +65,12 @@ begin
 	
 	uart_inst: entity work.uart
 		generic map(
-			DVSR		=> 407,	-- baud rate divisor
+			DVSR		    => 407,	-- baud rate divisor
 								-- DVSR = 100M / (16 * baud rate)
 								-- baud rate = 19200
-			DVSR_BIT	=> 9, 	-- # bits of DVSR
-			FIFO_W		=> 6 	-- # addr bits of FIFO
-								-- # words in FIFO=2^FIFO_W			
+			DVSR_BIT	    => 9, 	-- # bits of DVSR
+			FIFO_W_RX		=> 6, 	-- # addr bits of FIFO # words in FIFO=2^FIFO_W	
+			FIFO_W_TX		=> 6 	-- # addr bits of FIFO # words in FIFO=2^FIFO_W						-- 		
 		)
 		port map(
 			clk 		=> clk_i,

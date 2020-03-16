@@ -29,9 +29,6 @@ use work.my_package.all;
 	
 architecture Behavioral of separador is
 
-	Signal cv_s : std_logic_vector(N_CVS-1 downto 0);
-	Signal sem_s_i,sem_s_o : sems_type;
-	Signal mdc_s_i,mdc_s_o : std_logic;
 begin
 
 	process(Clock,Reset)

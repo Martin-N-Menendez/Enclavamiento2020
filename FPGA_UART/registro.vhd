@@ -32,13 +32,13 @@ begin
                 mux_s <= "0000";
             else
                 if (ena_s = '1') then        
-                    if (mux_s = "1111") then
-                        mux_s <= "0000";                
-                    else
-                        mux_s <= std_logic_vector(to_unsigned(to_integer(unsigned(mux_s)) + 1 , 4));         
+                    if (mux_s /= "1111") then
+                        if (estado = CICLO_1 or estado = CICLO_2) then
+                            mux_s <= std_logic_vector(to_unsigned(to_integer(unsigned(mux_s)) + 1 , 4));   
+                        end if;      
                     end if;
                 end if;
-                if (estado = REINICIO) then
+                if (procesar = '0') then
                     mux_s <= "0000";   
                 end if;             
             end if; 

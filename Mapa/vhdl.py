@@ -1,4 +1,5 @@
 import numpy as np
+import math
   
 def crear_modulo_vhdl(secciones,tabla):
 
@@ -13,9 +14,9 @@ def crear_modulo_vhdl(secciones,tabla):
     
     creando_uart_control(secciones,objetos) 
     
-    #creando_uart_instancia(secciones,objetos) # FALTA
+    creando_uart(secciones,objetos)
     
-    #creando_uart_baud_gen(secciones,objetos) # FALTA
+    creando_uart_baud_gen(secciones,objetos)
     
     creando_uart_tx(secciones,objetos)
     
@@ -39,7 +40,7 @@ def crear_modulo_vhdl(secciones,tabla):
     
     creando_cambio(secciones,objetos)
     
-    creando_registro(secciones,objetos) # FALTA generalizar!
+    creando_registro(secciones,objetos)
     
     creando_selector(secciones,objetos)
     
@@ -1495,9 +1496,10 @@ def creando_global(secciones,objetos):
     f.write("\t"+"uart_inst : entity work.uart"+"\n")
     
     f.write("\t\t"+"generic map("+"\n")
-    f.write("\t\t\t"+"DVSR      => 407,	-- baud rate divisor DVSR = 100M / (16 * baud rate) baud rate = 19200"+"\n")
+    f.write("\t\t\t"+"DVSR      => 407,	-- baud rate divisor DVSR = 125M / (16 * baud rate) baud rate = 19200"+"\n")
     f.write("\t\t\t"+"DVSR_BIT  => 9,   --  bits of DVSR"+"\n")
-    f.write("\t\t\t"+"FIFO_W	=> 6 	--  addr bits of FIFO words in FIFO=2^FIFO_W "+"\n")			
+    f.write("\t\t\t"+"FIFO_W_RX	=> "+str(int(round(np.log2(N)))+1)+", 	--  addr bits of FIFO words in FIFO=2^FIFO_W "+"\n")
+    f.write("\t\t\t"+"FIFO_W_TX	=> "+str(int(round(np.log2(M)))+1)+" 	--  addr bits of FIFO words in FIFO=2^FIFO_W "+"\n")			
     f.write("\t\t"+")"+"\n")
     f.write("\t\t"+"port map("+"\n")
     f.write("\t\t\t"+"clk 		=> clk_i,"+"\n")
@@ -1894,7 +1896,7 @@ def creando_registro(secciones,objetos):
     
     N = N_CVS + 2*N_SEM + N_PAN + N_MDC
     
-    M = 2*N_SEM + N_PAN + N_MDC
+    M = 2*N_SEM + N_PAN + N_MDC 
     
     NODO = "registro"
     f = open("VHDL/"+NODO+".vhd", "w")
@@ -1923,7 +1925,7 @@ def creando_registro(secciones,objetos):
     f.write("\t"+"type estados_t is (REINICIO,CICLO_1,CICLO_2);"+"\n") 
     f.write("\t"+"signal estado, estado_siguiente : estados_t;"+"\n") 
     f.write("\t"+"signal mux_out_s,ena_s,rst_s,reg_aux : std_logic;"+"\n") 
-    f.write("\t"+"signal mux_s : std_logic_vector(4-1 downto 0);"+"\r\n")  ### TODO:
+    f.write("\t"+"signal mux_s : std_logic_vector("+str(math.ceil(np.log2(M+1)))+"-1 downto 0);"+"\r\n")  ### TODO:
   
     f.write("begin\r\n")
        
@@ -1931,17 +1933,17 @@ def creando_registro(secciones,objetos):
     f.write("\t"+"begin"+"\n")
     f.write("\t\t"+"if (clk_i = '1' and clk_i'event) then"+"\n")
     f.write("\t\t\t"+"if rst_i = '1' then"+"\n")
-    f.write("\t\t\t\t"+"mux_s <= \"0000\";"+"\n")               ### TODO:
+    f.write("\t\t\t\t"+"mux_s <= \""+str("0"*math.ceil(np.log2(M+1)))+"\";"+"\n")               ### TODO:
     f.write("\t\t\t"+"else"+"\n")
     f.write("\t\t\t\t"+"if (ena_s = '1') then"+"\n")        
-    f.write("\t\t\t\t\t"+"if (mux_s = \"1111\") then"+"\n")     ### TODO:
-    f.write("\t\t\t\t\t\t"+"mux_s <= \"0000\";"+"\n")           ### TODO:
+    f.write("\t\t\t\t\t"+"if (mux_s = \""+"{0:b}".format(M)+"\") then"+"\n")     ### TODO:
+    f.write("\t\t\t\t\t\t"+"mux_s <= \""+str("0"*math.ceil(np.log2(M+1)))+"\";"+"\n")           ### TODO:
     f.write("\t\t\t\t\t"+"else"+"\n")
-    f.write("\t\t\t\t\t\t"+"mux_s <= std_logic_vector(to_unsigned(to_integer(unsigned(mux_s)) + 1 , 4));"+"\n")     ### TODO:     
+    f.write("\t\t\t\t\t\t"+"mux_s <= std_logic_vector(to_unsigned(to_integer(unsigned(mux_s)) + 1 , "+str(math.ceil(np.log2(M+1)))+"));"+"\n")     ### TODO:     
     f.write("\t\t\t\t\t"+"end if;"+"\n")
     f.write("\t\t\t\t"+"end if;"+"\n")
     f.write("\t\t\t\t"+"if (estado = REINICIO) then"+"\n")
-    f.write("\t\t\t\t\t"+"mux_s <= \"0000\";"+"\n")             ### TODO:
+    f.write("\t\t\t\t\t"+"mux_s <= \""+str("0"*math.ceil(np.log2(M+1)))+"\";"+"\n")             ### TODO:
     f.write("\t\t\t\t"+"end if;"+"\n")             
     f.write("\t\t\t"+"end if;"+"\n") 
     f.write("\t\t"+"end if;"+"\n")
@@ -1950,21 +1952,10 @@ def creando_registro(secciones,objetos):
     f.write("\t"+"multiplexor : process(paquete_i,mux_s)"+"\n")
     f.write("\t"+"begin"+"\n")
     f.write("\t\t"+"case mux_s is"+"\n")
-    f.write("\t\t\t"+"when \"0000\" => mux_out_s <= paquete_i(0);"+"\n") ### TODO:
-    f.write("\t\t\t"+"when \"0001\" => mux_out_s <= paquete_i(1);"+"\n") ### TODO:
-    f.write("\t\t\t"+"when \"0010\" => mux_out_s <= paquete_i(2);"+"\n") ### TODO:
-    f.write("\t\t\t"+"when \"0011\" => mux_out_s <= paquete_i(3);"+"\n") ### TODO:
-    f.write("\t\t\t"+"when \"0100\" => mux_out_s <= paquete_i(4);"+"\n") ### TODO:
-    f.write("\t\t\t"+"when \"0101\" => mux_out_s <= paquete_i(5);"+"\n") ### TODO:
-    f.write("\t\t\t"+"when \"0110\" => mux_out_s <= paquete_i(6);"+"\n") ### TODO:
-    f.write("\t\t\t"+"when \"0111\" => mux_out_s <= paquete_i(7);"+"\n") ### TODO:
-    f.write("\t\t\t"+"when \"1000\" => mux_out_s <= paquete_i(8);"+"\n") ### TODO:
-    f.write("\t\t\t"+"when \"1001\" => mux_out_s <= paquete_i(9);"+"\n") ### TODO:
-    f.write("\t\t\t"+"when \"1010\" => mux_out_s <= paquete_i(10);"+"\n") ### TODO:
-    f.write("\t\t\t"+"when \"1011\" => mux_out_s <= paquete_i(11);"+"\n") ### TODO:
-    f.write("\t\t\t"+"when \"1100\" => mux_out_s <= paquete_i(12);"+"\n") ### TODO:
-    f.write("\t\t\t"+"when \"1101\" => mux_out_s <= paquete_i(13);"+"\n") ### TODO:
-    f.write("\t\t\t"+"when \"1110\" => mux_out_s <= paquete_i(14);"+"\n") ### TODO:
+    
+    for i in range(M):
+        f.write("\t\t\t"+"when \""+str(bin(i))[2:].zfill(math.ceil(np.log2(M+1)))+"\" => mux_out_s <= paquete_i("+str(i)+");"+"\n")
+        
     f.write("\t\t\t"+"when others => mux_out_s <= '0';"+"\n")
     f.write("\t\t"+"end case;"+"\n")     
     f.write("\t"+"end process;"+"\r\n")   
@@ -1996,7 +1987,7 @@ def creando_registro(secciones,objetos):
     f.write("\t\t\t\t"+"ena_s <= '0';"+"\n") 
     f.write("\t\t\t\t"+"procesado <= '0';"+"\n") 
     f.write("\t\t\t\t"+"reg_aux <= '0';"+"\n")  
-    f.write("\t\t\t\t"+"if (procesar = '1' and mux_s /= \"1111\" ) then"+"\n") 
+    f.write("\t\t\t\t"+"if (procesar = '1' and mux_s /= \""+"{0:b}".format(M)+"\" ) then"+"\n") 
     f.write("\t\t\t\t\t"+"estado_siguiente <= CICLO_1;"+"\n") 
     f.write("\t\t\t\t"+"end if;"+"\n") 
     f.write("\t\t\t"+"when CICLO_1 =>"+"\n") 
@@ -2011,7 +2002,7 @@ def creando_registro(secciones,objetos):
     f.write("\t\t\t\t"+"ena_s <= '1';"+"\n")               
     f.write("\t\t\t\t"+"procesado <= '0';"+"\n") 
     f.write("\t\t\t\t"+"reg_aux <= '0';"+"\n")          
-    f.write("\t\t\t\t"+"if mux_s = \"1110\" then"+"\n") 
+    f.write("\t\t\t\t"+"if mux_s = \""+"{0:b}".format(M-1)+"\" then"+"\n") 
     f.write("\t\t\t\t\t"+"procesado <= '1';"+"\n") 
     f.write("\t\t\t\t\t"+"reg_aux <= '1';"+"\n") 
     f.write("\t\t\t\t\t"+"estado_siguiente <= REINICIO;"+"\n")            
@@ -2489,4 +2480,165 @@ def creando_uart_tx(secciones,objetos):
     
     f.close()  # Close header file    
     
-    print("UART_tx > Finalizado")    
+    print("UART_tx > Finalizado")  
+    
+#%%    
+def creando_uart_baud_gen(secciones,objetos):        
+    
+    print("UART_baud_gen > Creando") 
+    
+    N_CVS = objetos[0]
+    N_SEM = objetos[1]
+    N_PAN = objetos[2]
+    N_MDC = objetos[3]
+    
+    N = N_CVS + 2*N_SEM + N_PAN + N_MDC
+    
+    M = 2*N_SEM + N_PAN + N_MDC
+    
+    NODO = "uart_baud_gen"
+    f = open("VHDL/"+NODO+".vhd", "w")
+
+    # Comentario inicial
+    f.write("-- " + NODO + ".vhdl : Achivo VHDL generado automaticamente\r\n")      
+    
+    incluir_librerias(f,False) # Incluir librerias
+        
+    # entidad uart_baud_gen
+    uart_baud_gen = "uart_baud_gen"
+    f.write("\t"+"entity "+uart_baud_gen+" is\n")
+    f.write("\t\t"+"generic("+"\n")
+    f.write("\t\t\t"+"N"+" : "+"integer"+" := "+"4; -- number of bits"+";\n")
+    f.write("\t\t\t"+"M"+" : "+"integer"+" := "+"10 -- mod-M"+";\n")
+    f.write("\t\t"+");\n")
+    f.write("\t\t"+"port("+"\n")
+    f.write("\t\t\t"+"clk, reset"+" : "+"in"+" "+"std_logic"+";\n")
+    f.write("\t\t\t"+"max_tick"+" : "+"out"+" "+"std_logic"+";\n")
+    f.write("\t\t\t"+"q"+   " : "+"out"+" "+"std_logic_vector(N-1 downto 0)"+"\n")
+    f.write("\t\t"+");\n")
+    f.write("\t"+"end entity "+uart_baud_gen+";\r\n") 
+   
+    f.write("architecture Behavioral of "+uart_baud_gen+" is\r\n")            
+       
+    f.write("\t"+"signal r_reg : unsigned(N-1 downto 0);"+"\n")
+    f.write("\t"+"signal r_next : unsigned(N-1 downto 0);"+"\r\n")
+       
+    f.write("begin\r\n")
+       
+    f.write("\t"+"-- register"+"\n")
+    f.write("\t"+"process(clk, reset)"+"\n")
+    f.write("\t"+"begin"+"\n")
+    f.write("\t\t"+"if (reset='1') then"+"\n")
+    f.write("\t\t\t"+"r_reg <= (others => '0');"+"\n")
+    f.write("\t\t"+"elsif rising_edge(clk) then"+"\n")
+    f.write("\t\t\t"+"r_reg <= r_next;"+"\n")
+    f.write("\t\t"+"end if;"+"\n")
+    f.write("\t"+"end process;"+"\r\n")
+	
+    f.write("\t"+"-- next-state logic"+"\n")
+    f.write("\t"+"r_next <= (others => '0') when r_reg=(M-1) else r_reg + 1;"+"\r\n")
+	
+    f.write("\t"+"-- output logic"+"\n")
+    f.write("\t"+"q <= std_logic_vector(r_reg);"+"\n")
+    f.write("\t"+"max_tick <= '1' when r_reg=(M-1) else '0';"+"\r\n")
+        
+    f.write("end Behavioral;") 
+    
+    f.close()  # Close header file    
+    
+    print("UART_baud_gen > Finalizado")
+    
+    
+#%%    
+def creando_uart(secciones,objetos):        
+    
+    print("UART > Creando") 
+    
+    N_CVS = objetos[0]
+    N_SEM = objetos[1]
+    N_PAN = objetos[2]
+    N_MDC = objetos[3]
+    
+    N = N_CVS + 2*N_SEM + N_PAN + N_MDC
+    
+    M = 2*N_SEM + N_PAN + N_MDC
+    
+    NODO = "uart"
+    f = open("VHDL/"+NODO+".vhd", "w")
+
+    # Comentario inicial
+    f.write("-- " + NODO + ".vhdl : Achivo VHDL generado automaticamente\r\n")      
+    
+    incluir_librerias(f,False) # Incluir librerias
+        
+    # entidad uart
+    uart = "uart"
+    f.write("\t"+"entity "+uart+" is\n")
+    f.write("\t\t"+"generic("+"\n")
+    f.write("\t\t\t"+"-- 19200 baud, 8 data bits, 1 stop bit, 2^2 FIFO"+"\n")
+    f.write("\t\t\t"+"DBIT: integer := 8; -- # data bits"+"\n")
+    f.write("\t\t\t"+"SB_TICK: integer := 16;	-- # ticks for stop bits, 16/24/32 -- for 1/1.5/2 stop bits"+"\n")									
+    f.write("\t\t\t"+"DVSR: integer := 407; 	-- baud rate divisor -- DVSR = 125M / (16 * baud rate)"+"\n")								
+    f.write("\t\t\t"+"DVSR_BIT: integer := 9; 	-- # bits of DVSR"+"\n")
+    f.write("\t\t\t"+"FIFO_W_TX: integer := 4; 	-- # addr bits of FIFO_TX # words in FIFO=2^FIFO_W"+"\n")
+    f.write("\t\t\t"+"FIFO_W_RX: integer := 4 	-- # addr bits of FIFO_TX # words in FIFO=2^FIFO_W"+"\n")
+    f.write("\t\t"+");"+"\n")
+    f.write("\t\t"+"port("+"\n")
+    f.write("\t\t\t"+"clk, reset : in std_logic;"+"\n")
+    f.write("\t\t\t"+"rd_uart, wr_uart : in std_logic;"+"\n")
+    f.write("\t\t\t"+"rx : in std_logic;"+"\n")
+    f.write("\t\t\t"+"w_data : in std_logic_vector(8-1 downto 0);"+"\n")
+    f.write("\t\t\t"+"tx_full, rx_empty : out std_logic;"+"\n")
+    f.write("\t\t\t"+"r_data : out std_logic_vector(8-1 downto 0) ;"+"\n")
+    f.write("\t\t\t"+"tx : out std_logic"+"\n")
+    f.write("\t\t"+");"+"\n")
+    f.write("\t"+"end entity "+uart+";\r\n") 
+   
+    f.write("architecture Behavioral of "+uart+" is\r\n")            
+       
+    f.write("\t"+"signal rx_done_tick : std_logic;"+"\n")
+    f.write("\t"+"signal tick : std_logic;"+"\n")
+    f.write("\t"+"signal tx_fifo_out : std_logic_vector(8-1 downto 0);"+"\n")
+    f.write("\t"+"signal rx_data_out : std_logic_vector(8-1 downto 0);"+"\n")
+    f.write("\t"+"signal tx_empty, tx_fifo_not_empty : std_logic;"+"\n")
+    f.write("\t"+"signal tx_done_tick : std_logic;"+"\r\n")
+       
+    f.write("begin\r\n")
+       
+    f.write("\t"+"baud_gen_unit: entity work.uart_baud_gen(arch)"+"\n")
+    f.write("\t\t"+"generic map(M => DVSR, N => DVSR_BIT)"+"\n")
+    f.write("\t\t"+"port map(clk => clk, reset => reset,"+"\n")
+    f.write("\t\t\t\t"+"q => open, max_tick => tick);"+"\r\n")
+	
+    f.write("\t"+"uart_rx_unit: entity work.uart_rx(arch)"+"\n")
+    f.write("\t\t"+"generic map(DBIT=>DBIT, SB_TICK=>SB_TICK)"+"\n")
+    f.write("\t\t"+"port map(clk=>clk, reset=>reset, rx=>rx,"+"\n")
+    f.write("\t\t\t\t"+"s_tick=>tick, rx_done_tick=>rx_done_tick,"+"\n")
+    f.write("\t\t\t\t"+"d_out => rx_data_out);"+"\r\n")
+				 
+    f.write("\t"+"fifo_rx_unit: entity work.fifo(arch)"+"\n")
+    f.write("\t\t"+"generic map(B => DBIT, W => FIFO_W_RX)"+"\n")
+    f.write("\t\t"+"port map(clk => clk, reset => reset, rd => rd_uart,"+"\n")
+    f.write("\t\t\t\t"+"wr => rx_done_tick, w_data => rx_data_out,"+"\n")
+    f.write("\t\t\t\t"+"empty => rx_empty, full => open, r_data => r_data);"+"\r\n")
+				 
+    f.write("\t"+"fifo_tx_unit: entity work.fifo(arch)"+"\n")
+    f.write("\t\t"+"generic map(B => DBIT, W => FIFO_W_TX)"+"\n")
+    f.write("\t\t"+"port map(clk => clk, reset => reset, rd => tx_done_tick,"+"\n")
+    f.write("\t\t\t\t"+"wr=>wr_uart, w_data=>w_data, empty => tx_empty,"+"\n")
+    f.write("\t\t\t\t"+"full=>tx_full, r_data=>tx_fifo_out);"+"\r\n")
+				 
+    f.write("\t"+"uart_tx_unit: entity work.uart_tx(arch)"+"\n")
+    f.write("\t\t"+"generic map(DBIT=>DBIT, SB_TICK=>SB_TICK)"+"\n")
+    f.write("\t\t"+"port map(clk=>clk, reset=>reset,"+"\n")
+    f.write("\t\t\t\t"+"tx_start => tx_fifo_not_empty,"+"\n")
+    f.write("\t\t\t\t"+"s_tick => tick, d_in => tx_fifo_out,"+"\n")
+    f.write("\t\t\t\t"+"tx_done_tick => tx_done_tick, tx => tx);"+"\r\n")
+				 
+    f.write("\t"+"tx_fifo_not_empty <= not tx_empty;"+"\r\n")
+        
+    f.write("end Behavioral;") 
+    
+    f.close()  # Close header file    
+    
+    print("UART_baud_gen > Finalizado")
