@@ -17,7 +17,7 @@ def crear_modulo_vhdl(secciones,tabla):
     
     #creando_uart_baud_gen(secciones,objetos) # FALTA
     
-    #creando_uart_tx(secciones,objetos) # FALTA
+    creando_uart_tx(secciones,objetos)
     
     creando_uart_rx(secciones,objetos)
     
@@ -2358,3 +2358,135 @@ def creando_uart_rx(secciones,objetos):
     f.close()  # Close header file    
     
     print("UART_rx > Finalizado")
+ 
+#%%    
+def creando_uart_tx(secciones,objetos):        
+    
+    print("UART_tx > Creando") 
+    
+    N_CVS = objetos[0]
+    N_SEM = objetos[1]
+    N_PAN = objetos[2]
+    N_MDC = objetos[3]
+    
+    N = N_CVS + 2*N_SEM + N_PAN + N_MDC
+    
+    M = 2*N_SEM + N_PAN + N_MDC
+    
+    NODO = "uart_tx"
+    f = open("VHDL/"+NODO+".vhd", "w")
+
+    # Comentario inicial
+    f.write("-- " + NODO + ".vhdl : Achivo VHDL generado automaticamente\r\n")      
+    
+    incluir_librerias(f,False) # Incluir librerias
+        
+    # entidad uart_tx
+    uart_tx = "uart_tx"
+    f.write("\t"+"entity "+uart_tx+" is\n")
+    f.write("\t\t"+"generic("+"\n")
+    f.write("\t\t\t"+"DBIT"+" : "+"integer"+" := "+"8; -- # data bits"+";\n")
+    f.write("\t\t\t"+"SB_TICK"+" : "+"integer"+" := "+"16 -- # ticks for stop bits"+";\n")
+    f.write("\t\t"+");\n")
+    f.write("\t\t"+"port("+"\n")
+    f.write("\t\t\t"+"clk, reset"+" : "+"in"+" "+"std_logic"+";\n")
+    f.write("\t\t\t"+"tx_start"+" : "+"in"+" "+"std_logic"+";\n")
+    f.write("\t\t\t"+"s_tick"+" : "+"in"+" "+"std_logic"+";\n")
+    f.write("\t\t\t"+"d_in"+" : "+"in"+" "+"std_logic_vector(8-1 downto 0)"+";\n")
+    f.write("\t\t\t"+"tx_done_tick"+" : "+"out"+" "+"std_logic"+";\n")
+    f.write("\t\t\t"+"tx"+   " : "+"out"+" "+"std_logic"+"\n")
+    f.write("\t\t"+");\n")
+    f.write("\t"+"end entity "+uart_tx+";\r\n") 
+   
+    f.write("architecture Behavioral of "+uart_tx+" is\r\n")            
+       
+    f.write("\t"+"type state_type is (idle, start, data, stop);"+"\n")
+    f.write("\t"+"signal state_reg, state_next: state_type;"+"\n")
+    f.write("\t"+"signal s_reg, s_next: unsigned(3 downto 0);"+"\n")
+    f.write("\t"+"signal n_reg, n_next: unsigned(2 downto 0);"+"\n")
+    f.write("\t"+"signal b_reg, b_next: std_logic_vector(7 downto 0);"+"\n")
+    f.write("\t"+"signal tx_reg, tx_next: std_logic;"+"\r\n")
+       
+    f.write("begin\r\n")
+       
+    f.write("\t"+"-- FSMD state & data registers"+"\n")
+    f.write("\t"+"process(clk, reset)"+"\n")
+    f.write("\t"+"begin"+"\n")
+    f.write("\t\t"+"if reset = '1' then"+"\n")
+    f.write("\t\t\t"+"state_reg <= idle;"+"\n")
+    f.write("\t\t\t"+"s_reg <= (others => '0');"+"\n")
+    f.write("\t\t\t"+"n_reg <= (others => '0');"+"\n")
+    f.write("\t\t\t"+"b_reg <= (others => '0');"+"\n")
+    f.write("\t\t\t"+"tx_reg <= '1';"+"\n")
+    f.write("\t\t"+"elsif rising_edge(clk) then"+"\n")
+    f.write("\t\t\t"+"state_reg <= state_next;"+"\n")
+    f.write("\t\t\t"+"s_reg <= s_next;"+"\n")
+    f.write("\t\t\t"+"n_reg <= n_next;"+"\n")
+    f.write("\t\t\t"+"b_reg <= b_next;"+"\n")
+    f.write("\t\t\t"+"tx_reg <= tx_next;"+"\n")
+    f.write("\t\t"+"end if;"+"\n")
+    f.write("\t"+"end process;"+"\r\n")
+	
+    f.write("\t"+"-- next-state logic & datapath functional units/routing"+"\n")
+    f.write("\t"+"process(state_reg, s_reg, n_reg, b_reg, s_tick, tx_reg, tx_start, d_in)"+"\n")
+    f.write("\t"+"begin"+"\n")
+    f.write("\t\t"+"state_next <= state_reg;"+"\n")
+    f.write("\t\t"+"s_next <= s_reg;"+"\n")
+    f.write("\t\t"+"n_next <= n_reg;"+"\n")
+    f.write("\t\t"+"b_next <= b_reg;"+"\n")
+    f.write("\t\t"+"tx_next <= tx_reg;"+"\n")
+    f.write("\t\t"+"tx_done_tick <= '0';"+"\n")
+    f.write("\t\t"+"case state_reg is"+"\n")
+    f.write("\t\t\t"+"when idle =>"+"\n")
+    f.write("\t\t\t\t"+"tx_next <= '1';"+"\n")
+    f.write("\t\t\t\t"+"if tx_start = '1' then"+"\n")
+    f.write("\t\t\t\t\t"+"state_next <= start;"+"\n")
+    f.write("\t\t\t\t\t"+"s_next <= (others => '0');"+"\n")
+    f.write("\t\t\t\t\t"+"b_next <= d_in;"+"\n")
+    f.write("\t\t\t\t"+"end if;"+"\n")
+    f.write("\t\t\t"+"when start =>"+"\n")
+    f.write("\t\t\t\t"+"tx_next <= '0';"+"\n")
+    f.write("\t\t\t\t"+"if (s_tick = '1') then"+"\n")
+    f.write("\t\t\t\t\t"+"if s_reg = 15 then"+"\n")
+    f.write("\t\t\t\t\t\t"+"state_next <= data;"+"\n")
+    f.write("\t\t\t\t\t\t"+"s_next <= (others => '0');"+"\n")
+    f.write("\t\t\t\t\t\t"+"n_next <= (others => '0');"+"\n")
+    f.write("\t\t\t\t\t"+"else"+"\n")
+    f.write("\t\t\t\t\t\t"+"s_next <= s_reg + 1;"+"\n")
+    f.write("\t\t\t\t\t"+"end if;"+"\n")
+    f.write("\t\t\t\t"+"end if;"+"\n")
+    f.write("\t\t\t"+"when data =>"+"\n")
+    f.write("\t\t\t\t"+"tx_next <= b_reg(0);"+"\n")
+    f.write("\t\t\t\t"+"if (s_tick = '1') then"+"\n")
+    f.write("\t\t\t\t\t"+"if s_reg = 15 then"+"\n")
+    f.write("\t\t\t\t\t\t"+"s_next <= (others => '0') ;"+"\n")
+    f.write("\t\t\t\t\t\t"+"b_next <= '0' & b_reg(8-1 downto 1);"+"\n")
+    f.write("\t\t\t\t\t\t"+"if n_reg = (DBIT - 1) then"+"\n")
+    f.write("\t\t\t\t\t\t\t"+"state_next <= stop;"+"\n")
+    f.write("\t\t\t\t\t\t"+"else"+"\n")
+    f.write("\t\t\t\t\t\t\t"+"n_next <= n_reg + 1 ;"+"\n")
+    f.write("\t\t\t\t\t\t"+"end if;"+"\n")
+    f.write("\t\t\t\t\t"+"else"+"\n")
+    f.write("\t\t\t\t\t\t"+"s_next <= s_reg + 1;"+"\n")
+    f.write("\t\t\t\t\t"+"end if;"+"\n")
+    f.write("\t\t\t\t"+"end if;"+"\n")
+    f.write("\t\t\t"+"when stop =>"+"\n")
+    f.write("\t\t\t\t"+"tx_next <= '1';"+"\n")
+    f.write("\t\t\t\t"+"if (s_tick = '1') then"+"\n")
+    f.write("\t\t\t\t\t"+"if s_reg = (SB_TICK - 1) then"+"\n")
+    f.write("\t\t\t\t\t\t"+"state_next <= idle;"+"\n")
+    f.write("\t\t\t\t\t\t"+"tx_done_tick <= '1';"+"\n")
+    f.write("\t\t\t\t\t"+"else"+"\n")
+    f.write("\t\t\t\t\t\t"+"s_next <= s_reg + 1;"+"\n")
+    f.write("\t\t\t\t\t"+"end if;"+"\n")
+    f.write("\t\t\t\t"+"end if;"+"\n")
+    f.write("\t\t"+"end case;"+"\n")
+    f.write("\t"+"end process;"+"\r\n")
+	
+    f.write("\t"+"tx <= tx_reg;"+"\r\n")
+        
+    f.write("end Behavioral;") 
+    
+    f.close()  # Close header file    
+    
+    print("UART_tx > Finalizado")    

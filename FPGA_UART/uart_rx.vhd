@@ -94,6 +94,6 @@ begin
 		end case;
 	end process;
 	
-	dout <= b_reg;
+	d_out <= b_reg;
 	
 end arch;

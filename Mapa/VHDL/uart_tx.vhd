@@ -1,9 +1,7 @@
--- uart_tx.vhdl : Achivo VHDL generado automaticamente
-
+-- uart_tx.vhdl : Achivo VHDL generado automaticamente
 library IEEE;
 use IEEE.std_logic_1164.all;
-use IEEE.numeric_std.all;
-
+use IEEE.numeric_std.all;
 	entity uart_tx is
 		generic(
 			DBIT : integer := 8; -- # data bits;
@@ -17,19 +15,15 @@ use IEEE.numeric_std.all;
 			tx_done_tick : out std_logic;
 			tx : out std_logic
 		);
-	end uart_tx;
-
-architecture arch of uart_tx is
-
+	end entity uart_tx;
+architecture Behavioral of uart_tx is
 	type state_type is (idle, start, data, stop);
 	signal state_reg, state_next: state_type;
 	signal s_reg, s_next: unsigned(3 downto 0);
 	signal n_reg, n_next: unsigned(2 downto 0);
 	signal b_reg, b_next: std_logic_vector(7 downto 0);
-	signal tx_reg, tx_next: std_logic;
-
-begin
-
+	signal tx_reg, tx_next: std_logic;
+begin
 	-- FSMD state & data registers
 	process(clk, reset)
 	begin
@@ -46,8 +40,7 @@ begin
 			b_reg <= b_next;
 			tx_reg <= tx_next;
 		end if;
-	end process;
-	
+	end process;
 	-- next-state logic & datapath functional units/routing
 	process(state_reg, s_reg, n_reg, b_reg, s_tick, tx_reg, tx_start, d_in)
 	begin
@@ -102,8 +95,6 @@ begin
 					end if;
 				end if;
 		end case;
-	end process;
-	
-	tx <= tx_reg;
-	
-end arch;
+	end process;
+	tx <= tx_reg;
+end Behavioral;

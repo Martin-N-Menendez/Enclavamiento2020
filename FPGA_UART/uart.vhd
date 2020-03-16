@@ -46,7 +46,7 @@ begin
 		generic map(DBIT=>DBIT, SB_TICK=>SB_TICK)
 		port map(clk=>clk, reset=>reset, rx=>rx,
 				 s_tick=>tick, rx_done_tick=>rx_done_tick,
-	             dout => rx_data_out);
+	             d_out => rx_data_out);
 				 
 	fifo_rx_unit: entity work.fifo(arch)
 		generic map(B => DBIT, W => FIFO_W)
@@ -64,7 +64,7 @@ begin
 		generic map(DBIT=>DBIT, SB_TICK=>SB_TICK)
 		port map(clk=>clk, reset=>reset,
 				 tx_start => tx_fifo_not_empty,
-				 s_tick => tick, din => tx_fifo_out,
+				 s_tick => tick, d_in => tx_fifo_out,
 				 tx_done_tick => tx_done_tick, tx => tx);
 				 
 	tx_fifo_not_empty <= not tx_empty;
