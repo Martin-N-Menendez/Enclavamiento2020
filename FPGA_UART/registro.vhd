@@ -24,7 +24,7 @@ architecture Behavioral of registro is
     signal mux_s : std_logic_vector(4-1 downto 0);
    
 begin    
-   --<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
     contador : process(clk_i)
     begin
         if (clk_i = '1' and clk_i'event) then
@@ -121,4 +121,3 @@ begin
     end process;
         
 end Behavioral;
-

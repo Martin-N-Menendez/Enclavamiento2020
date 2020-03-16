@@ -1936,13 +1936,13 @@ def creando_registro(secciones,objetos):
     f.write("\t\t\t\t"+"mux_s <= \""+str("0"*math.ceil(np.log2(M+1)))+"\";"+"\n")               ### TODO:
     f.write("\t\t\t"+"else"+"\n")
     f.write("\t\t\t\t"+"if (ena_s = '1') then"+"\n")        
-    f.write("\t\t\t\t\t"+"if (mux_s = \""+"{0:b}".format(M)+"\") then"+"\n")     ### TODO:
-    f.write("\t\t\t\t\t\t"+"mux_s <= \""+str("0"*math.ceil(np.log2(M+1)))+"\";"+"\n")           ### TODO:
-    f.write("\t\t\t\t\t"+"else"+"\n")
-    f.write("\t\t\t\t\t\t"+"mux_s <= std_logic_vector(to_unsigned(to_integer(unsigned(mux_s)) + 1 , "+str(math.ceil(np.log2(M+1)))+"));"+"\n")     ### TODO:     
+    f.write("\t\t\t\t\t"+"if (mux_s /= \""+"{0:b}".format(M)+"\") then"+"\n")     ### TODO:
+    f.write("\t\t\t\t\t\t"+"if (estado = CICLO_1 or estado = CICLO_2) then"+"\n")
+    f.write("\t\t\t\t\t\t\t"+"mux_s <= std_logic_vector(to_unsigned(to_integer(unsigned(mux_s)) + 1 , "+str(math.ceil(np.log2(M+1)))+"));"+"\n")     ### TODO:     
+    f.write("\t\t\t\t\t\t"+"end if;"+"\n")
     f.write("\t\t\t\t\t"+"end if;"+"\n")
     f.write("\t\t\t\t"+"end if;"+"\n")
-    f.write("\t\t\t\t"+"if (estado = REINICIO) then"+"\n")
+    f.write("\t\t\t\t"+"if (procesar = '0') then"+"\n")
     f.write("\t\t\t\t\t"+"mux_s <= \""+str("0"*math.ceil(np.log2(M+1)))+"\";"+"\n")             ### TODO:
     f.write("\t\t\t\t"+"end if;"+"\n")             
     f.write("\t\t\t"+"end if;"+"\n") 
