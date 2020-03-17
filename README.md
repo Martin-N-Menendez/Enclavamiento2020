@@ -3,7 +3,7 @@
 ![Mapa_0](https://github.com/Martin-N-Menendez/Enclavamiento2020/blob/master/Mapa/Mapas/Mapa_0.png)
 
 ## Progreso
-:white_square_button::white_square_button::white_square_button::white_square_button::black_square_button::black_square_button::black_square_button::black_square_button::black_square_button::black_square_button:
+:white_square_button::white_square_button::white_square_button::white_square_button::white_square_button::white_square_button::black_square_button::black_square_button::black_square_button::black_square_button:
 
 
 ## Implementado en FPGA:
@@ -41,12 +41,12 @@
 - [ ] Interconexion de nodos en redes de N cambios inferiores
 - [ ] Interconexion de nodos en redes de N cambios genericos
 - [ ] Generacion de barreras
-- [ ] Comportamiento de semaforo en cortocircuito
-- [ ] Comportamiento de semaforo en funcion del estado propio
+- [x] Comportamiento de semaforo en cortocircuito
+- [x] Comportamiento de semaforo en funcion del estado propio
 - [ ] Comportamiento de semaforo en funcion del estado vecino cercano
 - [ ] Comportamiento de semaforo en funcion del estado vecino lejano
 ## Implementacion de UART
-- [ ] Implementacion de UART automatizada para pruebas en Arty Z7 10
+- [x] Implementacion de UART automatizada para pruebas en Arty Z7 10
 - [x] Implementacion de codigo python para enviar/recibir tramas adaptadas (EN PROGRESO)
 - [ ] Implementacion de codigo python para procesar las tramas recibidas y layout
 - [ ] Adaptacion del codigo para compatibilidad con CNEA
