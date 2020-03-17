@@ -34,9 +34,9 @@ def crear_modulo_vhdl(secciones,tabla):
     
     creando_mediador(secciones,objetos)
     
-    creando_red(secciones,objetos,tabla)
+    creando_red(secciones,objetos,tabla,False)
     
-    creando_nodo(secciones,objetos)
+    creando_nodo(secciones,objetos,tabla)
     
     creando_cambio(secciones,objetos)
     
@@ -650,7 +650,7 @@ def creando_red(secciones,objetos,tabla,test = False):
     
     f.write("architecture Behavioral of "+red+" is\r\n") 
 
-    sem_cant,sem_actual,sem_anterior = calcular_semaforos(secciones,objetos,tabla)
+    sem_cant,sem_actual,sem_anterior = calcular_semaforos(secciones,objetos,tabla,True)
     
     #print("Cantidades : {}".format(sem_cant))
     #print("Actuales : {}".format(sem_actual))
@@ -709,9 +709,9 @@ def creando_red(secciones,objetos,tabla,test = False):
         f.write("\t\t\t"+"Reset"+   " : "+" in "+"std_logic;"+"\n")
         f.write("\t\t\t"+"Estado_i"+   " : "+" in "+"std_logic;"+"\n")
         if secciones[i].anterior != "" or secciones[i].desvio_inf_dir == "<" or secciones[i].desvio_sup_dir == "<" :
-            f.write("\t\t\t"+"Estado_ante"+   " : "+" out "+"std_logic;"+"\n")
+            f.write("\t\t\t"+"Estado_ante"+   " : "+" in "+"std_logic;"+"\n")
         if secciones[i].posterior != "" or secciones[i].desvio_inf_dir == ">" or secciones[i].desvio_sup_dir == ">":
-            f.write("\t\t\t"+"Estado_post"+   " : "+" out "+"std_logic;"+"\n")
+            f.write("\t\t\t"+"Estado_post"+   " : "+" in "+"std_logic;"+"\n")
             
         if secciones[i].semaforo:
             for j in range(secciones[i].N_semaforos):
@@ -819,7 +819,7 @@ def creando_red(secciones,objetos,tabla,test = False):
                     f.write("\t\t"+"Estado_post => mdc_desv_o_"+str(cambios.index(desvio)+1)+",\n")
                         
             else:
-                if secciones[i].posterior == vecinos[j]:
+                if vecinos[j] == secciones[i].posterior :
                     if secciones[vecinos[j]-1].cambio:
                         if (secciones[vecinos[j]-1].desvio_inf_dir == ">" or secciones[vecinos[j]-1].desvio_sup_dir == ">"):
                             posterior = "conector_"+str(vecinos[j])
@@ -838,6 +838,7 @@ def creando_red(secciones,objetos,tabla,test = False):
                 if vecinos[j] == secciones[i].anterior:
                     if test:
                         print ("[{}] < cambio_{}".format(i+1,cambios.index(i+1)+1))
+                    cambios_conexion[cambios.index(i+1)][0] = i+1    
                     f.write("\t\t"+"Estado_ante => mdc_post_o_"+str(cambios.index(i+1)+1)+",\n")
                     
                 if secciones[i].desvio_sup != "":
@@ -899,7 +900,9 @@ def creando_red(secciones,objetos,tabla,test = False):
             
         f.write("\t\t"+"Cambio_i => mdc_i_"+str(i+1)+",\n")
         f.write("\t\t"+"Cambio_o => mdc_o_"+str(i+1)+",\n")
-          
+        
+        print ("Nodos : {} | {} o {} | {}".format(i+1,secciones[i].desvio_inf,secciones[i].desvio_sup,cambios_conexion))
+        
         f.write("\t\t"+"Estado_ante_i => conector_"+str(cambios_conexion[i][0])+",\n")
         f.write("\t\t"+"Estado_ante_o => mdc_ante_o_"+str(i+1)+",\n")
         f.write("\t\t"+"Estado_post_i => conector_"+str(cambios_conexion[i][1])+",\n")
@@ -923,9 +926,9 @@ def creando_red(secciones,objetos,tabla,test = False):
             f.write("\t\t"+"mdc_i_"+str(i+1)+" <= Cambios_i("+str(i)+");\n")        
             f.write("\t\t"+"Cambios_o("+str(i)+") <= mdc_o_"+str(i+1)+";\n")
     
-        if N_MDC == 1:
-            f.write("\t\t"+"mdc_i_"+str(i+1)+" <= Cambios_i;\n")        
-            f.write("\t\t"+"Cambios_o <= mdc_o_"+str(i+1)+";\n")
+    if N_MDC == 1:
+        f.write("\t\t"+"mdc_i_1 <= Cambios_i;\n")        
+        f.write("\t\t"+"Cambios_o <= mdc_o_1;\n")
             
     if N_PAN > 0: 
         for i in range(N_PAN):
@@ -942,6 +945,10 @@ def creando_red(secciones,objetos,tabla,test = False):
         f.write("\t\t"+"semaforos_o.lsb("+str(i)+") <= sem_lsb_o_"+str(i+1)+";"+"\n") 
         f.write("\t\t"+"semaforos_o.msb("+str(i)+") <= sem_msb_o_"+str(i+1)+";"+"\n")
     
+    
+    
+    
+    
     f.write("\t\t"+"procesado <= procesar;\n")
     
     f.write("end Behavioral;") 
@@ -951,7 +958,7 @@ def creando_red(secciones,objetos,tabla,test = False):
     print("Redes > Finalizado")
 
 #%%    
-def creando_nodo(secciones,objetos):        
+def creando_nodo(secciones,objetos,tabla):        
     
     print("Nodo > Creando") 
     
@@ -963,6 +970,12 @@ def creando_nodo(secciones,objetos):
     N = N_CVS + 2*N_SEM + N_PAN + N_MDC
     
     M = 2*N_SEM + N_PAN + N_MDC
+    
+    sem_cant,sem_actual,sem_anterior = calcular_semaforos(secciones,objetos,tabla)
+    
+    print("Cantidades : {}".format(sem_cant))
+    print("Actuales : {}".format(sem_actual))
+    print("Anteriores : {}".format(sem_anterior))
     
     for i in range(N_CVS):
         nodo = "nodo_"+str(i+1)
@@ -990,9 +1003,9 @@ def creando_nodo(secciones,objetos):
         f.write("\t\t\t"+"Reset"+   " : "+" in "+"std_logic;"+"\n")
         f.write("\t\t\t"+"Estado_i"+   " : "+" in "+"std_logic;"+"\n")
         if secciones[i].anterior != "" or secciones[i].desvio_inf_dir == "<" or secciones[i].desvio_sup_dir == "<" :
-            f.write("\t\t\t"+"Estado_ante"+   " : "+" out "+"std_logic;"+"\n")
+            f.write("\t\t\t"+"Estado_ante"+   " : "+" in "+"std_logic;"+"\n")
         if secciones[i].posterior != "" or secciones[i].desvio_inf_dir == ">" or secciones[i].desvio_sup_dir == ">":
-            f.write("\t\t\t"+"Estado_post"+   " : "+" out "+"std_logic;"+"\n")
+            f.write("\t\t\t"+"Estado_post"+   " : "+" in "+"std_logic;"+"\n")
         if secciones[i].semaforo:
             for j in range(secciones[i].N_semaforos):
                 f.write("\t\t\t"+"Semaforo_propio_i_"+str(j+1)+   " : "+" in "+"sem_type;"+"\n")
@@ -1016,17 +1029,35 @@ def creando_nodo(secciones,objetos):
         f.write("\t"+"begin\n")
         f.write("\t\t"+"if (Clock = '1' and Clock'Event) then\n")
         f.write("\t\t\t"+"if (Reset = '1') then\n")
-        f.write("\t\t\t\t"+"Estado_o <= '0';"+"\n") 
+        #f.write("\t\t\t\t"+"Estado_o <= '0';"+"\n") 
         if secciones[i].semaforo:
             for j in range(secciones[i].N_semaforos):
                 f.write("\t\t\t\t"+"Semaforo_propio_o_"+str(j+1)+   ".msb <= '0';"+"\n")
                 f.write("\t\t\t\t"+"Semaforo_propio_o_"+str(j+1)+   ".lsb <= '0';"+"\n")
         f.write("\t\t\t"+"else\n")    
+        
         f.write("\t\t\t\t"+"Estado_o <= Estado_i;"+"\n") 
-        if secciones[i].semaforo:
-            for j in range(secciones[i].N_semaforos):
-                f.write("\t\t\t\t"+"Semaforo_propio_o_"+str(j+1)+".msb <= Semaforo_propio_i_"+str(j+1)+".msb;"+"\n")
-                f.write("\t\t\t\t"+"Semaforo_propio_o_"+str(j+1)+".lsb <= Semaforo_propio_i_"+str(j+1)+".lsb;"+"\n")          
+            
+        if secciones[i].semaforo:            
+                #f.write("\t\t\t\t"+"Semaforo_propio_o_"+str(j+1)+".msb <= Semaforo_propio_i_"+str(j+1)+".msb;"+"\n")
+                #f.write("\t\t\t\t"+"Semaforo_propio_o_"+str(j+1)+".lsb <= Semaforo_propio_i_"+str(j+1)+".lsb;"+"\n") 
+            f.write("\t\t\t\t"+"if ( Estado_i = '0' ) then"+"\n") 
+               
+            
+            print("{}:{}|{}|{}".format(i+1,sem_cant,sem_actual,sem_anterior)) ### TODO:
+            
+            #for j in range(secciones[i].N_semaforos): 
+            f.write("\t\t\t\t\t"+"Semaforo_propio_o_1.msb <= '0';"+"\n")
+            f.write("\t\t\t\t\t"+"Semaforo_propio_o_1.lsb <= '0';"+"\n") 
+            f.write("\t\t\t\t"+"else"+"\n")  
+            
+            if secciones[i].anterior != "" or secciones[i].desvio_inf_dir == "<" or secciones[i].desvio_sup_dir == "<" :
+                f.write("\t\t\t\t\t"+"if ( Estado_ante = '0' ) then"+"\n")
+                f.write("\t\t\t\t\t"+"Semaforo_propio_o_1.msb <= '1';"+"\n")
+                f.write("\t\t\t\t\t"+"Semaforo_propio_o_1.lsb <= '0';"+"\n") 
+                f.write("\t\t\t\t\t"+"end if;"+"\n") 
+            
+            f.write("\t\t\t\t"+"end if;"+"\n") 
         f.write("\t\t\t"+"end if;\n")
         f.write("\t\t"+"end if;\n")
         f.write("\t"+"end process;\r\n")   
@@ -1124,7 +1155,7 @@ def creando_cambio(secciones,objetos):
     print("Cambios > Finalizado")
     
 #%%
-def calcular_semaforos(secciones,objetos,tabla):
+def calcular_semaforos(secciones,objetos,tabla,test = False):
    
     N_CVS = objetos[0]
     N_SEM = objetos[1]
@@ -1139,7 +1170,8 @@ def calcular_semaforos(secciones,objetos,tabla):
     
     M = 2*N_SEM + N_PAN + N_MDC
     
-    print("Semaforeo > Iniciando")
+    if test:
+        print("Semaforeo > Iniciando")
     
     sem_index = -1;
     sem_lista = [];
@@ -1155,7 +1187,8 @@ def calcular_semaforos(secciones,objetos,tabla):
         semaforeo[sem_post][i] = -1
         
     #print("{}".format(semaforeo)) 
-    print("{}".format(tabla['Secuencia'])) 
+    if test:
+        print("{}".format(tabla['Secuencia'])) 
     
     for i in range(len(tabla['Secuencia'])):
         
@@ -1189,12 +1222,13 @@ def calcular_semaforos(secciones,objetos,tabla):
       sem_cant.remove(0)   
       
         #print("Semaforo: {} Anterior: {}".format(tabla['Secuencia'][i][-1],tabla['Secuencia'][i][0])) 
-    print("{}".format(sem_lista))
-    print("#{}".format(sem_cant))
-    print("fin:{}".format(sem_actual))
-    print("ini:{}".format(sem_anterior))
-    
-    print("Semaforeo > Finalizado")     
+    if test:    
+        print("{}".format(sem_lista))
+        print("#{}".format(sem_cant))
+        print("fin:{}".format(sem_actual))
+        print("ini:{}".format(sem_anterior))
+        
+        print("Semaforeo > Finalizado")     
     
     return sem_cant,sem_actual,sem_anterior
  
@@ -1306,8 +1340,8 @@ def creando_sistema(secciones,objetos):
     f.write("\t\t"+");\n")
     f.write("\t"+"end component "+registro+";\r\n")
     
-    f.write("\t"+"Signal paquete_i : std_logic_vector("+str(N)+"-1 downto 0);\n")
-    f.write("\t"+"Signal paquete_o : std_logic_vector("+str(N)+"-1 downto 0);\n")
+    f.write("\t"+"Signal paquete_i_s : std_logic_vector("+str(N)+"-1 downto 0);\n")
+    f.write("\t"+"Signal paquete_o_s : std_logic_vector("+str(M)+"-1 downto 0);\n")
     
     f.write("\t"+"Signal w_data_1,w_data_2,w_data_3 : std_logic_vector(8-1 downto 0);\n")
     f.write("\t"+"Signal wr_uart_1_s,wr_uart_2_s : std_logic;\n")
@@ -1328,7 +1362,7 @@ def creando_sistema(secciones,objetos):
     f.write("\t\t\t"+"wr_uart"+" => "+"wr_uart_1_s"+",\n")
     f.write("\t\t\t"+"procesar"+" => "+"pro_reg_det"+",\n")
     f.write("\t\t\t"+"procesado"+" => "+"pro_det_enc"+",\n")
-    f.write("\t\t\t"+"paquete"+" => "+"paquete_i"+",\n")
+    f.write("\t\t\t"+"paquete"+" => "+"paquete_i_s"+",\n")
     f.write("\t\t\t"+"w_data"+" => "+"w_data_1"+"\n")
     f.write("\t\t"+");"+"\r\n")
     
@@ -1338,8 +1372,8 @@ def creando_sistema(secciones,objetos):
     f.write("\t\t\t"+"Reset"+" => "+"Reset"+",\n")
     f.write("\t\t\t"+"procesar"+" => "+"pro_det_enc"+",\n")
     f.write("\t\t\t"+"procesado"+" => "+"pro_enc_reg"+",\n")
-    f.write("\t\t\t"+"Paquete_i"+" => "+"paquete_i"+",\n")
-    f.write("\t\t\t"+"Paquete_o"+" => "+"paquete_o"+"\n")
+    f.write("\t\t\t"+"Paquete_i"+" => "+"paquete_i_s"+",\n")
+    f.write("\t\t\t"+"Paquete_o"+" => "+"paquete_o_s"+"\n")
     f.write("\t\t"+");"+"\r\n")
     
     f.write("\t"+registro+"_i : "+registro+"\n")
@@ -1348,7 +1382,7 @@ def creando_sistema(secciones,objetos):
     f.write("\t\t\t"+"Reset"+" => "+"Reset"+",\n")
     f.write("\t\t\t"+"procesar"+" => "+"pro_enc_reg"+",\n")
     f.write("\t\t\t"+"procesado"+" => "+"pro_reg_det"+",\n")
-    f.write("\t\t\t"+"paquete_i"+" => "+"paquete_o"+",\n")
+    f.write("\t\t\t"+"paquete_i"+" => "+"paquete_o_s"+",\n")
     f.write("\t\t\t"+"w_data"+" => "+"w_data_2"+",\n")
     f.write("\t\t\t"+"wr_uart"+" => "+"wr_uart_2_s"+"\n")
     f.write("\t\t"+");"+"\r\n")
@@ -1374,10 +1408,10 @@ def creando_sistema(secciones,objetos):
     f.write("\t\t\t\t"+"if switch2 = '1' then"+"\n")
     f.write("\t\t\t\t\t"+"leds <= std_logic_vector(to_unsigned(N,4));"+"\n")                
     f.write("\t\t\t\t"+"else"+"\n")
-    f.write("\t\t\t\t\t"+"leds(3) <= paquete_i(3);"+"\n")
-    f.write("\t\t\t\t\t"+"leds(2) <= paquete_i(2);"+"\n")
-    f.write("\t\t\t\t\t"+"leds(1) <= paquete_i(1);"+"\n") 
-    f.write("\t\t\t\t\t"+"leds(0) <= paquete_i(0);"+"\n")  
+    f.write("\t\t\t\t\t"+"leds(3) <= paquete_i_s(3);"+"\n")
+    f.write("\t\t\t\t\t"+"leds(2) <= paquete_i_s(2);"+"\n")
+    f.write("\t\t\t\t\t"+"leds(1) <= paquete_i_s(1);"+"\n") 
+    f.write("\t\t\t\t\t"+"leds(0) <= paquete_i_s(0);"+"\n")  
     f.write("\t\t\t\t"+"end if;"+"\n")
     f.write("\t\t\t"+"end if;"+"\n")
     f.write("\t\t"+"end process;"+"\r\n") 
@@ -1432,7 +1466,7 @@ def creando_global(secciones,objetos):
     wrapper = "global"
     f.write("\t"+"entity "+wrapper+" is\n")
     f.write("\t\t"+"port("+"\n")
-    f.write("\t\t\t"+"clk_i"+" : "+" in "+"std_logic"+";\n")
+    f.write("\t\t\t"+"Clock"+" : "+" in "+"std_logic"+";\n")
     f.write("\t\t\t"+"uart_rxd_i"+" : "+" in "+"std_logic"+";\n")
     f.write("\t\t\t"+"uart_txd_o"+   " : "+" out "+"std_logic"+";\n")
     f.write("\t\t\t"+"leds"+   " : "+" out "+"std_logic_vector(4-1 downto 0)"+";\n")
@@ -1440,7 +1474,7 @@ def creando_global(secciones,objetos):
     f.write("\t\t\t"+"rgb_2"+   " : "+" out "+"std_logic_vector(3-1 downto 0)"+";\n")
     f.write("\t\t\t"+"switch1"+   " : "+" in "+"std_logic"+";\n")
     f.write("\t\t\t"+"switch2"+   " : "+" in "+"std_logic"+";\n")
-    f.write("\t\t\t"+"rst_i"+   " : "+" in "+"std_logic"+"\n")
+    f.write("\t\t\t"+"Reset"+   " : "+" in "+"std_logic"+"\n")
     f.write("\t\t"+");\n")
     f.write("\t"+"end entity "+wrapper+";\r\n") 
    
@@ -1450,13 +1484,13 @@ def creando_global(secciones,objetos):
     uart_control = "uart_control"
     f.write("\t"+"component "+uart_control+" is\n")
     f.write("\t\t"+"port("+"\n")
-    f.write("\t\t\t"+"clk_i"+   " : "+" in "+"std_logic"+";\n")
+    f.write("\t\t\t"+"Clock"+   " : "+" in "+"std_logic"+";\n")
     f.write("\t\t\t"+"N"+   " : "+" out "+"integer"+";\n")
     f.write("\t\t\t"+"escribir"+   " : "+" in "+"std_logic"+";\n")
     f.write("\t\t\t"+"vacio_in"+    " : "+" in "+"std_logic"+";\n") 
     f.write("\t\t\t"+"rd_uart"+ " : "+" out "+"std_logic"+";\n")
     f.write("\t\t\t"+"wr_uart"+ " : "+" out "+"std_logic"+";\n")  
-    f.write("\t\t\t"+"rst_i"+   " : "+" in "+"std_logic"+"\n")
+    f.write("\t\t\t"+"Reset"+   " : "+" in "+"std_logic"+"\n")
     f.write("\t\t"+");\n")
     f.write("\t"+"end component "+uart_control+";\r\n")
     
@@ -1464,7 +1498,7 @@ def creando_global(secciones,objetos):
     sistema = "sistema"
     f.write("\t"+"component "+sistema+" is\n")
     f.write("\t\t"+"port("+"\n")
-    f.write("\t\t\t"+"clk_i"+   " : "+" in "+"std_logic;"+"\n")
+    f.write("\t\t\t"+"Clock"+   " : "+" in "+"std_logic;"+"\n")
     
     f.write("\t\t\t"+"reset_uart"+ " : "+" out "+"std_logic;"+"\n")
     f.write("\t\t\t"+"r_disponible"+ " : "+" in "+"std_logic;"+"\n")
@@ -1479,7 +1513,7 @@ def creando_global(secciones,objetos):
     f.write("\t\t\t"+"led_rgb_2"+ " : "+" out "+"std_logic_vector(3-1 downto 0);"+"\n")
     f.write("\t\t\t"+"w_data"+ " : "+" out "+"std_logic_vector(8-1 downto 0);"+"\n")
    
-    f.write("\t\t\t"+"rst_i"+   " : "+" in "+"std_logic"+"\n")
+    f.write("\t\t\t"+"Reset"+   " : "+" in "+"std_logic"+"\n")
     f.write("\t\t"+");\n")
     f.write("\t"+"end component "+sistema+";\r\n")
     
@@ -1502,8 +1536,8 @@ def creando_global(secciones,objetos):
     f.write("\t\t\t"+"FIFO_W_TX	=> "+str(int(round(np.log2(M)))+1)+" 	--  addr bits of FIFO words in FIFO=2^FIFO_W "+"\n")			
     f.write("\t\t"+")"+"\n")
     f.write("\t\t"+"port map("+"\n")
-    f.write("\t\t\t"+"clk 		=> clk_i,"+"\n")
-    f.write("\t\t\t"+"reset 		=> rst_i,"+"\n")
+    f.write("\t\t\t"+"clk 		=> Clock,"+"\n")
+    f.write("\t\t\t"+"reset 		=> Reset,"+"\n")
     f.write("\t\t\t"+"rd_uart 	=> rd_uart_signal,"+"\n")
     f.write("\t\t\t"+"wr_uart 	=> wr_uart_signal,"+"\n")
     f.write("\t\t\t"+"rx 			=> uart_rxd_i,"+"\n")
@@ -1515,8 +1549,8 @@ def creando_global(secciones,objetos):
        
     f.write("\t"+uart_control+"_i : "+uart_control+"\n")
     f.write("\t\t"+"port map("+"\n")
-    f.write("\t\t\t"+"clk_i"+" => "+"clk_i"+",\n")
-    f.write("\t\t\t"+"rst_i"+" => "+"reset_uart"+",\n")
+    f.write("\t\t\t"+"Clock"+" => "+"Clock"+",\n")
+    f.write("\t\t\t"+"Reset"+" => "+"reset_uart"+",\n")
     f.write("\t\t\t"+"N"+" => "+"N_s"+",\n")
     f.write("\t\t\t"+"escribir"+" => "+"escribir_s"+",\n")
     f.write("\t\t\t"+"vacio_in"+" => "+"emptySignal"+",\n")
@@ -1526,8 +1560,8 @@ def creando_global(secciones,objetos):
     
     f.write("\t"+sistema+"_i : "+sistema+"\n")
     f.write("\t\t"+"port map("+"\n")
-    f.write("\t\t\t"+"clk_i"+" => "+"clk_i"+",\n")
-    f.write("\t\t\t"+"rst_i"+" => "+"rst_i"+",\n")
+    f.write("\t\t\t"+"Clock"+" => "+"Clock"+",\n")
+    f.write("\t\t\t"+"Reset"+" => "+"Reset"+",\n")
     f.write("\t\t\t"+"reset_uart"+" => "+"reset_s"+",\n")
     f.write("\t\t\t"+"r_disponible"+" => "+"rd_uart_signal"+",\n")
     f.write("\t\t\t"+"leer"+" => "+"leer_s"+",\n")
@@ -1546,7 +1580,7 @@ def creando_global(secciones,objetos):
     f.write("\t"+"rgb_1 <= led_rgb_1;"+"\n")
     f.write("\t"+"rgb_2 <= led_rgb_2;"+"\n")
     f.write("\t"+"leds <= led_s;"+"\n")
-    f.write("\t"+"reset_uart <= rst_i or reset_s;"+"\r\n") 
+    f.write("\t"+"reset_uart <= Reset or reset_s;"+"\r\n") 
         
     f.write("end Behavioral;") 
     
@@ -1580,13 +1614,13 @@ def creando_uart_control(secciones,objetos):
     uart_control = "uart_control"
     f.write("\t"+"entity "+uart_control+" is\n")
     f.write("\t\t"+"port("+"\n")
-    f.write("\t\t\t"+"clk_i"+" : "+" in "+"std_logic"+";\n")
+    f.write("\t\t\t"+"Clock"+" : "+" in "+"std_logic"+";\n")
     f.write("\t\t\t"+"N"+" : "+" out "+"integer"+";\n")
     f.write("\t\t\t"+"escribir"+   " : "+" in "+"std_logic"+";\n")
     f.write("\t\t\t"+"vacio_in"+   " : "+" in "+"std_logic"+";\n")
     f.write("\t\t\t"+"rd_uart"+   " : "+" out "+"std_logic"+";\n")
     f.write("\t\t\t"+"wr_uart"+   " : "+" out "+"std_logic"+";\n")
-    f.write("\t\t\t"+"rst_i"+   " : "+" in "+"std_logic"+"\n")
+    f.write("\t\t\t"+"Reset"+   " : "+" in "+"std_logic"+"\n")
     f.write("\t\t"+");\n")
     f.write("\t"+"end entity "+uart_control+";\r\n") 
    
@@ -1594,12 +1628,12 @@ def creando_uart_control(secciones,objetos):
     
     f.write("begin\r\n")
        
-    f.write("\t"+"lectura : process(clk_i)"+"\n")
+    f.write("\t"+"lectura : process(Clock)"+"\n")
     f.write("\t\t"+"variable contador_i: integer := 0;"+"\n")
     f.write("\t\t"+"variable L : integer := 0;"+"\n")
     f.write("\t"+"begin"+"\n")   
-    f.write("\t\t"+"if (clk_i = '1' and clk_i'event) then"+"\n")
-    f.write("\t\t\t"+"if rst_i = '1' then"+"\n")          
+    f.write("\t\t"+"if (Clock = '1' and Clock'event) then"+"\n")
+    f.write("\t\t\t"+"if Reset = '1' then"+"\n")          
     f.write("\t\t\t\t"+"L := 0;"+"\n") 
     f.write("\t\t\t\t"+"rd_uart <= '0';"+"\n")
     f.write("\t\t\t"+"elsif vacio_in = '0' then   -- Tiene datos"+"\n")
@@ -1609,7 +1643,7 @@ def creando_uart_control(secciones,objetos):
     f.write("\t\t\t\t\t"+"rd_uart <= '1';     -- Pido el dato"+"\n")
     f.write("\t\t\t\t\t"+"L := L + 1;"+"\n")
     f.write("\t\t\t\t"+"else"+"\n")                    
-    f.write("\t\t\t\t\t"+"rd_uart <= '0'"+"\n");
+    f.write("\t\t\t\t\t"+"rd_uart <= '0';"+"\n");
     f.write("\t\t\t\t"+"end if;"+"\n")                     
     f.write("\t\t\t"+"else                    -- No tiene datos"+"\n")
     f.write("\t\t\t\t"+"N <= L;"+"\n")
@@ -1618,14 +1652,14 @@ def creando_uart_control(secciones,objetos):
     f.write("\t\t"+"end if;"+"\n")
     f.write("\t"+"end process;"+"\r\n")
     
-    f.write("\t"+"escritura : process(clk_i)"+"\n")
+    f.write("\t"+"escritura : process(Clock)"+"\n")
     f.write("\t\t"+"variable contador_j: integer := 0;"+"\n")
     f.write("\t"+"begin"+"\n")   
-    f.write("\t\t"+"if (clk_i = '1' and clk_i'event) then"+"\n")
-    f.write("\t\t\t"+"if rst_i = '1' then"+"\n")          
+    f.write("\t\t"+"if (Clock = '1' and Clock'event) then"+"\n")
+    f.write("\t\t\t"+"if Reset = '1' then"+"\n")          
     f.write("\t\t\t\t"+"wr_uart <= '0';"+"\n")
     f.write("\t\t\t"+"else"+"\n")                    
-    f.write("\t\t\t\t"+"wr_uart <= escribir"+"\n");
+    f.write("\t\t\t\t"+"wr_uart <= escribir;"+"\n");
     f.write("\t\t\t"+"end if;"+"\n")
     f.write("\t\t"+"end if;"+"\n")
     f.write("\t"+"end process;"+"\r\n") 
@@ -1662,7 +1696,7 @@ def creando_detector(secciones,objetos):
     detector = "detector"
     f.write("\t"+"entity "+detector+" is\n")
     f.write("\t\t"+"port("+"\n")
-    f.write("\t\t\t"+"clk_i"+" : "+"in"+" "+"std_logic"+";\n")
+    f.write("\t\t\t"+"Clock"+" : "+"in"+" "+"std_logic"+";\n")
     f.write("\t\t\t"+"r_data"+" : "+"in"+" "+"std_logic_vector(8-1 downto 0)"+";\n")
     f.write("\t\t\t"+"r_disponible"+" : "+"in"+" "+"std_logic"+";\n")
     f.write("\t\t\t"+"led_rgb_1"+" : "+"out"+" "+"std_logic_vector(3-1 downto 0)"+";\n")
@@ -1673,7 +1707,7 @@ def creando_detector(secciones,objetos):
     f.write("\t\t\t"+"N"+" : "+"in"+" "+"integer"+";\n")
     f.write("\t\t\t"+"wr_uart"+   " : "+"out"+" "+"std_logic"+";\n")
     f.write("\t\t\t"+"w_data"+" : "+"out"+" "+"std_logic_vector(8-1 downto 0)"+";\n")
-    f.write("\t\t\t"+"rst_i"+   " : "+"in"+" "+"std_logic"+"\n")
+    f.write("\t\t\t"+"Reset"+   " : "+"in"+" "+"std_logic"+"\n")
     f.write("\t\t"+");\n")
     f.write("\t"+"end entity "+detector+";\r\n") 
    
@@ -1697,10 +1731,10 @@ def creando_detector(secciones,objetos):
 
     f.write("begin\r\n")
        
-    f.write("\t"+"cambio_estados : process(clk_i)"+"\n")
+    f.write("\t"+"cambio_estados : process(Clock)"+"\n")
     f.write("\t"+"begin"+"\n")   
-    f.write("\t\t"+"if (clk_i = '1' and clk_i'event) then"+"\n")
-    f.write("\t\t\t"+"if rst_i = '1' then"+"\n")          
+    f.write("\t\t"+"if (Clock = '1' and Clock'event) then"+"\n")
+    f.write("\t\t\t"+"if Reset = '1' then"+"\n")          
     f.write("\t\t\t\t"+"estado <= inicio;"+"\n") 
     f.write("\t\t\t"+"else"+"\n")
     f.write("\t\t\t\t"+"if procesar = '1' then"+"\n")
@@ -1712,10 +1746,10 @@ def creando_detector(secciones,objetos):
     f.write("\t\t"+"end if;"+"\n")   
     f.write("\t"+"end process;"+"\r\n")
     
-    f.write("\t"+"incrementar_contador : process(clk_i)"+"\n")
+    f.write("\t"+"incrementar_contador : process(Clock)"+"\n")
     f.write("\t"+"begin"+"\n")
-    f.write("\t\t"+"if (clk_i = '1' and clk_i'event) then"+"\n")
-    f.write("\t\t\t"+"if rst_i = '1' then"+"\n")          
+    f.write("\t\t"+"if (Clock = '1' and Clock'event) then"+"\n")
+    f.write("\t\t\t"+"if Reset = '1' then"+"\n")          
     f.write("\t\t\t\t"+"contador := 0;"+"\n") 
     f.write("\t\t\t"+"else"+"\n")
     f.write("\t\t\t\t"+"if r_disponible = '1' then"+"\n")
@@ -1735,10 +1769,10 @@ def creando_detector(secciones,objetos):
     f.write("\t\t"+"end if;"+"\n")
     f.write("\t"+"end process;"+"\r\n")
     
-    f.write("\t"+"empaquetado : process(clk_i)"+"\n") 
+    f.write("\t"+"empaquetado : process(Clock)"+"\n") 
     f.write("\t"+"begin"+"\n") 
-    f.write("\t\t"+"if (clk_i = '1' and clk_i'event) then"+"\n")
-    f.write("\t\t\t"+"if rst_i = '1' then"+"\n")          
+    f.write("\t\t"+"if (Clock = '1' and Clock'event) then"+"\n")
+    f.write("\t\t\t"+"if Reset = '1' then"+"\n")          
     f.write("\t\t\t\t"+"paquete_aux <= (others => '0');"+"\n")
     f.write("\t\t\t\t"+"nuevo <= '0';"+"\n")
     f.write("\t\t\t"+"else"+"\n")
@@ -1761,10 +1795,10 @@ def creando_detector(secciones,objetos):
     f.write("\t\t"+"end if;"+"\n")
     f.write("\t"+"end process;"+"\r\n")
     
-    f.write("\t"+"estados : process(clk_i,estado)"+"\n")      
+    f.write("\t"+"estados : process(Clock,estado)"+"\n")      
     f.write("\t"+"begin"+"\n")
-    f.write("\t\t"+"if (clk_i = '1' and clk_i'event) then"+"\n")
-    f.write("\t\t\t"+"if rst_i = '1' then"+"\n")          
+    f.write("\t\t"+"if (Clock = '1' and Clock'event) then"+"\n")
+    f.write("\t\t\t"+"if Reset = '1' then"+"\n")          
     f.write("\t\t\t\t"+"estado_siguiente <= inicio;"+"\n")
     f.write("\t\t\t\t"+"tags_izq <= '0';"+"\n") 
     f.write("\t\t\t\t"+"tags_der <= '0';"+"\n")
@@ -1806,10 +1840,10 @@ def creando_detector(secciones,objetos):
     f.write("\t\t"+"end if;"+"\n")
     f.write("\t"+"end process;"+"\r\n")
      
-    f.write("\t"+"paquete_listo : process(clk_i)"+"\n")
+    f.write("\t"+"paquete_listo : process(Clock)"+"\n")
     f.write("\t"+"begin"+"\n")
-    f.write("\t\t"+"if (clk_i = '1' and clk_i'event) then"+"\n")
-    f.write("\t\t\t"+"if rst_i = '1' then"+"\n")
+    f.write("\t\t"+"if (Clock = '1' and Clock'event) then"+"\n")
+    f.write("\t\t\t"+"if Reset = '1' then"+"\n")
     f.write("\t\t\t\t"+"procesado <= '0';"+"\n") 
     f.write("\t\t\t"+"else"+"\n")  
     f.write("\t\t\t\t"+"if estado = final then"+"\n")          
@@ -1821,10 +1855,10 @@ def creando_detector(secciones,objetos):
     f.write("\t\t"+"end if;"+"\n")
     f.write("\t"+"end process;"+"\r\n")  
     
-    f.write("\t"+"analizar_tags : process(clk_i)"+"\n")
+    f.write("\t"+"analizar_tags : process(Clock)"+"\n")
     f.write("\t"+"begin"+"\n")
-    f.write("\t\t"+"if (clk_i = '1' and clk_i'event) then"+"\n")
-    f.write("\t\t\t"+"if rst_i = '1' then"+"\n")
+    f.write("\t\t"+"if (Clock = '1' and Clock'event) then"+"\n")
+    f.write("\t\t\t"+"if Reset = '1' then"+"\n")
     f.write("\t\t\t\t"+"tags_ok <= '0';"+"\n") 
     f.write("\t\t\t\t"+"led_rgb_1 <= \"001\"; -- rojo"+"\n")
     f.write("\t\t\t"+"else"+"\n")  
@@ -1841,10 +1875,10 @@ def creando_detector(secciones,objetos):
     f.write("\t\t"+"end if;"+"\n")
     f.write("\t"+"end process;"+"\r\n")
     
-    f.write("\t"+"analizar_largo : process(clk_i)"+"\n")
+    f.write("\t"+"analizar_largo : process(Clock)"+"\n")
     f.write("\t"+"begin"+"\n")
-    f.write("\t\t"+"if (clk_i = '1' and clk_i'event) then"+"\n")
-    f.write("\t\t\t"+"if rst_i = '1' then"+"\n")
+    f.write("\t\t"+"if (Clock = '1' and Clock'event) then"+"\n")
+    f.write("\t\t\t"+"if Reset = '1' then"+"\n")
     f.write("\t\t\t\t"+"largo_ok <= '0';"+"\n") 
     f.write("\t\t\t\t"+"led_rgb_2 <= \"001\"; -- rojo"+"\n") 
     f.write("\t\t\t"+"else"+"\n")  
@@ -1862,10 +1896,10 @@ def creando_detector(secciones,objetos):
     f.write("\t\t"+"end if;"+"\n")
     f.write("\t"+"end process;"+"\r\n")
     
-    f.write("\t"+"paquete_valido : process(clk_i)"+"\n")
+    f.write("\t"+"paquete_valido : process(Clock)"+"\n")
     f.write("\t"+"begin"+"\n")
-    f.write("\t\t"+"if (clk_i = '1' and clk_i'event) then"+"\n")
-    f.write("\t\t\t"+"if rst_i = '1' then"+"\n")
+    f.write("\t\t"+"if (Clock = '1' and Clock'event) then"+"\n")
+    f.write("\t\t\t"+"if Reset = '1' then"+"\n")
     f.write("\t\t\t\t"+"paquete <= (others => '0');"+"\n") 
     f.write("\t\t\t"+"else"+"\n")                      
     f.write("\t\t\t\t"+"if estado = final and largo_ok = '1' and tags_ok = '1' then"+"\n")
@@ -1910,13 +1944,13 @@ def creando_registro(secciones,objetos):
     registro = "registro"
     f.write("\t"+"entity "+registro+" is\n")
     f.write("\t\t"+"port("+"\n")
-    f.write("\t\t\t"+"clk_i"+" : "+"in"+" "+"std_logic"+";\n")
+    f.write("\t\t\t"+"Clock"+" : "+"in"+" "+"std_logic"+";\n")
     f.write("\t\t\t"+"procesar"+" : "+"in"+" "+"std_logic"+";\n")
     f.write("\t\t\t"+"procesado"+" : "+"out"+" "+"std_logic"+";\n")
     f.write("\t\t\t"+"paquete_i"+" : "+"in"+" "+"std_logic_vector("+str(M)+"-1 downto 0)"+";\n")
     f.write("\t\t\t"+"w_data"+" : "+"out"+" "+"std_logic_vector(8-1 downto 0)"+";\n")
     f.write("\t\t\t"+"wr_uart"+   " : "+"out"+" "+"std_logic"+"; -- \"char_disp\"\n")
-    f.write("\t\t\t"+"rst_i"+   " : "+"in"+" "+"std_logic"+"\n")
+    f.write("\t\t\t"+"Reset"+   " : "+"in"+" "+"std_logic"+"\n")
     f.write("\t\t"+");\n")
     f.write("\t"+"end entity "+registro+";\r\n") 
    
@@ -1929,10 +1963,10 @@ def creando_registro(secciones,objetos):
   
     f.write("begin\r\n")
        
-    f.write("\t"+"contador : process(clk_i)"+"\n")
+    f.write("\t"+"contador : process(Clock)"+"\n")
     f.write("\t"+"begin"+"\n")
-    f.write("\t\t"+"if (clk_i = '1' and clk_i'event) then"+"\n")
-    f.write("\t\t\t"+"if rst_i = '1' then"+"\n")
+    f.write("\t\t"+"if (Clock = '1' and Clock'event) then"+"\n")
+    f.write("\t\t\t"+"if Reset = '1' then"+"\n")
     f.write("\t\t\t\t"+"mux_s <= \""+str("0"*math.ceil(np.log2(M+1)))+"\";"+"\n")               ### TODO:
     f.write("\t\t\t"+"else"+"\n")
     f.write("\t\t\t\t"+"if (ena_s = '1') then"+"\n")        
@@ -1962,10 +1996,10 @@ def creando_registro(secciones,objetos):
                   
     f.write("\t"+"w_data <= \"00110001\" when mux_out_s = '1' else \"00110000\";"+"\r\n")
 
-    f.write("\t"+"FSM_reset : process(clk_i)"+"\n") 
+    f.write("\t"+"FSM_reset : process(Clock)"+"\n") 
     f.write("\t"+"begin"+"\n") 
-    f.write("\t\t"+"if (clk_i = '1' and clk_i'event) then"+"\n") 
-    f.write("\t\t\t"+"if rst_i = '1' then"+"\n") 
+    f.write("\t\t"+"if (Clock = '1' and Clock'event) then"+"\n") 
+    f.write("\t\t\t"+"if Reset = '1' then"+"\n") 
     f.write("\t\t\t\t"+"estado <= REINICIO;"+"\n")           
     f.write("\t\t\t"+"else"+"\n")                  
     f.write("\t\t\t\t"+"if (procesar = '1') then"+"\n")           
@@ -2045,7 +2079,7 @@ def creando_selector(secciones,objetos):
     selector = "selector"
     f.write("\t"+"entity "+selector+" is\n")
     f.write("\t\t"+"port("+"\n")
-    f.write("\t\t\t"+"clk_i"+" : "+"in"+" "+"std_logic"+";\n")
+    f.write("\t\t\t"+"Clock"+" : "+"in"+" "+"std_logic"+";\n")
     f.write("\t\t\t"+"switch"+" : "+"in"+" "+"std_logic"+";\n")
     f.write("\t\t\t"+"leds"+" : "+"out"+" "+"std_logic_vector(2-1 downto 0)"+";\n")
     f.write("\t\t\t"+"wr_uart_1"+" : "+"in"+" "+"std_logic"+";\n")
@@ -2054,7 +2088,7 @@ def creando_selector(secciones,objetos):
     f.write("\t\t\t"+"w_data_1"+" : "+"in"+" "+"std_logic_vector(8-1 downto 0)"+";\n")
     f.write("\t\t\t"+"w_data_2"+" : "+"in"+" "+"std_logic_vector(8-1 downto 0)"+";\n")
     f.write("\t\t\t"+"w_data_3"+" : "+"out"+" "+"std_logic_vector(8-1 downto 0)"+";\n")
-    f.write("\t\t\t"+"rst_i"+   " : "+"in"+" "+"std_logic"+"\n")
+    f.write("\t\t\t"+"Reset"+   " : "+"in"+" "+"std_logic"+"\n")
     f.write("\t\t"+");\n")
     f.write("\t"+"end entity "+selector+";\r\n") 
    
@@ -2064,10 +2098,10 @@ def creando_selector(secciones,objetos):
   
     f.write("begin\r\n")
        
-    f.write("\t"+"switches : process(clk_i)"+"\n")   
+    f.write("\t"+"switches : process(Clock)"+"\n")   
     f.write("\t"+"begin"+"\n")
-    f.write("\t\t"+"if (clk_i = '1' and clk_i'event) then"+"\n")
-    f.write("\t\t\t"+"if rst_i = '1' then"+"\n")
+    f.write("\t\t"+"if (Clock = '1' and Clock'event) then"+"\n")
+    f.write("\t\t\t"+"if Reset = '1' then"+"\n")
     f.write("\t\t\t\t"+"w_data_3 <= \"00000000\";"+"\n")
     f.write("\t\t\t\t"+"wr_uart_3 <= '0';"+"\n")
     f.write("\t\t\t"+"else"+"\n") 
@@ -2179,7 +2213,7 @@ def creando_fifo(secciones,objetos):
     f.write("\t\t\t"+"full_reg <= full_next;"+"\n")
     f.write("\t\t\t"+"empty_reg <= empty_next;"+"\n")
     f.write("\t\t"+"end if;"+"\n")
-    f.write("\t"+"end process"+"\r\n")
+    f.write("\t"+"end process;"+"\r\n")
 
     f.write("\t"+"-- successive pointer values"+"\n")
     f.write("\t"+"w_ptr_succ <= std_logic_vector(unsigned(w_ptr_reg) + 1);"+"\n")
@@ -2605,30 +2639,30 @@ def creando_uart(secciones,objetos):
        
     f.write("begin\r\n")
        
-    f.write("\t"+"baud_gen_unit: entity work.uart_baud_gen(arch)"+"\n")
+    f.write("\t"+"baud_gen_unit: entity work.uart_baud_gen(Behavioral)"+"\n")
     f.write("\t\t"+"generic map(M => DVSR, N => DVSR_BIT)"+"\n")
     f.write("\t\t"+"port map(clk => clk, reset => reset,"+"\n")
     f.write("\t\t\t\t"+"q => open, max_tick => tick);"+"\r\n")
 	
-    f.write("\t"+"uart_rx_unit: entity work.uart_rx(arch)"+"\n")
+    f.write("\t"+"uart_rx_unit: entity work.uart_rx(Behavioral)"+"\n")
     f.write("\t\t"+"generic map(DBIT=>DBIT, SB_TICK=>SB_TICK)"+"\n")
     f.write("\t\t"+"port map(clk=>clk, reset=>reset, rx=>rx,"+"\n")
     f.write("\t\t\t\t"+"s_tick=>tick, rx_done_tick=>rx_done_tick,"+"\n")
     f.write("\t\t\t\t"+"d_out => rx_data_out);"+"\r\n")
 				 
-    f.write("\t"+"fifo_rx_unit: entity work.fifo(arch)"+"\n")
+    f.write("\t"+"fifo_rx_unit: entity work.fifo(Behavioral)"+"\n")
     f.write("\t\t"+"generic map(B => DBIT, W => FIFO_W_RX)"+"\n")
     f.write("\t\t"+"port map(clk => clk, reset => reset, rd => rd_uart,"+"\n")
     f.write("\t\t\t\t"+"wr => rx_done_tick, w_data => rx_data_out,"+"\n")
     f.write("\t\t\t\t"+"empty => rx_empty, full => open, r_data => r_data);"+"\r\n")
 				 
-    f.write("\t"+"fifo_tx_unit: entity work.fifo(arch)"+"\n")
+    f.write("\t"+"fifo_tx_unit: entity work.fifo(Behavioral)"+"\n")
     f.write("\t\t"+"generic map(B => DBIT, W => FIFO_W_TX)"+"\n")
     f.write("\t\t"+"port map(clk => clk, reset => reset, rd => tx_done_tick,"+"\n")
     f.write("\t\t\t\t"+"wr=>wr_uart, w_data=>w_data, empty => tx_empty,"+"\n")
     f.write("\t\t\t\t"+"full=>tx_full, r_data=>tx_fifo_out);"+"\r\n")
 				 
-    f.write("\t"+"uart_tx_unit: entity work.uart_tx(arch)"+"\n")
+    f.write("\t"+"uart_tx_unit: entity work.uart_tx(Behavioral)"+"\n")
     f.write("\t\t"+"generic map(DBIT=>DBIT, SB_TICK=>SB_TICK)"+"\n")
     f.write("\t\t"+"port map(clk=>clk, reset=>reset,"+"\n")
     f.write("\t\t\t\t"+"tx_start => tx_fifo_not_empty,"+"\n")
@@ -2641,4 +2675,4 @@ def creando_uart(secciones,objetos):
     
     f.close()  # Close header file    
     
-    print("UART_baud_gen > Finalizado")
+    print("UART > Finalizado")

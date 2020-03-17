@@ -58,7 +58,7 @@ begin
 			full_reg <= full_next;
 			empty_reg <= empty_next;
 		end if;
-	end process
+	end process;
 	-- successive pointer values
 	w_ptr_succ <= std_logic_vector(unsigned(w_ptr_reg) + 1);
 	r_ptr_succ <= std_logic_vector(unsigned(r_ptr_reg) + 1);

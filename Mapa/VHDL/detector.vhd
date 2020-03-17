@@ -4,7 +4,7 @@ use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
 	entity detector is
 		port(
-			clk_i : in std_logic;
+			Clock : in std_logic;
 			r_data : in std_logic_vector(8-1 downto 0);
 			r_disponible : in std_logic;
 			led_rgb_1 : out std_logic_vector(3-1 downto 0);
@@ -15,7 +15,7 @@ use IEEE.numeric_std.all;
 			N : in integer;
 			wr_uart : out std_logic;
 			w_data : out std_logic_vector(8-1 downto 0);
-			rst_i : in std_logic
+			Reset : in std_logic
 		);
 	end entity detector;
 architecture Behavioral of detector is
@@ -31,10 +31,10 @@ architecture Behavioral of detector is
 	constant char_0 : std_logic_vector(8-1 downto 0) := "00110000"; -- r_data = '0'
 	constant char_1 : std_logic_vector(8-1 downto 0) := "00110001"; -- r_data = '1' 
 begin
-	cambio_estados : process(clk_i)
+	cambio_estados : process(Clock)
 	begin
-		if (clk_i = '1' and clk_i'event) then
-			if rst_i = '1' then
+		if (Clock = '1' and Clock'event) then
+			if Reset = '1' then
 				estado <= inicio;
 			else
 				if procesar = '1' then
@@ -45,10 +45,10 @@ begin
 			end if;
 		end if;
 	end process;
-	incrementar_contador : process(clk_i)
+	incrementar_contador : process(Clock)
 	begin
-		if (clk_i = '1' and clk_i'event) then
-			if rst_i = '1' then
+		if (Clock = '1' and Clock'event) then
+			if Reset = '1' then
 				contador := 0;
 			else
 				if r_disponible = '1' then
@@ -67,10 +67,10 @@ begin
 			end if;
 		end if;
 	end process;
-	empaquetado : process(clk_i)
+	empaquetado : process(Clock)
 	begin
-		if (clk_i = '1' and clk_i'event) then
-			if rst_i = '1' then
+		if (Clock = '1' and Clock'event) then
+			if Reset = '1' then
 				paquete_aux <= (others => '0');
 				nuevo <= '0';
 			else
@@ -92,10 +92,10 @@ begin
 			end if;
 		end if;
 	end process;
-	estados : process(clk_i,estado)
+	estados : process(Clock,estado)
 	begin
-		if (clk_i = '1' and clk_i'event) then
-			if rst_i = '1' then
+		if (Clock = '1' and Clock'event) then
+			if Reset = '1' then
 				estado_siguiente <= inicio;
 				tags_izq <= '0';
 				tags_der <= '0';
@@ -136,10 +136,10 @@ begin
 			end if;
 		end if;
 	end process;
-	paquete_listo : process(clk_i)
+	paquete_listo : process(Clock)
 	begin
-		if (clk_i = '1' and clk_i'event) then
-			if rst_i = '1' then
+		if (Clock = '1' and Clock'event) then
+			if Reset = '1' then
 				procesado <= '0';
 			else
 				if estado = final then
@@ -150,10 +150,10 @@ begin
 			end if;
 		end if;
 	end process;
-	analizar_tags : process(clk_i)
+	analizar_tags : process(Clock)
 	begin
-		if (clk_i = '1' and clk_i'event) then
-			if rst_i = '1' then
+		if (Clock = '1' and Clock'event) then
+			if Reset = '1' then
 				tags_ok <= '0';
 				led_rgb_1 <= "001"; -- rojo
 			else
@@ -169,10 +169,10 @@ begin
 			end if;
 		end if;
 	end process;
-	analizar_largo : process(clk_i)
+	analizar_largo : process(Clock)
 	begin
-		if (clk_i = '1' and clk_i'event) then
-			if rst_i = '1' then
+		if (Clock = '1' and Clock'event) then
+			if Reset = '1' then
 				largo_ok <= '0';
 				led_rgb_2 <= "001"; -- rojo
 			else
@@ -189,10 +189,10 @@ begin
 			end if;
 		end if;
 	end process;
-	paquete_valido : process(clk_i)
+	paquete_valido : process(Clock)
 	begin
-		if (clk_i = '1' and clk_i'event) then
-			if rst_i = '1' then
+		if (Clock = '1' and Clock'event) then
+			if Reset = '1' then
 				paquete <= (others => '0');
 			else
 				if estado = final and largo_ok = '1' and tags_ok = '1' then

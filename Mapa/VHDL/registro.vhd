@@ -4,13 +4,13 @@ use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
 	entity registro is
 		port(
-			clk_i : in std_logic;
+			Clock : in std_logic;
 			procesar : in std_logic;
 			procesado : out std_logic;
 			paquete_i : in std_logic_vector(15-1 downto 0);
 			w_data : out std_logic_vector(8-1 downto 0);
 			wr_uart : out std_logic; -- "char_disp"
-			rst_i : in std_logic
+			Reset : in std_logic
 		);
 	end entity registro;
 architecture Behavioral of registro is
@@ -19,10 +19,10 @@ architecture Behavioral of registro is
 	signal mux_out_s,ena_s,rst_s,reg_aux : std_logic;
 	signal mux_s : std_logic_vector(4-1 downto 0);
 begin
-	contador : process(clk_i)
+	contador : process(Clock)
 	begin
-		if (clk_i = '1' and clk_i'event) then
-			if rst_i = '1' then
+		if (Clock = '1' and Clock'event) then
+			if Reset = '1' then
 				mux_s <= "0000";
 			else
 				if (ena_s = '1') then
@@ -60,10 +60,10 @@ begin
 		end case;
 	end process;
 	w_data <= "00110001" when mux_out_s = '1' else "00110000";
-	FSM_reset : process(clk_i)
+	FSM_reset : process(Clock)
 	begin
-		if (clk_i = '1' and clk_i'event) then
-			if rst_i = '1' then
+		if (Clock = '1' and Clock'event) then
+			if Reset = '1' then
 				estado <= REINICIO;
 			else
 				if (procesar = '1') then

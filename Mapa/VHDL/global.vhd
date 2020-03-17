@@ -4,7 +4,7 @@ use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
 	entity global is
 		port(
-			clk_i :  in std_logic;
+			Clock :  in std_logic;
 			uart_rxd_i :  in std_logic;
 			uart_txd_o :  out std_logic;
 			leds :  out std_logic_vector(4-1 downto 0);
@@ -12,24 +12,24 @@ use IEEE.numeric_std.all;
 			rgb_2 :  out std_logic_vector(3-1 downto 0);
 			switch1 :  in std_logic;
 			switch2 :  in std_logic;
-			rst_i :  in std_logic
+			Reset :  in std_logic
 		);
 	end entity global;
 architecture Behavioral of global is
 	component uart_control is
 		port(
-			clk_i :  in std_logic;
+			Clock :  in std_logic;
 			N :  out integer;
 			escribir :  in std_logic;
 			vacio_in :  in std_logic;
 			rd_uart :  out std_logic;
 			wr_uart :  out std_logic;
-			rst_i :  in std_logic
+			Reset :  in std_logic
 		);
 	end component uart_control;
 	component sistema is
 		port(
-			clk_i :  in std_logic;
+			Clock :  in std_logic;
 			reset_uart :  out std_logic;
 			r_disponible :  in std_logic;
 			leer :  out std_logic;
@@ -42,7 +42,7 @@ architecture Behavioral of global is
 			led_rgb_1 :  out std_logic_vector(3-1 downto 0);
 			led_rgb_2 :  out std_logic_vector(3-1 downto 0);
 			w_data :  out std_logic_vector(8-1 downto 0);
-			rst_i :  in std_logic
+			Reset :  in std_logic
 		);
 	end component sistema;
 	Signal w_data_signal, r_dataSignal: std_logic_vector(7 downto 0);
@@ -61,8 +61,8 @@ begin
 			FIFO_W_TX	=> 5 	--  addr bits of FIFO words in FIFO=2^FIFO_W 
 		)
 		port map(
-			clk 		=> clk_i,
-			reset 		=> rst_i,
+			clk 		=> Clock,
+			reset 		=> Reset,
 			rd_uart 	=> rd_uart_signal,
 			wr_uart 	=> wr_uart_signal,
 			rx 			=> uart_rxd_i,
@@ -73,8 +73,8 @@ begin
 		);
 	uart_control_i : uart_control
 		port map(
-			clk_i => clk_i,
-			rst_i => reset_uart,
+			Clock => Clock,
+			Reset => reset_uart,
 			N => N_s,
 			escribir => escribir_s,
 			vacio_in => emptySignal,
@@ -83,8 +83,8 @@ begin
 		);
 	sistema_i : sistema
 		port map(
-			clk_i => clk_i,
-			rst_i => rst_i,
+			Clock => Clock,
+			Reset => Reset,
 			reset_uart => reset_s,
 			r_disponible => rd_uart_signal,
 			leer => leer_s,
@@ -101,5 +101,5 @@ begin
 	rgb_1 <= led_rgb_1;
 	rgb_2 <= led_rgb_2;
 	leds <= led_s;
-	reset_uart <= rst_i or reset_s;
+	reset_uart <= Reset or reset_s;
 end Behavioral;

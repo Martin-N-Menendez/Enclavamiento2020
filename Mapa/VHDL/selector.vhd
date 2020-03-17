@@ -4,7 +4,7 @@ use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
 	entity selector is
 		port(
-			clk_i : in std_logic;
+			Clock : in std_logic;
 			switch : in std_logic;
 			leds : out std_logic_vector(2-1 downto 0);
 			wr_uart_1 : in std_logic;
@@ -13,16 +13,16 @@ use IEEE.numeric_std.all;
 			w_data_1 : in std_logic_vector(8-1 downto 0);
 			w_data_2 : in std_logic_vector(8-1 downto 0);
 			w_data_3 : out std_logic_vector(8-1 downto 0);
-			rst_i : in std_logic
+			Reset : in std_logic
 		);
 	end entity selector;
 architecture Behavioral of selector is
 	signal disp_aux : std_logic_vector(8-1 downto 0);
 begin
-	switches : process(clk_i)
+	switches : process(Clock)
 	begin
-		if (clk_i = '1' and clk_i'event) then
-			if rst_i = '1' then
+		if (Clock = '1' and Clock'event) then
+			if Reset = '1' then
 				w_data_3 <= "00000000";
 				wr_uart_3 <= '0';
 			else

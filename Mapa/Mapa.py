@@ -708,7 +708,7 @@ def generar_mapa(tabla):
     for i in range(len(archivos)):
             
         # Falta corregir desvios
-        if i != 8:
+        if i != 8:          # 8 u 2
             continue
     
         secciones.clear()

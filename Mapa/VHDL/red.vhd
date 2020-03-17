@@ -55,7 +55,7 @@ architecture Behavioral of red is
 			Clock :  in std_logic;
 			Reset :  in std_logic;
 			Estado_i :  in std_logic;
-			Estado_post :  out std_logic;
+			Estado_post :  in std_logic;
 			Semaforo_propio_i_1 :  in sem_type;
 			Semaforo_propio_o_1 :  out sem_type;
 			Semaforo_cercano :  out sem_type;
@@ -73,8 +73,8 @@ architecture Behavioral of red is
 			Clock :  in std_logic;
 			Reset :  in std_logic;
 			Estado_i :  in std_logic;
-			Estado_ante :  out std_logic;
-			Estado_post :  out std_logic;
+			Estado_ante :  in std_logic;
+			Estado_post :  in std_logic;
 			Semaforo_propio_i_1 :  in sem_type;
 			Semaforo_propio_o_1 :  out sem_type;
 			Semaforo_propio_i_2 :  in sem_type;
@@ -95,8 +95,8 @@ architecture Behavioral of red is
 			Clock :  in std_logic;
 			Reset :  in std_logic;
 			Estado_i :  in std_logic;
-			Estado_ante :  out std_logic;
-			Estado_post :  out std_logic;
+			Estado_ante :  in std_logic;
+			Estado_post :  in std_logic;
 			Estado_o :  out std_logic
 		);
 	end component nodo_3;
@@ -111,8 +111,8 @@ architecture Behavioral of red is
 			Clock :  in std_logic;
 			Reset :  in std_logic;
 			Estado_i :  in std_logic;
-			Estado_ante :  out std_logic;
-			Estado_post :  out std_logic;
+			Estado_ante :  in std_logic;
+			Estado_post :  in std_logic;
 			Semaforo_propio_i_1 :  in sem_type;
 			Semaforo_propio_o_1 :  out sem_type;
 			Estado_o :  out std_logic
@@ -129,7 +129,7 @@ architecture Behavioral of red is
 			Clock :  in std_logic;
 			Reset :  in std_logic;
 			Estado_i :  in std_logic;
-			Estado_ante :  out std_logic;
+			Estado_ante :  in std_logic;
 			Semaforo_propio_i_1 :  in sem_type;
 			Semaforo_propio_o_1 :  out sem_type;
 			Semaforo_cercano :  out sem_type;
@@ -147,7 +147,7 @@ architecture Behavioral of red is
 			Clock :  in std_logic;
 			Reset :  in std_logic;
 			Estado_i :  in std_logic;
-			Estado_ante :  out std_logic;
+			Estado_ante :  in std_logic;
 			Semaforo_propio_i_1 :  in sem_type;
 			Semaforo_propio_o_1 :  out sem_type;
 			Semaforo_cercano :  out sem_type;
@@ -302,6 +302,8 @@ begin
 		ocupacion_4 <= Ocupacion(3);
 		ocupacion_5 <= Ocupacion(4);
 		ocupacion_6 <= Ocupacion(5);
+		mdc_i_1 <= Cambios_i;
+		Cambios_o <= mdc_o_1;
 		sem_lsb_i_1 <= semaforos_i.lsb(0);
 		sem_msb_i_1 <= semaforos_i.msb(0);
 		semaforos_o.lsb(0) <= sem_lsb_o_1;
@@ -331,4 +333,201 @@ begin
 		semaforos_o.lsb(6) <= sem_lsb_o_7;
 		semaforos_o.msb(6) <= sem_msb_o_7;
 		procesado <= procesar;
-end Behavioral;
+end Behavioral;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 	Signal sem_msb_i_3 : std_logic;
+	Signal sem_lsb_o_3 : std_logic;
+	Signal sem_msb_o_3 : std_logic;
+	Signal sem_lsb_i_4 : std_logic;
+	Signal sem_msb_i_4 : std_logic;
+	Signal sem_lsb_o_4 : std_logic;
+	Signal sem_msb_o_4 : std_logic;
+	Signal sem_lsb_i_5 : std_logic;
+	Signal sem_msb_i_5 : std_logic;
+	Signal sem_lsb_o_5 : std_logic;
+	Signal sem_msb_o_5 : std_logic;
+	Signal sem_lsb_i_6 : std_logic;
+	Signal sem_msb_i_6 : std_logic;
+	Signal sem_lsb_o_6 : std_logic;
+	Signal sem_msb_o_6 : std_logic;
+	Signal sem_lsb_i_7 : std_logic;
+	Signal sem_msb_i_7 : std_logic;
+	Signal sem_lsb_o_7 : std_logic;
+	Signal sem_msb_o_7 : std_logic;
+	Signal sem_lsb_i_8 : std_logic;
+	Signal sem_msb_i_8 : std_logic;
+	Signal sem_lsb_o_8 : std_logic;
+	Signal sem_msb_o_8 : std_logic;
+	Signal sem_lsb_i_9 : std_logic;
+	Signal sem_msb_i_9 : std_logic;
+	Signal sem_lsb_o_9 : std_logic;
+	Signal sem_msb_o_9 : std_logic;
+	Signal sem_lsb_i_10 : std_logic;
+	Signal sem_msb_i_10 : std_logic;
+	Signal sem_lsb_o_10 : std_logic;
+	Signal sem_msb_o_10 : std_logic;
+	Signal sem_lsb_i_11 : std_logic;
+	Signal sem_msb_i_11 : std_logic;
+	Signal sem_lsb_o_11 : std_logic;
+	Signal sem_msb_o_11 : std_logic;
+	Signal sem_lsb_i_12 : std_logic;
+	Signal sem_msb_i_12 : std_logic;
+	Signal sem_lsb_o_12 : std_logic;
+	Signal sem_msb_o_12 : std_logic;
+	Signal sem_lsb_i_13 : std_logic;
+	Signal sem_msb_i_13 : std_logic;
+	Signal sem_lsb_o_13 : std_logic;
+	Signal sem_msb_o_13 : std_logic;
+	Signal sem_lsb_i_14 : std_logic;
+	Signal sem_msb_i_14 : std_logic;
+	Signal sem_lsb_o_14 : std_logic;
+	Signal sem_msb_o_14 : std_logic;
+	Signal sem_lsb_i_15 : std_logic;
+	Signal sem_msb_i_15 : std_logic;
+	Signal sem_lsb_o_15 : std_logic;
+	Signal sem_msb_o_15 : std_logic;
+	Signal sem_lsb_i_16 : std_logic;
+	Signal sem_msb_i_16 : std_logic;
+	Signal sem_lsb_o_16 : std_logic;
+	Signal sem_msb_o_16 : std_logic;
+	Signal sem_lsb_i_17 : std_logic;
+	Signal sem_msb_i_17 : std_logic;
+	Signal sem_lsb_o_17 : std_logic;
+	Signal sem_msb_o_17 : std_logic;
+	Signal sem_lsb_i_18 : std_logic;
+	Signal sem_msb_i_18 : std_logic;
+	Signal sem_lsb_o_18 : std_logic;
+	Signal sem_msb_o_18 : std_logic;
+	Signal sem_lsb_i_19 : std_logic;
+	Signal sem_msb_i_19 : std_logic;
+	Signal sem_lsb_o_19 : std_logic;
+	Signal sem_msb_o_19 : std_logic;
+	Signal sem_lsb_i_20 : std_logic;
+	Signal sem_msb_i_20 : std_logic;
+	Signal sem_lsb_o_20 : std_logic;
+	Signal sem_msb_o_20 : std_logic;
+	Signal mdc_i_1 : std_logic;
+	Signal mdc_o_1 : std_logic;
+	Signal mdc_ante_i_1 : std_logic;
+	Signal mdc_ante_o_1 : std_logic;
+	Signal mdc_post_i_1 : std_logic;
+	Signal mdc_post_o_1 : std_logic;
+	Signal mdc_desv_i_1 : std_logic;
+	Signal mdc_desv_o_1 : std_logic;
+	Signal mdc_i_2 : std_logic;
+	Signal mdc_o_2 : std_logic;
+	Signal mdc_ante_i_2 : std_logic;
+	Signal mdc_ante_o_2 : std_logic;
+	Signal mdc_post_i_2 : std_logic;
+	Signal mdc_post_o_2 : std_logic;
+	Signal mdc_desv_i_2 : std_logic;
+	Signal mdc_desv_o_2 : std_logic;
+	Signal mdc_i_3 : std_logic;
+	Signal mdc_o_3 : std_logic;
+	Signal mdc_ante_i_3 : std_logic;
+	Signal mdc_ante_o_3 : std_logic;
+	Signal mdc_post_i_3 : std_logic;
+	Signal mdc_post_o_3 : std_logic;
+	Signal mdc_desv_i_3 : std_logic;
+	Signal mdc_desv_o_3 : std_logic;
+	Signal mdc_i_4 : std_logic;
+	Signal mdc_o_4 : std_logic;
+	Signal mdc_ante_i_4 : std_logic;
+	Signal mdc_ante_o_4 : std_logic;
+	Signal mdc_post_i_4 : std_logic;
+	Signal mdc_post_o_4 : std_logic;
+	Signal mdc_desv_i_4 : std_logic;
+	Signal mdc_desv_o_4 : std_logic;
+	Signal mdc_i_5 : std_logic;
+	Signal mdc_o_5 : std_logic;
+	Signal mdc_ante_i_5 : std_logic;
+	Signal mdc_ante_o_5 : std_logic;
+	Signal mdc_post_i_5 : std_logic;
+	Signal mdc_post_o_5 : std_logic;
+	Signal mdc_desv_i_5 : std_logic;
+	Signal mdc_desv_o_5 : std_logic;
+	Signal mdc_i_6 : std_logic;
+	Signal mdc_o_6 : std_logic;
+	Signal mdc_ante_i_6 : std_logic;
+	Signal mdc_ante_o_6 : std_logic;
+	Signal mdc_post_i_6 : std_logic;
+	Signal mdc_post_o_6 : std_logic;
+	Signal mdc_desv_i_6 : std_logic;
+	Signal mdc_desv_o_6 : std_logic;
+	Signal cosa : std_logic;
+begin
+	nodo_1_i:nodo_1 port map(
+		Clock => Clock,
+		Estado_post => conector_2,
+		Semaforo_propio_i_1.lsb => sem_lsb_i_1,
+		Semaforo_propio_i_1.msb => sem_msb_i_1,
+		Semaforo_propio_o_1.lsb => sem_lsb_o_1,
+		Semaforo_propio_o_1.msb => sem_msb_o_1,
+		Semaforo_cercano.lsb => cosa,
+		Semaforo_cercano.msb => cosa,
+		Estado_i => ocupacion_1,
+		Estado_o => conector_1,
+		Reset => Reset
+		);
+	nodo_2_i:nodo_2 port map(
+		Clock => Clock,
+		Estado_ante => conector_1,
+		Estado_post => mdc_ante_o_1,
+		Semaforo_propio_i_1.lsb => sem_lsb_i_2,
+		Semaforo_propio_i_1.msb => sem_msb_i_2,
+		Semaforo_propio_o_1.lsb => sem_lsb_o_2,
+		Semaforo_propio_o_1.msb => sem_msb_o_2,
+		Semaforo_propio_i_2.lsb => sem_lsb_i_3,
+		Semaforo_propio_i_2.msb => sem_msb_i_3,
+		Semaforo_propio_o_2.lsb => sem_lsb_o_3,
+		Semaforo_propio_o_2.msb => sem_msb_o_3,
+		Semaforo_propio_i_3.lsb => sem_lsb_i_4,
+		Semaforo_propio_i_3.msb => sem_msb_i_4,
+		Semaforo_propio_o_3.lsb => sem_lsb_o_4,
+		Semaforo_propio_o_3.msb => sem_msb_o_4,
+		Estado_i => ocupacion_2,
+		Estado_o => conector_2,
+		Reset => Reset
+		);
+	nodo_3_i:nodo_3 port map(
+		Clock => Clock,
+		Estado_ante => mdc_post_o_1,
+		Estado_post => mdc_ante_o_2,
+		Semaforo_propio_i_1.lsb => sem_lsb_i_5,
+		Semaforo_propio_i_1.msb => sem_msb_i_5,
+		Semaforo_propio_o_1.lsb => sem_lsb_o_5,
+		Semaforo_propio_o_1.msb => sem_msb_o_5,
+		Semaforo_propio_i_2.lsb => sem_lsb_i_6,
+		Semaforo_propio_i_2.msb => sem_msb_i_6,
+		Semaforo_propio_o_2.lsb => sem_lsb_o_6,
+		Semaforo_propio_o_2.msb => sem_msb_o_6,
+		Estado_i => ocupacion_3,
+		Estado_o => conector_3,
+		Reset => Reset
+		);
+	nodo_4_i:nodo_4 port map(
+		Clock => Clock,
+		Estado_ante => mdc_post_o_2,
+		Estado_post => conector_5,
+		Estado_i => ocupacion_4,
+		Estado_o => conector_4,
+		Reset => Reset
+		);
+	nodo_5_i:nodo_5 port map(
+		Clock => Clock,
+		Estado_ante => conector_4,
+		Estado_post => conector_6,
+		Estado_i => ocupacion_5,
+		Estado_o => conector_5,
+		Reset => Reset
+		);
+	nodo_6_i:nodo_6 port map(
+		Clock => Clock,
+		Estado_ante => conector_5,
+		Estado_post => mdc_ante_o_3,
+		Estado_i => ocupacion_6,
+		Estado_o => conector_6,
+		Reset => Reset
+		);
+	nodo_7_i:nodo_7 port map(
+		Clock => Clock,
+		Estado_ante => mdc_post_o_3,
+		Estado_post => mdc_ante_o_3,

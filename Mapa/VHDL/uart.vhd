@@ -30,26 +30,26 @@ architecture Behavioral of uart is
 	signal tx_empty, tx_fifo_not_empty : std_logic;
 	signal tx_done_tick : std_logic;
 begin
-	baud_gen_unit: entity work.uart_baud_gen(arch)
+	baud_gen_unit: entity work.uart_baud_gen(Behavioral)
 		generic map(M => DVSR, N => DVSR_BIT)
 		port map(clk => clk, reset => reset,
 				q => open, max_tick => tick);
-	uart_rx_unit: entity work.uart_rx(arch)
+	uart_rx_unit: entity work.uart_rx(Behavioral)
 		generic map(DBIT=>DBIT, SB_TICK=>SB_TICK)
 		port map(clk=>clk, reset=>reset, rx=>rx,
 				s_tick=>tick, rx_done_tick=>rx_done_tick,
 				d_out => rx_data_out);
-	fifo_rx_unit: entity work.fifo(arch)
+	fifo_rx_unit: entity work.fifo(Behavioral)
 		generic map(B => DBIT, W => FIFO_W_RX)
 		port map(clk => clk, reset => reset, rd => rd_uart,
 				wr => rx_done_tick, w_data => rx_data_out,
 				empty => rx_empty, full => open, r_data => r_data);
-	fifo_tx_unit: entity work.fifo(arch)
+	fifo_tx_unit: entity work.fifo(Behavioral)
 		generic map(B => DBIT, W => FIFO_W_TX)
 		port map(clk => clk, reset => reset, rd => tx_done_tick,
 				wr=>wr_uart, w_data=>w_data, empty => tx_empty,
 				full=>tx_full, r_data=>tx_fifo_out);
-	uart_tx_unit: entity work.uart_tx(arch)
+	uart_tx_unit: entity work.uart_tx(Behavioral)
 		generic map(DBIT=>DBIT, SB_TICK=>SB_TICK)
 		port map(clk=>clk, reset=>reset,
 				tx_start => tx_fifo_not_empty,

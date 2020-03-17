@@ -102,6 +102,7 @@ begin
         -- Reset generation
         -- EDIT: Check that rst_i is really your reset signal
 	switch1 <= '1';
+	switch2 <= '1';
         rst_i <= '1';
         wait for 100 ns;
         rst_i <= '0';

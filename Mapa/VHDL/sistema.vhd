@@ -72,8 +72,8 @@ architecture Behavioral of sistema is
 			Reset :  in std_logic
 		);
 	end component registro;
-	Signal paquete_i : std_logic_vector(21-1 downto 0);
-	Signal paquete_o : std_logic_vector(21-1 downto 0);
+	Signal paquete_i_s : std_logic_vector(21-1 downto 0);
+	Signal paquete_o_s : std_logic_vector(15-1 downto 0);
 	Signal w_data_1,w_data_2,w_data_3 : std_logic_vector(8-1 downto 0);
 	Signal wr_uart_1_s,wr_uart_2_s : std_logic;
 	Signal pro_enc_reg,pro_det_enc,pro_reg_det : std_logic;
@@ -90,7 +90,7 @@ architecture Behavioral of sistema is
 			wr_uart => wr_uart_1_s,
 			procesar => pro_reg_det,
 			procesado => pro_det_enc,
-			paquete => paquete_i,
+			paquete => paquete_i_s,
 			w_data => w_data_1
 		);
 	enclavamiento_i : enclavamiento
@@ -99,8 +99,8 @@ architecture Behavioral of sistema is
 			Reset => Reset,
 			procesar => pro_det_enc,
 			procesado => pro_enc_reg,
-			Paquete_i => paquete_i,
-			Paquete_o => paquete_o
+			Paquete_i => paquete_i_s,
+			Paquete_o => paquete_o_s
 		);
 	registro_i : registro
 		port map(
@@ -108,7 +108,7 @@ architecture Behavioral of sistema is
 			Reset => Reset,
 			procesar => pro_enc_reg,
 			procesado => pro_reg_det,
-			paquete_i => paquete_o,
+			paquete_i => paquete_o_s,
 			w_data => w_data_2,
 			wr_uart => wr_uart_2_s
 		);
@@ -131,10 +131,10 @@ architecture Behavioral of sistema is
 				if switch2 = '1' then
 					leds <= std_logic_vector(to_unsigned(N,4));
 				else
-					leds(3) <= paquete_i(3);
-					leds(2) <= paquete_i(2);
-					leds(1) <= paquete_i(1);
-					leds(0) <= paquete_i(0);
+					leds(3) <= paquete_i_s(3);
+					leds(2) <= paquete_i_s(2);
+					leds(1) <= paquete_i_s(1);
+					leds(0) <= paquete_i_s(0);
 				end if;
 			end if;
 		end process;
