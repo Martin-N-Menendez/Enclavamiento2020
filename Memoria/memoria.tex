@@ -43,6 +43,10 @@ headsepline, % Uncomment to get a line under the header
 \usepackage[utf8]{inputenc} % Required for inputting international characters
 \usepackage[T1]{fontenc} % Output font encoding for international characters
 
+\usepackage{lipsum} 
+\usepackage{xargs}
+\usepackage[pdftex,dvipsnames]{xcolor}
+\usepackage[colorinlistoftodos,prependcaption,textsize=tiny]{todonotes}
 \usepackage{palatino} % Use the Palatino font by default
 
 \usepackage[backend=bibtex,natbib=true, style=numeric, sorting=none]{biblatex} % Use the bibtex backend for bibliography
@@ -62,7 +66,7 @@ headsepline, % Uncomment to get a line under the header
 %\hypersetup{breaklinks=true}
 \urlstyle{same}
 %\usepackage{cite}
-\hyphenation{biblatex}
+\hyphenation{biblatex}	
 %--------------------------
 
 \usepackage{color}
@@ -88,11 +92,11 @@ headsepline, % Uncomment to get a line under the header
 
 \thesistitle{Sistema ferroviario de enclavamiento electrónico en FPGA} % El títulos de la memoria, se usa en la carátula y se puede usar el cualquier lugar del documento con el comando \ttitle
 \degree{Maestría en Sistemas Embebidos} % Nombre del grado, se usa en la carátula y se puede usar el cualquier lugar del documento con el comando \degreename
-\author{Martín Nicolás Menéndez} % Tu nombre, se usa en la carátula y se puede usar el cualquier lugar del documento con el comando \authorname
-\supervisor{Ariel Lutenberg (CONICET-FIUBA)} % El nombre del director, se usa en la carátula y se puede usar el cualquier lugar del documento con el comando \supname
-\juradoUNO{Nombre del jurado 1 (pertenencia)} % Nombre y pertenencia del un jurado se usa en la carátula y se puede usar el cualquier lugar del documento con el comando \jur1name
-\juradoDOS{Nombre del jurado 2 (pertenencia)} % Nombre y pertenencia del un jurado se usa en la carátula y se puede usar el cualquier lugar del documento con el comando \jur2name
-\juradoTRES{Nombre del jurado 3 (pertenencia)} % Nombre y pertenencia del un jurado se usa en la carátula y se puede usar el cualquier lugar del documento con el comando \jur3name
+\author{Esp. Ing. Martín Nicolás Menéndez} % Tu nombre, se usa en la carátula y se puede usar el cualquier lugar del documento con el comando \authorname
+\supervisor{Dr. Ing. Ariel Lutenberg (CONICET-FIUBA)} % El nombre del director, se usa en la carátula y se puede usar el cualquier lugar del documento con el comando \supname
+\juradoUNO{Mg. Ing. Nicolás Dassieu Blanchet (FIUBA)} % Nombre y pertenencia del un jurado se usa en la carátula y se puede usar el cualquier lugar del documento con el comando \jur1name
+\juradoDOS{Esp. Ing. Pedro Martos (FIUBA)} % Nombre y pertenencia del un jurado se usa en la carátula y se puede usar el cualquier lugar del documento con el comando \jur2name
+\juradoTRES{Ing. Nicolás Álvarez (UNSAM, FIUBA)} % Nombre y pertenencia del un jurado se usa en la carátula y se puede usar el cualquier lugar del documento con el comando \jur3name
 \fechaINICIO{marzo de 2019}
 \fechaFINAL{abril de 2020}
 
@@ -108,6 +112,12 @@ headsepline, % Uncomment to get a line under the header
 \hypersetup{pdfauthor=\authorname} % Set the PDF's author to your name
 \hypersetup{pdfkeywords=\keywordnames} % Set the PDF's keywords to your keywords
 
+
+\newcommandx{\unsure}[2][1=]{\todo[linecolor=red,backgroundcolor=red!25,bordercolor=red,#1]{#2}}
+\newcommandx{\change}[2][1=]{\todo[linecolor=blue,backgroundcolor=blue!25,bordercolor=blue,#1]{#2}}
+\newcommandx{\info}[2][1=]{\todo[linecolor=OliveGreen,backgroundcolor=OliveGreen!25,bordercolor=OliveGreen,#1]{#2}}
+\newcommandx{\improvement}[2][1=]{\todo[linecolor=Plum,backgroundcolor=Plum!25,bordercolor=Plum,#1]{#2}}
+\newcommandx{\thiswillnotshow}[2][1=]{\todo[disable,#1]{#2}}
 
 \newcaptionname{spanish}{\acknowledgementname}{Agradecimientos}
 \newcaptionname{spanish}{\authorshipname}{Declaración de Autoría}
@@ -157,7 +167,7 @@ headsepline, % Uncomment to get a line under the header
 {Director:} \\
 {\supname}\\ % Supervisor name
 {Codirector:} \\
-{Facundo Larosa (UTN)} % Supervisor name
+{Mg. Ing. Facundo Larosa (UTN)} % Supervisor name
 
 \vspace{1cm}
 Jurados:\\
@@ -181,7 +191,7 @@ Jurados:\\
 %The Thesis Abstract is written here (and usually kept to just this page). The page is kept centered vertically so can expand into the blank space above the title too\ldots
 \centering
 
-Un enclavamiento es un sistema ferroviario que controla automáticamente que los cambios en las rutas se gestionen de forma segura, evitando choques y descarrilamientos de trenes. En base al análisis de sistemas de enclavameintos comerciales se propuso un enfoque de desarrollo para el diseño y la implementación  en tecnología FPGA. Se aplicaron técnicas apropiadas para lograr el nivel de seguridad requerido y se analizó la escalabilidad del diseño para dicha plataforma.				
+Un enclavamiento es un sistema ferroviario, de alto costo y complejidad, que controla automáticamente que los cambios en las rutas se gestionen de forma segura, evitando choques y descarrilamientos de trenes. En base a un pedido de Trenes Argentinos y al análisis de sistemas de enclavameintos comerciales se propuso un enfoque de desarrollo para el diseño y la implementación  en tecnología FPGA. Se aplicaron técnicas apropiadas para lograr el nivel de seguridad requerido y se analizó la escalabilidad del diseño para dicha plataforma.                			
 			
 Para el desarrollo del trabajo resultó necesario aplicar conocimientos en lenguajes de descripción de hardware para la implementación del sistema sobre plataforma de lógica programable. Además, se trabajó el firmware bajo control de versiones y se aplicó el modelo de máquinas de estados finitos para la lógica del sistema. Se documentan las estrategias de testing adoptadas para validar los módulos. Finalmente, fueron fundamentales los conocimientos de sistemas críticos y ferroviarios.
 						
@@ -196,8 +206,15 @@ Para el desarrollo del trabajo resultó necesario aplicar conocimientos en lengu
 %\addchaptertocentry{\acknowledgementname} % Descomentando esta línea se puede agregar los agradecimientos al índice
 \vspace{1.5cm}
 
-Esta sección es para agradecimientos personales y es totalmente \textbf{OPCIONAL}.  
+Quisiera agradecer a mi familia que siempre me han apoyado a lo largo de todos mis estudios de forma incondicional. Espero que se sientan tan orgullosos de los resultados como yo de haber puesto tanto esfuerzo en la realización de mi carrera.
 
+A mi Director el Dr. Ing. Ariel Lutenberg, que con una enorme paciencia siempre me ha dado incontables oportunidades para demostrar mi capacidad. Sus inagotables ganas de que el país crezca tecnológicamente son muy inspiradoras y los proyectos en los que me ha confiado la participación me enriquecen enormemente.
+
+% y permitido formarme cuando ésta no era suficiente. Agradezco enormemente su oferta de beca y deseo con fervor que el presente trabajo esté a la altura de sus expectativas. 
+
+A mi Codirector, el Mg. Ing. Facundo Larosa, que disipó muchas de mis dudas y supo ser flexible en éste proyecto desde el comienzo cuando la meta no era tan clara. Sé que el año próximo podremos lograr grandes cosas juntos y el resultado será satisfactorio por demás.
+
+Al CONICET-GICSAFe por su gran camaradería y solidaridad a la hora de compartir sus saberes, tanto de la profesión como de la vida diaria. Especialmente al Dr. Ing. Pablo Gomez y al Ing. Adrián Laiuppa, ya que conversando con ellos fuera del trabajo diario he aprendido enormemente.
 \end{acknowledgements}
 
 %----------------------------------------------------------------------------------------
@@ -216,7 +233,8 @@ Esta sección es para agradecimientos personales y es totalmente \textbf{OPCIONA
 %	CONTENIDO DE LA MEMORIA  - DEDICATORIA
 %----------------------------------------------------------------------------------------
 
-\dedicatory{\textbf{Dedicado a... [OPCIONAL]}}  % escribir acá si se desea una dedicatoria
+\dedicatory{\textbf{''Él hará la unidad de la República mejor que todos los Congresos. Estos podrán declararla una e indivisible pero sin el camino de fierro que acerque sus extremos remotos, quedará siempre divisible y dividida contra todos los Decretos Legislativos.''}\\
+\begin{flushright}Juan Bautista Alberdi (1810-1884).\end{flushright}}
 
 %----------------------------------------------------------------------------------------
 %	CONTENIDO DE LA MEMORIA  - CAPÍTULOS
@@ -245,6 +263,8 @@ Esta sección es para agradecimientos personales y es totalmente \textbf{OPCIONA
 
 % Incluir los apéndices de la memoria como archivos separadas desde la carpeta Appendices
 % Descomentar las líneas a medida que se escriben los apéndices
+
+
 
 %\include{Appendices/AppendixA}
 %\include{Appendices/AppendixB}

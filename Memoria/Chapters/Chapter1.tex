@@ -17,281 +17,396 @@
 
 %----------------------------------------------------------------------------------------
 
-%\section{Introducción}
+En este capítulo se presentan el contexto del proyecto, los sistemas ferroviarios, una introducción a las distintas tecnologías de los sistemas de enclavamientos y los objetivos a cumplir.
 
 %----------------------------------------------------------------------------------------
-%\section{Aprendiendo \LaTeX{}}
-%
-%\LaTeX{} no es \textsc{WYSIWYG} (What You See is What You Get), a diferencia de los procesadores de texto como Microsoft Word o Pages de Apple o incluso LibreOffice en el mundo open-source. En lugar de ello, un documento escrito para \LaTeX{} es en realidad un archivo de texto simple, llano que \emph{no contiene formato} . Nosotros le decimos a \LaTeX{} cómo deseamos que se aplique el formato en el documento final escribiendo comandos simples entre el texto, por ejemplo, si quiero usar \emph{texto en cursiva para dar énfasis}, escribo \verb|\emph{texto}| y pongo el texto en cursiva que quiero entre medio de las llaves. Esto significa que \LaTeX{} es un lenguaje del tipo \enquote{mark-up}, muy parecido a HTML.
-%
-%\subsection{Una introducción (no tan corta) a \LaTeX{}}
-%
-%Si usted es nuevo a \LaTeX{}, hay un muy buen libro electrónico - disponible gratuitamente en Internet como un archivo PDF - llamado, \enquote{A (not so short) Introduction to \LaTeX{}}. El título del libro es generalmente acortado a simplemente \emph{lshort}. Puede descargar la versión más reciente en inglés (ya que se actualiza de vez en cuando) desde aquí:
-%\url{http://www.ctan.org/tex-archive/info/lshort/english/lshort.pdf}
-%
-%Está disponible en varios idiomas además del inglés. Se puede encontrar la versión en español en la lista en esta página: \url{http://www.ctan.org/tex-archive/info/lshort/}
-%
-%
-%\subsection{Guía matemática rápida para \LaTeX{}}
-%
-%Si usted está escribiendo un documento con mucho contenido matemático, entonces es posible que desee leer el documento de la AMS (American Mathematical Society) llamado, \enquote{A Short Math Guide for \LaTeX{}}. Se puede encontrar en línea en el siguiente link: \url{http://www.ams.org/tex/amslatex.html} en la sección \enquote{Additional Documentation} hacia la parte inferior de la página.
-%
-%
-%%----------------------------------------------------------------------------------------
-%
-%\section{Utilizando esta plantilla}
-%
-%Si usted está familiarizado con \LaTeX{}, entonces puede explorar la estructura de directorios de esta plantilla y proceder a personalizarla agregando su información en el bloque \emph{INFORMACIÓN DE LA PORTADA} en el archivo \file{memoria.tex}.  
-%
-%Se puede continuar luego modificando el resto de los archivos siguiendo los lineamientos que se describen en la sección \ref{sec:FillingFile} en la página \pageref{sec:FillingFile}.
-%
-%Asegúrese de leer el capítulo \ref{Chapter2} acerca de las convenciones utilizadas para las Memoria de los Trabajos Finales de la Carrera de Especialización en Sistemas Embebidos de FIUBA.
-%
-%Si es nuevo en \LaTeX{} se recomienda que continue leyendo el documento ya que contiene información básica para aprovechar el potencial de esta herramienta.
-%
-%
-%\subsection{Acerca de esta plantilla}
-%
-%Esta plantilla \LaTeX{} está basada originalmente en torno a un archivo de estilo \LaTeX{} creado por Steve R.\ Gunn de la  University of Southampton (UK), department of Electronics and Computer Science. Se puede encontrar su trabajo original en el siguiente sitio de internet:
-%\url{http://www.ecs.soton.ac.uk/~srg/softwaretools/document/templates/}
-%
-%El archivo de Gunn, \file{ecsthesis.cls} fue posteriormente modificado por Sunil Patel quien creó una plantilla esqueleto con la estructura de carpetas. El template resultante se puede encontrar en el sitio web de Sunil Patel:
-%\url{http://www.sunilpatel.co.uk/thesis-template}
-%
-%El template de Patel se publicó a través de  \url{http://www.LaTeXTemplates.com} desde donde fue modificado muchas veces en base a solicitudes de usuarios. La versión 2.0 y subsiguientes representan cambios significativos respecto a la versión de la plantilla modificada por Patel, que es de hecho, dificilmente reconocible. El trabajo en la version 2.0 fue realizado por Vel Gayevskiy y Johannes Böttcher.
-%
-%Para la Carrera de Especialización en Sistemas Embebidos de FIUBA, la versión versión 2.3 fue modificada por el Ing. \href{mailto:pbos@fi.uba.ar}{Patricio Bos} para crear una plantilla fuertemente adaptada a la carrera de especialización.
-%
-%%----------------------------------------------------------------------------------------
-%
-%\section{Qué incluye esta plantilla}
-%
-%\subsection{Carpetas}
-%
-%Esta plantilla se distribuye como una único archivo .zip que se puede descomprimir en varios archivos y carpetas. Los nombres de las carpetas son (o pretender ser) auto-explicativos.
-%
-%\keyword{Appendices} -- Esta es la carpeta donde se deben poner los apéndices. Cada apéndice debe ir en su propio archivo \file{.tex}. Se incluye un ejemplo y una plantilla en la carpeta.
-%
-%\keyword{Chapters} -- Esta es la carpeta donde se deben poner los capítulos de la memoria. Cada capítulo debe ir un su propio archivo \file{.tex} por separado.  Se ofrece por defecto, la siguiente estructura de capítulos y se recomienda su utilización dentro de lo posible:
-%
-%\begin{itemize}
-%\item Capítulo 1: Introducción general	
-%\item Capítulo 2: Introducción específica
-%\item Capítulo 3: Diseño e implementación
-%\item Capítulo 4: Ensayos y resultados
-%\item Capítulo 5: Conclusiones
-%
-%\end{itemize}
-%
-%Esta estructura de capítulos es la que se recomienda para las memorias de la especialización.
-%
-%\keyword{Figures} -- Esta carpeta contiene todas las figuras de la memoria.  Estas son las versiones finales de las imágenes que van a ser incluidas en la memoria.  Pueden ser imágenes en formato \textit{raster}\footnote{\url{https://en.wikipedia.org/wiki/Raster_graphics}} como \file{.png}, \file{.jpg} o en formato vectoriales\footnote{\url{https://en.wikipedia.org/wiki/Vector_graphics}} como \file{.pdf}, \file{.ps}.  Se debe notar que utilizar imágenes vectoriales disminuye notablemente el peso del documento final y acelera el tiempo de compilación por lo que es recomendable su utilización siempre que sea posible.
-%
-%\subsection{Archivos}
-%
-%También están incluidos varios archivos, la mayoría de ellos son de texto plano y se puede ver su contenido en un editor de texto. Después de la compilación inicial, se verá que más archivos auxiliares son creados por \ LaTeX{} o BibTeX, pero son de uso interno y que no es necesario eliminarlos o hacer nada con ellos.  Toda la información necesaria para complilar el documento se encuentra en los archivos \file{.tex} y en las imágenes de la carpeta Figures.
-%
-%\keyword{referencias.bib} - este es un archivo importante que contiene toda la información de referencias bibliográficas que se utilizarán para las citas en la memoria en conjunto con BibTeX. Usted puede escribir las entradas bibliográficas en forma manual, aunque existen también programas de gestión de referencias que facilitan la creación y gestión de las referencias y permiten exportarlas en formato BibTeX.  También hay disponibles sitios web como \url{books.google.com} que permiten obtener toda la información necesaria para una cita en formato BibTeX. Ver sección \ref{sec:biblio}
-%
-%\keyword{MastersDoctoralThesis.cls} -- este es un archivo importante. Es el archivos con la clase que le informa a \LaTeX{} cómo debe dar formato a la memoria. El usuario de la plantilla no debería necesitar modificar nada de este archivo.
-%
-%\keyword{memoria.pdf} -- esta es su memoria con una tipografía bellamente compuesta (en formato de archivo PDF) creado por \LaTeX{}. Se distribuye con la plantilla y después de compilar por primera vez sin hacer ningún cambio se debería obtener una versión idéntica a este documento.
-%
-%\keyword{memoria.tex} -- este es un archivo importante. Este es el archivo que tiene que compilar \LaTeX{} para producir la memoria como un archivo PDF. Contiene un marco de trabajo y estructuras que le indican a \LaTeX{} cómo diagramar la memoria.  Está altamente comentado para que se pueda entender qué es lo que realiza cada línea de código y por qué está incluida en ese lugar.  En este archivo se debe completar la información personalizada de las primeras sección según se indica en la sección \ref{sec:FillingFile}.
-%
-%Archivos que \emph{no} forman parte de la distribución de la plantilla pero que son generados por \LaTeX{} como archivos auxiliares necesarios para la producción de la memoria.pdf son:
-%
-%\keyword{memoria.aux} -- este es un archivo auxiliar generado por \LaTeX{}, si se borra \LaTeX{} simplemente lo regenera cuando se compila el archivo principal \file{memoria.tex}.
-%
-%\keyword{memoria.bbl} -- este es un archivo auxiliar generado por BibTeX, si se borra BibTeX simplemente lo regenera cuando se compila el archivo principal \file{memoria.tex}. Mientras que el archivo \file{.bib} contiene todas las referencias que hay, este archivo \file{.bbl} contine sólo las referencias que han sido citadas y se utiliza para la construcción de la bibiografía.
-%
-%\keyword{memoria.blg} -- este es un archivo auxiliar generado por BibTeX, si se borra BibTeX simplemente lo regenera cuando se compila el archivo principal \file{memoria.tex}.
-%
-%\keyword{memoria.lof} -- este es un archivo auxiliar generado por \LaTeX{}, si se borra \LaTeX{} simplemente lo regenera cuando se compila el archivo principal \file{memoria.tex}.  Le indica a \LaTeX{} cómo construir la sección \emph{Lista de Figuras}.
-% 
-%\keyword{memoria.log} --  este es un archivo auxiliar generado por \LaTeX{}, si se borra \LaTeX{} simplemente lo regenera cuando se compila el archivo principal \file{memoria.tex}. Contiene mensajes de \LaTeX{}. Si se reciben errores o advertencias durante la compilación, se guardan en este archivo \file{.log}.
-%
-%\keyword{memoria.lot} -- este es un archivo auxiliar generado por \LaTeX{}, si se borra \LaTeX{} simplemente lo regenera cuando se compila el archivo principal \file{memoria.tex}.  Le indica a \LaTeX{} cómo construir la sección \emph{Lista de Tablas}.
-%
-%\keyword{memoria.out} -- este es un archivo auxiliar generado por \LaTeX{}, si se borra \LaTeX{} simplemente lo regenera cuando se compila el archivo principal \file{memoria.tex}.
-%
-%De esta larga lista de archivos, sólo aquellos con la extensión \file{.bib}, \file{.cls} y \file{.tex} son importantes.  Los otros archivos auxiliares pueden ser ignorados o borrados ya que \LaTeX{} y BibTeX los regenerarán durante la compilación.
-%
-%%----------------------------------------------------------------------------------------
-%
-%\section{Entorno de trabajo}
-%
-%Ante de comenzar a editar la plantilla debemos tener un editor \LaTeX{} instalado en nuestra computadora.  En forma análoga a lo que sucede en lenguaje C, que se puede crear y editar código con casi cualquier editor, exiten ciertos entornos de trabajo que nos pueden simplificar mucho la tarea.  En este sentido, se recomienda, sobre todo para los principiantes en \LaTeX{} la utilización de TexMaker, un programa gratuito y multi-plantaforma que está disponible tanto para windows como para sistemas GNU/linux.
-%
-%La versión más reciente de TexMaker es la 4.5 y se puede descargar del siguiente link: \url{http://www.xm1math.net/texmaker/download.html}. Se puede consultar el manual de usuario en el siguiente link: \url{http://www.xm1math.net/texmaker/doc.html}.
-% 
-%
-%\subsection{Paquetes adicionales}
-%
-%Si bien durante el proceso de instalación de TexMaker, o cualquier otro editor que se haya elegido, se instalarán en el sistema los paquetes básicos necesarios para trabajar con \LaTeX{}, la plantilla de los trabajos de Especialización y Maestría requieren de paquete adicionales.
-%
-%Se indican a continuación los comandos que se deben introducir en la consola de Ubuntu (ctrl + alt + t) para instalarlos:
-%
-%\begin{lstlisting}[language=bash]
-%  $ sudo apt install texlive-lang-spanish texlive-science 
-%  $ sudo apt install texlive-bibtex-extra biber
-%  $ sudo apt install texlive texlive-fonts-recommended
-%\end{lstlisting}
-%
-%
-%\subsection{Configurando TexMaker}
-%
-%
-%Una vez instalado el programa y los paquetes adicionales se debe abrir el archivo memoria.tex con el editor para ver una pantalla similar a la que se puede apreciar en la figura \ref{fig:texmaker}. 
-%
-%\begin{figure}[h]
-%	\centering
-%	\includegraphics[width=\textwidth]{./Figures/texmaker.png}
-%	\caption{Entorno de trabajo de texMaker.}
-%	\label{fig:texmaker}
-%\end{figure}
-%
-%Notar que existe una vista llamada Estructura a la izquierda de la interface que nos permite abrir desde dentro del programa los archivos individuales de los capítulos.  A la derecha se encuentra una vista con el archivo propiamente dicho para su edición. Hacia la parte inferior se encuentra una vista del log con información de los resultados de la compilación.  En esta última vista pueden aparecen advertencias o \textit{warning}, que normalmente pueden ser ignorados, y los errores que se indican en color rojo y deben resolverse para que se genere el PDF de salida.
-%
-%Recordar que el archivo que se debe compilar con PDFLaTeX es \file{memoria.tex}, si se tratara de compilar alguno de los capítulos saldría un error.  Para salvar la molestia de tener que cambiar de archivo para compilar cada vez que se realice una modificación en un capítulo, se puede definir el archivo \file{memoria.tex} como ``documento maestro'' yendo al menú opciones -> ``definir documento actual como documento maestro'', lo que permite compilar con PDFLaTeX memoria.tex directamente desde cualquier archivo que se esté modificando . Se muestra esta opción en la figura \ref{fig:docMaestro}.
-%
-%\begin{figure}[h]
-%	\centering
-%	\includegraphics[width=\textwidth]{./Figures/docMaestro.png}
-%	\caption{Definir memoria.tex como documento maestro.}
-%	\label{fig:docMaestro}
-%\end{figure}
-%
-%En el menú herramientas se encuentran las opciones de compilación.  Para producir un archivo PDF a partir de un archivo .tex se debe ejecutar PDFLaTeX (el shortcut es F6). Para incorporar nueva bibliografía se debe utilizar la opción BibTeX del mismo menú herramientas (el shortcut es F11).
-%
-%Notar que para actualizar las tablas de contenidos se debe ejecutar PDFLaTeX dos veces.  Esto se debe a que es necesario actualizar algunos archivos auxiliares antes de obtener el resultado final.  En forma similar, para actualizar las referecias se debe ejecutar primero PDFLaTeX, después BibTeX y finalmente PDFLaTeX dos veces por idénticos motivos.
-%
-%\section{Personalizando la plantilla, el archivo \file{memoria.tex}}
-%\label{sec:FillingFile}
-%
-%Para personalizar la plantilla se debe incorporar la información propia en los distintos archivos \file{.tex}. 
-%
-%Primero abrir \file{memoria.tex} con TexMaker (o el editor de su preferencia). Se debe ubicar dentro del archivo el bloque de código titulado \emph{INFORMACIÓN DE LA PORTADA} donde se deben incorporar los primeros datos personales con los que se constuirá automáticamente la portada.
-%
-%
-%%----------------------------------------------------------------------------------------
-%
-%\section{El código del archivo \file{memoria.tex} explicado}
-%
-%El archivo \file{memoria.tex} contiene la estructura del documento y es el archivo de mayor jeraquía de la memoria.  Podría ser equiparable a la función \emph{main()} de un programa en C, o mejor dicho al archivo fuente .c donde se encuentra definida la función main().
-%
-%La estructura básica de cualquier documento de \LaTeX{} comienza con la definición de clase del documento, es seguida por un preámbulo donde se pueden agregar funcionalidades con el uso de \texttt{paquetes} (equiparables a bibliotecas de C), y finalmente, termina con el cuerpo del documento, donde irá el contenido de la memoria.
-%
-%\lstset{%
-%  basicstyle=\small\ttfamily,
-%  language=[LaTeX]{TeX}
-%}
-%
-%\begin{lstlisting}
-%\documentclass{article}  <- Definicion de clase
-%\usepackage{listings}	 <- Preambulo
-%
-%\begin{document}	 <- Comienzo del contenido propio 
-%	Hello world!
-%\end{document}
-%\end{lstlisting}
-%
-%
-%El archivo \file{memoria.tex} se encuentra densamente comentado para explicar qué páginas, secciones y elementos de formato está creando el código \LaTeX{} en cada línea. El código está dividido en bloques con nombres en mayúsculas para que resulte evidente qué es lo que hace esa porción de código en particular. Inicialmente puede parecer que hay mucho código \LaTeX{}, pero es principalmente código para dar formato a la memoria por lo que no requiere intervención del usuario de la plantilla.  Sí se deben personalizar con su información los bloques indicados como:
-%
-%\begin{itemize}
-%	\item Informacion de la memoria
-%	\item Carátula
-%	\item Resumen
-%	\item Agradecimientos
-%	\item Dedicatoria
-%\end{itemize}
-%
-%El índice de contenidos, las listas de figura de tablas se generan en forma automática y no requieren intervención ni edición manual por parte del usuario de la plantilla. 
-%
-%En la parte final del documento se encuentran los capítulos y los apéndices.  Por defecto se incluyen los 5 capítulos propuestos que se encuentran en la carpeta /Chapters. Cada capítulo se debe escribir en un archivo .tex separado y se debe poner en la carpeta \emph{Chapters} con el nombre \file{Chapter1}, \file{Chapter2}, etc\ldots El código para incluir capítulos desde archivos externos se muestra a continuación.
-%
-%\begin{verbatim}
-%	\include{Chapters/Chapter1}
-%	\include{Chapters/Chapter2} 
-%	\include{Chapters/Chapter3}
-%	\include{Chapters/Chapter4} 
-%	\include{Chapters/Chapter5} 
-%\end{verbatim}
-%
-%Los apéndices también deben escribirse en archivos .tex separados, que se deben ubicar dentro de la carpeta \emph{Appendices}. Los apéndices vienen comentados por defecto con el caracter \code{\%} y para incluirlos simplemente se debe eliminar dicho caracter.
-%
-%Finalmente, se encuentra el código para incluir la bibliografía en el documento final.  Este código tampoco debe modificarse. La metodología para trabajar las referencias bibliográficas se desarrolla en la sección \ref{sec:biblio}.
-%%----------------------------------------------------------------------------------------
-%
-%\section{Bibliografía}
-%\label{sec:biblio}
-%
-%Las opciones de formato de la bibliografía se controlan a través del paquete de latex \option{biblatex} que se incluye en la memoria en el archivo memoria.tex.  Estas opciones determinan cómo se generan las citas bibliográficas en el cuerpo del documento y cómo se genera la biblografía al final de la memoria.
-%
-%En el preámbulo se puede encontrar el código que incluye el paquete biblatex, que no requiere ninguna modificación del usuario de la plantilla, y que contiene las siguientes opciones:
-%
-%\begin{lstlisting}
-%\usepackage[backend=bibtex,
-%	natbib=true, 
-%	style=numeric, 
-%	sorting=none]
-%{biblatex}
-%\end{lstlisting}
-%
-%En el archivo \file{reference.bib} se encuentran las referencias bibliográficas que se pueden citar en el documento.  Para incorporar una nueva cita al documento lo primero es agregarla en este archivo con todos los campos necesario.  Todas las entradas bibliográficas comienzan con $@$ y una palabra que define el formato de la entrada.  Para cada formato existen campos obligatorios que deben completarse. No importa el orden en que las entradas estén definidas en el archivo .bib.  Tampoco es importante el orden en que estén definidos los campos de una entrada bibliográfica. A continuación se muestran algunos ejemplos:
-%
-%\begin{lstlisting}
-%@ARTICLE{ARTICLE:1,
-%    AUTHOR="John Doe",
-%    TITLE="Title",
-%    JOURNAL="Journal",
-%    YEAR="2017",
-%}
-%\end{lstlisting}
-%
-%
-%\begin{lstlisting}
-%@BOOK{BOOK:1,
-%    AUTHOR="John Doe",
-%    TITLE="The Book without Title",
-%    PUBLISHER="Dummy Publisher",
-%    YEAR="2100",
-%}
-%\end{lstlisting}
-%
-%
-%\begin{lstlisting}
-%@INBOOK{BOOK:2,
-%    AUTHOR="John Doe",
-%    TITLE="The Book without Title",
-%    PUBLISHER="Dummy Publisher",
-%    YEAR="2100",
-%    PAGES="100-200",
-%}
-%\end{lstlisting}
-%
-%
-%\begin{lstlisting}
-%@MISC{WEBSITE:1,
-%    HOWPUBLISHED = "\url{http://example.com}",
-%    AUTHOR = "Intel",
-%    TITLE = "Example Website",
-%    MONTH = "12",
-%    YEAR = "1988",
-%    URLDATE = {2012-11-26}
-%}
-%\end{lstlisting}
-%
-%Se debe notar que los nombres \emph{ARTICLE:1}, \emph{BOOK:1}, \emph{BOOK:2} y \emph{WEBSITE:1} son nombres de fantasía que le sirve al autor del documento para indentificar la entrada. En este sentido, se podrían reemplazar por cualquier otro nombre.  Tampoco es necesario poner : seguido de un número, en los ejemplos sólo se incluye como un posible estilo para identificar las entradas.
-%
-%La entradas se citan en el documento con el comando: 
-%
-%\begin{verbatim}
-%\citep{nombre_de_la_entrada}
-%\end{verbatim}
-%
-%Y cuando se usan, se muestran así: \citep{ARTICLE:1}, \citep{BOOK:1}, \citep{BOOK:2}, \citep{WEBSITE:1}.  Notar cómo se conforma la sección Bibliografía al final del documento. 
+		
+	\section{Contexto y motivación}
+	
+		En Argentina cada día tres millones de personas viajan en tren o subte y el $5\%$ del PBI se moviliza por ferrocarril\citep{CNRT}. Sin embargo, todos los sistemas electrónicos para la seguridad vial de trenes y subtes son importados y muy costosos. 
 
-\section{Introducción}
-\section{Objetivos y requerimientos}
+		Así, en muchos ferrocarriles, no hay sistemas de seguridad para pasajeros, conductores, peatones y automovilistas. En otras líneas se siguen usando tecnologías de hace más de 50 años, que en los países con alto desarrollo tecnológico han sido reemplazadas hace mucho tiempo\citep{LIBRO1}.
+
+		Esta situación ha favorecido que ocurran importantes accidentes \citep{WIKI1} y ha urgido al estado a adquirir en el exterior trenes y sistemas de seguridad ferroviaria, implicando enormes gastos en dólares y la dependencia de tecnología extranjera\citep{GOB1}.
+
+		Los accidentes implican pérdidas de vidas humanas y/o pérdidas económicas significativas. Incluso, cuando los sistemas no son fiables, las formaciones aminoran la marcha en las inmediaciones de un cambio de vía, aumentando el tiempo de tránsito y encareciendo la logística.
+		
+		En los sistemas críticos una falla puede poner en peligro cientos de vidas humanas y/o costosas inversiones. Por lo tanto se deben cumplir estrictos parámetros de fiabilidad, disponibilidad, mantenibilidad y seguridad (RAMS, del inglés \textit{Reliability}, \textit{Availability}, \textit{Mantenibility} \textit{and} \textit{Safety}), durante todo el ciclo de vida. %Las normas EN-50126/8/9  detallan los procedimientos para especificar y demostrar el cumplimiento de los parámetros RAMS ferroviarios.
+
+		Desde 2004 la comunidad europea ha establecido normas ferroviarias relacionadas con los parámetros RAMS, haciendo especial hincapié en la seguridad. En este sentido, las tres normas principales son EN-50126\citep{EN50126} (ciclo de vida), EN-50128\citep{EN50128} (técnicas de software) y EN-50129\citep{EN50129} (técnicas de hardware). Entre otras cuestiones, se busca asegurar la integridad de la seguridad.	
+	
+		En este contexto en 2015 se crea el CONICET-GICSAFe, cuyas siglas corresponden a Grupo de Investigación y Control para la Seguridad y Aplicaciones Ferroviarias, conformado por docentes e investigadores de una decena de universidades e instituciones públicas argentinas\citep{GICSAFE}. El grupo desarrolla sistemas electrónicos e informáticos para aplicaciones ferroviarias relacionadas con la seguridad, generando un prototipo funcional y la documentación correspondiente que luego se transfiere en su totalidad a los clientes. En particular, esta metodología se utiliza en este trabajo con Trenes Argentinos, que es la Sociedad del Estado que opera las líneas Roca, Sarmiento, Mitre, San Martin y Belgrano Sur, entre otras. Luego el cliente puede fabricar el sistema diseñado por el GICSAFe o licitar su fabricación, así como modificar el sistema de acuerdo con sus necesidades.   
+	
+		Durante el mes de julio de 2018 se tuvieron reuniones con diferentes funcionarios y profesionales de Trenes Argentinos. En particular los encuentros se desarrollaron con la Gerencia de Ingeniería, Gerencia de Seguridad Operacional, Subgerencia de Desarrollo y Normas Técnicas, Subgerencia de Transporte, Gerencia de Señalamiento, entre otros, de los cuales surgió el interés en el desarrollo del presente proyecto.
+		
+		 Un sistema de enclavamiento como el que se aborda en este trabajo puede costar entre 5 y 10 millones de dólares\citep{SIEMENS} y se requieren varias decenas de estos sistemas sólo para la zona urbana de la Ciudad Autónoma de Buenos Aires.
+	
+		El desarrollo del sistema que se aborda en este trabajo se estima que podrá ser completado en el transcurso de dos años. La primera parte corresponde al alcance que se presenta en esta memoria, mientras que la segunda parte será realizada como trabajo final de la Maestría en Sistemas Embebidos.	
+	
+		En una primera instancia el CONICET-GICSAFe se familiarizó con el funcionamiento del sistema de enclavamiento: sus componentes (circuitos de vía, señales absolutas, señales de maniobra, pasos a nivel, entre otros), estructura, funcionamiento y operación. Para esto, se visitaron las islas de enclavamiento de las estaciones 'Lavallol' (FFCC Gral. Roca), 'Retiro' (FFCC Gral. San Martín) y 'Matheu' (FFCC Gral. Mitre) para ampliar los conocimientos con vistas a encarar el proyecto. De dichas visitas y otras posteriores se obtienen la totalidad de las fotografías incluidas en esta memoria.
+	
+		Posteriormente, al comienzo de año 2019, dadas las múltiples topologías que eran necesarias implementar, se adoptó una estrategia de desarrollo orientada a la automatización de la generación del código y los testbenchs involucrados. A la vez que miembros de CONICET-GICSAFe pertenecientes a UTN-Haedo comenzaron el desarrollo de un front-end gráfico y su correspondiente simulador en tiempo real, en vistas a ser integrado al proyecto en el mediano plazo.
+	
+		Hacia finales del 2019 se tuvieron reuniones con miembros de la Comisión Nacional de Energía Atómica(CNEA), en vistas a integrar el proyecto en sus plataformas de hardware ampliamente testeadas en el ámbito de los sistemas críticos. Además del intercambio de conocimiento y la puesta en común de estrategias a utilizar, se aprovechó todo lo posible la amplia experiencia que ellos nos brindaron durante el pasado y corriente año.	 
+		
+	\section{Elementos del sistema ferroviario}
+	
+		Se denomina señalamiento ferroviario al sistema cuya función es evitar las colisiones entre trenes. A continuación se presentan distintos elementos del señalamiento ferroviario que fueron utilizados durante este trabajo.
+		
+		\subsection{Vías}
+			
+			En la Figura \ref{fig:Via_eclisa} se visualiza un tramo de vía ferroviaria. Las vías se separan en tramos y por seguridad se establece que cada tramo de vías puede contener solo una formación por vez. Estos tramos en zonas urbanas tienen una extensión típica de entre 500 y 1000 metros.
+			
+			\begin{figure}[htbp!]
+				\centering
+				\includegraphics[scale=.12]{./Figures/Tramo_via}
+				\caption{Tramo de vía ferroviaria.}
+				\label{fig:Via_eclisa}
+			\end{figure}					
+			
+			Las vías pueden ser ascendentes o descendentes. Las ascendentes son aquellas por las que los trenes circulan únicamente en la dirección del kilometraje en sentido creciente. Las descendentes son aquellas por la que los trenes circulan únicamente en la dirección del kilometraje en sentido decreciente\citep{RITO}. Usualmente el kilómetro 0 es la estación principal de la línea ferroviaria, como por ejemplo: Plaza Constitución (para la línea Roca), Once de septiembre (para la línea Sarmiento) o Retiro (para las líneas Mitre y San Martín).
+		
+			También existen vías simples, banalizadas o de maniobra en las que los trenes pueden circular en ambas direcciones. En este trabajo no se abordarán este tipo de vías, salvo por un pequeño tramo de unos 30 metros en los que se produce el cambio de vía, lo que permite a los trenes pasar de la vía ascendente a la descendente o viceversa.
+			
+		\subsection{Semáforos ferroviarios}
+			
+			Los semáforos ferroviarios poseen varias luces, que al encenderse configuran diversos aspectos, cada uno de los cuales posee diferente significado.
+			
+			La función principal de los semáforos es indicar al conductor ferroviario el tipo de marcha que debe adoptar en el tramo de vía en el que va a ingresar.
+			
+			A diferencia de los semáforos viales que funcionan con un temporizador, los semáforos ferroviarios cambian su estado en función de la ausencia o presencia de formaciones ferroviarias ocupando vías cercanas, o por la petición de rutas por parte de un operador autorizado.
+			
+			En la Figura \ref{fig:Sem_3Aspectos} se presenta un esquema de señales de tres aspectos, que es el tipo de semáforo que se utiliza en la gran mayoría de las líneas ferroviarias.
+						 	
+			 \begin{figure}[htbp!]
+				\centering
+				\includegraphics[scale=.33]{./Figures/Sem3}
+				\caption{(a) Semáforo de 3 aspectos\\(b) Semáforo doble de 3 aspectos (Estación Olivos).}
+				\label{fig:Sem_3Aspectos}
+			\end{figure}
+	
+			%\vspace{5cm}
+			
+			Los semáforos de dos aspectos, como el que se se visualiza en la Figura \ref{fig:Sem_2Aspectos}, se utilizan en cambios de vías donde por su peligrosidad no se podría permitir un aspecto verde que habilite una velocidad alta. 		
+			 
+			 \begin{figure}[htbp!]
+				\centering
+				\includegraphics[scale=.35]{./Figures/Sem2}
+				\caption{(a) Semáforo de 2 aspectos\\(b) Semáforos de cruce de vías (Estación Lavallol).}
+				\label{fig:Sem_2Aspectos}
+			\end{figure}				
+			
+			Los semáforos de cuatro aspectos son utilizados en la Línea Roca y poseen un doble amarillo antes del amarillo simple, para permitir así tramos de vías mas cortos en forma segura. Como no son objeto de estudio del presente trabajo, no serán explicados en esta memoria.
+		
+		\subsection{Circuito de vías}
+		%\label{sec:DOBLE}
+			Un circuito de vía es un sistema eléctrico que determina si un tramo de la vía se encuentra ocupado o libre. Se ilustra en la Figura \ref{fig:Ocupacion} que cada tren provoca un cortocircuito en el tramo de vía en que se encuentra, modelado como un 0, y cada ausencia de tren es modelada como un 1.
+			
+			\begin{figure}[h]
+				\centering
+				\includegraphics[scale=.4]{./Figures/Ocupacion}
+				\caption{Ocupación de las secciones de vías.}
+				\label{fig:Ocupacion}
+			\end{figure}
+			\change{Incluir el tren recortado?}
+			
+			Dicha ocupación repercute directamente sobre el señalamiento lumínico: si el tramo de vía no tiene ninguna formación ocupándolo, el señalamiento indicará un aspecto verde o amarillo según el estado de ocupación del tramo siguiente, como se ilustra en la Figura \ref{fig:Recubrimiento}.
+			
+			Si la formación ocupa la sección, el señalamiento cambiará su aspecto a rojo para indicar que no puede ingresar ninguna otra formación, a fin de evitar colisiones. Por seguridad también se establecerá a rojo el semáforo anterior y a amarillo el anterior a éste (doble recubrimiento).
+			
+			\begin{figure}[h]
+				\centering
+				\includegraphics[scale=.4]{./Figures/Recubrimiento}
+				\caption{Estado de los aspectos ferroviarios según la ubicación del tren.}
+				\label{fig:Recubrimiento}
+			\end{figure}
+			\change{Incluir el tren recortado?}
+			
+			El sistema ferroviario sigue el principio de falla segura\footnote{fail-safe: Falla segura}. Es decir, si por alguna razón algo falla, el sistema adopta la condición mas restrictiva, mitigando la posibilidad de una situación peligrosa. Si la alimentación se corta o si el cableado sufre alguna falla, entonces el sistema asumirá que hay un tren y los semáforos se pondrán a rojo para que las formaciones cercanas detengan su marcha y las barreras de los pasos a nivel desciendan.		
+			
+		\subsection{Pasos a nivel}
+		
+			Un paso a nivel es una intersección entre una vía férrea y una calle o ruta peatonal, como se ilustra en la Figura \ref{fig:Paso_a_nivel}
+			
+			En ausencia de trenes, el sistema de control de la barrera del paso a nivel mantiene el brazo en alto para permitir la circulación de peatones y automóviles. Cuando un tren ocupa las secciones amarillas de la Figura \ref{fig:Paso_a_nivel} se desenergiza la barrera y comienza a descender el brazo por efecto de la gravedad. Cuando se ocupen las secciones azules de la Figura \ref{fig:Paso_a_nivel} entonces se accionará la alarma sonora para alertar a los peatones que deben permanecer en el laberinto contiguo a la vía, cuya función es forzar a los peatones a mirar a ambos lados antes de cruzar el paso a nivel.
+			
+			\begin{figure}[h!]
+				\centering
+				\includegraphics[scale=0.4]{./Figures/Paso a nivel}
+				\caption{Pasos a nivel vehicular y peatonal sobre vía férrea.}
+				\label{fig:Paso_a_nivel}
+			\end{figure}
+			\change{Rehacer figura}
+			%\vspace{5cm}
+			
+			Solo cuando la barrera baja, el tren tiene permitido avanzar sobre el cruce, siendo el paso a nivel un sector de altísimo riesgo.
+			
+			Al desocuparse las las secciones amarillas, la barrera vuelve a energizarse y se sitúa en estado alto nuevamente, a la espera de otro tren para reiniciar el proceso descripto.
+						
+			Se debe destacar que el mismo proceso de descenso de la barrera ocurrirá si la misma se desenergiza por una falla eléctrica y/o pérdida de alimentación. Es decir, el sistema asumirá el estado mas seguro ante cualquiera de los mencionados fallos, siguiendo el principio de falla segura.
+		
+		\subsection{Máquina de cambios}
+			
+			Una máquina de cambios (Figura \ref{fig:Cambios}) posibilita el uso de rutas alternativas a la ruta principal para diversificar los itinerarios o ante cualquier incidente, permitiendo el paso de las formaciones de una vía a otro. Consiste en un mecanismo que mueve la aguja del cambio (riel móvil) hacia su respectiva contraaguja (riel fijo) hasta obtener un adecuado acoplamiento que permita la circulación de la formación.
+			
+			\begin{figure}[h!]
+				\centering
+				\includegraphics[scale=.06]{./Figures/Cambio}
+				\caption{Máquina de cambios de Lavallol (Línea Roca).}
+				\label{fig:Cambios}
+			\end{figure} 
+			
+			\vspace{7cm}
+			
+			En la Figura \ref{fig:Cambios_2} se muestra el cambio de vía de la estación Matheu de la Línea Mitre. Se observa que según sea la posición del cambio el tren puede continuar en la misma vía o hacer el cambio a la otra vía.
+			
+			\begin{figure}[h!]
+				\centering
+				\includegraphics[scale=.1]{./Figures/Cambios_2}
+				\caption{Cambio de vías de estación Matheu (Línea Mitre).}
+				\label{fig:Cambios_2}
+			\end{figure} 
+		
+			En la Figura \ref{fig:Cambios} se muestran las posiciones que puede adoptar el cambio. En la posición normal los trenes pueden circular de forma directa, en paralelo, por la vía principal en sentidos opuestos. En la posición reversa, en cambio, se permite el intercambio de trenes de una rama principal a otra en sentido opuesto o a una ramificación secundaria de la red.
+			
+			\begin{figure}[h!]
+				\centering
+				\includegraphics[scale=.45]{./Figures/Cambios}
+				\caption{Posiciones normal e inversa del cambio.}
+				\label{fig:Cambios}
+			\end{figure} 
+		
+					
+	\section{Sistema de enclavamientos}
+	
+
+		En la Figura \ref{fig:Bypass} se presenta, a modo de ejemplo, un sistema de cambios en una vía simple con \emph{bypass}. El mismo permite que una formación que transita hacia la estación B y una formación que lo hace hacia la estación A puedan cruzarse.
+	
+		\begin{figure}[h!]
+			\centering
+			\includegraphics[scale=.25]{./Figures/Bypass_2}
+			\caption{Vía simple con bypass}
+			\label{fig:Bypass}
+		\end{figure}
+		\change{Rehacer figura}
+		%\vspace{5cm}
+				
+		Este cruce mediante el uso del \emph{bypass} requiere un control seguro para evitar colisiones entre los trenes. Por ejemplo, si se aplica una configuración de las máquinas de cambios tal que dos formaciones en sentido opuesto sean conducidas ambas al bypass o sean conducidas ambas a la vía principal, entonces podría producirse una colisión entre los trenes. El sistema de enclavamiento impide que se produzcan estas configuraciones no seguras y controla los semáforos que habilitan o no los itinerarios de las formaciones.
+	 
+	 	Una falla en un enclavamiento puede ocasionar que se produzcan configuraciones no seguras y poner en peligro cientos de vidas humanas y generar costos considerables. Por lo tanto, en el diseño del sistema de enclavamiento se deben cumplir estrictos parámetros de fiabilidad, disponibilidad, mantenibilidad y seguridad (RAMS).
+	 	
+		 En Argentina la mayoría de los enclavamientos son mecánicos y tienen entre 40 y 100 años de antigüedad por lo que en muchos casos se ha agotado su vida útil y deben ser reemplazados. Otros en cambio, han estado en desuso por años y se necesita su reposición. Un ejemplo de esto es la ruta ferroviaria a la zona de Vaca Muerta, donde se requiere instalar sistemas de enclavamiento por cifras millonarias en dólares. Por esto, es importante contar con sistemas electrónicos de diseño y fabricación nacional.
+
+		Adicionalmente, existen diferentes lugares donde aún resta instalar este tipo de sistemas, por lo que su implementación constituye una necesidad real para el desarrollo de la infraestructura ferroviaria de señalamiento en Argentina.		
+	
+	\section{Tipos de enclavamientos}
+		
+		A continuación se presentan distintas tecnologías de implementación de enclavamientos.
+		
+		\subsection{Enclavamientos mecánicos}
+			
+			A comienzos del siglo XX se implementaron los sistemas de enclavamientos mediante soluciones mecánicas. Utilizaban palancas como las que se visualizan en la Figura \ref{fig:Mecanico} para comandar los cambios de vías y semáforos.
+	
+			\begin{figure}[htbp!]
+				\centering
+				\includegraphics[scale=.3]{./Figures/Mecanico}
+				\caption{Sistema mecánico de enclavamiento en la antigua estación de Chascomús, hoy convertida en museo.}
+				\label{fig:Mecanico}
+			\end{figure}
+
+			Una vez que se constituye una configuración de posiciones de palancas que habilitan un trayecto, las mismas quedan 'enclavadas' mecánicamente. Es decir, la posición de las mismas se bloquea y no es físicamente posible cambiarla. A su vez a medida que se van moviendo ciertas palancas las demás palancas que pudieran representar situaciones no seguras quedan enclavadas, y sólo se pueden mover aquellas cuyo accionamiento representa una situación segura. De esa manera se garantiza que no se generarán configuraciones tales que las formaciones colisionen entre sí.
+			
+			Las tecnologías mas modernas heredaron el término 'enclavamiento', aún cuando ya no se tengan palancas enclavadas en posiciones fijas.
+		
+		\subsection{Enclavamientos electromecánicos}
+			
+			A mediados de siglo XX se desarrolló el sistema de enclavamiento electromecánico. Su funcionamiento se basa en relés (Figura \ref{fig:Reles}) y circuitos de vía, de forma tal de poder detectar la presencia de un tren y comandar tanto las señales como las barreras de los pasos a nivel.
+	
+			Se visitó un sistema de enclavamientos en la estación Lavallol (Línea Roca). La misma es una sala refrigerada, de gran tamaño, con varios bastidores que contienen cientos de relés. La Figura \ref{fig:Reles} corresponde al enclavamiento electromecánico de Lavallol.	
+			
+			\begin{figure}[htbp!]
+				\centering
+				\includegraphics[scale=.08]{./Figures/Reles}
+				\caption{Bastidor de relés de estación Lavallol.}
+				\label{fig:Reles}
+			\end{figure}
+		
+			%\vspace{5cm}
+			
+			Los sistemas de enclavamiento electromecánicos son comandados por un operario mediante un panel de control (Figura \ref{fig:Electromecanico}). El operario solicita al sistema de enclavamiento las rutas que el conductor ferroviario necesita para circular. El sistema permitirá solo la operación de cambio de vías seguras. En caso contrario, se tendrán las salidas 'enclavadas' y el sistema de enclavamiento impedirá mediante los semáforos el avance de la formación hasta que pueda realizarse el cambio en forma segura.
+		
+			\begin{figure}[h!]
+				\centering
+				\includegraphics[scale=.27]{./Figures/Electromecanico}
+				\caption{Panel de control enclavamientos - Central Lavallol.}
+				\label{fig:Electromecanico}
+			\end{figure}
+		
+			\vspace{5cm}
+			
+			%El sistema debe evitar colisiones en los trenes, pero no siempre se tiene toda la red con circuitos de vías. Por lo tanto es el operario el que debe recordar a que sectores envió tal o cual formación. Lo que implica una enorme responsabilidad que recae en el operario y el factor de error humano aumenta conforme el personal se encuentre mas cansado o distraído por alguna razón.
+		
+		\subsection{Enclavamientos electrónicos}
+		\label{sec:Redundancia}	
+			%La redundancia es obligatoria en sistemas electrónicos críticos para obtener un sistema tolerante a fallas, operando ante eventos no previstos u erróneos.
+			
+			El sistema de enclavamiento moderno es electrónico y debe incluir redundancia de hardware para lograr niveles RAMS adecuados. Pueden utilizarse, por ejemplo, estrategias de \emph{2 en 2} o sistemas de votación \emph{2 de 3}  como se ve en la Figura \ref{fig:Redundancia} para tener siempre una salida sin importar los fallos que puedan producirse\citep{REDUNDANCIA}. La diversidad de plataformas de hardware (representados en diferente color en la Figura \ref{fig:Redundancia}), por ejemplo utilizando diferentes proveedores de un mismo sistema o plataforma, es otra técnica muy utilizada.
+			
+			\begin{figure}[h]
+				\centering
+				\includegraphics[scale=.5]{./Figures/Redundancia}
+				\caption{(a) Redundancia 2 de 2. (b) Redundancia por votación 2 de 3.}
+				\label{fig:Redundancia}
+			\end{figure}
+			
+			En este trabajo se implementó un sistema de enclavamiento electrónico, como se explicará en el Capítulo \ref{Chapter3}.
+	 
+	 		%\vspace{5cm}
+	 		
+%	\section{Tabla de enclavamientos}
+%	\label{Tabla_enclavamientos}
+%	\label{sec:Semi}	
+%		La forma de diseñar y presentar los enclavamientos es mediante tablas de enclavamiento. La Figura \ref{fig:Matheu_a} presenta la tabla correspondiente a la estación Matheu de la Línea Mitre.
+%	
+%		\begin{figure}[htbp!]
+%			\centering
+%			%\includegraphics[scale=.4]{./Figures/Matheu_a}
+%			\caption{Tabla de enclavamientos mecánicos (Matheu-Mitre).}
+%			\label{fig:Matheu_a}
+%		\end{figure}
+%		
+%		La tabla define en que posiciones se enclavan las palancas de la segunda columna, respecto de las condiciones de la columna 'normal' e 'invertida'.
+%		
+%		Por ejemplo, en el caso de la palanca 1, que corresponde a la señal de distancia 2 y 3, si las palancas 2 y 3 se encuentran en posición invertida, entonces la palanca 1 se enclavará en invertida sin posibilidad de pasarla a normal hasta que las otras dos palancas reviertan su estado.
+%			
+%		En este trabajo se utiliza una forma alternativa de representar las tablas de enclavamiento, que se introduce a continuación, mediante un ejemplo en base a la Figura \ref{fig:Esquema_vacio}.		
+%		
+%		\begin{figure}[htbp!]
+%			\centering
+%			%\includegraphics[scale=.3]{./Figures/Tabla_vacia}
+%			\caption{Esquema de ejemplo en el que las señales no se han asignado.}
+%			\label{fig:Esquema_vacio}
+%		\end{figure}
+%		
+%		\vspace{5cm}
+%		
+%		Se supone una topología de vías dobles con un cambio de vías entre ambas para realizar maniobras, dos pasos peatonales con campanilla (paso a nivel 1 y 3) y un paso a nivel vehicular con barrera automática (paso a nivel 2). 
+%		
+%		Además se presentan los semáforos de tres aspectos correspondientemente numerados de forma creciente en el sentido de circulación marcado para cada trayecto (impares para la vía ascendente y pares de la descendente). Se ilustran además, los semáforos de dos aspectos (10 y 11) para las maniobras de cambio de vías.
+%		
+%		Para comenzar el razonamiento, todo el señalamiento se muestra apagado (gris) ya que se busca determinar en qué aspecto debe estar cada señal. Supóngase que una formación ocupa el circuito de vía 8, detenido antes del semáforo 6 y se dispone a completar el trayecto descendente hacia la sección 6 de la vía.%, correspondiente a la estación. %Cabe destacar que el cambio de vía en este caso se toma en reversa, por lo que se denomina una 'maniobra de talón'.
+%		
+%		%Si nos encontramos en el modo semiautomático, el operario debe solicitar al sistema de enclavamiento cada ruta que desee que la formación recorra. Una ruta siempre se define de un semáforo al semáforo inmediatamente consecutivo. Por lo tanto mientras la ruta no esté aprobada los semáforos deben estar en aspecto rojo y como la aprobación requiere la presencia de una formación ocupando el circuito de vía inicial de la misma, se concluye que la vía ascendente tendrá todos los semáforos en rojo en ausencia de formación alguna.
+%		
+%		Ya que la formación usará la vía principal, los semáforos 10 y 11 correspondientes al cambio de vías también estarán a rojo, al igual que los semáforos 2 y 8 que no involucran a la ruta a solicitar. La ruta en cuestión se definirá entre los semáforos 6 (inicial) y el 4 (final). Para comenzar el trayecto la formación necesita permiso para acceder a los tramos de vías siguientes, para lo cual el semáforo 6 deberá estar en aspecto verde. Para finalizar el trayecto se necesita que el semáforo 4 se encuentre en rojo. Por seguridad se pusieron a rojo el semáforo 8 (para evitar colisiones de formaciones que vengan antes de la formación de ejemplo) y el semáforo 2 (por si la formación no llega a frenar ante el semáforo 4).
+%		
+%		El paso a nivel número 3 debería estar a peligro desde que la formación ocupo el circuito de vía 10, el número 2 debería tener su barrera baja por la misma razón y el número 1 estará a peligro tan pronto la formación ocupe el circuito de vía 6b. Por lo tanto los tres pasos a nivel se encuentran a peligro y no deberán permitir el cruce ni de vehículos ni de peatones mientras la ruta esté en ejecución. Durante todo el trayecto también se deberá garantizar que la máquina de cambios se encuentre en posición 'normal'. De esta forma se tiene la configuración que se muestra en la Figura \ref{fig:Esquema_lleno}.
+%		
+%		\begin{figure}[htbp!]
+%			\centering
+%			%\includegraphics[scale=.3]{./Figures/Tabla_llena}
+%			\caption{Esquema de ejemplo en el que las señales se han asignado.}
+%			\label{fig:Esquema_lleno}
+%		\end{figure}
+%		
+%		La Tabla \ref{tab:Ejemplo_semi} representa la situación descripta, siendo:
+%		
+%		\begin{table}[htbp!]
+%			\centering
+%			\caption[Modelo de Tabla de enclavamientos semiautomáticos]{Modelo de Tabla de enclavamientos semiautomáticos}
+%			\resizebox{\textwidth}{!}{  
+%			\begin{tabular}{c|cccccc|ccccc|cccc|cc|c|ccc}    
+%				\toprule
+%				& \multicolumn{6}{c|}{Circuitos de vía (DES)} & \multicolumn{5}{c|}{Semáforos ASC} & \multicolumn{4}{c|}{Semáforos DES} & \multicolumn{2}{c|}{Cambio} & M & \multicolumn{3}{c}{PaN} \\
+%				\textbf{Rutas} 	 & 2 & 4 & 6a & 6b & 8 & 10 & 1 & 3 & 5 & 7 & 9 & 2 & 4 & 6 & 8 & 10 & 11 & - & 1 & 2 & 3  \\
+%				\midrule
+%				$\text{Ruta}$ &O&O&O&O&X&O&R&R&R&R&R&R&R&V&R&R&R&N&B&B&B\\ 
+%				%\bottomrule
+%				\hline
+%			\end{tabular}
+%			}
+%			\label{tab:Ejemplo_semi}
+%		\end{table}
+%		
+%		\begin{itemize}
+%			\item O: Circuito de vía que debe permanecer libre.
+%			\item X: Circuito de vía que se encuentra ocupado por una formación.
+%			\item R: Semáforo rojo.
+%			\item A: Semáforo amarillo.
+%			\item V: Semáforo verde.
+%			\item -: \emph{Don't care}, no es relevante.
+%			\item N: Máquina de cambios en posición normal.
+%			\item R: Máquina de cambios en posición reversa.
+%			\item A: Barrera alta.
+%			\item B: Barrera baja.
+%		\end{itemize}								
+%		
+%		Repitiendo el razonamiento se pueden generar las demás filas de la tabla para cualquier ruta entre dos semáforos. Solo se puede tener un tren en cada vía a la vez: uno para la vía ascendente y otro para la vía descendente.
+%		
+%%		En el caso del modo automático la construcción de la tabla es muy similar, pero cambia el criterio para los semáforos.
+%%		
+%%		Por otro lado, en el modo automático los semáforos por defecto se encuentran en verde y cada tren que ocupa la vía genera hacia atrás una estela de protección denominada doble recubrimiento[REF] a peligro como puede verse en la Figura \ref{fig:Doble}.
+%%		
+%%		\begin{figure}[htbp!]
+%%			\centering
+%%			\includegraphics[scale=.33]{./Figures/Doble}
+%%			\caption{Doble recubrimiento a peligro}
+%%			\label{fig:Doble}
+%%		\end{figure}
+%%				
+%%		Dicho recubrimiento consiste en dos semáforos a rojo (semáforo 7 y 9) para proteger el tramo que ocupa la formación y el anterior (circuitos de vía 11 y 9), además de un semáforo amarillo de precaución (semáforo 5) para avisar a la formación anterior que la próxima señal será roja y debe disminuir su marcha.					
+%%		
+%%		En esta modalidad no se pueden realizar cambios de vías, por lo que la máquina de cambios estará en posición 'normal' y los semáforos de cambios 10 y 11 estarán en rojo. Además todos los pasos a nivel estarán a peligro menos el paso a nivel número 1, que al estar alejado de la formación que sigue avanzando en sentido ascendente, dejará de sonar su campanilla.
+%%		
+%%		La Tabla \ref{tab:Ejemplo_auto} presenta el ejemplo anterior pero para un sistema automático con una formación ocupando el circuito de vía 4.
+%%		
+%%		\begin{table}[htbp!]
+%%			\centering
+%%			\caption[Modelo de Tabla de enclavamientos semiautomáticos]{Modelo de Tabla de enclavamientos semiautomáticos}
+%%			\resizebox{\textwidth}{!}{  
+%%			\begin{tabular}{c|cccccc|ccccc|cccc|cc|c|ccc}    
+%%				\toprule
+%%				& \multicolumn{6}{c|}{Circuitos de vía(ASC)} & \multicolumn{5}{c|}{Semáforos ASC} & \multicolumn{4}{c|}{Semáforos DES} & \multicolumn{2}{c|}{Cambio} & M & \multicolumn{3}{c}{PaN} \\
+%%				\textbf{Rutas} 	 & 1 & 3 & 5 & 7 & 9 & 11 & 1 & 3 & 5 & 7 & 9 & 2 & 4 & 6 & 8 & 10 & 11 &  & 1 & 2 & 3  \\
+%%				\midrule
+%%				$\text{Ruta}$ &-&-&-&O&O&X&V&V&A&R&R&V&V&V&V&R&R&N&A&B&B\\ 
+%%				%\bottomrule
+%%				\hline
+%%			\end{tabular}
+%%			}
+%%			\label{tab:Ejemplo_auto}
+%%		\end{table}
+%%	
+%%		Los circuitos de vía 1,3 y5 figuran como \emph{don't care} porque queda fuera del doble recubrimiento y podría ser ocupado por otra formación. Además el semáforo para acceder a dicho tramo se establece en verde, lo que permite el acceso.
+%		
+	\section{Objetivos}
+	
+		El objetivo de este proyecto fue el diseño, implementación y realización de pruebas funcionales de un prototipo de sistema electrónico de enclavamiento, sobre un kit de desarrollo de FPGA. 
+		
+		Se procura además estudiar las tecnologías para implementar metodologías orientadas a mejorar los niveles RAMS del sistema, de acuerdo al estado del arte en sistemas ferroviarios altamente críticos. 
+		
+		Teniendo la experiencia acumulada del trabajo realizado en la Especialización de Sistemas Embebidos, se puso especial énfasis en la automatización del proceso, para poder satisfacer las necesidades de cualquiera sea la estación o zona elegida. 
+
+%		Para lo cual se definieron los siguientes requerimientos funcionales:
+%		
+%		\begin{itemize}
+%			\item Cantidad de entradas: alrededor de 40
+%			\item Tipo de entrada: contactos secos
+%			\item Clase de entradas: ocupación de vía, señalamiento, estado de la máquina de cambios o posición de barreras del paso a nivel.
+%			\item Tiempo máximo entre cambios: 1 minuto
+%			\item Topología: vía doble con estación, cruce y tres pasos a nivel
+%			\item Distancia mínima entre formaciones: doble recubrimiento
+%			\item Tiempo mínimo para recorrer el tramo:
+%			\item Tiempo máximo para recorrer el tramo:
+%			\item Cantidad de trenes circulando en simultáneo: hasta 2 en modo semiautomático y hasta cuatro en modo automático.
+%			\item Cantidad de coches por formación: 6
+%		\end{itemize}
+
+	
+%----------------------------------------------------------------------------------------
+
+
+
+
+
+
