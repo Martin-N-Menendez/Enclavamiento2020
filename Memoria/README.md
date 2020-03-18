@@ -1,3 +1,9 @@
-# Plantilla-CESE
+# Memoria en progreso
 
-Plantilla para la elaboración de la Memoria del Trabajo Final de la Carrera de Especialización en Sistemas Embebidos que se dicta en la Facultad de Ingeniería de la UBA.
+## Analizador de topologias
+- [x] Portada | Resumen
+- [x] Capítulo 1
+- [ ] Capítulo 2
+- [ ] Capítulo 3
+- [ ] Capítulo 4
+- [x] Capítulo 5
