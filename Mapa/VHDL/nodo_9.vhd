@@ -15,8 +15,8 @@ use work.my_package.all;
 			Clock :  in std_logic;
 			Reset :  in std_logic;
 			Estado_i :  in std_logic;
-			Estado_ante :  out std_logic;
-			Estado_post :  out std_logic;
+			Estado_ante :  in std_logic;
+			Estado_post :  in std_logic;
 			Semaforo_cercano :  out sem_type;
 			Semaforo_lejano :  out sem_type;
 			Estado_o :  out std_logic
@@ -28,7 +28,6 @@ begin
 	begin
 		if (Clock = '1' and Clock'Event) then
 			if (Reset = '1') then
-				Estado_o <= '0';
 			else
 				Estado_o <= Estado_i;
 			end if;

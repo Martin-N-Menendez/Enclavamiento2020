@@ -15,7 +15,7 @@ use work.my_package.all;
 			Clock :  in std_logic;
 			Reset :  in std_logic;
 			Estado_i :  in std_logic;
-			Estado_ante :  out std_logic;
+			Estado_ante :  in std_logic;
 			Semaforo_propio_i_1 :  in sem_type;
 			Semaforo_propio_o_1 :  out sem_type;
 			Semaforo_cercano :  out sem_type;
@@ -29,13 +29,19 @@ begin
 	begin
 		if (Clock = '1' and Clock'Event) then
 			if (Reset = '1') then
-				Estado_o <= '0';
 				Semaforo_propio_o_1.msb <= '0';
 				Semaforo_propio_o_1.lsb <= '0';
 			else
 				Estado_o <= Estado_i;
-				Semaforo_propio_o_1.msb <= Semaforo_propio_i_1.msb;
-				Semaforo_propio_o_1.lsb <= Semaforo_propio_i_1.lsb;
+				if ( Estado_i = '0' ) then
+					Semaforo_propio_o_1.msb <= '0';
+					Semaforo_propio_o_1.lsb <= '0';
+				else
+					if ( Estado_ante = '0' ) then
+					Semaforo_propio_o_1.msb <= '1';
+					Semaforo_propio_o_1.lsb <= '0';
+					end if;
+				end if;
 			end if;
 		end if;
 	end process;
