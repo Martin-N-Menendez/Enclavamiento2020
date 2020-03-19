@@ -23,32 +23,65 @@ En este capítulo se presentan el contexto del proyecto, los sistemas ferroviari
 		
 	\section{Contexto y motivación}
 	
-		En Argentina cada día tres millones de personas viajan en tren o subte y el $5\%$ del PBI se moviliza por ferrocarril\citep{CNRT}. Sin embargo, todos los sistemas electrónicos para la seguridad vial de trenes y subtes son importados y muy costosos. 
-
-		Así, en muchos ferrocarriles, no hay sistemas de seguridad para pasajeros, conductores, peatones y automovilistas. En otras líneas se siguen usando tecnologías de hace más de 50 años, que en los países con alto desarrollo tecnológico han sido reemplazadas hace mucho tiempo\citep{LIBRO1}.
-
-		Esta situación ha favorecido que ocurran importantes accidentes \citep{WIKI1} y ha urgido al estado a adquirir en el exterior trenes y sistemas de seguridad ferroviaria, implicando enormes gastos en dólares y la dependencia de tecnología extranjera\citep{GOB1}.
-
-		Los accidentes implican pérdidas de vidas humanas y/o pérdidas económicas significativas. Incluso, cuando los sistemas no son fiables, las formaciones aminoran la marcha en las inmediaciones de un cambio de vía, aumentando el tiempo de tránsito y encareciendo la logística.
+		Actualmente el sistema ferroviario argentino se encuentra enormemente deteriorado y desactualizado. Mientras que otras naciones mas avanzadas han progresado en la migración de sus sistemas de transporte de cargas y pasajeros añadiendo electrónica de última generación, Argentina continua utilizando mecanismos diseñados a principios o mediados del siglo XX.
 		
-		En los sistemas críticos una falla puede poner en peligro cientos de vidas humanas y/o costosas inversiones. Por lo tanto se deben cumplir estrictos parámetros de fiabilidad, disponibilidad, mantenibilidad y seguridad (RAMS, del inglés \textit{Reliability}, \textit{Availability}, \textit{Mantenibility} \textit{and} \textit{Safety}), durante todo el ciclo de vida. %Las normas EN-50126/8/9  detallan los procedimientos para especificar y demostrar el cumplimiento de los parámetros RAMS ferroviarios.
+		%Así, en muchos ferrocarriles, no hay sistemas de seguridad para pasajeros, conductores, peatones y automovilistas. En otras líneas se siguen usando tecnologías de hace más de 50 años, que en los países con alto desarrollo tecnológico han sido reemplazadas hace mucho tiempo\citep{LIBRO1}.
+		
+		Esto repercute negativamente en la poca o nula seguridad que dichos sistemas pueden brindar a los pasajeros, conductores, peatones y automovilistas. Pero los sistemas electrónicos para la seguridad vial de trenes y subtes son importados y muy costosos, además de estar monopolizados por menos de un docena de empresas en todo el mundo. Un sistema de enclavamiento como el que se aborda en este trabajo puede costar entre 5 y 10 millones de dólares\citep{SIEMENS} y se requieren varias decenas de estos sistemas sólo para la zona urbana de la Ciudad Autónoma de Buenos Aires.
+		
+		Dichas empresas brindan muy poca información técnica sobre sus desarrollos y la mayoría de las herramientas que utilizan son de uso privado empresarial. No obstante, deben regirse bajo normativas como las que la comunidad europea ha establecido desde 2004. Normas ferroviarias relacionadas con los parámetros RAMS, haciendo especial hincapié en la seguridad. En este sentido, las tres normas principales son EN-50126\citep{EN50126} (ciclo de vida), EN-50128\citep{EN50128} (técnicas de software) y EN-50129\citep{EN50129} (técnicas de hardware). Entre otras cuestiones, se busca asegurar la integridad de la seguridad.	
+		
+		En los sistemas críticos una falla puede poner en peligro cientos de vidas humanas y/o costosas inversiones. Por lo tanto se deben cumplir estrictos parámetros de fiabilidad, disponibilidad, mantenibilidad y seguridad (RAMS, del inglés \textit{Reliability}, \textit{Availability}, \textit{Mantenibility} \textit{and} \textit{Safety}), durante todo el ciclo de vida.
+		
+		En este contexto en 2015 se crea el CONICET-GICSAFe, cuyas siglas corresponden a Grupo de Investigación en Calidad y Seguridad de las Aplicaciones Ferroviarias, conformado por docentes e investigadores de una decena de universidades e instituciones públicas argentinas\citep{GICSAFE}. El grupo desarrolla sistemas electrónicos e informáticos para aplicaciones ferroviarias relacionadas con la seguridad, generando un prototipo funcional y la documentación correspondiente que luego se transfiere en su totalidad a los clientes. En particular, esta metodología se utiliza en este trabajo con Trenes Argentinos, que es la Sociedad del Estado que opera las líneas Roca, Sarmiento, Mitre, San Martin y Belgrano Sur, entre otras. Luego el cliente puede fabricar el sistema diseñado por el GICSAFe o licitar su fabricación, así como modificar el sistema de acuerdo con sus necesidades.   
+	
+		En el marco de la Especialización de Sistemas Embebidos, desde julio de 2018 se tuvieron reuniones con diferentes funcionarios y profesionales de Trenes Argentinos. En particular los encuentros se desarrollaron con la Gerencia de Ingeniería, Gerencia de Seguridad Operacional, Subgerencia de Desarrollo y Normas Técnicas, Subgerencia de Transporte, Gerencia de Señalamiento, entre otros, de los cuales surgió el interés en el desarrollo del presente proyecto. De dichas visitas y otras posteriores se obtienen la totalidad de las fotografías incluidas en esta memoria.
+			 	
+		El desarrollo del sistema implica muchas áreas distintas a tener en cuenta: procesamiento, comunicación, replicación del sistema para otras topologías, testing, etc. Un primer prototipo se desarrolló a finales de 2018 y actualmente se culminó una segunda versión para la Maestría en Sistemas Embebidos. Sin contar que la amplia variedad de topologías existentes obliga a abandonar la metodología de desarrollo artesanal de cada sistema y abordarlo de forma general para topologías genéricas, lo que adiciona aún mas trabajo al monumental proyecto.		
+		
+		Por esa razón, durante la Maestría en Sistemas Embebidos, en el año 2019, se comenzó a seguir un estrategia orientada a obtener una solución integral para cualquiera sea la locación, generando automáticamente el código y los testbenchs involucrados. A la vez que miembros de CONICET-GICSAFe pertenecientes a UTN-Haedo comenzaron el desarrollo de un front-end gráfico y su correspondiente simulador en tiempo real, en vistas a ser integrado al proyecto en el mediano plazo.
+	
+		Hacia finales del 2019 se iniciaron reuniones con miembros de la Comisión Nacional de Energía Atómica(CNEA), para integrar el proyecto en sus plataformas de hardware ampliamente testeadas en el ámbito de los sistemas críticos. Además del intercambio de conocimiento y la puesta en común de estrategias a utilizar, se aprovechó todo lo posible la amplia experiencia que ellos nos brindaron durante el pasado y corriente año.
+		
+	\section{Propuesta de solución}	
+		
+		En el desarrollo del proyecto en la Especialización de Sistemas Embebidos se implementaron sistemas como el de la Figura \ref{fig:CESE_1}. Con una cantidad acotada de tramos de vías y bifurcaciones que implicaba una cantidad acotada de circuitos lógicos complicados pero posibles de obtener y testear.
+		
+		La implementación del sistema se hacía de forma artesanal, bloque a bloque y conectándolos de igual manera uno por uno. El testing demoraba días o semanas en estar completo para ser utilizado y era necesario revisar varias veces las pocas y difusas especificaciones que se tenían para corroborar un correcto funcionamiento del sistema.	
+		
+		\begin{figure}[htbp!]
+			\centering
+			\includegraphics[scale=.5]{./Figures/Grafo_VHDL}
+			\caption{Ejemplo de implementación de topología sencilla}
+			\label{fig:CESE_1}
+		\end{figure}	
+		
+		\vspace{5cm}
+		
+		Pero fue una constante que la locación en la cual se basaba el desarrollo del sistema cambiase abruptamente por otra diferente, representada en la Figura \ref{fig:CESE_2}. Por lo que, aún manteniendo los mismos conceptos iniciales, el alcance y los requerimientos cambiaban completamente y se tenía que desechar gran parte de lo construido, tanto del sistema como los tests que ya no tenían sentido para el nuevo sistema. El rediseñar de cero todo fue algo común durante esta etapa del proyecto.
+		
+		\begin{figure}[htbp!]
+			\centering
+			\includegraphics[scale=.5]{./Figures/Grafo_VHDL_B}
+			\caption{Ejemplo de implementación de topología compleja}
+			\label{fig:CESE_2}
+		\end{figure}
+			
+		Una mayor cantidad de elementos ferroviarios implica una densidad mayor de circuitos lógicos y estos a su vez repercuten en un crecimiento exponencial de la complejidad del desarrollo, mayor dificultad para implementar los ensayos y mayores chances de errores al extrapolar conceptos aún inmaduros a sistemas de mayor tamaño.
+		
+		La solución a proponer no podía quedar sujeta a una única topología, ya que aún culminando el proyecto se corría el riesgo de que el tiempo empleado fuese desperdiciado si se cambiaban los requerimientos de forma tan abrupta. Es por eso que se añadió como objetivo de este trabajo el desarrollo de una herramienta capaz de generar automáticamente la solución electrónica de un sistema de enclavamiento ferroviario, a partir de una representación matemática única de cada topología. En la Figura \ref{fig:Generacion} se puede visualizar el proceso.
+		
+		\begin{figure}[htbp!]
+			\centering
+			\includegraphics[scale=.5]{./Figures/Generacion}
+			\caption{Proceso de generación automática de la solución electrónica}
+			\label{fig:Generacion}
+		\end{figure}
+		
+		De esta manera, la solución desarrollada parte de cualquier red ferroviaria, representada mediante un grafo y un analizador de redes ferroviarias (desarrollado también en este trabajo) detecta qué función cumplirá cada elemento de la red y determina cuántos semáforos, de cuantos aspectos, en que orientación y en qué nodo deben situarse para que el sistema sea seguro. A continuación, en base a los semáforos insertados el analizador calcula todas las rutas posibles que admite esa red.
+	
+		Para poder entender mejor el funcionamiento del sistema es necesario introducir conceptos propios del sistema ferroviario y sus componentes involucrados, que se describirán en la sección siguiente.
 
-		Desde 2004 la comunidad europea ha establecido normas ferroviarias relacionadas con los parámetros RAMS, haciendo especial hincapié en la seguridad. En este sentido, las tres normas principales son EN-50126\citep{EN50126} (ciclo de vida), EN-50128\citep{EN50128} (técnicas de software) y EN-50129\citep{EN50129} (técnicas de hardware). Entre otras cuestiones, se busca asegurar la integridad de la seguridad.	
-	
-		En este contexto en 2015 se crea el CONICET-GICSAFe, cuyas siglas corresponden a Grupo de Investigación y Control para la Seguridad y Aplicaciones Ferroviarias, conformado por docentes e investigadores de una decena de universidades e instituciones públicas argentinas\citep{GICSAFE}. El grupo desarrolla sistemas electrónicos e informáticos para aplicaciones ferroviarias relacionadas con la seguridad, generando un prototipo funcional y la documentación correspondiente que luego se transfiere en su totalidad a los clientes. En particular, esta metodología se utiliza en este trabajo con Trenes Argentinos, que es la Sociedad del Estado que opera las líneas Roca, Sarmiento, Mitre, San Martin y Belgrano Sur, entre otras. Luego el cliente puede fabricar el sistema diseñado por el GICSAFe o licitar su fabricación, así como modificar el sistema de acuerdo con sus necesidades.   
-	
-		Durante el mes de julio de 2018 se tuvieron reuniones con diferentes funcionarios y profesionales de Trenes Argentinos. En particular los encuentros se desarrollaron con la Gerencia de Ingeniería, Gerencia de Seguridad Operacional, Subgerencia de Desarrollo y Normas Técnicas, Subgerencia de Transporte, Gerencia de Señalamiento, entre otros, de los cuales surgió el interés en el desarrollo del presente proyecto.
-		
-		 Un sistema de enclavamiento como el que se aborda en este trabajo puede costar entre 5 y 10 millones de dólares\citep{SIEMENS} y se requieren varias decenas de estos sistemas sólo para la zona urbana de la Ciudad Autónoma de Buenos Aires.
-	
-		El desarrollo del sistema que se aborda en este trabajo se estima que podrá ser completado en el transcurso de dos años. La primera parte corresponde al alcance que se presenta en esta memoria, mientras que la segunda parte será realizada como trabajo final de la Maestría en Sistemas Embebidos.	
-	
-		En una primera instancia el CONICET-GICSAFe se familiarizó con el funcionamiento del sistema de enclavamiento: sus componentes (circuitos de vía, señales absolutas, señales de maniobra, pasos a nivel, entre otros), estructura, funcionamiento y operación. Para esto, se visitaron las islas de enclavamiento de las estaciones 'Lavallol' (FFCC Gral. Roca), 'Retiro' (FFCC Gral. San Martín) y 'Matheu' (FFCC Gral. Mitre) para ampliar los conocimientos con vistas a encarar el proyecto. De dichas visitas y otras posteriores se obtienen la totalidad de las fotografías incluidas en esta memoria.
-	
-		Posteriormente, al comienzo de año 2019, dadas las múltiples topologías que eran necesarias implementar, se adoptó una estrategia de desarrollo orientada a la automatización de la generación del código y los testbenchs involucrados. A la vez que miembros de CONICET-GICSAFe pertenecientes a UTN-Haedo comenzaron el desarrollo de un front-end gráfico y su correspondiente simulador en tiempo real, en vistas a ser integrado al proyecto en el mediano plazo.
-	
-		Hacia finales del 2019 se tuvieron reuniones con miembros de la Comisión Nacional de Energía Atómica(CNEA), en vistas a integrar el proyecto en sus plataformas de hardware ampliamente testeadas en el ámbito de los sistemas críticos. Además del intercambio de conocimiento y la puesta en común de estrategias a utilizar, se aprovechó todo lo posible la amplia experiencia que ellos nos brindaron durante el pasado y corriente año.	 
-		
 	\section{Elementos del sistema ferroviario}
 	
 		Se denomina señalamiento ferroviario al sistema cuya función es evitar las colisiones entre trenes. A continuación se presentan distintos elementos del señalamiento ferroviario que fueron utilizados durante este trabajo.
