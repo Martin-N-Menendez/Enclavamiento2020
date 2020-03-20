@@ -88,52 +88,53 @@ En este capítulo se presentan el contexto del proyecto, los sistemas ferroviari
 		
 		\subsection{Vías}
 			
-			En la Figura \ref{fig:Via_eclisa} se visualiza un tramo de vía ferroviaria. Las vías se separan en tramos y por seguridad se establece que cada tramo de vías puede contener solo una formación por vez. Estos tramos en zonas urbanas tienen una extensión típica de entre 500 y 1000 metros.
+			Las vías férreas (\ref{fig:Via_eclisa}) consisten en el elemento esencial de la infraestructura ferroviaria y conforman el sitio por el cual se desplazan los trenes. Las mismas se encuentran separadas una distancia fija, medida desde sus caras internas, denominada trocha.
 			
 			\begin{figure}[htbp!]
 				\centering
-				\includegraphics[scale=.12]{./Figures/Tramo_via}
+				\includegraphics[scale=.07]{./Figures/Tramo_via}
 				\caption{Tramo de vía ferroviaria.}
 				\label{fig:Via_eclisa}
-			\end{figure}					
+			\end{figure}	
 			
-			Las vías pueden ser ascendentes o descendentes. Las ascendentes son aquellas por las que los trenes circulan únicamente en la dirección del kilometraje en sentido creciente. Las descendentes son aquellas por la que los trenes circulan únicamente en la dirección del kilometraje en sentido decreciente\citep{RITO}. Usualmente el kilómetro 0 es la estación principal de la línea ferroviaria, como por ejemplo: Plaza Constitución (para la línea Roca), Once de septiembre (para la línea Sarmiento) o Retiro (para las líneas Mitre y San Martín).
-		
-			También existen vías simples, banalizadas o de maniobra en las que los trenes pueden circular en ambas direcciones. En este trabajo no se abordarán este tipo de vías, salvo por un pequeño tramo de unos 30 metros en los que se produce el cambio de vía, lo que permite a los trenes pasar de la vía ascendente a la descendente o viceversa.
+			\vspace{7cm}
+			
+			Las vías no son un tramo continuo, sino que se encuentran separadas en tramos y por seguridad se establece que cada tramo de vías puede contener solo una formación por vez. Los mismos pueden tener largos variables en zonas urbanas  de entre 500 a 1000 metros en zonas rurales.						
+			
+			Las vías se clasifican en ascendentes o descendentes. Las ascendentes son aquellas por las que los trenes circulan únicamente en la dirección del kilometraje en sentido creciente. Las descendentes son aquellas por la que los trenes circulan únicamente en la dirección del kilometraje en sentido decreciente\citep{RITO}. El kilómetro 0 es la estación principal de la línea ferroviaria, como por ejemplo: Plaza Constitución (para la línea Roca), Once de septiembre (para la línea Sarmiento) o Retiro (para las líneas Mitre y San Martín).
+			
+			Existen vías de maniobra que pueden ser tanto ascendentes como descendentes. Estas vinculan, mediante un cambio de vías, una sección ascendente con otra descendente, en la cual los trenes deben circular a una velocidad reducida.
 			
 		\subsection{Semáforos ferroviarios}
 			
-			Los semáforos ferroviarios poseen varias luces, que al encenderse configuran diversos aspectos, cada uno de los cuales posee diferente significado.
-			
-			La función principal de los semáforos es indicar al conductor ferroviario el tipo de marcha que debe adoptar en el tramo de vía en el que va a ingresar.
-			
-			A diferencia de los semáforos viales que funcionan con un temporizador, los semáforos ferroviarios cambian su estado en función de la ausencia o presencia de formaciones ferroviarias ocupando vías cercanas, o por la petición de rutas por parte de un operador autorizado.
-			
+			El sistema de enclavamientos utiliza los semáforos ferroviarios para indicarle al conductor del tren si puede o no acceder al próximo tramo de vías y a que velocidad se le permite circular por medio del color del semáforo, denominado aspecto.	A diferencia de los semáforos vehiculares donde cada color es alternado por otro color de la secuencia rojo-amarillo-verde en función del tiempo, los semáforos ferroviarios cambian su aspecto en función de los eventos de los tramos siguientes.
+					
 			En la Figura \ref{fig:Sem_3Aspectos} se presenta un esquema de señales de tres aspectos, que es el tipo de semáforo que se utiliza en la gran mayoría de las líneas ferroviarias.
 						 	
 			 \begin{figure}[htbp!]
 				\centering
-				\includegraphics[scale=.33]{./Figures/Sem3}
+				\includegraphics[scale=.35]{./Figures/Sem3}
 				\caption{(a) Semáforo de 3 aspectos\\(b) Semáforo doble de 3 aspectos (Estación Olivos).}
 				\label{fig:Sem_3Aspectos}
 			\end{figure}
-	
-			%\vspace{5cm}
 			
-			Los semáforos de dos aspectos, como el que se se visualiza en la Figura \ref{fig:Sem_2Aspectos}, se utilizan en cambios de vías donde por su peligrosidad no se podría permitir un aspecto verde que habilite una velocidad alta. 		
+			Otra diferencia fundamental es que no todos los semáforos ferroviarios poseen tres aspectos. Los semáforos de maniobras constan de solo dos aspectos: amarillo(precaución)y rojo(prohibido avanzar) y algunas líneas como la Línea Roca utilizan semáforos de cuatro aspectos.	
+			
+			En Figura \ref{fig:Sem_2Aspectos} se visualizan Los semáforos de dos aspectos. Se utilizan en cambios de vías donde, por su peligrosidad, solo se podrían permitir aspectos rojos y amarillos.
 			 
 			 \begin{figure}[htbp!]
 				\centering
-				\includegraphics[scale=.35]{./Figures/Sem2}
+				\includegraphics[scale=.33]{./Figures/Sem2}
 				\caption{(a) Semáforo de 2 aspectos\\(b) Semáforos de cruce de vías (Estación Lavallol).}
 				\label{fig:Sem_2Aspectos}
 			\end{figure}				
+			\change{Modificar}
 			
 			Los semáforos de cuatro aspectos son utilizados en la Línea Roca y poseen un doble amarillo antes del amarillo simple, para permitir así tramos de vías mas cortos en forma segura. Como no son objeto de estudio del presente trabajo, no serán explicados en esta memoria.
 		
 		\subsection{Circuito de vías}
-		%\label{sec:DOBLE}
-			Un circuito de vía es un sistema eléctrico que determina si un tramo de la vía se encuentra ocupado o libre. Se ilustra en la Figura \ref{fig:Ocupacion} que cada tren provoca un cortocircuito en el tramo de vía en que se encuentra, modelado como un 0, y cada ausencia de tren es modelada como un 1.
+		
+			Para poder determinar si un tramo de la vía se encuentra ocupado o libre se utilizan los llamados circuitos de vías. Los mismos constituyen en componentes electrónicos que imponen una tensión conocida entre los rieles y cuando un tren se posiciona sobre esa sección provoca un cortocircuito que es detectado por el circuito. Se ejemplifica en la Figura \ref{fig:Ocupacion}, la ocupación de las secciones por una formación (modelada con un 0) y la ausencia de formación (modelada con un 1).
 			
 			\begin{figure}[h]
 				\centering
@@ -141,27 +142,26 @@ En este capítulo se presentan el contexto del proyecto, los sistemas ferroviari
 				\caption{Ocupación de las secciones de vías.}
 				\label{fig:Ocupacion}
 			\end{figure}
-			\change{Incluir el tren recortado?}
+			\change{Modificar}
 			
-			Dicha ocupación repercute directamente sobre el señalamiento lumínico: si el tramo de vía no tiene ninguna formación ocupándolo, el señalamiento indicará un aspecto verde o amarillo según el estado de ocupación del tramo siguiente, como se ilustra en la Figura \ref{fig:Recubrimiento}.
+			\vspace{7cm}
 			
-			Si la formación ocupa la sección, el señalamiento cambiará su aspecto a rojo para indicar que no puede ingresar ninguna otra formación, a fin de evitar colisiones. Por seguridad también se establecerá a rojo el semáforo anterior y a amarillo el anterior a éste (doble recubrimiento).
-			
+			Si el tramo de vía no tiene ninguna formación ocupándolo, el señalamiento indicará un aspecto verde o amarillo según el estado de ocupación del tramo siguiente.Si la formación ocupa la sección, el señalamiento cambiará su aspecto a rojo para indicar que no puede ingresar ninguna otra formación, a fin de evitar colisiones. Por seguridad también se establecerá a rojo el semáforo anterior y a amarillo el anterior a éste (doble recubrimiento), tal como se ilustra en la Figura \ref{fig:Recubrimiento}.			
+					
 			\begin{figure}[h]
 				\centering
 				\includegraphics[scale=.4]{./Figures/Recubrimiento}
 				\caption{Estado de los aspectos ferroviarios según la ubicación del tren.}
 				\label{fig:Recubrimiento}
 			\end{figure}
-			\change{Incluir el tren recortado?}
+			\change{Modificar}
 			
-			El sistema ferroviario sigue el principio de falla segura\footnote{fail-safe: Falla segura}. Es decir, si por alguna razón algo falla, el sistema adopta la condición mas restrictiva, mitigando la posibilidad de una situación peligrosa. Si la alimentación se corta o si el cableado sufre alguna falla, entonces el sistema asumirá que hay un tren y los semáforos se pondrán a rojo para que las formaciones cercanas detengan su marcha y las barreras de los pasos a nivel desciendan.		
+			
+			Si la alimentación es interrumpida o si el cableado sufre alguna falla, entonces el sistema asumirá que hay un tren en las vías y los semáforos se pondrán en aspecto rojo para que las formaciones cercanas detengan su marcha y las barreras de los pasos a nivel desciendan. A este principio se le denomina fail-safe \footnote{fail-safe: Falla segura}. Es decir, si por alguna razón algo falla, el sistema adopta la condición mas restrictiva, mitigando la posibilidad de una situación peligrosa. 		
 			
 		\subsection{Pasos a nivel}
 		
-			Un paso a nivel es una intersección entre una vía férrea y una calle o ruta peatonal, como se ilustra en la Figura \ref{fig:Paso_a_nivel}
-			
-			En ausencia de trenes, el sistema de control de la barrera del paso a nivel mantiene el brazo en alto para permitir la circulación de peatones y automóviles. Cuando un tren ocupa las secciones amarillas de la Figura \ref{fig:Paso_a_nivel} se desenergiza la barrera y comienza a descender el brazo por efecto de la gravedad. Cuando se ocupen las secciones azules de la Figura \ref{fig:Paso_a_nivel} entonces se accionará la alarma sonora para alertar a los peatones que deben permanecer en el laberinto contiguo a la vía, cuya función es forzar a los peatones a mirar a ambos lados antes de cruzar el paso a nivel.
+			La intersección de una ruta vehicular o peatonal con la vía férrea se denomina paso a nivel. El sistema de control de la barrera mantiene el brazo de la misma en alto para permitir la circulación vehicular, como se puede ver en la Figura \ref{fig:Paso_a_nivel}. Si un tren ocupa las secciones amarillas de la Figura \ref{fig:Paso_a_nivel} se desenergiza la barrera y comienza a descender el brazo por efecto de la gravedad. Cuando se ocupen las secciones azules de la Figura \ref{fig:Paso_a_nivel} entonces se accionará la alarma sonora para alertar a los peatones que deben permanecer en el laberinto contiguo a la vía, cuya función es forzar a los peatones a mirar a ambos lados antes de cruzar el paso a nivel.			
 			
 			\begin{figure}[h!]
 				\centering
@@ -180,7 +180,7 @@ En este capítulo se presentan el contexto del proyecto, los sistemas ferroviari
 		
 		\subsection{Máquina de cambios}
 			
-			Una máquina de cambios (Figura \ref{fig:Cambio}) posibilita el uso de rutas alternativas a la ruta principal para diversificar los itinerarios o ante cualquier incidente, permitiendo el paso de las formaciones de una vía a otro. Consiste en un mecanismo que mueve la aguja del cambio (riel móvil) hacia su respectiva contraaguja (riel fijo) hasta obtener un adecuado acoplamiento que permita la circulación de la formación.
+			Una máquina de cambios (Figura \ref{fig:Cambio}) es un mecanismo utilizado para permitir el paso de las formaciones de una vía a una ramificación del recorrido principal mediante el movimiento de la aguja del cambio (riel móvil) hacia su respectiva contraaguja (riel fijo) hasta obtener un adecuado acoplamiento que permita la circulación de la formación.
 			
 			\begin{figure}[h!]
 				\centering
@@ -207,13 +207,11 @@ En este capítulo se presentan el contexto del proyecto, los sistemas ferroviari
 				\includegraphics[scale=.45]{./Figures/Cambios}
 				\caption{Posiciones normal e inversa del cambio.}
 				\label{fig:Cambios}
-			\end{figure} 
-		
+			\end{figure} 	
 					
 	\section{Sistema de enclavamientos}
-	
 
-		En la Figura \ref{fig:Bypass} se presenta, a modo de ejemplo, un sistema de cambios en una vía simple con \emph{bypass}. El mismo permite que una formación que transita hacia la estación B y una formación que lo hace hacia la estación A puedan cruzarse.
+		A modo de ejemplo se ilustra en la Figura \ref{fig:Bypass} un sistema de cambios en una vía simple con \emph{bypass}. El mismo permite que dos formaciones puedan cruzarse en sentidos opuestos sin colisionar entre si.
 	
 		\begin{figure}[h!]
 			\centering
@@ -223,18 +221,18 @@ En este capítulo se presentan el contexto del proyecto, los sistemas ferroviari
 		\end{figure}
 		\change{Rehacer figura}
 		%\vspace{5cm}
-				
-		Este cruce mediante el uso del \emph{bypass} requiere un control seguro para evitar colisiones entre los trenes. Por ejemplo, si se aplica una configuración de las máquinas de cambios tal que dos formaciones en sentido opuesto sean conducidas ambas al bypass o sean conducidas ambas a la vía principal, entonces podría producirse una colisión entre los trenes. El sistema de enclavamiento impide que se produzcan estas configuraciones no seguras y controla los semáforos que habilitan o no los itinerarios de las formaciones.
-	 
-	 	Una falla en un enclavamiento puede ocasionar que se produzcan configuraciones no seguras y poner en peligro cientos de vidas humanas y generar costos considerables. Por lo tanto, en el diseño del sistema de enclavamiento se deben cumplir estrictos parámetros de fiabilidad, disponibilidad, mantenibilidad y seguridad (RAMS).
+			
+		Para evitar la colisión se requiere un control seguro que evite que las formaciones avancen hacia secciones ya ocupadas por otras formaciones. También debe evitar que las formaciones avancen sobre los cambios cuando estos aún no han terminado de posicionarse en su lugar, provocando descarrillamientos. A este control se le denomina sistema de enclavamiento que impide que se produzcan las configuraciones no seguras y controla los semáforos que habilitan o no los itinerarios de las formaciones.		
+					 
+	 	Una falla en un enclavamiento puede poner en peligro cientos de vidas humanas y generar gastos considerables. Por lo tanto, en el diseño del sistema de enclavamiento se deben cumplir estrictos parámetros de fiabilidad, disponibilidad, mantenibilidad y seguridad (RAMS).
 	 	
-		 En Argentina la mayoría de los enclavamientos son mecánicos y tienen entre 40 y 100 años de antigüedad por lo que en muchos casos se ha agotado su vida útil y deben ser reemplazados. Otros en cambio, han estado en desuso por años y se necesita su reposición. Un ejemplo de esto es la ruta ferroviaria a la zona de Vaca Muerta, donde se requiere instalar sistemas de enclavamiento por cifras millonarias en dólares. Por esto, es importante contar con sistemas electrónicos de diseño y fabricación nacional.
+	 	Lamentablemente los sistemas de enclavamientos en Argentina son en su mayoría mecánicos, de comienzos del siglo XX y otra cantidad considerable son electromecánicos con mas de 40 años de antiguedad. Muchos de ellos ya han agotado su vida útil y deben ser reemplazados. Otros en cambio, han estado en desuso por años y se necesita su reposición pero solo una docena de empresas en el mundo realizan el diseño del sistema y los costos para un bypass simple rondan las decenas de millones de dólares. Por esto, es importante contar con sistemas electrónicos de diseño y fabricación nacional.
 
 		Adicionalmente, existen diferentes lugares donde aún resta instalar este tipo de sistemas, por lo que su implementación constituye una necesidad real para el desarrollo de la infraestructura ferroviaria de señalamiento en Argentina.		
 	
 	\section{Tipos de enclavamientos}
 		
-		A continuación se presentan distintas tecnologías de implementación de enclavamientos.
+		A continuación se presentan distintas tecnologías de implementación de enclavamientos en orden cronológico de invención.
 		
 		\subsection{Enclavamientos mecánicos}
 			
@@ -242,12 +240,12 @@ En este capítulo se presentan el contexto del proyecto, los sistemas ferroviari
 	
 			\begin{figure}[htbp!]
 				\centering
-				\includegraphics[scale=.3]{./Figures/Mecanico}
+				\includegraphics[scale=.27]{./Figures/Mecanico}
 				\caption{Sistema mecánico de enclavamiento en la antigua estación de Chascomús, hoy convertida en museo.}
 				\label{fig:Mecanico}
 			\end{figure}
 
-			Una vez que se constituye una configuración de posiciones de palancas que habilitan un trayecto, las mismas quedan 'enclavadas' mecánicamente. Es decir, la posición de las mismas se bloquea y no es físicamente posible cambiarla. A su vez a medida que se van moviendo ciertas palancas las demás palancas que pudieran representar situaciones no seguras quedan enclavadas, y sólo se pueden mover aquellas cuyo accionamiento representa una situación segura. De esa manera se garantiza que no se generarán configuraciones tales que las formaciones colisionen entre sí.
+			Una vez que se constituye una configuración de posiciones de palancas que habilitan un trayecto, las mismas quedan 'enclavadas' mecánicamente. Es decir, la posición de las mismas se bloquea y no es físicamente posible cambiarla. A medida que se van moviendo ciertas palancas las demás palancas que pudieran representar situaciones no seguras quedan enclavadas, y sólo se pueden mover aquellas cuyo accionamiento representa una situación segura. De esa manera se garantiza que no se generarán configuraciones tales que las formaciones colisionen entre sí.
 			
 			Las tecnologías mas modernas heredaron el término 'enclavamiento', aún cuando ya no se tengan palancas enclavadas en posiciones fijas.
 		
@@ -255,16 +253,16 @@ En este capítulo se presentan el contexto del proyecto, los sistemas ferroviari
 			
 			A mediados de siglo XX se desarrolló el sistema de enclavamiento electromecánico. Su funcionamiento se basa en relés (Figura \ref{fig:Reles}) y circuitos de vía, de forma tal de poder detectar la presencia de un tren y comandar tanto las señales como las barreras de los pasos a nivel.
 	
-			Se visitó un sistema de enclavamientos en la estación Lavallol (Línea Roca). La misma es una sala refrigerada, de gran tamaño, con varios bastidores que contienen cientos de relés. La Figura \ref{fig:Reles} corresponde al enclavamiento electromecánico de Lavallol.	
+			%Se visitó un sistema de enclavamientos en la estación Lavallol (Figura \ref{fig:Reles})  de la Línea Roca. La misma es una sala refrigerada, de gran tamaño, con varios bastidores que contienen cientos de relés.	
 			
 			\begin{figure}[htbp!]
 				\centering
 				\includegraphics[scale=.08]{./Figures/Reles}
-				\caption{Bastidor de relés de estación Lavallol.}
+				\caption{Bastidor de relés de estación Lavallol (Línea Roca)}
 				\label{fig:Reles}
 			\end{figure}
 		
-			%\vspace{5cm}
+			\vspace{7cm}
 			
 			Los sistemas de enclavamiento electromecánicos son comandados por un operario mediante un panel de control (Figura \ref{fig:Electromecanico}). El operario solicita al sistema de enclavamiento las rutas que el conductor ferroviario necesita para circular. El sistema permitirá solo la operación de cambio de vías seguras. En caso contrario, se tendrán las salidas 'enclavadas' y el sistema de enclavamiento impedirá mediante los semáforos el avance de la formación hasta que pueda realizarse el cambio en forma segura.
 		
@@ -275,7 +273,7 @@ En este capítulo se presentan el contexto del proyecto, los sistemas ferroviari
 				\label{fig:Electromecanico}
 			\end{figure}
 		
-			\vspace{5cm}
+			%\vspace{5cm}
 			
 			%El sistema debe evitar colisiones en los trenes, pero no siempre se tiene toda la red con circuitos de vías. Por lo tanto es el operario el que debe recordar a que sectores envió tal o cual formación. Lo que implica una enorme responsabilidad que recae en el operario y el factor de error humano aumenta conforme el personal se encuentre mas cansado o distraído por alguna razón.
 		
