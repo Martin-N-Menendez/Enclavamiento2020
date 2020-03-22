@@ -176,12 +176,41 @@ Los módulos del sistema fueron implementados con máquinas de estado finitas co
 	
 \section{Módulos de adaptación a enclavamiento}
 
-	Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion 
+	El módulo de enclavamientos espera como entradas un vector de elementos booleanos de tamaño N y su salida será el mismo vector pero reducido a un tamaño M. Es por eso que es necesario el introducir dos módulos de adaptación. El primero debe separar el vector de N elementos booleanos (Tabla \ref{Trama_in}) en las señales que el enclavamiento necesita y el segundo debe recibir las señales de salida del sistema de enclavamiento (Tabla \ref{Trama_out}) y volver a generar el vector de elementos booleanos, que al no tener el estado de ocupación ahora tendrá un tamaño M menor que el N original. 
+	 
+	\begin{table}[!hbt]
+	\renewcommand{\arraystretch}{1.3}
+	\caption{Trama de datos a recibir}
+	\label{Trama_in}
+	\centering
+	\begin{tabular}{| c | c | c | c |}
+	\multicolumn{4}{c}{Trama de entrada [N]} \\
+	\hline
+	Ocupacion & Semaforos & Barreras & Cambios \\	
+	\hline
+	\end{tabular}
+	\end{table}	 
+	
+	\begin{table}[!hbt]
+	\renewcommand{\arraystretch}{1.3}
+	\caption{Trama de datos a enviar}
+	\label{Trama_out}
+	\centering
+	\begin{tabular}{| c | c | c | c |}
+	\multicolumn{4}{c}{Trama de salida [M]} \\
+	\hline
+	 & Semaforos & Barreras & Cambios \\
+	\hline	
+	\end{tabular}
+	\end{table}	
+	 
+	La información de la ocupación tendrá tantos elementos como circuitos de vía a modelar, donde cada tramo libre se modelará con un 1 y cada ocupado con un 0. De igual forma para barreras y cambios.
+	
+	La única diferencia es en el caso de los semáforos donde la información de cada semáforo no ocupará un bit sino dos bits, de forma tal de tener cuatro posibles aspectos: rojo (00), amarillo (01), doble amarillo (10) y verde (11).
 	 
 	\subsection{Módulo separador}
 	
-		Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion 
-		
+		En la Figura \ref{fig:FSMD_Separador} se puede ver la FSMD del módulo separador. El mismo debe recibir el vector de elementos booleanos de tamaño N (paquete[N]) y la orden de que debe procesarlo(procesar). 
 		\begin{figure}[h]
 		\centering
 			\includegraphics[scale=.5]{./Figures/FSMD-Separador}
@@ -189,11 +218,11 @@ Los módulos del sistema fueron implementados con máquinas de estado finitas co
 			\label{fig:FSMD_Separador}
 		\end{figure}
 		
-		Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion 
+		A continuación, como el generador de código sabe previamente la cantidad de cada uno de los elementos ferroviarios separa el paquete, puede descomponer de forma sencilla los elementos del vector paquete[N] en verctores (o variables) mas pequeñas según corresponda.
 		
 	\subsection{Módulo mediador}
 	
-		Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion 
+		El bloque mediador que se puede visualizar en la Figura \ref{fig:FSMD_Mediador} tiene como función volver a generar el vector de elementos booleanos que ya han sido procesados por el enclavamiento.
 		
 		\begin{figure}[h]
 		\centering
@@ -202,11 +231,11 @@ Los módulos del sistema fueron implementados con máquinas de estado finitas co
 			\label{fig:FSMD_Mediador}
 		\end{figure}
 		
-		Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion 
+		Recibe la salida del enclavamiento y la orden de generar el paquete (procesar). Una vez que el vector (paquete[M]) ha sido creado se envía una variable de control (procesado) a la siguiente etapa para poder coordinar todo el sistema con un solo reloj.
 		
 \section{Módulos de procesamiento de tramas}
 
-	Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion 
+	asdadsas
 	
 	\subsection{Módulo detector}
 	
@@ -214,9 +243,16 @@ Los módulos del sistema fueron implementados con máquinas de estado finitas co
 		
 		\begin{figure}[h]
 		\centering
-			\includegraphics[scale=.4]{./Figures/FSMD-Detector}
+			\includegraphics[scale=.7]{./Figures/FSMD-Detector}
 			\caption{FSMD del módulo detector}
 			\label{fig:FSMD_Detector}
+		\end{figure}
+		
+		\begin{figure}[h]
+		\centering
+			\includegraphics[scale=.8,angle = 0]{./Figures/Estados_Detector}
+			\caption{FSMD del módulo detector}
+			\label{fig:Estados_Detector}
 		\end{figure}
 		
 		Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion Explicacion 
