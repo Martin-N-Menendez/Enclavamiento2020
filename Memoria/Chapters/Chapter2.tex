@@ -248,14 +248,18 @@ Es este capítulo se presentarán las topologías básicas del sistema ferroviar
 		
 		\subsection{Escalabilidad de la estrategia}	
 			
-		\begin{figure}[h]
-		\centering
-			\includegraphics[scale=.4]{./Figures/Geografico_complejidad}
-			\caption{Escalabilidad del enfoque geográfico}
-			\label{fig:Escala_Geografico}
-		\end{figure}
+			Realizando el mismo análisis de escalabilidad se llega a una conclusión muy diferente respecto al otro enfoque. Al aumentar la complejidad, y por lo tanto el tamaño, de las topologías, el tamaño de los bloques se mantiene constante, pero aumenta la cantidad de bloques necesarios para implementar el sistema. Esto es ilustrado en la Figura \ref{fig:Escala_Geografico}.
+					
+			\begin{figure}[h]
+			\centering
+				\includegraphics[scale=.4]{./Figures/Geografico_complejidad}
+				\caption{Escalabilidad del enfoque geográfico}
+				\label{fig:Escala_Geografico}
+			\end{figure}
 		
+			Todos los tests unitarios, referidos a cada bloque del mismo color que modelan un mismo espacio físico (que puede o no contener una barrera, un cambio o varios semáforos) se elaboran una única vez, sin importar la cantidad de elementos idénticos presentes en la topología. Sumado a que, como en este enfoque se identifican todas las rutas y por lo tanto se pueden generar todos los tests necesarios, entonces la batería de ensayos que otorga este enfoque es completa. Es decir, siempre se tendrán una cantidad de test mayor o igual que la necesaria para cualquier necesidad presente o futura.
 		
-		
-		
-	Explicacion
+			Una desventaja de este enfoque es que se debe implementar el analizador de redes ferroviarias y un conversor que dado un grafo genere toda la estructura de archivos necesaria para implementar el circuito electrónico en una FPGA. Por lo tanto, la complejidad y en consecuencia el tiempo de desarrollo es mayor.
+			
+			
+			
