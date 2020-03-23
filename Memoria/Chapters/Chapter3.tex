@@ -318,7 +318,7 @@ Los módulos del sistema fueron implementados con máquinas de estado finitas co
 		
 \section{Módulo de comunicación UART}
 
-	Para el diseño de los módulos para la interface UART con el exterior fueron necesarias varias premisas:
+	Para el diseño de los módulos para la interface UART con el exterior se utilizó un modelo básico aportado por los docentes, pero fueron necesarias varias premisas para modificarlo y poder automatizarlo:
 	
 	\begin{itemize}
 		\item Se deben tener dos FIFOS distintas, una de entrada y la otra de salida.
@@ -332,8 +332,8 @@ Los módulos del sistema fueron implementados con máquinas de estado finitas co
 			
 		\begin{figure}[h]
 		\centering
-		%\includegraphics[scale=.3]{./Figures/FSMD_UART}
-			\caption{Diagrama de estados finitos digitales del módulo UART}
+		\includegraphics[scale=.35]{./Figures/UART}
+			\caption{Diagrama en bloques de la UART}
 			\label{fig:FSMD_UART}
 		\end{figure}
 
@@ -342,7 +342,7 @@ Los módulos del sistema fueron implementados con máquinas de estado finitas co
 		La FIFO de entrada se utiliza para almacenar una trama de la forma "<Mensaje de largo N>" por lo que espera al menos N+2 bytes, mientras que la FIFO de salida espera mensajes de la forma "Mensaje de largo M" que mide M bytes. Ya que N > M es claro que N + 2 > M en la mayoría de los casos. Aunque también puede ocurrir que la diferencia entre ambos no sea tanta y al implementar el tamaño de las FIFOs en potencias de 2 terminen ambas FIFOs con el mismo tamaño. 
 
 		Con este criterio de diseño, en todos los demás casos, la FIFO de salida deberá ser $50\%$ menor que la de entrada, representando un ahorro de $25\%$ de los recursos estimados.
-
+		
 \section{Interfaz de comunicación Python}
 
 	El algoritmo analizador de redes finaliza ejecutando la conexión de la consola utilizada con la plataforma FPGA. Presentando al usuario un menú de opciones para ocupar/desocupar ciertos tramos de la vía, cambiar el aspecto de ciertos semáforos, pedir que una barrera suba o baje o incluso el modificar la posición de una máquina de cambios.
