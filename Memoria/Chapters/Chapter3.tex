@@ -123,6 +123,17 @@ Los módulos del sistema fueron implementados con máquinas de estado finitas co
 	
 	Esta metodología puede inferir mas tiempo de desarrollo que el habitual, pero ya ha demostrado ser exitosa en el proyecto realizado por el Mg. Ing. Facundo Larosa, codirector de este trabajo. Por lo que se aprovechó su experiencia y conocimiento para resolver esta etapa del desarrollo. Los beneficios son un mayor control del diseño a bajo nivel, una mayor portabilidad y un mas eficiente uso de los recursos de la plataforma electrónica.
 
+\section{Plataforma utilizada}
+
+	Por razones de disponibilidad se utilizó el kit de desarrollo Arty Z7  (Figura \ref{fig:FPGA}), el cual posee 17600 LUT’s, 35200 FF’s, 32 BUFG’s y 100 IOB’s \cite{cite28}. Se lo utilizó como base para sintetizar el diseño y extraer conclusiones que permitan dimensionar los recursos lógicos necesarios para un desarrollo de estas características.
+	
+	\begin{figure}[h]
+	\centering
+		\includegraphics[scale=.4]{./Figures/FPGA}
+		\caption{FPGA Arty Z7-10 de Digilent}
+	\label{fig:FPGA}	
+	\end{figure}
+
 \section{Análisis de la red ferroviaria y generación automática del código}
 
 	Todo grafo ferroviario necesita dos datos para estar definido. El primero es la una lista de relaciones entre nodo inicial y nodo final, el segundo es la posición absoluta del nodo en el grafo junto con datos adicionales como si posee un paso a nivel o si es bidireccional. Con esa información es posible realizar un análisis para obtener un resultado como el que se presenta en la Figura \ref{fig:Mapa} al ingresar un grafo de una red ferroviaria bypass.	
