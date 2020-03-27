@@ -156,33 +156,53 @@ Los módulos del sistema fueron implementados con máquinas de estado finitas co
 
 \section{Módulo de nodos}
 
+	Como existen diversos tipos de nodos instanciados en el sistema, se describirá el funcionamiento de un nodo genérico con la máxima cantidad de funcionalidades, de forma tal de cubrir todos los casos.
+	
+	Un módulo de nodo (cuyo diagrama de bloques se presenta en la Figura \ref{fig:FSMD_Nodo}) recibe los estados de ocupación de sus vecinos y de si mismo desde el exterior, además del estado de los semáforos que posee. 
+	
 	\begin{figure}[h]
 	\centering
-	%\includegraphics[scale=.3]{./Figures/Redundancia}
-		\caption{HOLA}
-		\label{fig:hola}
-	\end{figure}
-	\improvement{Incluir figura}	
+	\includegraphics[scale=.5]{./Figures/FSMD-Nodo}
+		\caption{FSMD del módulo de nodo genérico}
+		\label{fig:FSMD_Nodo}
+	\end{figure}		
 	
-\section{Módulo de cambios}
+	Internamente deberá informar su estado de ocupación a sus vecinos y decidir los aspectos que deberán tener sus semáforos de la siguiente manera:
+			
+	\begin{itemize}
+		\item Si el tramo propio está ocupado: el semáforo propio estará en aspecto rojo.
+		\item Si el vecino está ocupado: el semáforo propio estará en aspecto rojo.
+		\item Si el vecino está desocupado:
+		\begin{itemize}
+			\item Si el semáforo vecino está en rojo: el semáforo analizado estará en aspecto amarillo.
+			\item Si el semáforo vecino está en amarillo:  el semáforo analizado estará en aspecto verde.
+		\end{itemize}				 
+	\end{itemize}
+	
+\section{Módulo de la máquina de cambios cambios}
 
+	Un cambio de vías en la realidad conecta un tramo A con un tramo B o con un tramo C. Pero en la implementación de los nodos solo se contemplan dos casos: un vecino anterior y un vecino posterior. Es por eso que el nodo de la máquina de cambios tiene como función el conectar con uno u otro nodo, como se muestra en la Figura \ref{fig:Cambio_conexion}.
+	
 	\begin{figure}[h]
 	\centering
-	%\includegraphics[scale=.3]{./Figures/Redundancia}
-		\caption{HOLA}
-		\label{fig:hola}
-	\end{figure}
-	\improvement{Incluir figura}	
+	\includegraphics[scale=.5]{./Figures/FSMD-Conexiones}
+		\caption{Conexión del módulo de la máquina de cambios}
+		\label{fig:Cambio_conexion}
+	\end{figure}	
 	
-%\section{Módulo de red}
-%
-%	\begin{figure}[h]
-%	\centering
-%	%\includegraphics[scale=.3]{./Figures/Redundancia}
-%		\caption{HOLA}
-%		\label{fig:hola}
-%	\end{figure}
-%	\improvement{Incluir figura}	
+	De esta manera, el nodo A ejemplificado en la Figura \ref{fig:Cambio_conexion} tendrá como vecino posterior al que le indique la máquina de cambios. Si la posición del cambio es normal, entonces el nodo A tendrá como vecino posterior al nodo B. Si la posición del cambio es reversa, entonces el nodo A tendrá como vecino posterior al nodo C.
+	
+	De la misma manera los nodos B y C verán como nodo "anterior" al nodo A o a ningún nodo, según el cambio se encuentre en posición normal o reversa respectivamente.	
+	
+	En la Figura \ref{fig:FSMD_Cambio} se ilustra el diagrama en bloques del módulo de la máquina de cambios.
+	
+	\begin{figure}[h]
+	\centering
+	\includegraphics[scale=.5]{./Figures/FSMD-Cambio}
+		\caption{FSMD del módulo de máquina de cambios}
+		\label{fig:FSMD_Cambio}
+	\end{figure}
+		
 	
 \section{Módulos de adaptación a enclavamiento}
 
@@ -317,14 +337,16 @@ Los módulos del sistema fueron implementados con máquinas de estado finitas co
 	
 		Para facilitar el proceso de desarrollo se añadió la posibilidad de elegir con uno de los switchs del kit de desarrollo el puntear completamente el enclavamiento. Es decir, con una posición del switch la salida era una copia exacta de la entrada, permitiendo diseñar todo el proceso de detección, lectura y escritura en la UART de forma independiente al enclavamiento. Mientras que con la otra posición del switch se enviaba la señal de entrada el sistema de enclavamiento y la salida era la consecuencia de haber pasado por este proceso.
 		
-		En la Figura \ref{FSMD_Selector} se ilustra brevemente este módulo.
+		En la Figura \ref{fig:FSMD_Selector} se ilustra brevemente este módulo.
 		
 		\begin{figure}[h]
 		\centering
-			%\includegraphics[scale=.3]{./Figures/FSMD_Selector}
+			\includegraphics[scale=.6]{./Figures/FSMD-Selector}
 			\caption{Diagrama de estados finitos digitales del módulo selector}
 			\label{fig:FSMD_Selector}
 		\end{figure}	
+		
+		\vspace{5cm}
 		
 		La implementación es por demás sencilla: un selector que decide enviar la entrada a una salida u otra según la posición del switch, de forma asincrónica. Aunque no solo envía el dato sino también la ráfaga de pulsos asociada para su correcta escritura en la UART.
 		
@@ -367,5 +389,7 @@ Los módulos del sistema fueron implementados con máquinas de estado finitas co
 			\caption{Menú de opciones para comunicarse con el sistema}
 			\label{fig:Menu_UART}
 		\end{figure}
+	
+	\vspace{5cm}
 	
 	Todos los cambios repercuten en el grafo mostrado en pantalla que cambiará los colores de los semáforos y los colores de los nodos para representar la ocupación del tren. Así como también el color de las aristas para indicar la posición de los cambios.
