@@ -92,7 +92,6 @@
 
 En este capítulo se presentarán las decisiones de diseño adoptadas para concretar el desarrollo del trabajo. Además de describir en forma genérica los módulos necesarios tanto del sistema de enclavamiento como de los bloques auxiliares para concretar una comunicación exitosa entre el sistema y el exterior.
 
-
 \section{Consideraciones generales}
 
 En el presente trabajo se optó por implementar el sistema bajo el enfoque funcional. Asumiendo que sus ventajas son mucho mas fuertes que sus desventajas y el análisis de los resultados obtenidos fueron mucho mas provechosos que los de su contraparte funcional.
@@ -175,15 +174,15 @@ Los módulos del sistema fueron implementados con máquinas de estado finitas co
 	\end{figure}
 	\improvement{Incluir figura}	
 	
-\section{Módulo de red}
-
-	\begin{figure}[h]
-	\centering
-	%\includegraphics[scale=.3]{./Figures/Redundancia}
-		\caption{HOLA}
-		\label{fig:hola}
-	\end{figure}
-	\improvement{Incluir figura}	
+%\section{Módulo de red}
+%
+%	\begin{figure}[h]
+%	\centering
+%	%\includegraphics[scale=.3]{./Figures/Redundancia}
+%		\caption{HOLA}
+%		\label{fig:hola}
+%	\end{figure}
+%	\improvement{Incluir figura}	
 	
 \section{Módulos de adaptación a enclavamiento}
 
@@ -244,6 +243,8 @@ Los módulos del sistema fueron implementados con máquinas de estado finitas co
 		
 		Recibe la salida del enclavamiento y la orden de generar el paquete (procesar). Una vez que el vector (paquete[M]) ha sido creado se envía una variable de control (procesado) a la siguiente etapa para poder coordinar todo el sistema con un solo reloj.
 		
+
+
 \section{Módulos de procesamiento de tramas}
 
 	Durante el desarrollo del trabajo de la Especialización en Sistemas Embebidos se había considerado la estrategia de obtener las señales de forma paralela, es decir, para cada elemento se tenía asignado un pin que monitoreaba su estado. Esto resulto ser un problema a la hora de implementar topologías mas grandes, necesitando hasta 5 veces la cantidad de entradas digitales que la plataforma tenía. Por lo tanto se decidió cambiar a una lectura y escritura en serie.
@@ -358,6 +359,13 @@ Los módulos del sistema fueron implementados con máquinas de estado finitas co
 
 	El algoritmo analizador de redes finaliza ejecutando la conexión de la consola utilizada con la plataforma FPGA. Presentando al usuario un menú de opciones para ocupar/desocupar ciertos tramos de la vía, cambiar el aspecto de ciertos semáforos, pedir que una barrera suba o baje o incluso el modificar la posición de una máquina de cambios.
 	
-	PRESENTAR EJEMPLO.
+	En la Figura \ref{fig:Menu_UART} se ilustra el menú diseñado para ingresar los comandos al sistema. Ya que existe una interfaz mucho mas avanzada desarrollada por otra parte del equipo de investigación en UTN Haedo, no se ha invertido demasiado tiempo en tener una interfaz propia para realizar pruebas a mayor escala.
+	
+		\begin{figure}[h]
+		\centering
+		\includegraphics[scale=.76]{./Figures/Test/UART_2}
+			\caption{Menú de opciones para comunicarse con el sistema}
+			\label{fig:Menu_UART}
+		\end{figure}
 	
 	Todos los cambios repercuten en el grafo mostrado en pantalla que cambiará los colores de los semáforos y los colores de los nodos para representar la ocupación del tren. Así como también el color de las aristas para indicar la posición de los cambios.

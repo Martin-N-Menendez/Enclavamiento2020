@@ -101,13 +101,13 @@ begin
 
         -- Reset generation
         -- EDIT: Check that rst_i is really your reset signal
-	switch1 <= '1';
-	switch2 <= '1';
+	switch1 <= '0';
+	switch2 <= '0';
         Reset <= '1';
         wait for 100 ns;
         Reset <= '0';
-	switch1 <= '1';
-	switch2 <= '1';
+	switch1 <= '0';
+	switch2 <= '0';
         wait for 250000 * TbPeriod;
 
         -- Stop the clock and hence terminate the simulation
@@ -741,7 +741,7 @@ begin
 	wait for periodo * TbPeriod;
 
 	-- 22
-	N <= 24; 	
+	N <= 23; 	
 	Enviar_char("00111100",r_data,r_disponible); -- < 	
 	Enviar_char("00110001",r_data,r_disponible); -- 1 	
 	Enviar_char("00110000",r_data,r_disponible); -- 0

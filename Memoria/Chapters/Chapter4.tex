@@ -15,9 +15,7 @@
 
 \section{Validación de grafos}
 	
-	\subsubsection{Topología bypass}
-	\subsubsection{Topología playa de maniobras}
-	\subsubsection{Topología estación}
+	Se generaron varias topologías distintas, entre ellas: estaciones simples, estaciones complejas, bypass, playa de maniobras y aleatorias. Para todas ellas se generó automáticamente una tabla de enclavamientos, las cuales fueron comparadas con éxito con las tablas de enclavamientos realizadas de la forma tradicional por el Ingeniero Ramiro Ghignone de la UTN Haedo. Quien fue además el encargado de diseñar e implementar el simulador del sistema de enclavamiento, por lo que se valoró su amplia experiencia en el tema para comprobar que por dos caminos de diseño distintos se llegaban a tablas de enclavamientos idénticas.
 			
 \section{Validación del nodo}
 
@@ -784,11 +782,11 @@ end tb;
 			
 	\subsection{Resultados obtenidos}
 				
-		En la Figura \ref{fig:TEST_Uart} se presentan los datos del ensayo. Se puede ver que las tramas inyectadas son presentadas idénticamente en la salida, con un pequeño delay temporal. Además de poder apreciar el tren de pulsos que envía la UART de un extremo al otro del módulo, primero para indicar la lectura de la FIFO de recepción y luego para indicar la escritura de la FIFO de transmisión.
+		En la Figura \ref{fig:Test_UART} se presentan los datos del ensayo. Se puede ver que las tramas inyectadas son presentadas idénticamente en la salida, con un pequeño delay temporal. Además de poder apreciar el tren de pulsos que envía la UART de un extremo al otro del módulo, primero para indicar la lectura de la FIFO de recepción y luego para indicar la escritura de la FIFO de transmisión.
 		
 		\begin{figure}[h]
 		\centering
-		%\includegraphics[scale=0.5]{./Figures/Test/Detector}
+		\includegraphics[scale=0.7]{./Figures/Test/UART}
 			\caption{Simulación de la UART}
 			\label{fig:Test_UART}
 		\end{figure}
@@ -797,10 +795,21 @@ end tb;
 	
 \section{Validación del detector}
 
+	El bloque detector tiene como función descartar todas las tramas que no cumplan con el requisito definido de poseer tag inicial y final, además de que el mensaje debe tener una cantidad de elementos indicado por la UART.
+	
+	Para probar el sistema se deberán enviar:
+	
+	\begin{itemize}
+		\item Tramas con tags incorrectos
+		\item Tramas con ausencia de alguno o ambos tags
+		\item Tramas con menos datos de los indicados
+		\item Tramas con mas datos de los indicados
+		\item Tramas correctas de elementos nulos, con un solo elemento válido en todas las posiciones posibles.
+	\end{itemize}
+	
 	\subsection{Testbench del módulo detector}
 			
-		Se generó el Algoritmo \ref{lst:test_detector} para ...
-		
+		Se generó el Algoritmo \ref{lst:test_detector} que inyecta las señalas necesarias para probar la detección de las tramas correctas y el descarte de las incorrectas. Además deberá envíar las señales de activación/desactivación de las próximas etapas, así como recibir las señales inhibidoras necesarias. Por una cuestión de espacio se recortó parte del algoritmo presentado.		
 			
 		\begin{lstlisting}[language = vhdl,caption=Testbench del módulo detector,label={lst:test_detector}] 
 				
@@ -1037,7 +1046,7 @@ end tb;
 			
 	\subsection{Resultados obtenidos}
 				
-		Figura \ref{fig:Test_Detector} ...
+		En la Figura \ref{fig:Test_Detector} se puede visualizar una parte de los resultados del ensayo. En la cual se enviaron cuatro paquetes distintos y el módulo va alternando los estados según el evento ocurrido. 
 		
 		\begin{figure}[h]
 		\centering
@@ -1046,12 +1055,19 @@ end tb;
 			\label{fig:Test_Detector}
 		\end{figure}
 
+		Cuando se recibe el tag inicial ('<') el sistema pasa al estado de lectura y debe recibir la cantidad de elementos indicada por la señal N (en este caso 23). El elemento número 24 leído deberá ser el tag final('>'), que al recibirlo se pasa al estado final (en caso contrario pasa al estado error) a la espera de que la transmisión termine.
+		
+		Para la transmisión, cada caracter (byte) leído deberá ser convertido en un booleano (bit) para ser empaquetado en un vector de booleanos. Esto puede verse en la señal auxiliar paquete\_aux que luego de validada toda la trama se envía por w\_data al próximo bloque, junto con el tren de pulsos wr\_uart para indicar el ciclo de lectura de la señal.
+		
+		El ensayo fue exitoso y todas las tramas listadas como erróneas al comienzo del ensayo fueron descartadas sin contratiempos.
+		
 \section{Validación del enclavamiento}	
 
+	Utilizando el mismo algoritmo que para validar la UART, pero con el switch en la posición contraria, se pueden enviar las señales del módulo detector al enclavamiento, probando de esta forma los bloques separador, enclavamiento y mediador.
+	
 	\subsection{Testbench del módulo enclavamiento}
 			
-		Se generó el Algoritmo \ref{lst:test_enclavamiento} para ...
-		
+		Se generó el Algoritmo \ref{lst:test_enclavamiento} para ensayar los módulos mencionados. En el cual se inyectan diferentes señales para comprobar que el módulo separador puede justamente separar las señales en vectores manejables. Luego de ser procesados por el enclavamiento, las señales son enviadas al mediador para volver a unificarlas en una sola señal. Finalmente el registro convierte cada elemento de la señal en un caracter imprimible que será enviado a la UART.		
 			
 		\begin{lstlisting}[language = vhdl,caption=Testbench del módulo enclavamiento,label={lst:test_separador}] 
 				
@@ -1325,40 +1341,43 @@ end tb;
 			
 	\subsection{Resultados obtenidos}
 				
-		Figura \ref{fig:Test_Separador} ...
+		En la Figura \ref{fig:Test_Separador} se puede visualizar como la trama principal es separada en los diferentes vectores que serán recibidos por el enclavamiento. La separación es exitosa al ser un módulo de implementación trivial, la dificultad del mismo estaba en su automatización, mas no en su funcionamiento. El haber atomizado esta funcionalidad fue beneficioso para todo el diseño.
 		
-		\begin{figure}[h]
+		\begin{figure}[!hbt]
 		\centering
 		\includegraphics[scale=0.6]{./Figures/Test/Separador}
 			\caption{Simulación del separador}
 			\label{fig:Test_Separador}
 		\end{figure}
 		
-		Figura \ref{fig:Test_Enclavamiento} ...
+		En la Figura \ref{fig:Test_Enclavamiento} se visualiza el comportamiento del enclavamiento ante las señales que fueron enviadas por el separador. En base al aspecto de los semáforos relevados en campo (sem\_s\_i) y a la ocupación de los tramos de vías (cv\_s) el enclavamiento determina que el aspecto de los semáforos para que no ocurran colisiones ni descarrilamientos es el que indica en la señal sem\_s\_o.
 		
-		\begin{figure}[h]
+		\begin{figure}[!hbt]
 		\centering
 		\includegraphics[scale=0.65]{./Figures/Test/Enclavamiento}
 			\caption{Simulación del enclavamiento}
 			\label{fig:Test_Enclavamiento}
 		\end{figure}
+
 		
-		Figura \ref{fig:Test_Mediador} ...
+		En la Figura \ref{fig:Test_Mediador} se presenta el proceso inverso del módulo mediador, donde las señales del enclavamiento son de vuelta combinadas en una única señal.
 		
-		\begin{figure}[h]
+		\begin{figure}[!hbt]
 		\centering
 		\includegraphics[scale=0.8]{./Figures/Test/Mediador}
 			\caption{Simulación del mediador}
 			\label{fig:Test_Mediador}
 		\end{figure}
 		
-
+		Los tres módulos son parte de un módulo mayor, al funcionar los tres correctamente se ha comprobado que también funciona de forma el bloque que los integra.
+		
 \section{Validación del registro}
 
+	El módulo de registro tiene la función de recibir una señal de M elementos booleanos y devolver M caracteres que correspondan al valor del vector en cuestión. Además de generar un tren de pulsos para coordinar la correcta escritura de los caracteres en la UART para su posterior impresión en la consola.
+	
 	\subsection{Testbench del módulo registro}
 			
-		Se generó el Algoritmo \ref{lst:test_registro} para ...
-		
+		Se generó el Algoritmo \ref{lst:test_registro} en el cual se ingresan diferentes tramas y se comprueba que a la salida se obtenga la secuencia de caracteres esperada.		
 			
 		\begin{lstlisting}[language = vhdl,caption=Testbench del módulo registro,label={lst:test_registro}] 
 				
@@ -1456,21 +1475,28 @@ end tb;
 			
 	\subsection{Resultados obtenidos}
 				
-		Figura \ref{fig:Test_Registro} ...
+		En la Figura \ref{fig:Test_Registro} se visualiza el resultado del ensayo, para una trama aleatoria.
 		
 	\begin{figure}[h]
 	\centering
-	\includegraphics[scale=0.7]{./Figures/Test/Registro}
+	\includegraphics[scale=0.6]{./Figures/Test/Registro}
 		\caption{Simulación del registro}
 		\label{fig:Test_Registro}
 	\end{figure}
 	
+	Cuando la señal procesar se encuentra en alto, la señal paquete\_i es invertida y en cada ciclo ena\_s se envía el caracter equivalente al elemento del paquete\_i en la posición mux\_s. A su vez la señal ena\_s se envía a la UART a través de wr\_uart para indicarle el ciclo de escritura en la FIFO.
+	
+	Al finalizar la operación se envía la señal procesado para indicarle al bloque detector que el paquete ingresado ya ha sido enviado, de forma tal de iniciar otro ciclo de lectura y procesamiento. De esa forma la señal procesar pasa a un estado bajo a la espera de dicha lectura.
+	
+	El comportamiento del bloque fue tal cual fue diseñado y responde con un delay muy bajo de 2 ciclos de reloj. Por lo que tendríamos un espaciado entre tramas de hasta un mínimo de 16 nanosegundos, lo cual es muy positivo a la hora de tener un sistema que debe responder de forma rápida a los cambios en el exterior.	
+	
 \section{Validación del selector}
 
+	Al módulo selector pueden llegar señales por dos caminos: directamente desde el módulo detector la señal de entrada sin procesar junto con su tren de pulsos asociado o la mismas señales pero procesadas previamente por el sistema de enclavamiento. Es tarea del módulo selector el enviar a la UART las señales de una u otra fuente, según la posición del switch.	
+	
 	\subsection{Testbench del módulo selector}
 			
-		Se generó el Algoritmo \ref{lst:test_selector} para ...
-		
+		Se generó el Algoritmo \ref{lst:test_selector} que inyecta dos señales idénticas, una mientras el switch se encuentra en posición alta y otra mientras se encuentra en posición baja.		
 			
 		\begin{lstlisting}[language = vhdl,caption=Testbench del módulo selector,label={lst:test_selector}] 
 				
@@ -1524,7 +1550,7 @@ architecture tb of tb_conector_test is
 
   	end Enviar_char;
 
-begin
+	begin
 
     dut : conector_test
     port map (clk_i      => clk_i,
@@ -1602,6 +1628,35 @@ begin
 	Enviar_char("00111110",w_data_1,r_disponible); -- >
 	--wait for 5 * TbPeriod;
 	r_disponible <= '0';
+	
+	switch <= '1';
+	r_disponible <= '1';
+	Enviar_char("00111100",w_data_1,r_disponible); -- < 	
+	Enviar_char("00110001",w_data_1,r_disponible); -- 1 	
+	Enviar_char("00110001",w_data_1,r_disponible); -- 1
+ 	Enviar_char("00110001",w_data_1,r_disponible); -- 1 	
+	Enviar_char("00110000",w_data_1,r_disponible); -- 0
+	Enviar_char("00110001",w_data_1,r_disponible); -- 1 	
+	Enviar_char("00110000",w_data_1,r_disponible); -- 0
+	Enviar_char("00110001",w_data_1,r_disponible); -- 1 	
+	Enviar_char("00110000",w_data_1,r_disponible); -- 0
+	Enviar_char("00110001",w_data_1,r_disponible); -- 1 	
+	Enviar_char("00110000",w_data_1,r_disponible); -- 0
+	Enviar_char("00110001",w_data_1,r_disponible); -- 1 	
+	Enviar_char("00110000",w_data_1,r_disponible); -- 0
+	Enviar_char("00110001",w_data_1,r_disponible); -- 1 	
+	Enviar_char("00110000",w_data_1,r_disponible); -- 0
+	Enviar_char("00110001",w_data_1,r_disponible); -- 1 	
+	Enviar_char("00110000",w_data_1,r_disponible); -- 0
+	Enviar_char("00110001",w_data_1,r_disponible); -- 1 	
+	Enviar_char("00110000",w_data_1,r_disponible); -- 0
+	Enviar_char("00110000",w_data_1,r_disponible); -- 0	
+	Enviar_char("00110001",w_data_1,r_disponible); -- 1 
+	Enviar_char("00110001",w_data_1,r_disponible); -- 1 	
+	Enviar_char("00111110",w_data_1,r_disponible); -- >
+	--wait for 5 * TbPeriod;
+	r_disponible <= '0';
+	
 	wait for 1000 * TbPeriod;
 
         --wait for 100 * TbPeriod;
@@ -1613,12 +1668,15 @@ end tb;
 			
 	\subsection{Resultados obtenidos}
 				
-		Figura \ref{fig:Test_Selector} ...
-		
+		En la Figura \ref{fig:Test_Selector} se visualiza el comportamiento del sistema con el switch en estado alto. Se puede comprobar que ambas señales llegan al módulo: w\_data\_1 y wr\_uart\_1 son la señal con información y el tren de pulsos que corresponden a no procesar la señal; mientras que w\_data\_2 y wr\_uart\_2 son las mismas pero luego de haber sido procesadas por el sistema de enclavamiento.
+			
 	\begin{figure}[h]
 	\centering
 	\includegraphics[scale=0.95]{./Figures/Test/Selector}
 		\caption{Simulación del selector}
 		\label{fig:Test_Selector}
 	\end{figure}
+	
+	\vspace{5cm}
 			
+	Las señales w\_data\_3 y wr\_uart\_3 son la salida del bloque selector, que se puede apreciar copian exactamente a w\_data\_2 y wr\_uart\_2. Cuando el switch se encuentra en estado bajo la salida copiará a w\_data\_1 y wr\_uart\_1.

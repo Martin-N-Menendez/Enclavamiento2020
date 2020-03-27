@@ -12,8 +12,8 @@ architecture tb of tb_sistema is
 
     component sistema
        port(
-		clk_i: in std_logic;
-        	rst_i: in std_logic;
+		Clock: in std_logic;
+        	Reset: in std_logic;
 		r_data: in std_logic_vector(8-1 downto 0);
 		r_disponible : in std_logic;
 		leer : out std_logic;
@@ -31,8 +31,8 @@ architecture tb of tb_sistema is
     end component;
 
 
-    signal clk_i     : std_logic;
-    signal rst_i     : std_logic;
+    signal Clock     : std_logic;
+    signal Reset     : std_logic;
     signal r_data    : std_logic_vector (8-1 downto 0);
     signal r_disponible : std_logic;
     signal leer : std_logic;
@@ -73,8 +73,8 @@ architecture tb of tb_sistema is
 begin
 
     dut : sistema
-    port map (clk_i      => clk_i,
-              rst_i      => rst_i,
+    port map (Clock      => Clock,
+              Reset      => Reset,
               r_data     => r_data,
 	      r_disponible => r_disponible,
 	      leer       => leer,
@@ -92,7 +92,7 @@ begin
     TbClock <= not TbClock after TbPeriod/2 when TbSimEnded /= '1' else '0';
 
     -- EDIT: Check that clk_i is really your main clock signal
-    clk_i <= TbClock;
+    Clock <= TbClock;
 
     stimuli : process
     begin
@@ -101,13 +101,13 @@ begin
 
         -- Reset generation
         -- EDIT: Check that rst_i is really your reset signal
-	switch1 <= '1';
-	switch2 <= '1';
-        rst_i <= '1';
+	switch1 <= '0';
+	switch2 <= '0';
+        Reset <= '1';
         wait for 100 ns;
-        rst_i <= '0';
-	switch1 <= '1';
-	switch2 <= '1';
+        Reset <= '0';
+	switch1 <= '0';
+	switch2 <= '0';
         wait for 250000 * TbPeriod;
 
         -- Stop the clock and hence terminate the simulation
