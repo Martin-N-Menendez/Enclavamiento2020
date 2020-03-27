@@ -8,7 +8,7 @@
 - [x] Capítulo 4
 - [x] Capítulo 5
 
-- [] Aprobado por Patricio
-- [] Aprobado por Pablo Gomez
-- [] Aprobado por Ariel Lutenberg
-- [] Aprobado por Facundo Larosa
+- [ ] Aprobado por Patricio
+- [ ] Aprobado por Pablo Gomez
+- [ ] Aprobado por Ariel Lutenberg
+- [ ] Aprobado por Facundo Larosa
