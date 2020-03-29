@@ -772,21 +772,24 @@ def generar_mapa(tabla):
         
         (df).append(pd.DataFrame(tabla, columns = ['Ruta', 'Inicial', 'Final', 'Secuencia','Sentido']))
         
-        crear_modulo_vhdl(secciones,tabla)
+        
         
         exportar_tablas(df)
 
 #%% 
-def conectar_terminal():
+def conectar_terminal(secciones):
     print("UART > Conectando")    
-    uart_main()
+    uart_main(secciones)
+    print("UART > Desconectado") 
     
 #%%  
 def main():
 
     generar_mapa(tabla)
     
-    #conectar_terminal()
+    crear_modulo_vhdl(secciones,tabla)
+    
+    conectar_terminal(secciones)
     
     #serial_main()
     

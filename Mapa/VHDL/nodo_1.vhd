@@ -36,7 +36,6 @@ begin
 				if ( Estado_i = '0' ) then
 					Semaforo_propio_o_1.msb <= '0';
 					Semaforo_propio_o_1.lsb <= '0';
-				else
 				end if;
 			end if;
 		end if;

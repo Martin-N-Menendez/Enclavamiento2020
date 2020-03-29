@@ -1,9 +1,9 @@
 import numpy as np
 import math
-  
+
+
 def crear_modulo_vhdl(secciones,tabla):
 
- 
     print("%"*25+" Iniciando creacion de modulos "+"%"*25)    
     
     objetos = calcular_paquete(secciones)
@@ -1046,16 +1046,16 @@ def creando_nodo(secciones,objetos,tabla):
             
             print("{}:{}|{}|{}".format(i+1,sem_cant,sem_actual,sem_anterior)) ### TODO:
             
-            #for j in range(secciones[i].N_semaforos): 
-            f.write("\t\t\t\t\t"+"Semaforo_propio_o_1.msb <= '0';"+"\n")
-            f.write("\t\t\t\t\t"+"Semaforo_propio_o_1.lsb <= '0';"+"\n") 
-            f.write("\t\t\t\t"+"else"+"\n")  
+            for j in range(secciones[i].N_semaforos): 
+                f.write("\t\t\t\t\t"+"Semaforo_propio_o_"+str(j+1)+".msb <= '0';"+"\n")
+                f.write("\t\t\t\t\t"+"Semaforo_propio_o_"+str(j+1)+".lsb <= '0';"+"\n") 
+            #f.write("\t\t\t\t"+"else"+"\n")  
             
-            if secciones[i].anterior != "" or secciones[i].desvio_inf_dir == "<" or secciones[i].desvio_sup_dir == "<" :
-                f.write("\t\t\t\t\t"+"if ( Estado_ante = '0' ) then"+"\n")
-                f.write("\t\t\t\t\t"+"Semaforo_propio_o_1.msb <= '1';"+"\n")
-                f.write("\t\t\t\t\t"+"Semaforo_propio_o_1.lsb <= '0';"+"\n") 
-                f.write("\t\t\t\t\t"+"end if;"+"\n") 
+            #if secciones[i].anterior != "" or secciones[i].desvio_inf_dir == "<" or secciones[i].desvio_sup_dir == "<" :
+            #    f.write("\t\t\t\t\t"+"if ( Estado_ante = '0' ) then"+"\n")
+            #    f.write("\t\t\t\t\t"+"Semaforo_propio_o_1.msb <= '1';"+"\n")
+            #    f.write("\t\t\t\t\t"+"Semaforo_propio_o_1.lsb <= '0';"+"\n") 
+            #    f.write("\t\t\t\t\t"+"end if;"+"\n") 
             
             f.write("\t\t\t\t"+"end if;"+"\n") 
         f.write("\t\t\t"+"end if;\n")
