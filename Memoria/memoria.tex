@@ -38,8 +38,6 @@ parskip, % Uncomment to add space between paragraphs
 headsepline, % Uncomment to get a line under the header
 ]{MastersDoctoralThesis} % The class file specifying the document structure
 
-
-
 \usepackage[utf8]{inputenc} % Required for inputting international characters
 \usepackage[T1]{fontenc} % Output font encoding for international characters
 
@@ -49,7 +47,7 @@ headsepline, % Uncomment to get a line under the header
 \usepackage[colorinlistoftodos,prependcaption,textsize=tiny]{todonotes}
 \usepackage{palatino} % Use the Palatino font by default
 
-\usepackage[backend=bibtex,natbib=true, style=numeric, sorting=none]{biblatex} % Use the bibtex backend for bibliography
+\usepackage[backend=biber,natbib=true, style=numeric, sorting=none]{biblatex} % Use the bibtex backend for bibliography
 
 \addbibresource{references.bib} % The filename of the bibliography
 
@@ -182,14 +180,6 @@ Jurados:\\
 \end{center}
 \end{titlepage}
 
-
-
-
-
-
-
-
-
 %----------------------------------------------------------------------------------------
 %	RESUMEN - ABSTRACT 
 %----------------------------------------------------------------------------------------
@@ -205,7 +195,7 @@ En base a un pedido de Trenes Argentinos, se diseñó un sistema de enclavamient
 %Luego de un extenos análisis del estado del arte, se propuso un enfoque de desarrollo para el diseño y la implementación en tecnología FPGA. Se aplicaron técnicas apropiadas para lograr el nivel de seguridad requerido y se analizó la escalabilidad del diseño para dicha plataforma.                			
 			
 Para el desarrollo de este trabajo resultó necesario aplicar conocimientos de lenguajes de descripción de hardware para la implementación del sistema sobre una plataforma de lógica programable en FPGA. Además, se trabajó con control de versiones y se aplicó el modelo de máquinas de estados finitos para la lógica del sistema. Se aplicaron estrategias de testing para validar los módulos. Finalmente, fueron fundamentales los conocimientos de sistemas críticos y ferroviarios.
-						
+					
 
 \end{abstract}
 
