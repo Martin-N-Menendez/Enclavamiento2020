@@ -96,7 +96,7 @@ En este capítulo se presentarán las decisiones de diseño adoptadas para concr
 
 En el presente trabajo se optó por implementar el sistema bajo el enfoque funcional. Asumiendo que sus ventajas son mucho mas fuertes que sus desventajas y el análisis de los resultados obtenidos fueron mucho mas provechosos que los de su contraparte funcional.
 
-Los módulos del sistema fueron implementados con máquinas de estado finitas con camino de datos (FSMD, del inglés \textit{Finite State Machine with Data path}), que son máquinas de estado finitas (FSM, del inglés \textit{Finite State Machine}) y circuitos secuenciales. La FSMD (Figura \ref{fig:FSMD}) posee dos partes diferenciadas: el camino de control y el camino de datos. El camino de control contiene una FSM que ,según las entradas de control y el estado interno que posee, genera señales de control internas que controlan los circuitos secuenciales del camino de datos que contienen los bloques que procesan las entradas y actúan sobre las salidas.
+Los módulos del sistema fueron implementados con máquinas de estado finitas con camino de datos (FSMD, del inglés \textit{Finite State Machine with Data path}), que son máquinas de estado finitas (FSM, del inglés \textit{Finite State Machine}) y circuitos secuenciales. La FSMD (figura \ref{fig:FSMD}) posee dos partes diferenciadas: el camino de control y el camino de datos. El camino de control contiene una FSM que ,según las entradas de control y el estado interno que posee, genera señales de control internas que controlan los circuitos secuenciales del camino de datos que contienen los bloques que procesan las entradas y actúan sobre las salidas.
 
 	\begin{figure}[h]
 	\centering
@@ -124,7 +124,7 @@ Los módulos del sistema fueron implementados con máquinas de estado finitas co
 
 \section{Plataforma utilizada}
 
-	Por razones de disponibilidad se utilizó el kit de desarrollo Arty Z7  (Figura \ref{fig:FPGA}), el cual posee 17600 LUT’s, 35200 FF’s, 32 BUFG’s y 100 IOB’s \cite{cite28}. Se lo utilizó como base para sintetizar el diseño y extraer conclusiones que permitan dimensionar los recursos lógicos necesarios para un desarrollo de estas características.
+	Por razones de disponibilidad se utilizó el kit de desarrollo Arty Z7  (figura \ref{fig:FPGA}), el cual posee 17600 LUT’s, 35200 FF’s, 32 BUFG’s y 100 IOB’s \cite{cite28}. Se lo utilizó como base para sintetizar el diseño y extraer conclusiones que permitan dimensionar los recursos lógicos necesarios para un desarrollo de estas características.
 	
 	\begin{figure}[h]
 	\centering
@@ -135,7 +135,7 @@ Los módulos del sistema fueron implementados con máquinas de estado finitas co
 
 \section{Análisis de la red ferroviaria y generación automática del código}
 
-	Todo grafo ferroviario necesita dos datos para estar definido. El primero es la una lista de relaciones entre nodo inicial y nodo final, el segundo es la posición absoluta del nodo en el grafo junto con datos adicionales como si posee un paso a nivel o si es bidireccional. Con esa información es posible realizar un análisis para obtener un resultado como el que se presenta en la Figura \ref{fig:Mapa} al ingresar un grafo de una red ferroviaria bypass.	
+	Todo grafo ferroviario necesita dos datos para estar definido. El primero es la una lista de relaciones entre nodo inicial y nodo final, el segundo es la posición absoluta del nodo en el grafo junto con datos adicionales como si posee un paso a nivel o si es bidireccional. Con esa información es posible realizar un análisis para obtener un resultado como el que se presenta en la figura \ref{fig:Mapa} al ingresar un grafo de una red ferroviaria bypass.	
 
 	\begin{figure}[h]
 	\centering
@@ -158,7 +158,7 @@ Los módulos del sistema fueron implementados con máquinas de estado finitas co
 
 	Como existen diversos tipos de nodos instanciados en el sistema, se describirá el funcionamiento de un nodo genérico con la máxima cantidad de funcionalidades, de forma tal de cubrir todos los casos.
 	
-	Un módulo de nodo (cuyo diagrama de bloques se presenta en la Figura \ref{fig:FSMD_Nodo}) recibe los estados de ocupación de sus vecinos y de si mismo desde el exterior, además del estado de los semáforos que posee. 
+	Un módulo de nodo (cuyo diagrama de bloques se presenta en la figura \ref{fig:FSMD_Nodo}) recibe los estados de ocupación de sus vecinos y de si mismo desde el exterior, además del estado de los semáforos que posee. 
 	
 	\begin{figure}[h]
 	\centering
@@ -181,7 +181,7 @@ Los módulos del sistema fueron implementados con máquinas de estado finitas co
 	
 \section{Módulo de la máquina de cambios cambios}
 
-	Un cambio de vías en la realidad conecta un tramo A con un tramo B o con un tramo C. Pero en la implementación de los nodos solo se contemplan dos casos: un vecino anterior y un vecino posterior. Es por eso que el nodo de la máquina de cambios tiene como función el conectar con uno u otro nodo, como se muestra en la Figura \ref{fig:Cambio_conexion}.
+	Un cambio de vías en la realidad conecta un tramo A con un tramo B o con un tramo C. Pero en la implementación de los nodos solo se contemplan dos casos: un vecino anterior y un vecino posterior. Es por eso que el nodo de la máquina de cambios tiene como función el conectar con uno u otro nodo, como se muestra en la figura \ref{fig:Cambio_conexion}.
 	
 	\begin{figure}[h]
 	\centering
@@ -190,11 +190,11 @@ Los módulos del sistema fueron implementados con máquinas de estado finitas co
 		\label{fig:Cambio_conexion}
 	\end{figure}	
 	
-	De esta manera, el nodo A ejemplificado en la Figura \ref{fig:Cambio_conexion} tendrá como vecino posterior al que le indique la máquina de cambios. Si la posición del cambio es normal, entonces el nodo A tendrá como vecino posterior al nodo B. Si la posición del cambio es reversa, entonces el nodo A tendrá como vecino posterior al nodo C.
+	De esta manera, el nodo A ejemplificado en la figura \ref{fig:Cambio_conexion} tendrá como vecino posterior al que le indique la máquina de cambios. Si la posición del cambio es normal, entonces el nodo A tendrá como vecino posterior al nodo B. Si la posición del cambio es reversa, entonces el nodo A tendrá como vecino posterior al nodo C.
 	
 	De la misma manera los nodos B y C verán como nodo "anterior" al nodo A o a ningún nodo, según el cambio se encuentre en posición normal o reversa respectivamente.	
 	
-	En la Figura \ref{fig:FSMD_Cambio} se ilustra el diagrama en bloques del módulo de la máquina de cambios.
+	En la figura \ref{fig:FSMD_Cambio} se ilustra el diagrama en bloques del módulo de la máquina de cambios.
 	
 	\begin{figure}[h]
 	\centering
@@ -240,7 +240,7 @@ Los módulos del sistema fueron implementados con máquinas de estado finitas co
 	 
 	\subsection{Módulo separador}
 	
-		En la Figura \ref{fig:FSMD_Separador} se puede ver la FSMD del módulo separador. El mismo debe recibir el vector de elementos booleanos de tamaño N (paquete[N]) y la orden de que debe procesarlo(procesar). 
+		En la figura \ref{fig:FSMD_Separador} se puede ver la FSMD del módulo separador. El mismo debe recibir el vector de elementos booleanos de tamaño N (paquete[N]) y la orden de que debe procesarlo(procesar). 
 		\begin{figure}[h]
 		\centering
 			\includegraphics[scale=.5]{./Figures/FSMD-Separador}
@@ -252,7 +252,7 @@ Los módulos del sistema fueron implementados con máquinas de estado finitas co
 		
 	\subsection{Módulo mediador}
 	
-		El bloque mediador que se puede visualizar en la Figura \ref{fig:FSMD_Mediador} tiene como función volver a generar el vector de elementos booleanos que ya han sido procesados por el enclavamiento.
+		El bloque mediador que se puede visualizar en la figura \ref{fig:FSMD_Mediador} tiene como función volver a generar el vector de elementos booleanos que ya han sido procesados por el enclavamiento.
 		
 		\begin{figure}[h]
 		\centering
@@ -273,7 +273,7 @@ Los módulos del sistema fueron implementados con máquinas de estado finitas co
 	
 	\subsection{Módulo detector}
 	
-		El módulo detector tiene como función el recibir una secuencia de caracteres y armar una salida con un vector de elementos booleanos. Un diagrama en bloques del funcionamiento del módulo se muestra en la Figura \ref{fig:FSMD_Detector}
+		El módulo detector tiene como función el recibir una secuencia de caracteres y armar una salida con un vector de elementos booleanos. Un diagrama en bloques del funcionamiento del módulo se muestra en la figura \ref{fig:FSMD_Detector}
 		
 		\begin{figure}[h]
 		\centering
@@ -286,7 +286,7 @@ Los módulos del sistema fueron implementados con máquinas de estado finitas co
 		
 		La Uart envía secuencialmente un caracter por medio de la señal r\_data (8 bytes) y un pulso (r\_disponible) para informar que un nuevo dato ha sido enviado, además de indicar por medio de la señal N la cantidad de caracteres que serán enviados. 
 		
-		El proceso de detección es ilustrado en la Figura \ref{fig:Estados_Detector}.  		
+		El proceso de detección es ilustrado en la figura \ref{fig:Estados_Detector}.  		
 		
 		\begin{figure}[h]
 		\centering
@@ -305,7 +305,7 @@ Los módulos del sistema fueron implementados con máquinas de estado finitas co
 		
 	\subsection{Módulo registro}
 	
-		Así como el módulo de detección realizaba una conversión de caracteres (1 byte) a booleanos (1 bit), el módulo de registro (Figura \ref{fig:FSMD_Registro}) hace la operación inversa. Dado un vector de elementos booleanos, el módulo debe generar M caracteres '0' o '1' según corresponda en base al vector y enviarlos a la Uart para su posterior impresión.
+		Así como el módulo de detección realizaba una conversión de caracteres (1 byte) a booleanos (1 bit), el módulo de registro (figura \ref{fig:FSMD_Registro}) hace la operación inversa. Dado un vector de elementos booleanos, el módulo debe generar M caracteres '0' o '1' según corresponda en base al vector y enviarlos a la Uart para su posterior impresión.
 		
 		\begin{figure}[h]
 		\centering
@@ -320,7 +320,7 @@ Los módulos del sistema fueron implementados con máquinas de estado finitas co
 		
 		Finalmente se envía un caracter ASCII "1" si el elemento i-ésimo del paquete es '1' lógico y un "0" si lo recibido es un '0' lógico. Junto con el caracter se envía la señal wr\_uart para indicarle a la Uart que ese dato debe ser guardado en la FIFO de salida y la señal procesado para indicarle al módulo de detección que ya puede recibir nuevas tramas.
 	
-		La máquina de estados es ilustrada en la Figura \ref{fig:Estado_Registro}. Se añadieron dos estados para generar el pulso de reloj necesario para mantener sincronizadas las tramas y el estado de reinicio se accede al sobrepasar el tamaño máximo del contador interno que es igual a M, la cantidad de elementos esperados.
+		La máquina de estados es ilustrada en la figura \ref{fig:Estado_Registro}. Se añadieron dos estados para generar el pulso de reloj necesario para mantener sincronizadas las tramas y el estado de reinicio se accede al sobrepasar el tamaño máximo del contador interno que es igual a M, la cantidad de elementos esperados.
 		
 		\begin{figure}[h]
 		\centering
@@ -337,7 +337,7 @@ Los módulos del sistema fueron implementados con máquinas de estado finitas co
 	
 		Para facilitar el proceso de desarrollo se añadió la posibilidad de elegir con uno de los switchs del kit de desarrollo el puntear completamente el enclavamiento. Es decir, con una posición del switch la salida era una copia exacta de la entrada, permitiendo diseñar todo el proceso de detección, lectura y escritura en la UART de forma independiente al enclavamiento. Mientras que con la otra posición del switch se enviaba la señal de entrada el sistema de enclavamiento y la salida era la consecuencia de haber pasado por este proceso.
 		
-		En la Figura \ref{fig:FSMD_Selector} se ilustra brevemente este módulo.
+		En la figura \ref{fig:FSMD_Selector} se ilustra brevemente este módulo.
 		
 		\begin{figure}[h]
 		\centering
@@ -362,7 +362,7 @@ Los módulos del sistema fueron implementados con máquinas de estado finitas co
 		\item Cada cierto tiempo ambas FIFOS deberán vaciarse en su totalidad.		
 	\end{itemize}
 	
-		Se presenta en la Figura \ref{fig:FSMD_UART} un diagrama en bloques de la UART.
+		Se presenta en la figura \ref{fig:FSMD_UART} un diagrama en bloques de la UART.
 			
 		\begin{figure}[h]
 		\centering
@@ -381,7 +381,7 @@ Los módulos del sistema fueron implementados con máquinas de estado finitas co
 
 	El algoritmo analizador de redes finaliza ejecutando la conexión de la consola utilizada con la plataforma FPGA. Presentando al usuario un menú de opciones para ocupar/desocupar ciertos tramos de la vía, cambiar el aspecto de ciertos semáforos, pedir que una barrera suba o baje o incluso el modificar la posición de una máquina de cambios.
 	
-	En la Figura \ref{fig:Menu_UART} se ilustra el menú diseñado para ingresar los comandos al sistema. Ya que existe una interfaz mucho mas avanzada desarrollada por otra parte del equipo de investigación en UTN Haedo, no se ha invertido demasiado tiempo en tener una interfaz propia para realizar pruebas a mayor escala.
+	En la figura \ref{fig:Menu_UART} se ilustra el menú diseñado para ingresar los comandos al sistema. Ya que existe una interfaz mucho mas avanzada desarrollada por otra parte del equipo de investigación en UTN Haedo, no se ha invertido demasiado tiempo en tener una interfaz propia para realizar pruebas a mayor escala.
 	
 		\begin{figure}[h]
 		\centering

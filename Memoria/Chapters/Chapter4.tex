@@ -213,7 +213,7 @@ end cfg_tb_nodo;
 			
 		\subsection{Resultados obtenidos}
 			
-			En la Figura \ref{fig:Test_Nodo} se muestra el resultado obtenido. Siempre que el tramo está ocupado el semáforo cambia su aspecto a rojo. Si el tramo analizado está desocupado se desprenden varios casos:
+			En la figura \ref{fig:Test_Nodo} se muestra el resultado obtenido. Siempre que el tramo está ocupado el semáforo cambia su aspecto a rojo. Si el tramo analizado está desocupado se desprenden varios casos:
 			
 			\begin{itemize}
 				\item Si el vecino esta ocupado: el semáforo analizado estará en aspecto rojo.
@@ -459,7 +459,7 @@ end cfg_tb_cambio;
 			
 	\subsection{Resultados obtenidos}
 			
-		En la Figura \ref{fig:Test_Cambios} se visualizan los resultados del ensayo. Cuando la posición de la máquina de cambios es normal entonces el estado anterior y el posterior están comunicados y cada uno puede ver tanto la ocupación como los semáforos del otro. Cuando la posición de la máquina de cambios es inversa entonces los estados vinculados son el anterior y el estado del nodo perteneciente al desvío.
+		En la figura \ref{fig:Test_Cambios} se visualizan los resultados del ensayo. Cuando la posición de la máquina de cambios es normal entonces el estado anterior y el posterior están comunicados y cada uno puede ver tanto la ocupación como los semáforos del otro. Cuando la posición de la máquina de cambios es inversa entonces los estados vinculados son el anterior y el estado del nodo perteneciente al desvío.
 		
 		\begin{figure}[h]
 		\centering
@@ -782,7 +782,7 @@ end tb;
 			
 	\subsection{Resultados obtenidos}
 				
-		En la Figura \ref{fig:Test_UART} se presentan los datos del ensayo. Se puede ver que las tramas inyectadas son presentadas idénticamente en la salida, con un pequeño delay temporal. Además de poder apreciar el tren de pulsos que envía la UART de un extremo al otro del módulo, primero para indicar la lectura de la FIFO de recepción y luego para indicar la escritura de la FIFO de transmisión.
+		En la figura \ref{fig:Test_UART} se presentan los datos del ensayo. Se puede ver que las tramas inyectadas son presentadas idénticamente en la salida, con un pequeño delay temporal. Además de poder apreciar el tren de pulsos que envía la UART de un extremo al otro del módulo, primero para indicar la lectura de la FIFO de recepción y luego para indicar la escritura de la FIFO de transmisión.
 		
 		\begin{figure}[h]
 		\centering
@@ -1046,7 +1046,7 @@ end tb;
 			
 	\subsection{Resultados obtenidos}
 				
-		En la Figura \ref{fig:Test_Detector} se puede visualizar una parte de los resultados del ensayo. En la cual se enviaron cuatro paquetes distintos y el módulo va alternando los estados según el evento ocurrido. 
+		En la figura \ref{fig:Test_Detector} se puede visualizar una parte de los resultados del ensayo. En la cual se enviaron cuatro paquetes distintos y el módulo va alternando los estados según el evento ocurrido. 
 		
 		\begin{figure}[h]
 		\centering
@@ -1341,7 +1341,7 @@ end tb;
 			
 	\subsection{Resultados obtenidos}
 				
-		En la Figura \ref{fig:Test_Separador} se puede visualizar como la trama principal es separada en los diferentes vectores que serán recibidos por el enclavamiento. La separación es exitosa al ser un módulo de implementación trivial, la dificultad del mismo estaba en su automatización, mas no en su funcionamiento. El haber atomizado esta funcionalidad fue beneficioso para todo el diseño.
+		En la figura \ref{fig:Test_Separador} se puede visualizar como la trama principal es separada en los diferentes vectores que serán recibidos por el enclavamiento. La separación es exitosa al ser un módulo de implementación trivial, la dificultad del mismo estaba en su automatización, mas no en su funcionamiento. El haber atomizado esta funcionalidad fue beneficioso para todo el diseño.
 		
 		\begin{figure}[!hbt]
 		\centering
@@ -1350,7 +1350,7 @@ end tb;
 			\label{fig:Test_Separador}
 		\end{figure}
 		
-		En la Figura \ref{fig:Test_Enclavamiento} se visualiza el comportamiento del enclavamiento ante las señales que fueron enviadas por el separador. En base al aspecto de los semáforos relevados en campo (sem\_s\_i) y a la ocupación de los tramos de vías (cv\_s) el enclavamiento determina que el aspecto de los semáforos para que no ocurran colisiones ni descarrilamientos es el que indica en la señal sem\_s\_o.
+		En la figura \ref{fig:Test_Enclavamiento} se visualiza el comportamiento del enclavamiento ante las señales que fueron enviadas por el separador. En base al aspecto de los semáforos relevados en campo (sem\_s\_i) y a la ocupación de los tramos de vías (cv\_s) el enclavamiento determina que el aspecto de los semáforos para que no ocurran colisiones ni descarrilamientos es el que indica en la señal sem\_s\_o.
 		
 		\begin{figure}[!hbt]
 		\centering
@@ -1360,7 +1360,7 @@ end tb;
 		\end{figure}
 
 		
-		En la Figura \ref{fig:Test_Mediador} se presenta el proceso inverso del módulo mediador, donde las señales del enclavamiento son de vuelta combinadas en una única señal.
+		En la figura \ref{fig:Test_Mediador} se presenta el proceso inverso del módulo mediador, donde las señales del enclavamiento son de vuelta combinadas en una única señal.
 		
 		\begin{figure}[!hbt]
 		\centering
@@ -1475,7 +1475,7 @@ end tb;
 			
 	\subsection{Resultados obtenidos}
 				
-		En la Figura \ref{fig:Test_Registro} se visualiza el resultado del ensayo, para una trama aleatoria.
+		En la figura \ref{fig:Test_Registro} se visualiza el resultado del ensayo, para una trama aleatoria.
 		
 	\begin{figure}[h]
 	\centering
@@ -1668,7 +1668,7 @@ end tb;
 			
 	\subsection{Resultados obtenidos}
 				
-		En la Figura \ref{fig:Test_Selector} se visualiza el comportamiento del sistema con el switch en estado alto. Se puede comprobar que ambas señales llegan al módulo: w\_data\_1 y wr\_uart\_1 son la señal con información y el tren de pulsos que corresponden a no procesar la señal; mientras que w\_data\_2 y wr\_uart\_2 son las mismas pero luego de haber sido procesadas por el sistema de enclavamiento.
+		En la figura \ref{fig:Test_Selector} se visualiza el comportamiento del sistema con el switch en estado alto. Se puede comprobar que ambas señales llegan al módulo: w\_data\_1 y wr\_uart\_1 son la señal con información y el tren de pulsos que corresponden a no procesar la señal; mientras que w\_data\_2 y wr\_uart\_2 son las mismas pero luego de haber sido procesadas por el sistema de enclavamiento.
 			
 	\begin{figure}[h]
 	\centering
