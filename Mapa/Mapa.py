@@ -789,7 +789,7 @@ def main():
     
     crear_modulo_vhdl(secciones,tabla)
     
-    conectar_terminal(secciones)
+    #conectar_terminal(secciones)
     
     #serial_main()
     

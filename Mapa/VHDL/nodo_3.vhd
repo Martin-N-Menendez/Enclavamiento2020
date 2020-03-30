@@ -17,8 +17,6 @@ use work.my_package.all;
 			Estado_i :  in std_logic;
 			Estado_ante :  in std_logic;
 			Estado_post :  in std_logic;
-			Semaforo_cercano :  out sem_type;
-			Semaforo_lejano :  out sem_type;
 			Estado_o :  out std_logic
 		);
 	end entity nodo_3;

@@ -18,8 +18,6 @@ use work.my_package.all;
 			Estado_post :  in std_logic;
 			Semaforo_propio_i_1 :  in sem_type;
 			Semaforo_propio_o_1 :  out sem_type;
-			Semaforo_cercano :  out sem_type;
-			Semaforo_lejano :  out sem_type;
 			Estado_o :  out std_logic
 		);
 	end entity nodo_1;

@@ -23,8 +23,9 @@ use work.my_package.all;
 			Semaforo_propio_o_2 :  out sem_type;
 			Semaforo_propio_i_3 :  in sem_type;
 			Semaforo_propio_o_3 :  out sem_type;
-			Semaforo_cercano :  out sem_type;
-			Semaforo_lejano :  out sem_type;
+			Semaforo_cercano_1_i :  in sem_type;
+			Semaforo_cercano_5_i :  in sem_type;
+			Semaforo_cercano_6_i :  in sem_type;
 			Estado_o :  out std_logic
 		);
 	end entity nodo_2;
@@ -50,6 +51,12 @@ begin
 					Semaforo_propio_o_3.msb <= '0';
 					Semaforo_propio_o_3.lsb <= '0';
 				end if;
+				 --2 con 1
+				 --2 en ['T', 'N', 'R', 'R']
+				 --2 con 5
+				 --2 en ['T', 'N', 'R', 'R']
+				 --2 con 6
+				 --2 en ['T', 'N', 'R', 'R']
 			end if;
 		end if;
 	end process;
