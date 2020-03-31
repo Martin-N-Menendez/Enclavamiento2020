@@ -726,7 +726,12 @@ def creando_red(secciones,objetos,tabla,test = False):
                 #print(" esta {} en {}?".format(i+1,sem_anterior[j]))
                 if str(i+1) == sem_anterior[k]:
                     f.write("\t\t\t"+"Semaforo_cercano_"+str(sem_actual[k])+"_i"+" : "+" in "+"sem_type"+";\n")        
-    
+                    
+        for j in range(len(sem_anterior)):
+                #print(" esta {} en {}?".format(i+1,sem_anterior[j]))
+                if str(i+1) == sem_anterior[j]:
+                    if int(sem_actual[j]) not in secciones[i].vecinos:
+                        f.write("\t\t\t"+"Estado_lejano_"+str(sem_actual[j])+"_i"+" : "+" in "+"std_logic;"+"\n")            
                         
             
         #f.write("\t\t\t"+"Semaforo_lejano"+   " : "+" out "+"sem_type;"+"\n")
@@ -896,13 +901,17 @@ def creando_red(secciones,objetos,tabla,test = False):
      
         
         for k in range(len(sem_anterior)):
-                #print(" esta {} en {}?".format(i+1,sem_anterior[j]))
-                if str(i+1) == sem_anterior[k]:
-                    f.write("\t\t"+"Semaforo_cercano_"+str(sem_actual[k])+"_i.lsb => "+"sem_lsb_o_"+str(sem_actual[k])+","+"\n")    
-                    f.write("\t\t"+"Semaforo_cercano_"+str(sem_actual[k])+"_i.msb => "+"sem_msb_o_"+str(sem_actual[k])+","+"\n")   
+            #print(" esta {} en {}?".format(i+1,sem_anterior[j]))
+            if str(i+1) == sem_anterior[k]:
+                f.write("\t\t"+"Semaforo_cercano_"+str(sem_actual[k])+"_i.lsb => "+"sem_lsb_o_"+str(sem_actual[k])+","+"\n")    
+                f.write("\t\t"+"Semaforo_cercano_"+str(sem_actual[k])+"_i.msb => "+"sem_msb_o_"+str(sem_actual[k])+","+"\n")   
                 
-                #ACA
                 
+        for k in range(len(sem_anterior)):
+            #print(" esta {} en {}?".format(i+1,sem_anterior[j]))
+            if str(i+1) == sem_anterior[k]:
+                if int(sem_actual[k]) not in secciones[i].vecinos:
+                    f.write("\t\t"+"Estado_lejano_"+str(sem_actual[k])+"_i"+" => "+" conector_"+str(sem_actual[k])+",\n")        
             
         f.write("\t\t"+"Estado_i => ocupacion_"+str(i+1)+",\n")
         f.write("\t\t"+"Estado_o => conector_"+str(i+1)+",\n")     
@@ -1045,6 +1054,11 @@ def creando_nodo(secciones,objetos,tabla):
                 if str(i+1) == sem_anterior[j]:
                     f.write("\t\t\t"+"Semaforo_cercano_"+str(sem_actual[j])+"_i"+" : "+" in "+"sem_type;"+"\n")
                     
+        for j in range(len(sem_anterior)):
+                #print(" esta {} en {}?".format(i+1,sem_anterior[j]))
+                if str(i+1) == sem_anterior[j]:
+                    if int(sem_actual[j]) not in secciones[i].vecinos:
+                        f.write("\t\t\t"+"Estado_lejano_"+str(sem_actual[j])+"_i"+" : "+" in "+"std_logic;"+"\n")
                     
         #f.write("\t\t\t"+"Semaforo_cercano"+   " : "+" out "+"sem_type;"+"\n")
         #f.write("\t\t\t"+"Semaforo_lejano"+   " : "+" out "+"sem_type;"+"\n")
@@ -1079,22 +1093,96 @@ def creando_nodo(secciones,objetos,tabla):
                 
         if secciones[i].semaforo:            
 
-            f.write("\t\t\t\t"+"if ( Estado_i = '0' ) then"+"\n")  
-            for j in range(secciones[i].N_semaforos):                 
-                f.write("\t\t\t\t\t"+"Semaforo_propio_o_"+str(j+1)+".msb <= '0';"+"\n")
-                f.write("\t\t\t\t\t"+"Semaforo_propio_o_"+str(j+1)+".lsb <= '0';"+"\n") 
-            f.write("\t\t\t\t"+"else"+"\n")
+#            f.write("\t\t\t\t"+"if ( Estado_i = '0' ) then"+"\n")  
+#            for j in range(secciones[i].N_semaforos):                 
+#                f.write("\t\t\t\t\t"+"Semaforo_propio_o_"+str(j+1)+".msb <= '0';"+"\n")
+#                f.write("\t\t\t\t\t"+"Semaforo_propio_o_"+str(j+1)+".lsb <= '0';"+"\n") 
+#            f.write("\t\t\t\t"+"else"+"\n")
+#            
+#            for j in range(secciones[i].N_semaforos):                 
+#                f.write("\t\t\t\t\t"+"Semaforo_propio_o_"+str(j+1)+".msb <= '1';"+"\n")
+#                f.write("\t\t\t\t\t"+"Semaforo_propio_o_"+str(j+1)+".lsb <= '0';"+"\n") 
+#                
+#            for j in range(len(sem_anterior)):
+#                #print(" esta {} en {}?".format(i+1,sem_anterior[j]))
+#                if str(i+1) == sem_anterior[j]:
+#                    f.write("\t\t\t\t --"+str(i+1)+" con "+str(sem_actual[j])+" en "+str(sem_cambio[j])+"\n") 
+#            f.write("\t\t\t\t"+"end if;"+"\n")  
             
-            for j in range(secciones[i].N_semaforos):                 
-                f.write("\t\t\t\t\t"+"Semaforo_propio_o_"+str(j+1)+".msb <= '1';"+"\n")
-                f.write("\t\t\t\t\t"+"Semaforo_propio_o_"+str(j+1)+".lsb <= '0';"+"\n") 
+            for j in range(secciones[i].N_semaforos): 
                 
-            for j in range(len(sem_anterior)):
-                #print(" esta {} en {}?".format(i+1,sem_anterior[j]))
+                if secciones[i].sem_sentido[j] == '<':
+                    vecino = "seccion[i].anterior"
+                if secciones[i].sem_sentido[j] == '>':
+                    vecino = "seccion[i].posterior"                                   
+                      
+                
+                f.write("\t\t\t\t"+"--"+"Semaforo_"+str(j+1)+"\n") 
+                f.write("\t\t\t\t"+""+"if ( Estado_i = '0' ) then"+"\n") 
+                f.write("\t\t\t\t\t"+"--"+"estado = ROJO"+"\n") 
+                f.write("\t\t\t\t\t"+""+"Semaforo_propio_o_"+str(j+1)+".msb <= '0'; --ROJO"+"\n")
+                f.write("\t\t\t\t\t"+""+"Semaforo_propio_o_"+str(j+1)+".lsb <= '0'; --ROJO"+"\n") 
+                 
+                 
+                #f.write("\t\t\t\t\t"+"--"+"if secciones[int("+str(vecino)+")-1].semaforo:"+"\n")                
+                
                 if str(i+1) == sem_anterior[j]:
-                    f.write("\t\t\t\t --"+str(i+1)+" con "+str(sem_actual[j])+"\n") 
-                    f.write("\t\t\t\t --"+str(i+1)+" en "+str(sem_cambio)+"\n") 
-            f.write("\t\t\t\t"+"end if;"+"\n")   
+                    f.write("\t\t\t\t"+""+"else"+"\n")
+                    if int(sem_actual[j]) in secciones[i].vecinos:
+                        
+                        f.write("\t\t\t\t\t"+""+"if secciones[int("+str(vecino)+")-1].ocupado:"+"\n") 
+                        f.write("\t\t\t\t\t\t"+"--"+"estado = AMARILLO"+"\n") 
+                        f.write("\t\t\t\t\t\t"+""+"Semaforo_propio_o_"+str(j+1)+".msb <= '1'; --AMARILLO"+"\n")
+                        f.write("\t\t\t\t\t\t"+""+"Semaforo_propio_o_"+str(j+1)+".lsb <= '0'; --AMARILLO"+"\n") 
+                        
+                        f.write("\t\t\t\t\t"+""+"else"+"\n") 
+                        
+                        f.write("\t\t\t\t\t\t"+"--"+"Si Color = AMARILLO"+"\n") 
+                        f.write("\t\t\t\t\t\t"+""+"if (Semaforo_cercano_"+str(sem_actual[j])+".msb = '1'"+" and  "+"Semaforo_cercano_"+str(sem_actual[j])+".lsb = '0'):"+"\n")    
+                        
+                        f.write("\t\t\t\t\t\t\t"+"--"+"estado = VERDE"+"\n") 
+                        f.write("\t\t\t\t\t\t\t"+""+"Semaforo_propio_o_"+str(j+1)+".msb <= '1'; --VERDE"+"\n")
+                        f.write("\t\t\t\t\t\t\t"+""+"Semaforo_propio_o_"+str(j+1)+".lsb <= '1'; --VERDE"+"\n") 
+                        
+                        f.write("\t\t\t\t\t\t"+""+"else"+"\n") 
+                        f.write("\t\t\t\t\t\t\t"+"--"+"estado = VERDE"+"\n") 
+                        f.write("\t\t\t\t\t\t\t"+""+"Semaforo_propio_o_"+str(j+1)+".msb <= '1'; --VERDE"+"\n")
+                        f.write("\t\t\t\t\t\t\t"+""+"Semaforo_propio_o_"+str(j+1)+".lsb <= '1'; --VERDE"+"\n") 
+                        
+                        f.write("\t\t\t\t\t\t"+""+"end if;"+"\n")         
+                         
+                
+                
+                #f.write("\t\t\t\t\t"+"--"+"else"+"\n") 
+                         
+                    if int(sem_actual[j]) not in secciones[i].vecinos:
+                        
+                        f.write("\t\t\t\t\t"+""+"if secciones[int("+str(vecino)+")-1].ocupado:"+"\n") 
+                        f.write("\t\t\t\t\t\t"+"--"+"estado = ROJO"+"\n") 
+                        f.write("\t\t\t\t\t\t"+""+"Semaforo_propio_o_"+str(j+1)+".msb <= '0'; --ROJO"+"\n")
+                        f.write("\t\t\t\t\t\t"+""+"Semaforo_propio_o_"+str(j+1)+".lsb <= '0'; --ROJO"+"\n") 
+                        
+                        f.write("\t\t\t\t\t"+""+"else"+"\n") 
+                        
+                        f.write("\t\t\t\t\t\t"+"--"+"Si OTRO = OCUPADO"+"\n") 
+                        f.write("\t\t\t\t\t\t"+""+"if (Estado_lejano_"+str(sem_actual[j])+"_i == '0'):"+"\n")    
+                        
+                        f.write("\t\t\t\t\t\t\t"+"--"+"estado = AMARILLO"+"\n") 
+                        f.write("\t\t\t\t\t\t\t"+""+"Semaforo_propio_o_"+str(j+1)+".msb <= '1'; --AMARILLO"+"\n")
+                        f.write("\t\t\t\t\t\t\t"+""+"Semaforo_propio_o_"+str(j+1)+".lsb <= '0'; --AMARILLO"+"\n") 
+                    
+                        f.write("\t\t\t\t\t\t"+""+"else"+"\n") 
+                        f.write("\t\t\t\t\t\t\t"+"--"+"estado = VERDE"+"\n") 
+                        f.write("\t\t\t\t\t\t\t"+""+"Semaforo_propio_o_"+str(j+1)+".msb <= '1'; --VERDE"+"\n")
+                        f.write("\t\t\t\t\t\t\t"+""+"Semaforo_propio_o_"+str(j+1)+".lsb <= '1'; --VERDE"+"\n") 
+                        
+                        f.write("\t\t\t\t\t\t"+""+"end if;"+"\n")         
+                        f.write("\t\t\t\t\t"+""+"end if;"+"\n") 
+                        
+                        
+                        
+                #f.write("\t\t\t\t"+"--"+"end if;"+"\r\n") 
+                f.write("\t\t\t\t"+""+"end if;"+"\r\n")
           #print("a {} le importa {}".format(sem_anterior[j],sem_actual[j]))
             
              

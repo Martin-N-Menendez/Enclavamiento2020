@@ -20,6 +20,7 @@ use work.my_package.all;
 			Semaforo_propio_i_1 :  in sem_type;
 			Semaforo_propio_o_1 :  out sem_type;
 			Semaforo_cercano_1_i :  in sem_type;
+			Estado_lejano_1_i :  in std_logic;
 			Estado_o :  out std_logic
 		);
 	end entity nodo_4;
@@ -33,15 +34,12 @@ begin
 				Semaforo_propio_o_1.lsb <= '0';
 			else
 				Estado_o <= Estado_i;
+				--Semaforo_1
 				if ( Estado_i = '0' ) then
-					Semaforo_propio_o_1.msb <= '0';
-					Semaforo_propio_o_1.lsb <= '0';
-				else
-					Semaforo_propio_o_1.msb <= '1';
-					Semaforo_propio_o_1.lsb <= '0';
-				 --4 con 1
-				 --4 en ['T', 'N', 'R', 'R']
-				end if;
+					--estado = ROJO
+					Semaforo_propio_o_1.msb <= '0'; --ROJO
+					Semaforo_propio_o_1.lsb <= '0'; --ROJO
+				end if;
 			end if;
 		end if;
 	end process;

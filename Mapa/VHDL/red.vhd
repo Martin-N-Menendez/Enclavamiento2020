@@ -84,6 +84,8 @@ architecture Behavioral of red is
 			Semaforo_cercano_1_i :  in sem_type;
 			Semaforo_cercano_5_i :  in sem_type;
 			Semaforo_cercano_6_i :  in sem_type;
+			Estado_lejano_5_i :  in std_logic;
+			Estado_lejano_6_i :  in std_logic;
 			Estado_o :  out std_logic
 		);
 	end component nodo_2;
@@ -119,6 +121,7 @@ architecture Behavioral of red is
 			Semaforo_propio_i_1 :  in sem_type;
 			Semaforo_propio_o_1 :  out sem_type;
 			Semaforo_cercano_1_i :  in sem_type;
+			Estado_lejano_1_i :  in std_logic;
 			Estado_o :  out std_logic
 		);
 	end component nodo_4;
@@ -240,6 +243,8 @@ begin
 		Semaforo_cercano_5_i.msb => sem_msb_o_5,
 		Semaforo_cercano_6_i.lsb => sem_lsb_o_6,
 		Semaforo_cercano_6_i.msb => sem_msb_o_6,
+		Estado_lejano_5_i =>  conector_5,
+		Estado_lejano_6_i =>  conector_6,
 		Estado_i => ocupacion_2,
 		Estado_o => conector_2,
 		Reset => Reset
@@ -262,6 +267,7 @@ begin
 		Semaforo_propio_o_1.msb => sem_msb_o_5,
 		Semaforo_cercano_1_i.lsb => sem_lsb_o_1,
 		Semaforo_cercano_1_i.msb => sem_msb_o_1,
+		Estado_lejano_1_i =>  conector_1,
 		Estado_i => ocupacion_4,
 		Estado_o => conector_4,
 		Reset => Reset

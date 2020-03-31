@@ -27,6 +27,8 @@ use work.my_package.all;
 			Semaforo_cercano_1_i :  in sem_type;
 			Semaforo_cercano_5_i :  in sem_type;
 			Semaforo_cercano_6_i :  in sem_type;
+			Estado_lejano_5_i :  in std_logic;
+			Estado_lejano_6_i :  in std_logic;
 			Estado_o :  out std_logic
 		);
 	end entity nodo_2;
@@ -44,27 +46,74 @@ begin
 				Semaforo_propio_o_3.lsb <= '0';
 			else
 				Estado_o <= Estado_i;
+				--Semaforo_1
 				if ( Estado_i = '0' ) then
-					Semaforo_propio_o_1.msb <= '0';
-					Semaforo_propio_o_1.lsb <= '0';
-					Semaforo_propio_o_2.msb <= '0';
-					Semaforo_propio_o_2.lsb <= '0';
-					Semaforo_propio_o_3.msb <= '0';
-					Semaforo_propio_o_3.lsb <= '0';
+					--estado = ROJO
+					Semaforo_propio_o_1.msb <= '0'; --ROJO
+					Semaforo_propio_o_1.lsb <= '0'; --ROJO
 				else
-					Semaforo_propio_o_1.msb <= '1';
-					Semaforo_propio_o_1.lsb <= '0';
-					Semaforo_propio_o_2.msb <= '1';
-					Semaforo_propio_o_2.lsb <= '0';
-					Semaforo_propio_o_3.msb <= '1';
-					Semaforo_propio_o_3.lsb <= '0';
-				 --2 con 1
-				 --2 en ['T', 'N', 'R', 'R']
-				 --2 con 5
-				 --2 en ['T', 'N', 'R', 'R']
-				 --2 con 6
-				 --2 en ['T', 'N', 'R', 'R']
-				end if;
+					if secciones[int(seccion[i].anterior)-1].ocupado:
+						--estado = AMARILLO
+						Semaforo_propio_o_1.msb <= '1'; --AMARILLO
+						Semaforo_propio_o_1.lsb <= '0'; --AMARILLO
+					else
+						--Si Color = AMARILLO
+						if (Semaforo_cercano_1.msb = '1' and  Semaforo_cercano_1.lsb = '0'):
+							--estado = VERDE
+							Semaforo_propio_o_1.msb <= '1'; --VERDE
+							Semaforo_propio_o_1.lsb <= '1'; --VERDE
+						else
+							--estado = VERDE
+							Semaforo_propio_o_1.msb <= '1'; --VERDE
+							Semaforo_propio_o_1.lsb <= '1'; --VERDE
+						end if;
+				end if;
+				--Semaforo_2
+				if ( Estado_i = '0' ) then
+					--estado = ROJO
+					Semaforo_propio_o_2.msb <= '0'; --ROJO
+					Semaforo_propio_o_2.lsb <= '0'; --ROJO
+				else
+					if secciones[int(seccion[i].posterior)-1].ocupado:
+						--estado = ROJO
+						Semaforo_propio_o_2.msb <= '0'; --ROJO
+						Semaforo_propio_o_2.lsb <= '0'; --ROJO
+					else
+						--Si OTRO = OCUPADO
+						if (Estado_lejano_5_i == '0'):
+							--estado = AMARILLO
+							Semaforo_propio_o_2.msb <= '1'; --AMARILLO
+							Semaforo_propio_o_2.lsb <= '0'; --AMARILLO
+						else
+							--estado = VERDE
+							Semaforo_propio_o_2.msb <= '1'; --VERDE
+							Semaforo_propio_o_2.lsb <= '1'; --VERDE
+						end if;
+					end if;
+				end if;
+				--Semaforo_3
+				if ( Estado_i = '0' ) then
+					--estado = ROJO
+					Semaforo_propio_o_3.msb <= '0'; --ROJO
+					Semaforo_propio_o_3.lsb <= '0'; --ROJO
+				else
+					if secciones[int(seccion[i].posterior)-1].ocupado:
+						--estado = ROJO
+						Semaforo_propio_o_3.msb <= '0'; --ROJO
+						Semaforo_propio_o_3.lsb <= '0'; --ROJO
+					else
+						--Si OTRO = OCUPADO
+						if (Estado_lejano_6_i == '0'):
+							--estado = AMARILLO
+							Semaforo_propio_o_3.msb <= '1'; --AMARILLO
+							Semaforo_propio_o_3.lsb <= '0'; --AMARILLO
+						else
+							--estado = VERDE
+							Semaforo_propio_o_3.msb <= '1'; --VERDE
+							Semaforo_propio_o_3.lsb <= '1'; --VERDE
+						end if;
+					end if;
+				end if;
 			end if;
 		end if;
 	end process;

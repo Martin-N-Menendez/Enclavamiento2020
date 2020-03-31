@@ -772,8 +772,6 @@ def generar_mapa(tabla):
         
         (df).append(pd.DataFrame(tabla, columns = ['Ruta', 'Inicial', 'Final', 'Secuencia','Sentido']))
         
-        
-        
         exportar_tablas(df)
 
 #%% 

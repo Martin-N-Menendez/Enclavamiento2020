@@ -31,13 +31,12 @@ begin
 				Semaforo_propio_o_1.lsb <= '0';
 			else
 				Estado_o <= Estado_i;
+				--Semaforo_1
 				if ( Estado_i = '0' ) then
-					Semaforo_propio_o_1.msb <= '0';
-					Semaforo_propio_o_1.lsb <= '0';
-				else
-					Semaforo_propio_o_1.msb <= '1';
-					Semaforo_propio_o_1.lsb <= '0';
-				end if;
+					--estado = ROJO
+					Semaforo_propio_o_1.msb <= '0'; --ROJO
+					Semaforo_propio_o_1.lsb <= '0'; --ROJO
+				end if;
 			end if;
 		end if;
 	end process;
