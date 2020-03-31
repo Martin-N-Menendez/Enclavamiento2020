@@ -14,6 +14,7 @@ use work.my_package.all;
 		port(
 			Clock :  in std_logic;
 			Reset :  in std_logic;
+			Cambio_i :  in std_logic;
 			Estado_i :  in std_logic;
 			Estado_ante :  in std_logic;
 			Estado_post :  in std_logic;
@@ -50,13 +51,20 @@ begin
 					Semaforo_propio_o_2.lsb <= '0';
 					Semaforo_propio_o_3.msb <= '0';
 					Semaforo_propio_o_3.lsb <= '0';
-				end if;
+				else
+					Semaforo_propio_o_1.msb <= '1';
+					Semaforo_propio_o_1.lsb <= '0';
+					Semaforo_propio_o_2.msb <= '1';
+					Semaforo_propio_o_2.lsb <= '0';
+					Semaforo_propio_o_3.msb <= '1';
+					Semaforo_propio_o_3.lsb <= '0';
 				 --2 con 1
 				 --2 en ['T', 'N', 'R', 'R']
 				 --2 con 5
 				 --2 en ['T', 'N', 'R', 'R']
 				 --2 con 6
 				 --2 en ['T', 'N', 'R', 'R']
+				end if;
 			end if;
 		end if;
 	end process;

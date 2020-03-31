@@ -19,8 +19,7 @@ use work.my_package.all;
 			Estado_post :  in std_logic;
 			Semaforo_propio_i_1 :  in sem_type;
 			Semaforo_propio_o_1 :  out sem_type;
-			Semaforo_cercano :  out sem_type;
-			Semaforo_lejano :  out sem_type;
+			Semaforo_cercano_1_i :  in sem_type;
 			Estado_o :  out std_logic
 		);
 	end entity nodo_8;
@@ -38,10 +37,10 @@ begin
 					Semaforo_propio_o_1.msb <= '0';
 					Semaforo_propio_o_1.lsb <= '0';
 				else
-					if ( Estado_ante = '0' ) then
 					Semaforo_propio_o_1.msb <= '1';
 					Semaforo_propio_o_1.lsb <= '0';
-					end if;
+				 --8 con 1
+				 --8 en ['N', 'R', 'N', 'R', 'R', 'R']
 				end if;
 			end if;
 		end if;

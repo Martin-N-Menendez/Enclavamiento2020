@@ -39,7 +39,12 @@ begin
 			else
 				procesado <= procesar;
 				if procesar = '1' then
-					Ocupacion <= Paquete(21-1 downto 16-1);
+					Ocupacion(0) <= Paquete(20);
+					Ocupacion(1) <= Paquete(19);
+					Ocupacion(2) <= Paquete(18);
+					Ocupacion(3) <= Paquete(17);
+					Ocupacion(4) <= Paquete(16);
+					Ocupacion(5) <= Paquete(15);
 					semaforos.msb(0) <= Paquete(14);
 					semaforos.lsb(0) <= Paquete(13);
 					semaforos.msb(1) <= Paquete(12);

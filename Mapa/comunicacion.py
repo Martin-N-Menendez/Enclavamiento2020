@@ -13,7 +13,17 @@ global objetos
 # Variables globales con valores iniciales ------------------------------------
 
 
+global cvs_t
+global sem_t
+global pan_t
+global mdc_t
 global trama
+
+cvs_t = "111111"
+sem_t = "00000000000000"
+pan_t = ""
+mdc_t = "1"
+
 global trama_tagged
 
 global ser
@@ -102,16 +112,12 @@ def procesar_trama_recibida(leido):
              
         print ("Cambio: ", cambio) 
 
-def sendData( tag_inicial,tag_final,manual = False ):
-   #print( "Dato enviado --------------------------------------------\n" )
-   
-   
-   generar_random()
-   agregar_tags('<','>')
+def sendData( trama ):
 
-   if manual:
-       trama_tagged = "<"+"111111"+"00000000000000"+"1"+">";
-       
+
+   trama_tagged = "<"+ trama +">";
+   
+    
    print ("Enviando: ",  trama_tagged)
    ser.write(str(trama_tagged).encode())
    time.sleep(0.1)
@@ -155,27 +161,73 @@ def cmd_h():
 # comando 1:  Tag inicial erroneo
 
 def cmd_0():
-   sendData( '<',')',True )
+   sendData( "101111"+"00000000000000"+"1" )
    return   
 
 # comando 1:  Tag inicial erroneo
 def cmd_1():
-   sendData( '<',')',False )
+    
+   N_cvs = objetos[0]
+
+   global cvs_t
+      
+   comando = ""
+    
+   print("Ingresar tramo ocupado")
+   comando = input(">> ")      # for Python 3
+
+   if comando >= '1' and comando <= str(N_cvs):
+       print("Ocupado tramo "+str(comando))
+       index = int(comando)
+       cvs_t = cvs_t[:index-1] + '0' + cvs_t[index:]
+            
+   sendData( cvs_t + sem_t + pan_t + mdc_t  )
    return
 
 # comando 1:  Tag final erroneo
 def cmd_2():
-   sendData( '(','>',False )
+   N_cvs = objetos[0]
+
+   global cvs_t 
+      
+   comando = ""
+    
+   print("Ingresar tramo desocupado")
+   comando = input(">> ")      # for Python 3
+
+   if comando >= '1' and comando <= str(N_cvs):
+       print("Desocupando tramo "+str(comando))
+       index = int(comando)
+       cvs_t = cvs_t[:index-1] + '1' + cvs_t[index:]
+            
+   sendData( cvs_t + sem_t + pan_t + mdc_t  )
    return
 
 # comando 3: Checksum erroneo
 def cmd_3():
-   sendData( '(',')',False )
+   #sendData( '(',')',False )
    return
 
 # comando 4: Todo OK
 def cmd_4():
-   sendData( '(',')',False )   
+   N_mdc = objetos[3]
+
+   global mdc_t 
+      
+   comando = ""
+    
+   print("Ingresar maquina de cambios a modificar")
+   comando = input(">> ")      # for Python 3
+
+   if comando >= '1' and comando <= str(N_mdc):
+       print("Modificando maquina de cambios "+str(comando))
+       index = int(comando)
+       if mdc_t[index-1] == '1':
+           mdc_t = mdc_t[:index-1] + '0' + mdc_t[index:]
+       else:
+           mdc_t = mdc_t[:index-1] + '1' + mdc_t[index:]
+           
+   sendData( cvs_t + sem_t + pan_t + mdc_t  )  
    return
 
 

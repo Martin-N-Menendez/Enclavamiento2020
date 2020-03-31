@@ -36,9 +36,12 @@ begin
 				if ( Estado_i = '0' ) then
 					Semaforo_propio_o_1.msb <= '0';
 					Semaforo_propio_o_1.lsb <= '0';
-				end if;
+				else
+					Semaforo_propio_o_1.msb <= '1';
+					Semaforo_propio_o_1.lsb <= '0';
 				 --4 con 1
 				 --4 en ['T', 'N', 'R', 'R']
+				end if;
 			end if;
 		end if;
 	end process;

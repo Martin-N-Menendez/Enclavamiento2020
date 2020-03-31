@@ -385,7 +385,9 @@ def creando_separador(secciones,objetos):
     f.write("\t\t\t"+"else\n")
     f.write("\t\t\t\t"+"procesado <= procesar;"+"\n") 
     f.write("\t\t\t\t"+"if procesar = '1' then\n")
-    f.write("\t\t\t\t\t"+"Ocupacion <= Paquete("+str(N)+"-1 downto "+str(N-N_CVS+1)+"-1);"+"\n")
+    
+    for i in range(N_CVS):
+        f.write("\t\t\t\t\t"+"Ocupacion("+str(i)+") <= Paquete("+str(N-i-1)+");"+"\n")
     
     for i in range(2*N_SEM):
         if i%2:
@@ -707,6 +709,8 @@ def creando_red(secciones,objetos,tabla,test = False):
         f.write("\t\t"+"port("+"\n")
         f.write("\t\t\t"+"Clock"+   " : "+" in "+"std_logic;"+"\n")
         f.write("\t\t\t"+"Reset"+   " : "+" in "+"std_logic;"+"\n")
+        if secciones[i].tipo == "Cruce":
+            f.write("\t\t\t"+"Cambio_i"+   " : "+" in "+"std_logic;"+"\n") 
         f.write("\t\t\t"+"Estado_i"+   " : "+" in "+"std_logic;"+"\n")
         if secciones[i].anterior != "" or secciones[i].desvio_inf_dir == "<" or secciones[i].desvio_sup_dir == "<" :
             f.write("\t\t\t"+"Estado_ante"+   " : "+" in "+"std_logic;"+"\n")
@@ -868,9 +872,18 @@ def creando_red(secciones,objetos,tabla,test = False):
                     if test:
                         print ("{} < [{}]".format(anterior,i+1))   
                     f.write("\t\t"+"Estado_ante => "+str(anterior)+",\n")
+   
+    
+    #for i in range(N_CVS):
         
-        #f.write("\tSignal sem_lsb_"+str(i+1)+" : std_logic;\n")
-        #f.write("\tSignal sem_msb_"+str(i+1)+" : std_logic;\n")
+        #print ( cambios_conexion )
+        
+        for j in range(N_MDC):
+            if i+1 == cambios_conexion[j][0]:
+                mdc_index = j+1
+                print("{} tiene el cambio_{}".format(i+1,mdc_index))
+                f.write("\t\t"+"Cambio_i"+   " => "+" mdc_i_"+str(mdc_index)+","+"\n")              
+        
         
         if secciones[i].semaforo:
             for j in range(secciones[i].N_semaforos):
@@ -880,10 +893,7 @@ def creando_red(secciones,objetos,tabla,test = False):
                 f.write("\t\t"+"Semaforo_propio_o_"+str(j+1)+".msb => sem_msb_o_"+str(sem_index)+","+"\n") 
                 sem_index = sem_index + 1
                 
-        #if str(i+1) in sem_anterior:
-        #    for j in range(len(sem_actual)):
-        #        f.write("\t\t"+"Semaforo_cercano_"+str(int(sem_actual[j])+1)+"_i.lsb => "+"cosa"+",\n") 
-        #        f.write("\t\t"+"Semaforo_cercano_"+str(int(sem_actual[j])+1)+"_i.msb => "+"cosa"+",\n") 
+     
         
         for k in range(len(sem_anterior)):
                 #print(" esta {} en {}?".format(i+1,sem_anterior[j]))
@@ -898,6 +908,8 @@ def creando_red(secciones,objetos,tabla,test = False):
         f.write("\t\t"+"Estado_o => conector_"+str(i+1)+",\n")     
         f.write("\t\t"+"Reset"+" => "+"Reset"+"\n")    
         f.write("\t\t);\r\n")
+    
+    
     
     # instanciar cambios
     for i in range(N_MDC):
@@ -988,8 +1000,8 @@ def creando_nodo(secciones,objetos,tabla):
     print("Actuales : {}".format(sem_actual))
     print("Anteriores : {}".format(sem_anterior))
     
-    for j in range(len(sem_anterior)): 
-        print("a {} le importa {}".format(sem_anterior[j],sem_actual[j]))
+    #for j in range(len(sem_anterior)): 
+        #print("a {} le importa {}".format(sem_anterior[j],sem_actual[j]))
             
     for i in range(N_CVS):
         nodo = "nodo_"+str(i+1)
@@ -1015,6 +1027,8 @@ def creando_nodo(secciones,objetos,tabla):
         f.write("\t\t"+"port("+"\n")
         f.write("\t\t\t"+"Clock"+   " : "+" in "+"std_logic;"+"\n")
         f.write("\t\t\t"+"Reset"+   " : "+" in "+"std_logic;"+"\n")
+        if secciones[i].tipo == "Cruce":
+            f.write("\t\t\t"+"Cambio_i"+   " : "+" in "+"std_logic;"+"\n")    
         f.write("\t\t\t"+"Estado_i"+   " : "+" in "+"std_logic;"+"\n")
         if secciones[i].anterior != "" or secciones[i].desvio_inf_dir == "<" or secciones[i].desvio_sup_dir == "<" :
             f.write("\t\t\t"+"Estado_ante"+   " : "+" in "+"std_logic;"+"\n")
@@ -1069,14 +1083,18 @@ def creando_nodo(secciones,objetos,tabla):
             for j in range(secciones[i].N_semaforos):                 
                 f.write("\t\t\t\t\t"+"Semaforo_propio_o_"+str(j+1)+".msb <= '0';"+"\n")
                 f.write("\t\t\t\t\t"+"Semaforo_propio_o_"+str(j+1)+".lsb <= '0';"+"\n") 
-            f.write("\t\t\t\t"+"end if;"+"\n")
+            f.write("\t\t\t\t"+"else"+"\n")
             
+            for j in range(secciones[i].N_semaforos):                 
+                f.write("\t\t\t\t\t"+"Semaforo_propio_o_"+str(j+1)+".msb <= '1';"+"\n")
+                f.write("\t\t\t\t\t"+"Semaforo_propio_o_"+str(j+1)+".lsb <= '0';"+"\n") 
+                
             for j in range(len(sem_anterior)):
                 #print(" esta {} en {}?".format(i+1,sem_anterior[j]))
                 if str(i+1) == sem_anterior[j]:
                     f.write("\t\t\t\t --"+str(i+1)+" con "+str(sem_actual[j])+"\n") 
                     f.write("\t\t\t\t --"+str(i+1)+" en "+str(sem_cambio)+"\n") 
-                
+            f.write("\t\t\t\t"+"end if;"+"\n")   
           #print("a {} le importa {}".format(sem_anterior[j],sem_actual[j]))
             
              
