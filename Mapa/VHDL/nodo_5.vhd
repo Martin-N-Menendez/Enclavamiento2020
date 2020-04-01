@@ -23,20 +23,19 @@ use work.my_package.all;
 	end entity nodo_5;
 architecture Behavioral of nodo_5 is
 begin
-	process(Clock,Reset)
+	Estado_o <= Estado_i;
+	Semaforo_1 : process(Clock,Reset)
 	begin
 		if (Clock = '1' and Clock'Event) then
 			if (Reset = '1') then
 				Semaforo_propio_o_1.msb <= '0';
 				Semaforo_propio_o_1.lsb <= '0';
 			else
-				Estado_o <= Estado_i;
-				--Semaforo_1
 				if ( Estado_i = '0' ) then
 					--estado = ROJO
 					Semaforo_propio_o_1.msb <= '0'; --ROJO
 					Semaforo_propio_o_1.lsb <= '0'; --ROJO
-				end if;
+				end if;
 			end if;
 		end if;
 	end process;

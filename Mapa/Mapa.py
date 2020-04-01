@@ -9,7 +9,6 @@ import matplotlib.pyplot as plt
 import random
 import pandas as pd
 
-
 from Estaciones import *
 from Plotear import *
 from Tabla import *
@@ -23,10 +22,14 @@ conexiones = []
 
 df = []
 
+global ax 
+
 global N_rutas
 N_rutas = 0
 
 global tabla
+global archivos
+
 tabla = {'Ruta': [],
         'Inicial': [],
         'Final': [],
@@ -244,7 +247,6 @@ def cambios_herencia():
                 secciones[i].cambio_raiz = False
 
 
-        #%%
 #%%
 def asignar_semaforos():
     for i in range(len(secciones)):
@@ -377,81 +379,14 @@ def asignar_semaforos():
                     (secciones[i].aspecto).append("Amarillo")
 
         secciones[i].N_semaforos = len(secciones[i].N_aspectos)
-#%%
-def imprimir_semaforos(secciones,ajuste):
-     
-    for i in range(len(secciones)):
-        if (secciones[i].semaforo):
-            for j in range(len(secciones[i].N_aspectos)):
-                ajuste_x = 0
-                ajuste_y = 0
-                L = int(secciones[i].N_aspectos[j])
-                
-                x = secciones[i].pos_x
-                y = secciones[i].pos_y
-                
-                if (secciones[i].desvio_sup != ""):
-                    ajuste_x = -0.07*L
-                    ajuste_y = -0.5-0.15*j
-                else:
-                    ajuste_x = -0.07*L
-                    ajuste_y =  0.25+0.15*j
-                                                 
-                x = x + ajuste_x
-                y = y + ajuste_y
-              
-                actualizar_semaforos(x,y,secciones[i].sem_sentido[j],L,secciones[i].aspecto[j],ajuste)
-#%%
-def actualizar_semaforos(x,y,sem_sentido,cantidad,estado,adj):
-    
-    ajuste = 0.15
-    
-    fuente = 40/adj
-    
-    m = 1
-    if sem_sentido == '>':    
-        if estado == 'Rojo':
-            plt.text(x, y, sem_sentido , color = 'r', family="sans-serif", weight="bold", size = fuente) 
-        else:
-            plt.text(x, y, sem_sentido , color = 'k', family="sans-serif", weight="bold", size = fuente) 
-            
-        if estado == 'Amarillo':
-            plt.text(x+m*ajuste, y, sem_sentido , color = 'y', family="sans-serif", weight="bold", size = fuente)  
-        else:
-            plt.text(x+m*ajuste, y, sem_sentido , color = 'k', family="sans-serif", weight="bold", size = fuente) 
-        
-        m = m + 1          
-        if cantidad == 3:            
-            if estado == 'Verde':
-                plt.text(x+m*ajuste, y, sem_sentido , color = 'c', family="sans-serif", weight="bold", size = fuente)  
-            else:
-                plt.text(x+m*ajuste, y, sem_sentido , color = 'k', family="sans-serif", weight="bold", size = fuente) 
-    
-    m = 1
-    if sem_sentido == '<': 
-        if cantidad == 3:            
-            if estado == 'Verde':
-                plt.text(x, y, sem_sentido , color = 'c', family="sans-serif", weight="bold", size = fuente)  
-            else:
-                plt.text(x, y, sem_sentido , color = 'k', family="sans-serif", weight="bold", size = fuente) 
-        else:
-            m = 0
-        if estado == 'Amarillo':
-            plt.text(x+m*ajuste, y, sem_sentido , color = 'y', family="sans-serif", weight="bold", size = fuente)  
-        else:
-            plt.text(x+m*ajuste, y, sem_sentido , color = 'k', family="sans-serif", weight="bold", size = fuente) 
-         
-        m = m + 1
-        if estado == 'Rojo':
-            plt.text(x+m*ajuste, y, sem_sentido , color = 'r', family="sans-serif", weight="bold", size = fuente) 
-        else:
-            plt.text(x+m*ajuste, y, sem_sentido , color = 'k', family="sans-serif", weight="bold", size = fuente) 
+
+
 
 #%%
-#%%
 def detectar_rutas(secciones, test = False):
-      
-    print("#"*20)
+    
+    if test:
+        print("#"*20)
     inicial = 0
 
     
@@ -489,8 +424,8 @@ def detectar_rutas(secciones, test = False):
             if ('>' in secciones[i].sem_sentido and secciones[i].posterior != ""):
                 recorrido = []
                 semaforo_siguiente(inicial, recorrido=recorrido, test=imprimir)
-
-    print ("Rutas soportadas: {}".format(N_rutas))
+    if test:            
+        print ("Rutas soportadas: {}".format(N_rutas))
 #%%
 def semaforo_anterior(inicial,intermedio = None, desvio = None,recorrido = [], test = False):
     
@@ -620,33 +555,9 @@ def semaforo_siguiente(inicial,intermedio = None, desvio = None, recorrido = [],
         #print("{}^{} de {}".format(inicial,inicio.desvio_sup,inicio.id))
         recorrido.append(inicio.desvio_sup)
         semaforo_siguiente(inicial,desvio = inicio.desvio_sup, recorrido = recorrido, test = test)
-#%%
-def calcular_ejes(secciones):
-    
-    max_x = 0.0
-    max_y = 0.0
-    min_x = 0.0
-    min_y = 0.0
-        
-    for i in range(len(secciones)):
-                
-        if(secciones[i].pos_x > max_x):         
-            max_x = secciones[i].pos_x
-       
-        if(secciones[i].pos_x < min_x):
-            min_x = secciones[i].pos_x
-       
-        if(secciones[i].pos_y > max_y):
-            max_y = secciones[i].pos_y
-         
-        if(secciones[i].pos_y < min_y):
-            min_y = secciones[i].pos_y
-            
-        #print(i,[[min_x,max_x],[min_y,max_y]])   
-        
-    return [[min_x,float(max_x)],[min_y,max_y]]
+
 #%%           
-def analizar_tabla(tabla):
+def analizar_tabla(tabla,test = False):
         
     tabla2 = {'Ruta': [],
         'Inicial': [],
@@ -697,11 +608,14 @@ def analizar_tabla(tabla):
     
         
     #print(tabla2)
-    print ("Rutas optimizadas: {}".format(n))
+    if test:
+        print ("Rutas optimizadas: {}".format(n))
     return tabla2
 #%%
-def generar_mapa(tabla):
+def generar_mapa(tabla, iniciar = False):
     v = 0.5
+    
+    #fig = plt.figure()
     
     print("@"*25+" Analizador de grafos v"+str(v)+" "+"@"*25+"\n")
     
@@ -713,9 +627,10 @@ def generar_mapa(tabla):
     
         secciones.clear()
         conexiones.clear()
+        
         ax = plt.gca()
         ax.cla() # clear things for fresh plot
-    
+        
         print("%"*25+" Mapa_"+str(i)+' '+"%"*25)  
             
         cargar_secciones(archivos[i][0],archivos[i][1])
@@ -724,16 +639,17 @@ def generar_mapa(tabla):
         
         axis = calcular_ejes(secciones)
         
-        #print(axis)
+        #print(axis)       
         
         adj = 0.75 
         ax.set_xlim((axis[0][0]-3*r, axis[0][1]+3*r))
         ax.set_ylim((axis[1][0]-adj, axis[1][1]+adj))
-            
+                
         if axis[0][1] > 7:
             ajuste = 4
         else:
             ajuste = 3
+        
         
         buscar_vecinos()
         
@@ -755,41 +671,41 @@ def generar_mapa(tabla):
         
         #proximo_semaforo(secciones)
         
-        detectar_rutas(secciones,True)
+        detectar_rutas(secciones)
             
         #dibujar_barrera(5.5,-1, b = 1, h = 3, c = [0.85,0.85,0.85])
             
         ax.axis('off')
         plt.savefig('Mapas/Mapa_'+str(i)+'.png',dpi = 100)
         plt.show()
+        #plt.pause(0.0001)
+        #plt.clf()
+        #print(tabla)    
+        #tabla = analizar_tabla(tabla)
+        #print(tabla)      
+        #(df).append(pd.DataFrame(tabla, columns = ['Ruta', 'Inicial', 'Final', 'Secuencia','Sentido'])) 
+    #exportar_tablas(df)
     
-        #print(tabla)
-        
-        tabla = analizar_tabla(tabla)
-        analizar_tabla(tabla)
-        
-        #print(tabla)
-        
-        (df).append(pd.DataFrame(tabla, columns = ['Ruta', 'Inicial', 'Final', 'Secuencia','Sentido']))
-        
-        exportar_tablas(df)
 
+    
 #%% 
 def conectar_terminal(secciones):
     print("UART > Conectando")    
-    uart_main(secciones)
+    uart_main(secciones,conexiones)
     print("UART > Desconectado") 
     
 #%%  
 def main():
 
+    generar_mapa(tabla,True)
+    
+    #rear_modulo_vhdl(secciones,tabla)
+    
+    conectar_terminal(secciones)
+    
     generar_mapa(tabla)
     
-    crear_modulo_vhdl(secciones,tabla)
     
-    #conectar_terminal(secciones)
-    
-    #serial_main()
     
 if __name__ == "__main__":
     main()

@@ -6,29 +6,20 @@ use IEEE.numeric_std.all;
 use work.my_package.all;
 	entity nodo_9 is
 		generic(
-			N : natural := 32;
-			N_SEM : natural := 10;
-			N_MDC : natural := 2;
-			N_CVS : natural := 10
+			N : natural := 90;
+			N_SEM : natural := 27;
+			N_MDC : natural := 12;
+			N_CVS : natural := 24
 		);
 		port(
 			Clock :  in std_logic;
 			Reset :  in std_logic;
 			Estado_i :  in std_logic;
 			Estado_ante :  in std_logic;
-			Estado_post :  in std_logic;
 			Estado_o :  out std_logic
 		);
 	end entity nodo_9;
 architecture Behavioral of nodo_9 is
 begin
-	process(Clock,Reset)
-	begin
-		if (Clock = '1' and Clock'Event) then
-			if (Reset = '1') then
-			else
-				Estado_o <= Estado_i;
-			end if;
-		end if;
-	end process;
+	Estado_o <= Estado_i;
 end Behavioral;

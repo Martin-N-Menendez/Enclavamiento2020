@@ -1,53 +1,57 @@
 import numpy as np
 import math
 
+from Plotear import *
+
 
 def crear_modulo_vhdl(secciones,tabla):
 
     print("%"*25+" Iniciando creacion de modulos "+"%"*25)    
     
-    objetos = calcular_paquete(secciones)
+    #mostrar_grafo(Mapa.secciones,10,True)
     
-    creando_paquete(secciones,objetos)
+    objetos = calcular_paquete(secciones,True)
     
-    creando_global(secciones,objetos)
+    creando_paquete(secciones,objetos,False)
     
-    creando_uart_control(secciones,objetos) 
+    creando_global(secciones,objetos,False)
     
-    creando_uart(secciones,objetos)
+    creando_uart_control(secciones,objetos,False) 
     
-    creando_uart_baud_gen(secciones,objetos)
+    creando_uart(secciones,objetos,False)
     
-    creando_uart_tx(secciones,objetos)
+    creando_uart_baud_gen(secciones,objetos,False)
     
-    creando_uart_rx(secciones,objetos)
+    creando_uart_tx(secciones,objetos,False)
     
-    creando_fifo(secciones,objetos)
+    creando_uart_rx(secciones,objetos,False)
     
-    creando_sistema(secciones,objetos)
+    creando_fifo(secciones,objetos,False)
     
-    creando_detector(secciones,objetos)
+    creando_sistema(secciones,objetos,False)
     
-    creando_enclavamiento(secciones,objetos)
+    creando_detector(secciones,objetos,False)
     
-    creando_separador(secciones,objetos)
+    creando_enclavamiento(secciones,objetos,False)
     
-    creando_mediador(secciones,objetos)
+    creando_separador(secciones,objetos,False)
+    
+    creando_mediador(secciones,objetos,False)
     
     creando_red(secciones,objetos,tabla,False)
     
-    creando_nodo(secciones,objetos,tabla)
+    creando_nodo(secciones,objetos,tabla,False)
     
-    creando_cambio(secciones,objetos)
+    creando_cambio(secciones,objetos,False)
     
-    creando_registro(secciones,objetos)
+    creando_registro(secciones,objetos,False)
     
-    creando_selector(secciones,objetos)
+    creando_selector(secciones,objetos,False)
     
     print("%"*25+" Finalizando creacion de modulos "+"%"*25) 
 
 #%%
-def calcular_paquete(secciones):
+def calcular_paquete(secciones,test = False):
     
     N = 0
     M = 0
@@ -56,7 +60,8 @@ def calcular_paquete(secciones):
     n_pans = 0
     n_cambios = 0
  
-    print("Paquete > Calculando") 
+    if test:
+        print("Paquete > Calculando") 
     
     for i in range(len(secciones)):
         #print ("Nodo: {}".format(i+1))
@@ -71,8 +76,9 @@ def calcular_paquete(secciones):
     N = n_vias + 2*n_semaforos + n_pans + n_cambios
     M = 2*n_semaforos + n_pans + n_cambios
     
-    print ("Paquete > N : {} | M : {}".format(N,M))
-    print ("Paquete > CVS : {} | SEM : {} | PAN : {} | MDC : {}".format(n_vias,n_semaforos,n_pans,n_cambios))
+    if test:
+        print ("Paquete > N : {} | M : {}".format(N,M))
+        print ("Paquete > CVS : {} | SEM : {} | PAN : {} | MDC : {}".format(n_vias,n_semaforos,n_pans,n_cambios))
     
     return [n_vias,n_semaforos,n_pans,n_cambios]
 #%%
@@ -85,9 +91,10 @@ def incluir_librerias(f,paquete = False):
         f.write("--Declare the package\r\n")
         f.write("use work.my_package.all;\r\n")
 #%%    
-def creando_paquete(secciones,objetos):        
+def creando_paquete(secciones,objetos,test = False):        
     
-    print("Paquete > Creando") 
+    if test:
+        print("Paquete > Creando") 
     
     N_CVS = objetos[0]
     N_SEM = objetos[1]
@@ -125,12 +132,13 @@ def creando_paquete(secciones,objetos):
     
     f.close()  # Close header file
     
-    
-    print("Paquete > Finalizado")
+    if test:
+        print("Paquete > Finalizado")
 #%%    
-def creando_enclavamiento(secciones,objetos):        
+def creando_enclavamiento(secciones,objetos,test = False):        
     
-    print("Enclavamiento > Creando") 
+    if test:
+        print("Enclavamiento > Creando") 
     
     N_CVS = objetos[0]
     N_SEM = objetos[1]
@@ -296,12 +304,14 @@ def creando_enclavamiento(secciones,objetos):
     
     f.close()  # Close header file    
     
-    print("Enclavamiento > Finalizado")
+    if test:
+        print("Enclavamiento > Finalizado")
 
 #%%    
-def creando_separador(secciones,objetos):        
+def creando_separador(secciones,objetos,test = False):        
     
-    print("Separador > Creando") 
+    if test:
+        print("Separador > Creando") 
     
     N_CVS = objetos[0]
     N_SEM = objetos[1]
@@ -416,12 +426,14 @@ def creando_separador(secciones,objetos):
     
     f.close()  # Close header file    
     
-    print("Separador > Finalizado")
+    if test:
+        print("Separador > Finalizado")
     
 #%%    
-def creando_mediador(secciones,objetos):        
+def creando_mediador(secciones,objetos,test = False):        
     
-    print("Mediador > Creando") 
+    if test:
+        print("Mediador > Creando") 
     
     N_CVS = objetos[0]
     N_SEM = objetos[1]
@@ -515,7 +527,9 @@ def creando_mediador(secciones,objetos):
     
     f.close()  # Close header file    
     
-    print("Mediador > Finalizado")
+    if test:
+        print("Mediador > Finalizado")
+        
 #%%   
 def instanciar_separador(f,nombre,objetos):   
     
@@ -596,7 +610,8 @@ def instanciar_red(f,nombre,objetos):
  #%%    
 def creando_red(secciones,objetos,tabla,test = False):        
     
-    print("Redes > Creando") 
+    if test:
+        print("Redes > Creando") 
     
     N_CVS = objetos[0]
     N_SEM = objetos[1]
@@ -652,7 +667,7 @@ def creando_red(secciones,objetos,tabla,test = False):
     
     f.write("architecture Behavioral of "+red+" is\r\n") 
 
-    sem_cant,sem_actual,sem_anterior,sem_cambio = calcular_semaforos(secciones,objetos,tabla,True)
+    sem_cant,sem_actual,sem_anterior,sem_cambio = calcular_semaforos(secciones,objetos,tabla)
     
     #print("Cantidades : {}".format(sem_cant))
     #print("Actuales : {}".format(sem_actual))
@@ -886,7 +901,8 @@ def creando_red(secciones,objetos,tabla,test = False):
         for j in range(N_MDC):
             if i+1 == cambios_conexion[j][0]:
                 mdc_index = j+1
-                print("{} tiene el cambio_{}".format(i+1,mdc_index))
+                if test:
+                    print("{} tiene el cambio_{}".format(i+1,mdc_index))
                 f.write("\t\t"+"Cambio_i"+   " => "+" mdc_i_"+str(mdc_index)+","+"\n")              
         
         
@@ -933,7 +949,8 @@ def creando_red(secciones,objetos,tabla,test = False):
         f.write("\t\t"+"Cambio_i => mdc_i_"+str(i+1)+",\n")
         f.write("\t\t"+"Cambio_o => mdc_o_"+str(i+1)+",\n")
         
-        print ("Nodos : {} | {} o {} | {}".format(i+1,secciones[i].desvio_inf,secciones[i].desvio_sup,cambios_conexion))
+        if test:
+            print ("Nodos : {} | {} o {} | {}".format(i+1,secciones[i].desvio_inf,secciones[i].desvio_sup,cambios_conexion))
         
         f.write("\t\t"+"Estado_ante_i => conector_"+str(cambios_conexion[i][0])+",\n")
         f.write("\t\t"+"Estado_ante_o => mdc_ante_o_"+str(i+1)+",\n")
@@ -987,12 +1004,14 @@ def creando_red(secciones,objetos,tabla,test = False):
     
     f.close()  # Close header file    
     
-    print("Redes > Finalizado")
+    if test:
+        print("Redes > Finalizado")
 
 #%%    
-def creando_nodo(secciones,objetos,tabla):        
+def creando_nodo(secciones,objetos,tabla,test = False):        
     
-    print("Nodo > Creando") 
+    if test:
+        print("Nodo > Creando") 
     
     N_CVS = objetos[0]
     N_SEM = objetos[1]
@@ -1005,9 +1024,10 @@ def creando_nodo(secciones,objetos,tabla):
     
     sem_cant,sem_actual,sem_anterior,sem_cambio = calcular_semaforos(secciones,objetos,tabla)
     
-    print("Cantidades : {}".format(sem_cant))
-    print("Actuales : {}".format(sem_actual))
-    print("Anteriores : {}".format(sem_anterior))
+    if test:
+        print("Cantidades : {}".format(sem_cant))
+        print("Actuales : {}".format(sem_actual))
+        print("Anteriores : {}".format(sem_anterior))
     
     #for j in range(len(sem_anterior)): 
         #print("a {} le importa {}".format(sem_anterior[j],sem_actual[j]))
@@ -1075,62 +1095,42 @@ def creando_nodo(secciones,objetos,tabla):
            
         f.write("begin\r\n")  
         
-        f.write("\t"+"process(Clock,Reset)\n")
-        f.write("\t"+"begin\n")
-        f.write("\t\t"+"if (Clock = '1' and Clock'Event) then\n")
-        f.write("\t\t\t"+"if (Reset = '1') then\n")
-        #f.write("\t\t\t\t"+"Estado_o <= '0';"+"\n") 
-        if secciones[i].semaforo:
+        f.write("\t"+"Estado_o <= Estado_i;"+"\r\n") 
+        
+        if secciones[i].semaforo:            
+         
             for j in range(secciones[i].N_semaforos):
+        
+                f.write("\t"+"Semaforo_"+str(j+1)+" : process(Clock,Reset)\n")
+                f.write("\t"+"begin\n")
+                f.write("\t\t"+"if (Clock = '1' and Clock'Event) then\n")
+                f.write("\t\t\t"+"if (Reset = '1') then\n")
+                #f.write("\t\t\t\t"+"Estado_o <= '0';"+"\n") 
+                #if secciones[i].semaforo:
+                #    for j in range(secciones[i].N_semaforos):
                 f.write("\t\t\t\t"+"Semaforo_propio_o_"+str(j+1)+   ".msb <= '0';"+"\n")
                 f.write("\t\t\t\t"+"Semaforo_propio_o_"+str(j+1)+   ".lsb <= '0';"+"\n")
-        f.write("\t\t\t"+"else\n")    
-        
-        f.write("\t\t\t\t"+"Estado_o <= Estado_i;"+"\n") 
-         
-        #for j in range(len(sem_anterior)): 
-        #    print("a {} le importa {}".format(sem_anterior[j],sem_actual[j]))
-                
-        if secciones[i].semaforo:            
-
-#            f.write("\t\t\t\t"+"if ( Estado_i = '0' ) then"+"\n")  
-#            for j in range(secciones[i].N_semaforos):                 
-#                f.write("\t\t\t\t\t"+"Semaforo_propio_o_"+str(j+1)+".msb <= '0';"+"\n")
-#                f.write("\t\t\t\t\t"+"Semaforo_propio_o_"+str(j+1)+".lsb <= '0';"+"\n") 
-#            f.write("\t\t\t\t"+"else"+"\n")
-#            
-#            for j in range(secciones[i].N_semaforos):                 
-#                f.write("\t\t\t\t\t"+"Semaforo_propio_o_"+str(j+1)+".msb <= '1';"+"\n")
-#                f.write("\t\t\t\t\t"+"Semaforo_propio_o_"+str(j+1)+".lsb <= '0';"+"\n") 
-#                
-#            for j in range(len(sem_anterior)):
-#                #print(" esta {} en {}?".format(i+1,sem_anterior[j]))
-#                if str(i+1) == sem_anterior[j]:
-#                    f.write("\t\t\t\t --"+str(i+1)+" con "+str(sem_actual[j])+" en "+str(sem_cambio[j])+"\n") 
-#            f.write("\t\t\t\t"+"end if;"+"\n")  
+                f.write("\t\t\t"+"else\n")    
             
-            for j in range(secciones[i].N_semaforos): 
                 
                 if secciones[i].sem_sentido[j] == '<':
-                    vecino = "seccion[i].anterior"
+                    vecino = "Estado_ante"
                 if secciones[i].sem_sentido[j] == '>':
-                    vecino = "seccion[i].posterior"                                   
+                    vecino = "Estado_post"                                   
                       
                 
-                f.write("\t\t\t\t"+"--"+"Semaforo_"+str(j+1)+"\n") 
+                #f.write("\t\t\t\t"+"--"+"Semaforo_"+str(j+1)+"\n") 
                 f.write("\t\t\t\t"+""+"if ( Estado_i = '0' ) then"+"\n") 
                 f.write("\t\t\t\t\t"+"--"+"estado = ROJO"+"\n") 
                 f.write("\t\t\t\t\t"+""+"Semaforo_propio_o_"+str(j+1)+".msb <= '0'; --ROJO"+"\n")
                 f.write("\t\t\t\t\t"+""+"Semaforo_propio_o_"+str(j+1)+".lsb <= '0'; --ROJO"+"\n") 
-                 
-                 
-                #f.write("\t\t\t\t\t"+"--"+"if secciones[int("+str(vecino)+")-1].semaforo:"+"\n")                
+                           
                 
                 if str(i+1) == sem_anterior[j]:
                     f.write("\t\t\t\t"+""+"else"+"\n")
                     if int(sem_actual[j]) in secciones[i].vecinos:
                         
-                        f.write("\t\t\t\t\t"+""+"if secciones[int("+str(vecino)+")-1].ocupado:"+"\n") 
+                        f.write("\t\t\t\t\t"+""+"if "+str(vecino)+" = '0' then"+"\n") 
                         f.write("\t\t\t\t\t\t"+"--"+"estado = AMARILLO"+"\n") 
                         f.write("\t\t\t\t\t\t"+""+"Semaforo_propio_o_"+str(j+1)+".msb <= '1'; --AMARILLO"+"\n")
                         f.write("\t\t\t\t\t\t"+""+"Semaforo_propio_o_"+str(j+1)+".lsb <= '0'; --AMARILLO"+"\n") 
@@ -1138,7 +1138,7 @@ def creando_nodo(secciones,objetos,tabla):
                         f.write("\t\t\t\t\t"+""+"else"+"\n") 
                         
                         f.write("\t\t\t\t\t\t"+"--"+"Si Color = AMARILLO"+"\n") 
-                        f.write("\t\t\t\t\t\t"+""+"if (Semaforo_cercano_"+str(sem_actual[j])+".msb = '1'"+" and  "+"Semaforo_cercano_"+str(sem_actual[j])+".lsb = '0'):"+"\n")    
+                        f.write("\t\t\t\t\t\t"+""+"if (Semaforo_cercano_"+str(sem_actual[j])+"_i.msb = '1'"+" and  "+"Semaforo_cercano_"+str(sem_actual[j])+"_i.lsb = '0') then"+"\n")    
                         
                         f.write("\t\t\t\t\t\t\t"+"--"+"estado = VERDE"+"\n") 
                         f.write("\t\t\t\t\t\t\t"+""+"Semaforo_propio_o_"+str(j+1)+".msb <= '1'; --VERDE"+"\n")
@@ -1150,14 +1150,14 @@ def creando_nodo(secciones,objetos,tabla):
                         f.write("\t\t\t\t\t\t\t"+""+"Semaforo_propio_o_"+str(j+1)+".lsb <= '1'; --VERDE"+"\n") 
                         
                         f.write("\t\t\t\t\t\t"+""+"end if;"+"\n")         
-                         
+                        f.write("\t\t\t\t\t"+""+"end if;"+"\n")  
                 
                 
                 #f.write("\t\t\t\t\t"+"--"+"else"+"\n") 
                          
                     if int(sem_actual[j]) not in secciones[i].vecinos:
                         
-                        f.write("\t\t\t\t\t"+""+"if secciones[int("+str(vecino)+")-1].ocupado:"+"\n") 
+                        f.write("\t\t\t\t\t"+""+"if "+str(vecino)+" = '0' then"+"\n") 
                         f.write("\t\t\t\t\t\t"+"--"+"estado = ROJO"+"\n") 
                         f.write("\t\t\t\t\t\t"+""+"Semaforo_propio_o_"+str(j+1)+".msb <= '0'; --ROJO"+"\n")
                         f.write("\t\t\t\t\t\t"+""+"Semaforo_propio_o_"+str(j+1)+".lsb <= '0'; --ROJO"+"\n") 
@@ -1165,7 +1165,7 @@ def creando_nodo(secciones,objetos,tabla):
                         f.write("\t\t\t\t\t"+""+"else"+"\n") 
                         
                         f.write("\t\t\t\t\t\t"+"--"+"Si OTRO = OCUPADO"+"\n") 
-                        f.write("\t\t\t\t\t\t"+""+"if (Estado_lejano_"+str(sem_actual[j])+"_i == '0'):"+"\n")    
+                        f.write("\t\t\t\t\t\t"+""+"if (Estado_lejano_"+str(sem_actual[j])+"_i = '0') then"+"\n")    
                         
                         f.write("\t\t\t\t\t\t\t"+"--"+"estado = AMARILLO"+"\n") 
                         f.write("\t\t\t\t\t\t\t"+""+"Semaforo_propio_o_"+str(j+1)+".msb <= '1'; --AMARILLO"+"\n")
@@ -1181,24 +1181,28 @@ def creando_nodo(secciones,objetos,tabla):
                         
                         
                         
-                #f.write("\t\t\t\t"+"--"+"end if;"+"\r\n") 
-                f.write("\t\t\t\t"+""+"end if;"+"\r\n")
+                #f.write("\t\t\t\t\t"+"end if;"+"\n") 
+                f.write("\t\t\t\t"+""+"end if;"+"\n")
+                f.write("\t\t\t"+"end if;\n")
+                f.write("\t\t"+"end if;\n")
+                f.write("\t"+"end process;\r\n")
           #print("a {} le importa {}".format(sem_anterior[j],sem_actual[j]))
             
              
-        f.write("\t\t\t"+"end if;\n")
-        f.write("\t\t"+"end if;\n")
-        f.write("\t"+"end process;\r\n")   
+        
+           
          
         f.write("end Behavioral;") 
         
         f.close()  # Close header file    
     
-    print("Nodo > Finalizado")
+    if test:
+        print("Nodo > Finalizado")
 #%%   
-def creando_cambio(secciones,objetos):   
+def creando_cambio(secciones,objetos,test = False):   
     
-    print("Cambios > Creando") 
+    if test:
+        print("Cambios > Creando") 
     
     N_CVS = objetos[0]
     N_SEM = objetos[1]
@@ -1280,7 +1284,8 @@ def creando_cambio(secciones,objetos):
         
         f.close()  # Close header file    
     
-    print("Cambios > Finalizado")
+    if test:
+        print("Cambios > Finalizado")
     
 #%%
 def calcular_semaforos(secciones,objetos,tabla,test = False):
@@ -1375,16 +1380,17 @@ def calcular_semaforos(secciones,objetos,tabla,test = False):
         print("fin:{}".format(sem_actual))
         print("cmb:{}".format(sem_cambio))
         
-        
-    print("")
-    print("Semaforeo > Finalizado")     
+    if test:    
+        print("")
+        print("Semaforeo > Finalizado")     
     
     return sem_cant,sem_actual,sem_anterior,sem_cambio
  
 #%%    
-def creando_sistema(secciones,objetos):        
+def creando_sistema(secciones,objetos,test = False):        
     
-    print("Sistema > Creando") 
+    if test:
+        print("Sistema > Creando") 
     
     N_CVS = objetos[0]
     N_SEM = objetos[1]
@@ -1587,12 +1593,14 @@ def creando_sistema(secciones,objetos):
     
     f.close()  # Close header file    
     
-    print("Sistema > Finalizado")
+    if test:
+        print("Sistema > Finalizado")
     
 #%%    
-def creando_global(secciones,objetos):        
+def creando_global(secciones,objetos,test = False):        
     
-    print("Global > Creando") 
+    if test:
+        print("Global > Creando") 
     
     N_CVS = objetos[0]
     N_SEM = objetos[1]
@@ -1735,12 +1743,14 @@ def creando_global(secciones,objetos):
     
     f.close()  # Close header file    
     
-    print("Global > Finalizado")
+    if test:
+        print("Global > Finalizado")
         
 #%%    
-def creando_uart_control(secciones,objetos):        
+def creando_uart_control(secciones,objetos,test = False):        
     
-    print("Uart_control > Creando") 
+    if test:
+        print("Uart_control > Creando") 
     
     N_CVS = objetos[0]
     N_SEM = objetos[1]
@@ -1817,12 +1827,14 @@ def creando_uart_control(secciones,objetos):
     
     f.close()  # Close header file    
     
-    print("Uart_control > Finalizado")  
+    if test:
+        print("Uart_control > Finalizado")  
     
 #%%    
-def creando_detector(secciones,objetos):        
+def creando_detector(secciones,objetos,test = False):        
     
-    print("Detector > Creando") 
+    if test:
+        print("Detector > Creando") 
     
     N_CVS = objetos[0]
     N_SEM = objetos[1]
@@ -2065,12 +2077,14 @@ def creando_detector(secciones,objetos):
     
     f.close()  # Close header file    
     
-    print("Detector > Finalizado")     
+    if test:
+        print("Detector > Finalizado")     
     
 #%%    
-def creando_registro(secciones,objetos):        
+def creando_registro(secciones,objetos,test = False):        
     
-    print("Registro > Creando") 
+    if test:
+        print("Registro > Creando") 
     
     N_CVS = objetos[0]
     N_SEM = objetos[1]
@@ -2200,12 +2214,14 @@ def creando_registro(secciones,objetos):
     
     f.close()  # Close header file    
     
-    print("Registro > Finalizado")
+    if test:
+        print("Registro > Finalizado")
 
 #%%    
-def creando_selector(secciones,objetos):        
+def creando_selector(secciones,objetos,test = False):        
     
-    print("Selector > Creando") 
+    if test:
+        print("Selector > Creando") 
     
     N_CVS = objetos[0]
     N_SEM = objetos[1]
@@ -2273,12 +2289,14 @@ def creando_selector(secciones,objetos):
     
     f.close()  # Close header file    
     
-    print("Selector > Finalizado")    
+    if test:
+        print("Selector > Finalizado")    
 
 #%%    
-def creando_fifo(secciones,objetos):        
+def creando_fifo(secciones,objetos,test = False):        
     
-    print("FIFO > Creando") 
+    if test:
+        print("FIFO > Creando") 
     
     N_CVS = objetos[0]
     N_SEM = objetos[1]
@@ -2409,12 +2427,14 @@ def creando_fifo(secciones,objetos):
     
     f.close()  # Close header file    
     
-    print("FIFO > Finalizado")
+    if test:
+        print("FIFO > Finalizado")
 
 #%%    
-def creando_uart_rx(secciones,objetos):        
+def creando_uart_rx(secciones,objetos,test = False):        
     
-    print("UART_rx > Creando") 
+    if test:
+        print("UART_rx > Creando") 
     
     N_CVS = objetos[0]
     N_SEM = objetos[1]
@@ -2531,12 +2551,14 @@ def creando_uart_rx(secciones,objetos):
     
     f.close()  # Close header file    
     
-    print("UART_rx > Finalizado")
+    if test:
+        print("UART_rx > Finalizado")
  
 #%%    
-def creando_uart_tx(secciones,objetos):        
+def creando_uart_tx(secciones,objetos,test = False):        
     
-    print("UART_tx > Creando") 
+    if test:
+        print("UART_tx > Creando") 
     
     N_CVS = objetos[0]
     N_SEM = objetos[1]
@@ -2663,12 +2685,14 @@ def creando_uart_tx(secciones,objetos):
     
     f.close()  # Close header file    
     
-    print("UART_tx > Finalizado")  
+    if test:
+        print("UART_tx > Finalizado")  
     
 #%%    
-def creando_uart_baud_gen(secciones,objetos):        
+def creando_uart_baud_gen(secciones,objetos,test = False):        
     
-    print("UART_baud_gen > Creando") 
+    if test:
+        print("UART_baud_gen > Creando") 
     
     N_CVS = objetos[0]
     N_SEM = objetos[1]
@@ -2729,13 +2753,14 @@ def creando_uart_baud_gen(secciones,objetos):
     
     f.close()  # Close header file    
     
-    print("UART_baud_gen > Finalizado")
-    
-    
+    if test:
+        print("UART_baud_gen > Finalizado")
+      
 #%%    
-def creando_uart(secciones,objetos):        
+def creando_uart(secciones,objetos,test = False):        
     
-    print("UART > Creando") 
+    if test:
+        print("UART > Creando") 
     
     N_CVS = objetos[0]
     N_SEM = objetos[1]
@@ -2824,4 +2849,6 @@ def creando_uart(secciones,objetos):
     
     f.close()  # Close header file    
     
-    print("UART > Finalizado")
+    if test:
+        print("UART > Finalizado")
+        

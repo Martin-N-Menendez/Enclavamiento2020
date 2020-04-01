@@ -3,7 +3,9 @@ from matplotlib.patches import Rectangle
 
 from Estaciones import *
 
+import matplotlib.pyplot as plt
 
+global plt
 
 global r
 
@@ -19,13 +21,13 @@ violet = (0.6,0.0,0.5)
 def dibujar_semaforo(pos_x,pos_y, b = 0.2, h = 0.2, c = 'g'):
     
     rect = Rectangle((pos_x, pos_y), b, h, color = c)
-    ax.add_artist(rect)
+    plt.add_artist(rect)
 
 
 def dibujar_barrera(pos_x,pos_y, b = 0.2, h = 0.2, c = 'g'):
     
     rect = Rectangle((pos_x, pos_y), b, h, color = c)
-    ax.add_artist(rect)
+    plt.add_artist(rect)
     
 def conectar_central(estaciones):
     
@@ -34,6 +36,8 @@ def conectar_central(estaciones):
 
 #%%
 def conectar_secciones_b(secciones,conexiones):
+    
+   
     for i in range(len(conexiones)):
         
         a = conexiones[i][0]
@@ -76,7 +80,7 @@ def conectar_secciones_b(secciones,conexiones):
         
 #%%
 def conectar_secciones(secciones):
-    
+       
     for i in range(len(secciones)):
         
         for j in range(secciones[i].N_vecinos):
@@ -117,7 +121,7 @@ def conectar_secciones(secciones):
                         if ( secciones[a].anterior == secciones[b].id ):
                             if secciones[a].cambio_estado == False:
                                 color = grey2         
-                
+            
             create_line(secciones[a].pos_x, secciones[a].pos_y,
                         secciones[b].pos_x, secciones[b].pos_y,
                         c = color)    
@@ -187,6 +191,138 @@ def create_line(x1,y1,x2,y2,r = r, lw = 15, c = grey1):
         #print("<{} , {}>".format(round(mid_point[0],2),round(mid_point[1],2)))    
         
     # draw lines
-    ax.plot([x1,mid_point[0]], [y1,mid_point[1]], color = c , linewidth = lw)
-    ax.plot([mid_point[0],x2], [mid_point[1],y2], color = c , linewidth = lw)
+    plt.plot([x1,mid_point[0]], [y1,mid_point[1]], color = c , linewidth = lw)
+    plt.plot([mid_point[0],x2], [mid_point[1],y2], color = c , linewidth = lw)
 
+#%%
+def actualizar_semaforos(x,y,sem_sentido,cantidad,estado,adj):
+    
+    ajuste = 0.15
+    
+    fuente = 40/adj
+    
+    m = 1
+    if sem_sentido == '>':    
+        if estado == 'Rojo':
+            plt.text(x, y, sem_sentido , color = 'r', family="sans-serif", weight="bold", size = fuente) 
+        else:
+            plt.text(x, y, sem_sentido , color = 'k', family="sans-serif", weight="bold", size = fuente) 
+            
+        if estado == 'Amarillo':
+            plt.text(x+m*ajuste, y, sem_sentido , color = 'y', family="sans-serif", weight="bold", size = fuente)  
+        else:
+            plt.text(x+m*ajuste, y, sem_sentido , color = 'k', family="sans-serif", weight="bold", size = fuente) 
+        
+        m = m + 1          
+        if cantidad == 3:            
+            if estado == 'Verde':
+                plt.text(x+m*ajuste, y, sem_sentido , color = 'c', family="sans-serif", weight="bold", size = fuente)  
+            else:
+                plt.text(x+m*ajuste, y, sem_sentido , color = 'k', family="sans-serif", weight="bold", size = fuente) 
+    
+    m = 1
+    if sem_sentido == '<': 
+        if cantidad == 3:            
+            if estado == 'Verde':
+                plt.text(x, y, sem_sentido , color = 'c', family="sans-serif", weight="bold", size = fuente)  
+            else:
+                plt.text(x, y, sem_sentido , color = 'k', family="sans-serif", weight="bold", size = fuente) 
+        else:
+            m = 0
+        if estado == 'Amarillo':
+            plt.text(x+m*ajuste, y, sem_sentido , color = 'y', family="sans-serif", weight="bold", size = fuente)  
+        else:
+            plt.text(x+m*ajuste, y, sem_sentido , color = 'k', family="sans-serif", weight="bold", size = fuente) 
+         
+        m = m + 1
+        if estado == 'Rojo':
+            plt.text(x+m*ajuste, y, sem_sentido , color = 'r', family="sans-serif", weight="bold", size = fuente) 
+        else:
+            plt.text(x+m*ajuste, y, sem_sentido , color = 'k', family="sans-serif", weight="bold", size = fuente) 
+            
+#%%
+def imprimir_semaforos(secciones,ajuste):
+     
+    for i in range(len(secciones)):
+        if (secciones[i].semaforo):
+            for j in range(len(secciones[i].N_aspectos)):
+                ajuste_x = 0
+                ajuste_y = 0
+                L = int(secciones[i].N_aspectos[j])
+                
+                x = secciones[i].pos_x
+                y = secciones[i].pos_y
+                
+                if (secciones[i].desvio_sup != ""):
+                    ajuste_x = -0.07*L
+                    ajuste_y = -0.5-0.15*j
+                else:
+                    ajuste_x = -0.07*L
+                    ajuste_y =  0.25+0.15*j
+                                                 
+                x = x + ajuste_x
+                y = y + ajuste_y
+              
+                actualizar_semaforos(x,y,secciones[i].sem_sentido[j],L,secciones[i].aspecto[j],ajuste)
+                
+#%%
+def calcular_ejes(secciones):
+    
+    mplt_x = 0.0
+    mplt_y = 0.0
+    min_x = 0.0
+    min_y = 0.0
+        
+    for i in range(len(secciones)):
+                
+        if(secciones[i].pos_x > mplt_x):         
+            mplt_x = secciones[i].pos_x
+       
+        if(secciones[i].pos_x < min_x):
+            min_x = secciones[i].pos_x
+       
+        if(secciones[i].pos_y > mplt_y):
+            mplt_y = secciones[i].pos_y
+         
+        if(secciones[i].pos_y < min_y):
+            min_y = secciones[i].pos_y
+            
+        #print(i,[[min_x,mplt_x],[min_y,mplt_y]])   
+        
+    return [[min_x,float(mplt_x)],[min_y,mplt_y]]
+
+#%% 
+def mostrar_grafo(secciones,i = 0, save = False):
+    
+    adj = 0.75 
+    r = 0.14
+    
+    pltis = [[-0.5,10.5],[-2.5,2.5]]    
+    pltis = calcular_ejes(secciones)
+    
+    plt = plt.gca()
+    plt.cla() # clear things for fresh plot
+    
+    plt.set_xlim((pltis[0][0]-3*r, pltis[0][1]+3*r))
+    plt.set_ylim((pltis[1][0]-adj, pltis[1][1]+adj))
+        
+    if pltis[0][1] > 7:
+        ajuste = 4
+    else:
+        ajuste = 3
+    
+    #cargar_secciones(archivos[i][0],archivos[i][1])
+        
+    dibujar_secciones(secciones,ajuste)
+    conectar_secciones(secciones)     
+    imprimir_semaforos(secciones,ajuste)    
+        
+ 
+    if save:
+        plt.pltis('off')
+        plt.savefig('Mapas/Mapa_'+str(i)+'.png',dpi = 100)
+        plt.show()
+    
+    
+    
+    

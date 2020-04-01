@@ -22,13 +22,5 @@ use work.my_package.all;
 	end entity nodo_3;
 architecture Behavioral of nodo_3 is
 begin
-	process(Clock,Reset)
-	begin
-		if (Clock = '1' and Clock'Event) then
-			if (Reset = '1') then
-			else
-				Estado_o <= Estado_i;
-			end if;
-		end if;
-	end process;
+	Estado_o <= Estado_i;
 end Behavioral;

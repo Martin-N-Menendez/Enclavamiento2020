@@ -6,36 +6,45 @@ use IEEE.numeric_std.all;
 use work.my_package.all;
 	entity nodo_12 is
 		generic(
-			N : natural := 50;
-			N_SEM : natural := 16;
-			N_MDC : natural := 4;
-			N_CVS : natural := 14
+			N : natural := 90;
+			N_SEM : natural := 27;
+			N_MDC : natural := 12;
+			N_CVS : natural := 24
 		);
 		port(
 			Clock :  in std_logic;
 			Reset :  in std_logic;
 			Estado_i :  in std_logic;
-			Estado_ante :  out std_logic;
+			Estado_ante :  in std_logic;
+			Estado_post :  in std_logic;
 			Semaforo_propio_i_1 :  in sem_type;
 			Semaforo_propio_o_1 :  out sem_type;
-			Semaforo_cercano :  out sem_type;
-			Semaforo_lejano :  out sem_type;
+			Semaforo_cercano_15_i :  in sem_type;
+			Semaforo_cercano_24_i :  in sem_type;
+			Semaforo_cercano_6_i :  in sem_type;
+			Semaforo_cercano_21_i :  in sem_type;
+			Estado_lejano_15_i :  in std_logic;
+			Estado_lejano_24_i :  in std_logic;
+			Estado_lejano_6_i :  in std_logic;
+			Estado_lejano_21_i :  in std_logic;
 			Estado_o :  out std_logic
 		);
 	end entity nodo_12;
 architecture Behavioral of nodo_12 is
 begin
-	process(Clock,Reset)
+	Estado_o <= Estado_i;
+	Semaforo_1 : process(Clock,Reset)
 	begin
 		if (Clock = '1' and Clock'Event) then
 			if (Reset = '1') then
-				Estado_o <= '0';
 				Semaforo_propio_o_1.msb <= '0';
 				Semaforo_propio_o_1.lsb <= '0';
 			else
-				Estado_o <= Estado_i;
-				Semaforo_propio_o_1.msb <= Semaforo_propio_i_1.msb;
-				Semaforo_propio_o_1.lsb <= Semaforo_propio_i_1.lsb;
+				if ( Estado_i = '0' ) then
+					--estado = ROJO
+					Semaforo_propio_o_1.msb <= '0'; --ROJO
+					Semaforo_propio_o_1.lsb <= '0'; --ROJO
+				end if;
 			end if;
 		end if;
 	end process;

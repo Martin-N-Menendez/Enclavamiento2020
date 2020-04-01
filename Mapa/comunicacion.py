@@ -5,13 +5,14 @@ import random
 import sys
 import signal
 
+
 from vhdl import *
+from Estaciones import *
+from Plotear import *
 
 global objetos
 
-
 # Variables globales con valores iniciales ------------------------------------
-
 
 global cvs_t
 global sem_t
@@ -29,8 +30,6 @@ global trama_tagged
 global ser
 ser = serial.Serial()
 
-
-
 def signal_handler(sig, frame):
     print('Se pulsó Ctrl+C!, saliendo del programa!')
     try:
@@ -43,25 +42,6 @@ def signal_handler(sig, frame):
     
 # Funciones -------------------------------------------------------------------
 
-def generar_random():  
-
-   global trama
-   trama = ""
-
-   for i in range(21):
-       trama = trama + str(random.randint(0,1))
-   return
-
-
-   
-def agregar_tags(tag_inicial,tag_final):  
-
-   global trama
-   global trama_tagged
-   
-   trama_tagged = tag_inicial+trama+tag_final
-   
-   return
 
 def procesar_trama_recibida(leido):
     
@@ -112,8 +92,7 @@ def procesar_trama_recibida(leido):
              
         print ("Cambio: ", cambio) 
 
-def sendData( trama ):
-
+def sendData( trama , secciones ,conexiones ):
 
    trama_tagged = "<"+ trama +">";
    
@@ -126,8 +105,8 @@ def sendData( trama ):
       #print ("Leyendo ...")   
       leido = ser.read(ser.in_waiting).decode('ascii')
       #time.sleep(1)
-      procesar_trama_recibida(leido)
-      
+      procesar_trama_recibida(leido)     
+    
    except:
       pass
    
@@ -135,6 +114,10 @@ def sendData( trama ):
    ser.flushInput()  # flush input buffer, discarding all its contents
    ser.flushOutput() # flush output buffer, aborting current output 
                             # and discard all that is in buffer
+   
+   ser.close()
+  
+   
    
    #if (leido[0:-1] == trama_tagged):
    #    estado = "Ok"
@@ -160,12 +143,12 @@ def cmd_h():
 
 # comando 1:  Tag inicial erroneo
 
-def cmd_0():
-   sendData( "101111"+"00000000000000"+"1" )
+def cmd_0(secciones,conexiones):
+   sendData( "101111"+"00000000000000"+"1" , secciones ,conexiones)
    return   
 
 # comando 1:  Tag inicial erroneo
-def cmd_1():
+def cmd_1(secciones,conexiones):
     
    N_cvs = objetos[0]
 
@@ -181,11 +164,11 @@ def cmd_1():
        index = int(comando)
        cvs_t = cvs_t[:index-1] + '0' + cvs_t[index:]
             
-   sendData( cvs_t + sem_t + pan_t + mdc_t  )
+   sendData( cvs_t + sem_t + pan_t + mdc_t , secciones,conexiones )
    return
 
 # comando 1:  Tag final erroneo
-def cmd_2():
+def cmd_2(secciones,conexiones):
    N_cvs = objetos[0]
 
    global cvs_t 
@@ -199,17 +182,19 @@ def cmd_2():
        print("Desocupando tramo "+str(comando))
        index = int(comando)
        cvs_t = cvs_t[:index-1] + '1' + cvs_t[index:]
-            
-   sendData( cvs_t + sem_t + pan_t + mdc_t  )
+       secciones[index].ocupacion = True;
+   
+         
+   sendData( cvs_t + sem_t + pan_t + mdc_t , secciones,conexiones  )
    return
 
 # comando 3: Checksum erroneo
-def cmd_3():
+def cmd_3(secciones):
    #sendData( '(',')',False )
    return
 
 # comando 4: Todo OK
-def cmd_4():
+def cmd_4(secciones,conexiones):
    N_mdc = objetos[3]
 
    global mdc_t 
@@ -227,29 +212,32 @@ def cmd_4():
        else:
            mdc_t = mdc_t[:index-1] + '1' + mdc_t[index:]
            
-   sendData( cvs_t + sem_t + pan_t + mdc_t  )  
+   sendData( cvs_t + sem_t + pan_t + mdc_t , secciones,conexiones )  
    return
 
 
 # comando r: Enviar un dato aleatorio del equipo con ID1.
-def cmd_adelante():
+def cmd_adelante(secciones,conexiones):
 
-   for i in range(10):
-       sendData( '(',')',True )
+   #for i in range(10):
+   #    sendData( '(',')',True )
    return            
  
-def cmd_atras():
+def cmd_atras(secciones,conexiones):
 
-   for i in range(10):
-       sendData( '(',')',True )
+   #for i in range(10):
+   #    sendData( '(',')',True )
    return   
      
 # Inicializa y abre el puertos serie ------------------------------------------           
-def uart_main(secciones):
+def uart_main(secciones,conexiones):
     
     signal.signal(signal.SIGINT, signal_handler)
     
     ser.port = "COM4"            # Puerto por defecto para Windows
+    
+    estaciones = secciones
+    
     
     global objetos
     objetos = calcular_paquete(secciones)
@@ -289,47 +277,47 @@ def uart_main(secciones):
           cmd_h()           # Imprime la lista de comandos
     
           # Ciclo infinito hasta comando exit (q) ---------------------------------
-          while True: 
+          #while True: 
     
-             command = ""
-    
-             # get keyboard input
-             # input = raw_input(">> ")  # for Python 2
-             command = input(">> ")      # for Python 3
-    
-             if command == 'q':
-                print("Puerto cerrado. Se cierra el programa.")
-                ser.close()
-                #exit()
-                return;
-    
-             elif command == 'h':
-                cmd_h()
-    
-             elif command == '0':   # Insertar trama manual
-                cmd_0()
-                
-             elif command == '1':   # Insertar tren
-                cmd_1()
-              
-             elif command == '2':   # Remover tren
-                 cmd_2()
+          command = ""
+
+         # get keyboard input
+         # input = raw_input(">> ")  # for Python 2
+          command = input(">> ")      # for Python 3
+
+          if command == 'q':
+            print("Puerto cerrado. Se cierra el programa.")
+            ser.close()
+            #exit()
+            return;
+
+          elif command == 'h':
+            cmd_h()
+
+          elif command == '0':   # Insertar trama manual
+            cmd_0(secciones,conexiones)
+            
+          elif command == '1':   # Insertar tren
+            cmd_1(secciones,conexiones)
+          
+          elif command == '2':   # Remover tren
+             cmd_2(secciones,conexiones)
+         
+          elif command == '3':   # Modificar aspecto semaforo
+             cmd_3(secciones,conexiones)    
+
+          elif command == '4':   # Modificar aspecto de maquina de cambios
+             cmd_4(secciones,conexiones)  
              
-             elif command == '3':   # Modificar aspecto semaforo
-                 cmd_3()    
-    
-             elif command == '4':   # Modificar aspecto de maquina de cambios
-                 cmd_4()  
-                 
-             elif command == '>':   # Avanzar todos los trenes
-                cmd_adelante()
-                
-             elif command == '<':   # Retroceder todos los trenes
-                cmd_atras()
-                
-                
-             else:
-                print("Comando no conocido.")
+          elif command == '>':   # Avanzar todos los trenes
+            cmd_adelante(secciones,conexiones)
+            
+          elif command == '<':   # Retroceder todos los trenes
+            cmd_atras(secciones,conexiones)
+            
+            
+          else:
+            print("Comando no conocido.")
     
        except Exception as e1:
           print("Error de comunicación." + str(e1))

@@ -34,31 +34,26 @@ use work.my_package.all;
 	end entity nodo_2;
 architecture Behavioral of nodo_2 is
 begin
-	process(Clock,Reset)
+	Estado_o <= Estado_i;
+	Semaforo_1 : process(Clock,Reset)
 	begin
 		if (Clock = '1' and Clock'Event) then
 			if (Reset = '1') then
 				Semaforo_propio_o_1.msb <= '0';
 				Semaforo_propio_o_1.lsb <= '0';
-				Semaforo_propio_o_2.msb <= '0';
-				Semaforo_propio_o_2.lsb <= '0';
-				Semaforo_propio_o_3.msb <= '0';
-				Semaforo_propio_o_3.lsb <= '0';
 			else
-				Estado_o <= Estado_i;
-				--Semaforo_1
 				if ( Estado_i = '0' ) then
 					--estado = ROJO
 					Semaforo_propio_o_1.msb <= '0'; --ROJO
 					Semaforo_propio_o_1.lsb <= '0'; --ROJO
 				else
-					if secciones[int(seccion[i].anterior)-1].ocupado:
+					if Estado_ante = '0' then
 						--estado = AMARILLO
 						Semaforo_propio_o_1.msb <= '1'; --AMARILLO
 						Semaforo_propio_o_1.lsb <= '0'; --AMARILLO
 					else
 						--Si Color = AMARILLO
-						if (Semaforo_cercano_1.msb = '1' and  Semaforo_cercano_1.lsb = '0'):
+						if (Semaforo_cercano_1_i.msb = '1' and  Semaforo_cercano_1_i.lsb = '0') then
 							--estado = VERDE
 							Semaforo_propio_o_1.msb <= '1'; --VERDE
 							Semaforo_propio_o_1.lsb <= '1'; --VERDE
@@ -67,20 +62,30 @@ begin
 							Semaforo_propio_o_1.msb <= '1'; --VERDE
 							Semaforo_propio_o_1.lsb <= '1'; --VERDE
 						end if;
-				end if;
-				--Semaforo_2
+					end if;
+				end if;
+			end if;
+		end if;
+	end process;
+	Semaforo_2 : process(Clock,Reset)
+	begin
+		if (Clock = '1' and Clock'Event) then
+			if (Reset = '1') then
+				Semaforo_propio_o_2.msb <= '0';
+				Semaforo_propio_o_2.lsb <= '0';
+			else
 				if ( Estado_i = '0' ) then
 					--estado = ROJO
 					Semaforo_propio_o_2.msb <= '0'; --ROJO
 					Semaforo_propio_o_2.lsb <= '0'; --ROJO
 				else
-					if secciones[int(seccion[i].posterior)-1].ocupado:
+					if Estado_post = '0' then
 						--estado = ROJO
 						Semaforo_propio_o_2.msb <= '0'; --ROJO
 						Semaforo_propio_o_2.lsb <= '0'; --ROJO
 					else
 						--Si OTRO = OCUPADO
-						if (Estado_lejano_5_i == '0'):
+						if (Estado_lejano_5_i = '0') then
 							--estado = AMARILLO
 							Semaforo_propio_o_2.msb <= '1'; --AMARILLO
 							Semaforo_propio_o_2.lsb <= '0'; --AMARILLO
@@ -90,20 +95,29 @@ begin
 							Semaforo_propio_o_2.lsb <= '1'; --VERDE
 						end if;
 					end if;
-				end if;
-				--Semaforo_3
+				end if;
+			end if;
+		end if;
+	end process;
+	Semaforo_3 : process(Clock,Reset)
+	begin
+		if (Clock = '1' and Clock'Event) then
+			if (Reset = '1') then
+				Semaforo_propio_o_3.msb <= '0';
+				Semaforo_propio_o_3.lsb <= '0';
+			else
 				if ( Estado_i = '0' ) then
 					--estado = ROJO
 					Semaforo_propio_o_3.msb <= '0'; --ROJO
 					Semaforo_propio_o_3.lsb <= '0'; --ROJO
 				else
-					if secciones[int(seccion[i].posterior)-1].ocupado:
+					if Estado_post = '0' then
 						--estado = ROJO
 						Semaforo_propio_o_3.msb <= '0'; --ROJO
 						Semaforo_propio_o_3.lsb <= '0'; --ROJO
 					else
 						--Si OTRO = OCUPADO
-						if (Estado_lejano_6_i == '0'):
+						if (Estado_lejano_6_i = '0') then
 							--estado = AMARILLO
 							Semaforo_propio_o_3.msb <= '1'; --AMARILLO
 							Semaforo_propio_o_3.lsb <= '0'; --AMARILLO
@@ -113,7 +127,7 @@ begin
 							Semaforo_propio_o_3.lsb <= '1'; --VERDE
 						end if;
 					end if;
-				end if;
+				end if;
 			end if;
 		end if;
 	end process;
