@@ -7,7 +7,7 @@
 
 
 ## Implementado en FPGA:
-![Mapa_8](https://github.com/Martin-N-Menendez/Enclavamiento2020/blob/master/Mapa/Mapas/Mapa_8.png)
+![Mapa_8](https://github.com/Martin-N-Menendez/Enclavamiento2020/blob/master/Mapa/Mapas/giphy.gif)
 
 ## Analizador de topologias
 - [x] Deteccion de nodos extremos absolutos
