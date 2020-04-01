@@ -47,8 +47,8 @@
 - [ ] Comportamiento de semaforo en funcion del estado vecino lejano
 ## Implementacion de UART
 - [x] Implementacion de UART automatizada para pruebas en Arty Z7 10
-- [x] Implementacion de codigo python para enviar/recibir tramas adaptadas (EN PROGRESO)
-- [ ] Implementacion de codigo python para procesar las tramas recibidas y layout
+- [x] Implementacion de codigo python para enviar/recibir tramas adaptadas
+- [x] Implementacion de codigo python para procesar las tramas recibidas y layout
 - [ ] Adaptacion del codigo para compatibilidad con CNEA
 ## Testing
 - [x] Testbench sistema
