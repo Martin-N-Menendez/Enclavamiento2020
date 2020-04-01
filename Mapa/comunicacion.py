@@ -12,6 +12,9 @@ from Plotear import *
 
 global objetos
 
+global intento
+intento = 0
+
 # Variables globales con valores iniciales ------------------------------------
 
 global cvs_t
@@ -41,9 +44,47 @@ def signal_handler(sig, frame):
     sys.exit(0)    
     
 # Funciones -------------------------------------------------------------------
+#%%
+def calcular_sem_owner(secciones,i):
 
+    acumulado = secciones[0].N_semaforos
+    #k = 0
+    
+    for j in range(len(secciones)):
+        
+        if i+1 < acumulado:  
+            #k = 0;
+            return j
+        else:
+            acumulado += secciones[j].N_semaforos
+            #k = k + 1
+            
+    return j+1   
 
-def procesar_trama_recibida(leido):
+#%%
+def calcular_sem_index(secciones,sem_owner,sem_index,nuevo):
+    
+    Limite = secciones[sem_owner-1].N_semaforos
+
+    #print (Limite)
+    
+    #print("int({})|{}".format(sem_owner,sem_index))
+    if nuevo:
+        sem_index = 0
+    #print("int({})|{}".format(sem_owner,sem_index))      
+        
+    if sem_index < Limite:
+        sem_index += 1
+        
+        if sem_index == Limite:       
+            return sem_index, True
+        else:
+            return sem_index, False
+    
+     
+    
+#%%
+def procesar_trama_recibida(leido,secciones):
     
     #print(objetos)
     
@@ -67,19 +108,36 @@ def procesar_trama_recibida(leido):
     
     print ("Sem: ", sem) 
     
-    for i in range(7):
+    sem_index = 0
+    nuevo = False
+    
+    for i in range(N_sem):
         par =  sem[2*i:2*i+2]
-       
+        
+        sem_owner = calcular_sem_owner(secciones,i)
+        
+        sem_index,nuevo = calcular_sem_index(secciones,sem_owner,sem_index,nuevo)
+        
+        #print("({})|{}".format(sem_owner,sem_index))
+        
         if par == "00":
-            color = "rojo" 
+            color = "Rojo"          
         elif par == "01":
-            color = "amarillo" 
+            color = "Amarillo" 
         elif par == "10":
-            color = "naranja" 
+            color = "Amarillo" 
         elif par == "11":
-            color = "verde" 
-            
-        print ("Semaforos_"+str(i+1)+": ", color)
+            if secciones[sem_owner-1].N_aspectos[sem_index-1] == '3':
+                color = "Verde"
+            else:
+                color = "Amarillo"
+
+        
+        secciones[sem_owner-1].aspecto[sem_index-1] = color
+        
+        print ("({})Semaforos_{}:{} ".format( sem_owner,i+1,color ))
+    
+    
     
     if N_pan > 0:    
         print ("Pasos a nivel: ", pan) 
@@ -105,8 +163,8 @@ def sendData( trama , secciones ,conexiones ):
       #print ("Leyendo ...")   
       leido = ser.read(ser.in_waiting).decode('ascii')
       #time.sleep(1)
-      procesar_trama_recibida(leido)     
-    
+      procesar_trama_recibida(leido,secciones)     
+      mostrar_grafo(secciones,10,j = intento,gif_mode = True)
    except:
       pass
    
@@ -115,7 +173,7 @@ def sendData( trama , secciones ,conexiones ):
    ser.flushOutput() # flush output buffer, aborting current output 
                             # and discard all that is in buffer
    
-   ser.close()
+   #ser.close()
   
    
    
@@ -163,7 +221,9 @@ def cmd_1(secciones,conexiones):
        print("Ocupado tramo "+str(comando))
        index = int(comando)
        cvs_t = cvs_t[:index-1] + '0' + cvs_t[index:]
-            
+       secciones[index-1].ocupado = True;
+       
+       
    sendData( cvs_t + sem_t + pan_t + mdc_t , secciones,conexiones )
    return
 
@@ -182,8 +242,9 @@ def cmd_2(secciones,conexiones):
        print("Desocupando tramo "+str(comando))
        index = int(comando)
        cvs_t = cvs_t[:index-1] + '1' + cvs_t[index:]
-       secciones[index].ocupacion = True;
+       secciones[index-1].ocupado = False;
    
+       
          
    sendData( cvs_t + sem_t + pan_t + mdc_t , secciones,conexiones  )
    return
@@ -234,13 +295,13 @@ def uart_main(secciones,conexiones):
     
     signal.signal(signal.SIGINT, signal_handler)
     
-    ser.port = "COM4"            # Puerto por defecto para Windows
-    
-    estaciones = secciones
-    
+    ser.port = "COM4"            # Puerto por defecto para Windows    
     
     global objetos
     objetos = calcular_paquete(secciones)
+    
+    global intento
+    intento = 0
     
     print("Conectandose a "+str(ser.port))
     
@@ -277,47 +338,54 @@ def uart_main(secciones,conexiones):
           cmd_h()           # Imprime la lista de comandos
     
           # Ciclo infinito hasta comando exit (q) ---------------------------------
-          #while True: 
+          while True: 
     
-          command = ""
-
-         # get keyboard input
-         # input = raw_input(">> ")  # for Python 2
-          command = input(">> ")      # for Python 3
-
-          if command == 'q':
-            print("Puerto cerrado. Se cierra el programa.")
-            ser.close()
-            #exit()
-            return;
-
-          elif command == 'h':
-            cmd_h()
-
-          elif command == '0':   # Insertar trama manual
-            cmd_0(secciones,conexiones)
-            
-          elif command == '1':   # Insertar tren
-            cmd_1(secciones,conexiones)
-          
-          elif command == '2':   # Remover tren
-             cmd_2(secciones,conexiones)
-         
-          elif command == '3':   # Modificar aspecto semaforo
-             cmd_3(secciones,conexiones)    
-
-          elif command == '4':   # Modificar aspecto de maquina de cambios
-             cmd_4(secciones,conexiones)  
+              command = ""
+    
+             # get keyboard input
+             # input = raw_input(">> ")  # for Python 2
+              command = input(">> ")      # for Python 3
+    
+              if command == 'q':
+                print("Puerto cerrado. Se cierra el programa.")
+                ser.close()
+                #exit()
+                return;
+    
+              elif command == 'h':
+                cmd_h()
+    
+              elif command == '0':   # Insertar trama manual
+                intento += 1
+                cmd_0(secciones,conexiones)
+                
+              elif command == '1':   # Insertar tren
+                intento += 1  
+                cmd_1(secciones,conexiones)
+              
+              elif command == '2':   # Remover tren
+                 intento += 1 
+                 cmd_2(secciones,conexiones)
              
-          elif command == '>':   # Avanzar todos los trenes
-            cmd_adelante(secciones,conexiones)
-            
-          elif command == '<':   # Retroceder todos los trenes
-            cmd_atras(secciones,conexiones)
-            
-            
-          else:
-            print("Comando no conocido.")
+              elif command == '3':   # Modificar aspecto semaforo
+                 intento += 1 
+                 cmd_3(secciones,conexiones)    
+    
+              elif command == '4':   # Modificar aspecto de maquina de cambios
+                 intento += 1 
+                 cmd_4(secciones,conexiones)  
+                 
+              elif command == '>':   # Avanzar todos los trenes
+                intento += 1  
+                cmd_adelante(secciones,conexiones)
+                
+              elif command == '<':   # Retroceder todos los trenes
+                intento += 1  
+                cmd_atras(secciones,conexiones)
+                
+                
+              else:
+                print("Comando no conocido.")
     
        except Exception as e1:
           print("Error de comunicación." + str(e1))

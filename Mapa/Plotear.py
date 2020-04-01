@@ -16,6 +16,7 @@ grey1 = (0.65,0.65,0.65)
 grey2 = (0.9,0.9,0.9)
 grey3 = (0.35,0.35,0.35)
 red = (0.8,0.2,0.5)
+black = (0.2,0.2,0.2)
 violet = (0.6,0.0,0.5)
 
 def dibujar_semaforo(pos_x,pos_y, b = 0.2, h = 0.2, c = 'g'):
@@ -148,7 +149,7 @@ def dibujar_secciones(secciones,ajuste = 5):
  #%%             
 def dibujar_seccion(x,y,index, r=r,c='b',fc = 'w', centro = False, ajuste = 1):
     if centro == True:
-        fc = red
+        fc = black
         
     circles(x, y, r, ec=c,fc = fc, lw = 20/ajuste, zo = 100) 
     
@@ -263,8 +264,10 @@ def imprimir_semaforos(secciones,ajuste):
                 x = x + ajuste_x
                 y = y + ajuste_y
               
-                actualizar_semaforos(x,y,secciones[i].sem_sentido[j],L,secciones[i].aspecto[j],ajuste)
-                
+                if len(secciones[i].N_aspectos) == len(secciones[i].aspecto):
+                    actualizar_semaforos(x,y,secciones[i].sem_sentido[j],L,secciones[i].aspecto[j],ajuste)
+                else:
+                    actualizar_semaforos(x,y,secciones[i].sem_sentido[j],L,"",ajuste)
 #%%
 def calcular_ejes(secciones):
     
@@ -292,21 +295,21 @@ def calcular_ejes(secciones):
     return [[min_x,float(mplt_x)],[min_y,mplt_y]]
 
 #%% 
-def mostrar_grafo(secciones,i = 0, save = False):
+def mostrar_grafo(secciones,i = 0,j = 0, gif_mode = False):
     
     adj = 0.75 
     r = 0.14
     
-    pltis = [[-0.5,10.5],[-2.5,2.5]]    
-    pltis = calcular_ejes(secciones)
+    axis = [[-0.5,10.5],[-2.5,2.5]]    
+    axis = calcular_ejes(secciones)
     
-    plt = plt.gca()
-    plt.cla() # clear things for fresh plot
+    ax = plt.gca()
+    ax.cla() # clear things for fresh plot
     
-    plt.set_xlim((pltis[0][0]-3*r, pltis[0][1]+3*r))
-    plt.set_ylim((pltis[1][0]-adj, pltis[1][1]+adj))
+    ax.set_xlim((axis[0][0]-3*r, axis[0][1]+3*r))
+    ax.set_ylim((axis[1][0]-adj, axis[1][1]+adj))
         
-    if pltis[0][1] > 7:
+    if axis[0][1] > 7:
         ajuste = 4
     else:
         ajuste = 3
@@ -317,11 +320,15 @@ def mostrar_grafo(secciones,i = 0, save = False):
     conectar_secciones(secciones)     
     imprimir_semaforos(secciones,ajuste)    
         
- 
-    if save:
-        plt.pltis('off')
+    
+    ax.axis('off')
+    
+    if gif_mode:  
+        plt.savefig('Mapas/Mapa_'+str(i)+'('+str(j)+').png',dpi = 100)
+    else:
         plt.savefig('Mapas/Mapa_'+str(i)+'.png',dpi = 100)
-        plt.show()
+        
+    plt.show()
     
     
     

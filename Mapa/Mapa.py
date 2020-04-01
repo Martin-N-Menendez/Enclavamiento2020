@@ -261,13 +261,15 @@ def asignar_semaforos():
                     if (secciones[secciones[i].anterior-1].cambio == False):
                         (secciones[i].sem_sentido).append("<")
                         (secciones[i].N_aspectos).append("3")
-                        (secciones[i].aspecto).append("Rojo")
+                        #(secciones[i].aspecto).append("Rojo")
+                        (secciones[i].aspecto).append(" ")
 
                     #if (secciones[secciones[i].posterior-1].tipo != "Cruce"):
                     if (secciones[secciones[i].posterior-1].cambio == False):    
                         (secciones[i].sem_sentido).append(">")
                         (secciones[i].N_aspectos).append("3")
-                        (secciones[i].aspecto).append("Rojo")
+                        #(secciones[i].aspecto).append("Rojo")
+                        (secciones[i].aspecto).append(" ")
 
 
                 if (secciones[i].desvio_sup != ""):
@@ -283,7 +285,8 @@ def asignar_semaforos():
                     else:
                         (secciones[i].sem_sentido).append("<")
                     (secciones[i].N_aspectos).append("2")
-                    (secciones[i].aspecto).append("Amarillo")
+                    #(secciones[i].aspecto).append("Amarillo")
+                    (secciones[i].aspecto).append(" ")
 
                 if (secciones[i].desvio_inf != ""):
                     desvio = secciones[i].desvio_inf
@@ -298,7 +301,8 @@ def asignar_semaforos():
                     else:
                         (secciones[i].sem_sentido).append("<")
                     (secciones[i].N_aspectos).append("2")
-                    (secciones[i].aspecto).append("Amarillo")
+                    #(secciones[i].aspecto).append("Amarillo")
+                    (secciones[i].aspecto).append(" ")
 
             else:   # Si no es raiz
                 desvios = 0
@@ -316,7 +320,8 @@ def asignar_semaforos():
                         else:
                             (secciones[i].sem_sentido).append("<")
                         (secciones[i].N_aspectos).append("2")
-                        (secciones[i].aspecto).append("Amarillo")
+                        #(secciones[i].aspecto).append("Amarillo")
+                        (secciones[i].aspecto).append(" ")
 
                     if (secciones[secciones[i].desvio_inf - 1].cambio_raiz == True):
                         if (secciones[i].desvio_inf_dir == ">"):
@@ -324,7 +329,8 @@ def asignar_semaforos():
                         else:
                             (secciones[i].sem_sentido).append("<")
                         (secciones[i].N_aspectos).append("2")
-                        (secciones[i].aspecto).append("Amarillo")
+                        #(secciones[i].aspecto).append("Amarillo")
+                        (secciones[i].aspecto).append(" ")
 
                 if (desvios == 1):
                     if (secciones[i].desvio_sup != ""):
@@ -334,7 +340,8 @@ def asignar_semaforos():
                         else:
                             (secciones[i].sem_sentido).append("<")
                         (secciones[i].N_aspectos).append("2")
-                        (secciones[i].aspecto).append("Amarillo")
+                        #(secciones[i].aspecto).append("Amarillo")
+                        (secciones[i].aspecto).append(" ")
 
                     if (secciones[i].desvio_inf != ""):
 
@@ -343,7 +350,8 @@ def asignar_semaforos():
                         else:
                             (secciones[i].sem_sentido).append("<")
                         (secciones[i].N_aspectos).append("2")
-                        (secciones[i].aspecto).append("Amarillo")
+                        #(secciones[i].aspecto).append("Amarillo")
+                        (secciones[i].aspecto).append(" ")
 
           
         if(secciones[i].tipo == "Extremo"):
@@ -354,29 +362,35 @@ def asignar_semaforos():
 
                     (secciones[i].sem_sentido).append(">")
                     (secciones[i].N_aspectos).append("3")
-                    (secciones[i].aspecto).append("Verde")
+                    #(secciones[i].aspecto).append("Verde")
+                    (secciones[i].aspecto).append(" ")
 
                 if(secciones[i].posterior != ""):
 
                     (secciones[i].sem_sentido).append("<")
                     (secciones[i].N_aspectos).append("3")
-                    (secciones[i].aspecto).append("Verde")
+                    #(secciones[i].aspecto).append("Verde")
+                    (secciones[i].aspecto).append(" ")
             else:
                 if (secciones[i].anterior != ""):
                     (secciones[i].sem_sentido).append("<")
                     (secciones[i].sem_sentido).append(">")
                     (secciones[i].N_aspectos).append("2")
                     (secciones[i].N_aspectos).append("2")
-                    (secciones[i].aspecto).append("Amarillo")
-                    (secciones[i].aspecto).append("Amarillo")
+                    #(secciones[i].aspecto).append("Amarillo")
+                    #(secciones[i].aspecto).append("Amarillo")
+                    (secciones[i].aspecto).append(" ")
+                    (secciones[i].aspecto).append(" ")
 
                 if (secciones[i].posterior != ""):
                     (secciones[i].sem_sentido).append(">")
                     (secciones[i].sem_sentido).append("<")
                     (secciones[i].N_aspectos).append("2")
                     (secciones[i].N_aspectos).append("2")
-                    (secciones[i].aspecto).append("Amarillo")
-                    (secciones[i].aspecto).append("Amarillo")
+                    #(secciones[i].aspecto).append("Amarillo")
+                    #(secciones[i].aspecto).append("Amarillo")
+                    (secciones[i].aspecto).append(" ")
+                    (secciones[i].aspecto).append(" ")
 
         secciones[i].N_semaforos = len(secciones[i].N_aspectos)
 
@@ -612,7 +626,7 @@ def analizar_tabla(tabla,test = False):
         print ("Rutas optimizadas: {}".format(n))
     return tabla2
 #%%
-def generar_mapa(tabla, iniciar = False):
+def generar_mapa(tabla, iniciar = True):
     v = 0.5
     
     #fig = plt.figure()
@@ -625,6 +639,7 @@ def generar_mapa(tabla, iniciar = False):
         if i != 8:          # 8 u 2
             continue
     
+        
         secciones.clear()
         conexiones.clear()
         
@@ -651,23 +666,19 @@ def generar_mapa(tabla, iniciar = False):
             ajuste = 3
         
         
-        buscar_vecinos()
-        
-        clasificar_vecinos()
-        
-        asignar_tipo()
-    
+        buscar_vecinos()       
+        clasificar_vecinos()        
+        asignar_tipo()    
         cambios_herencia()
-    
         asignar_semaforos()
-        
-        dibujar_secciones(secciones, ajuste)
-        
         #imprimir_estados()
         
-        imprimir_semaforos(secciones,ajuste)    
         
-        conectar_secciones(secciones)
+        mostrar_grafo(secciones,i,gif_mode = False)
+        
+#        dibujar_secciones(secciones, ajuste)  
+#        imprimir_semaforos(secciones,ajuste)     
+#        conectar_secciones(secciones)
         
         #proximo_semaforo(secciones)
         
@@ -675,9 +686,9 @@ def generar_mapa(tabla, iniciar = False):
             
         #dibujar_barrera(5.5,-1, b = 1, h = 3, c = [0.85,0.85,0.85])
             
-        ax.axis('off')
-        plt.savefig('Mapas/Mapa_'+str(i)+'.png',dpi = 100)
-        plt.show()
+        #ax.axis('off')
+        #plt.savefig('Mapas/Mapa_'+str(i)+'.png',dpi = 100)
+        #plt.show()
         #plt.pause(0.0001)
         #plt.clf()
         #print(tabla)    
@@ -697,14 +708,14 @@ def conectar_terminal(secciones):
 #%%  
 def main():
 
-    generar_mapa(tabla,True)
+    generar_mapa(tabla)
     
-    #rear_modulo_vhdl(secciones,tabla)
+    #crear_modulo_vhdl(secciones,tabla)
     
     conectar_terminal(secciones)
     
-    generar_mapa(tabla)
-    
+    #generar_mapa(tabla,False)
+    #mostrar_grafo(secciones)
     
     
 if __name__ == "__main__":
