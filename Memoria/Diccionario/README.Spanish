@@ -1,0 +1,49 @@
+Instalacion general para agregar a OpenOffice.org el corrector de 
+ortografia en Español para OpenOffice.org 1.0 (OOorg1) para Linux y Windows:
+
+Nota 1: Las referencias están hechas para el OOorg1 en Español.
+Nota 2: Este documento asume que OOorg1 esta instalado correctamente
+Nota 3: Que NI el OOorg1 NI el Quickstarter estan ejecutando. 
+
+1. Descomprima el diccionario, es_ES.zip o es_ES.tgz, al directorio:
+    c:\Programas\OOorg1\user\wordbook\          // típica para windows
+    o 
+    $HOME/$OOorg1_local_dir/user/wordbook/   // típica para Linux
+
+	(solo el dictionary.lst,  *.aff  &  *.dic  son requerido in el user/wordbook.)
+
+2. Edite el archivo "dictionary.lst" en este directorio para
+    registrar una idioma especifico o para múltiples idiomas
+    (ver el Ejemplo_Dictionary.lst).
+    Con un editor de texto, agregue el siguiente información 
+    a "dictionary.lst":
+          ...
+          #
+          DICT es ES es_ES
+          DICT en US en_US        
+
+3. Ahora, arranque OOorg1. Si estaba funcionando mientras 
+	hacia lo de arriba, cerrar todos los ventanas y el Quickstarter
+	si esta activa, y arrancarlo de nuevo para que lea el dictionary.lst. 
+
+4. Configuración de Idiomas:
+    Haga clic en  Herramientas| Opciones| Configuración de idioma| Idiomas
+    Seleccione Idioma Predeterminado a "Español (España)"
+
+    Haga clic en  Herramientas| Opciones| Configuración de idioma| Lingüística
+    En Editar de Módulos disponibles de idioma, en la sección Idioma seleccione 
+    Español (España) y activarlo haciendo clic en 
+    "[x] OpenOffice MySpell SpellChecker" para cada idioma.
+    
+    Oprima Cerrar.
+    Seleccione Aceptar para guardar sus cambios y salir de Configuración de idioma.
+	*********************
+
+Listo! Su diccionario esta instalado y registrado para ese idioma.
+
+Si tiene algún problema, asegúrese de leer bien _todas_ las instrucciones.
+Problema más frecuente es de no haber reiniciado OOorg después de 
+activar el diccionario. 
+
+Si tienes problemas, escribame a 
+Richard Holt   <richard@openoffice.org>

@@ -40,50 +40,44 @@
 
 En este capítulo se presentan las decisiones de diseño adoptadas para concretar el desarrollo del trabajo. Además, se describen en forma genérica los módulos necesarios tanto del sistema de enclavamiento como de los bloques auxiliares para concretar una comunicación exitosa entre el sistema y el exterior.
 
-\section{Consideraciones generales}
-
-En el presente trabajo se optó por implementar el sistema bajo el enfoque funcional, asumiendo que sus ventajas son mucho mas fuertes que sus desventajas y el análisis de los resultados obtenidos fueron mucho mas provechosos que los de su contraparte funcional.
-
-Los módulos del sistema fueron implementados con máquinas de estado finitas con camino de datos (FSMD, del inglés \textit{Finite State Machine with Data path}), que son máquinas de estado finitas (FSM, del inglés \textit{Finite State Machine}) y circuitos secuenciales. La FSMD (figura \ref{fig:FSMD}) posee dos partes diferenciadas: el camino de control y el camino de datos. El camino de control contiene una FSM que, según las entradas de control y el estado interno que posee, genera señales internas que controlan los circuitos secuenciales del camino de datos. Estos, a su vez, contienen los bloques que procesan las entradas y actúan sobre las salidas.
-
-	\begin{figure}[h]
-	\centering
-		\includegraphics[scale=.5]{./Figures/FSMD}
-		\caption{Diagrama en bloques genérico de una FSMD}
-		\label{fig:FSMD}
-	\end{figure}
-	
-	\vspace{5cm}
-	
-	Siguiendo los lineamientos recomendados, una FSMD debe ser diseñada, implementada y simulada de acuerdo con los siguientes pasos:
-	
-	\begin{enumerate}
-		\item Definición del algoritmo a implementar.
-		\item Definición de entradas y salidas de la FSMD.
-		\item Diseño del camino de datos.
-		\item Diseño de interfaz entre camino de datos y camino de control.
-		\item Definición de los estados de la FSM.
-		\item Diseño de la FSM.
-		\item Implementación del diseño.
-		\item Diseño e implementación de los ensayos.
-	\end{enumerate}
-	
-	Esta metodología puede inferir mas tiempo de desarrollo que el habitual, pero ya ha demostrado ser exitosa en el proyecto realizado por el Mg. Ing. Facundo Larosa, codirector de este trabajo. Por lo que se aprovechó su experiencia y conocimiento para resolver esta etapa del desarrollo. Los beneficios son un mayor control del diseño a bajo nivel, una mayor portabilidad y un mas eficiente uso de los recursos de la plataforma electrónica.
-
-\section{Plataforma utilizada}
-
-	Por razones de disponibilidad se utilizó el kit de desarrollo Arty Z7  (figura \ref{fig:FPGA}), el cual posee 17600 LUT’s, 35200 FF’s, 32 BUFG’s y 100 IOB’s \cite{cite28}. Se lo utilizó como base para sintetizar el diseño y extraer conclusiones que permitan dimensionar los recursos lógicos necesarios para un desarrollo de estas características.
-	
-	\begin{figure}[h]
-	\centering
-		\includegraphics[scale=.4]{./Figures/FPGA}
-		\caption{FPGA Arty Z7-10 de Digilent}
-	\label{fig:FPGA}	
-	\end{figure}
-
 \section{Análisis de la red ferroviaria y generación automática del código}
 
-	Todo grafo ferroviario necesita dos datos para estar definido. El primero es la lista de relaciones entre nodo inicial y nodo final, y el segundo es la posición absoluta del nodo en el grafo junto con datos adicionales, como si posee un paso a nivel o si es bidireccional. Con esa información es posible realizar un análisis para obtener un resultado como el que se presenta en la figura \ref{fig:Mapa}, al ingresar un grafo de una red ferroviaria bypass.	
+	En el marco de la Especialización de Sistemas Embebidos se utilizó el enfoque funcional basado en la tabla de enclavamientos, con las limitaciones ya expuesta en el capítulo 2. La mayoría de los artículos encontrados utilizan ese enfoque\citep{FUNCIONAL}, pero una pequeña porción de los artículos aborda el modelado de los sistemas sin utilizar tablas de enclavamiento \citep{GEOGRAFICO}.
+	
+	Los diversos artículos que modelan los sistemas ferroviarios en base a la topología utilizan estrategias muy dispares. Por ejemplo, no existe una idea en común de que herramienta matemática utilizar: algunos utilizan redes de Petri, mientras que otros utilizan grafos. Incluso dentro del subgrupo de los artículos que sugieren utilizar grafos no tienen un criterio unificado de qué representa cada nodo y cada arista, ni tampoco cómo analizar la red ni cuáles son los elementos básicos que necesita para estar definida.	
+	
+	En base a la bibliografía relevada, se llegó a la conclusión de que todo grafo ferroviario necesita dos datos para estar definido. El primero es la lista de relaciones entre nodo inicial y nodo final, y el segundo es la posición absoluta del nodo en el grafo junto con datos adicionales, como si posee un paso a nivel o si es bidireccional. 
+	
+	Con esa información fue posible realizar un analizador de redes ferroviarias. Un script implementado en python que procesa archivos de texto plano donde se indican las conexiones entre ellos y cuyos resultados son:
+	
+	\begin{itemize}
+		\item Análisis de red ferroviaria:
+		\begin{itemize}
+			\item Determina qué cantidad de semáforos son necesarios.
+			\item Determina dónde deben situarse los semáforos.
+			\item Determina cuántos aspectos deben tener los semáforos.
+			\item Determina qué orientación deben tener los semáforos.
+			\item Identifica todos las máquinas de cambios.
+			\item Identifica los extremos de la red, sean absolutos o relativos.
+			\item Identifica todas las rutas soportadas por la red.
+			\item Genera una tabla de enclavamientos con todos los datos obtenidos.
+		\end{itemize}
+		\item Implementación de la red ferroviaria en VHDL:
+		\begin{itemize}
+			\item Genera todos los archivos necesarios.
+			\item Interconecta todos los módulos creados.
+			\item Adapta el tamaño de todas las señales a las que la topología necesite.
+		\end{itemize}
+		\item Interfaz de comunicación con la red ferroviaria:
+		\begin{itemize}
+			\item Genera todos las tramas necesarias para la comunicación.
+			\item Brinda un menú de opciones para modificar las tramas en tiempo real.
+			\item Envía las tramas al sistema implementado en la FPGA.
+			\item Actualiza la interfaz con los datos devueltos por la FPGA.
+		\end{itemize}
+	\end{itemize}
+	
+	Todas las topologías de la sección \ref{Topologias} pueden ser analizadas por el programa y generar, de forma automática, todo el código en VHDL que sea necesario para el correcto funcionamiento del sistema. A modo de ejemplo se incluye el caso de la figura \ref{fig:Mapa}, producto de ingresar un grafo de una red ferroviaria bypass.	
 
 	\begin{figure}[h]
 	\centering
@@ -102,9 +96,15 @@ Los módulos del sistema fueron implementados con máquinas de estado finitas co
 	
 	Los nodos de cambios son los que presentan mayor cantidad de semáforos. Necesitan dos semáforos de tres aspectos para permitir la circulación directa sobre el cambio cuando se encuentra en posición normal y un semáforo de dos aspectos para permitir la circulación en la ramificación del recorrido, pero con precaución por ser una zona crítica. Por último, los nodos de cambios ramificados solo presentan un semáforo de doble aspecto como complemento al otro semáforo de maniobras, en función de utilizar la ramificación para volver al recorrido principal a una velocidad moderada. 
 
+	El haber desarrollado un criterio propio para modelar las topologías tuvo como consecuencia el tener que diseñar tanto la herramienta de análisis, como así también la arquitectura y funcionalidad de cada uno de los módulos expuestos a continuación.	
+	
 \section{Módulo de nodos}
 
-	Como existen diversos tipos de nodos instanciados en el sistema, se describirá el funcionamiento de un nodo genérico con la máxima cantidad de funcionalidades, de forma tal de cubrir todos los casos.
+	El módulo principal a ser implementado es el módulo de nodos. Por cada nodo en el grafo se tendrá un módulo de nodos equivalente, cuyas conexiones a otros módulos estarán definidas por las aristas del grafo.
+	
+	Se definió que cada nodo del grafo representa un tramo de vía, con todos los elementos que posea ese tramo en la realidad. Es decir, si el tramo incluye semáforos o barreras serán modeladas dentro del módulo de nodo. Con excepción de las máquinas de cambios que por su naturaleza tendrán un módulo aparte.	
+	
+	Como cada sección puede tener diferentes cantidades de elementos, existen diversos tipos de nodos en el sistema. Para ejemplificar se describirá el funcionamiento de un nodo genérico con la máxima cantidad de funcionalidades, de forma tal de cubrir todos los casos.
 	
 	Un módulo de nodo (cuyo diagrama de bloques se presenta en la figura \ref{fig:FSMD_Nodo}) recibe los estados de ocupación de sus vecinos y de si mismo desde el exterior, además del estado de los semáforos que posee. 
 	
@@ -127,9 +127,13 @@ Los módulos del sistema fueron implementados con máquinas de estado finitas co
 		\end{itemize}				 
 	\end{itemize}
 	
-\section{Módulo de la máquina de cambios cambios}
+\section{Módulo de la máquina de cambios}
 
-	Un cambio de vías en la realidad conecta un tramo A con un tramo B o con un tramo C. Pero en la implementación de los nodos solo se contemplan dos casos: un vecino anterior y un vecino posterior. Es por eso que el nodo de la máquina de cambios tiene como función el conectar con uno u otro nodo, como se muestra en la figura \ref{fig:Cambio_conexion}.
+	Una decisión de diseño importante fue que, a pesar de que los nodos del grafo pueden tener desde uno hasta seis vecinos, los módulos de nodos solo tienen dos posibles vecinos: el anterior y el posterior. Esto se hizo para que todos los nodos pudiesen ser modelados desde la misma plantilla base, agilizando la automatización del proceso.
+	
+	Esto llevó a la necesidad de disponer de un módulo que conmute las conexiones en el caso de tener nodos con mas de dos vecinos. Este bloque es el módulo de la máquina de cambios.
+	
+	Un cambio de vías conecta un tramo A con un tramo B o con un tramo C. El módulo de la máquina de cambios tiene como función el conectar un nodo anterior(A) con un nodo posterior(B) o un nodo del desvío(C), según la posición de la máquina de cambios, como se muestra en la figura \ref{fig:Cambio_conexion}.
 	
 	\begin{figure}[h]
 	\centering
@@ -140,7 +144,7 @@ Los módulos del sistema fueron implementados con máquinas de estado finitas co
 	
 	De esta manera, el nodo A ejemplificado en la figura \ref{fig:Cambio_conexion} tendrá como vecino posterior al que le indique la máquina de cambios. Si la posición del cambio es normal, entonces el nodo A tendrá como vecino posterior al nodo B. Si la posición del cambio es reversa, entonces el nodo A tendrá como vecino posterior al nodo C.
 	
-	De la misma manera los nodos B y C verán como nodo "anterior" al nodo A o a ningún nodo, según el cambio se encuentre en posición normal o reversa respectivamente.	
+	De la misma manera los nodos B y C verán como nodo ''anterior'' al nodo A o a ningún nodo, según el cambio se encuentre en posición normal o reversa respectivamente.	
 	
 	En la figura \ref{fig:FSMD_Cambio} se ilustra el diagrama en bloques del módulo de la máquina de cambios.
 	
@@ -153,42 +157,83 @@ Los módulos del sistema fueron implementados con máquinas de estado finitas co
 		
 	
 \section{Módulos de adaptación a enclavamiento}
-
-	El módulo de enclavamientos espera como entradas un vector de elementos booleanos de tamaño N y su salida será el mismo vector pero reducido a un tamaño M; por eso es necesario introducir dos módulos de adaptación. El primero debe separar el vector de N elementos booleanos (Tabla \ref{Trama_in}) en las señales que el enclavamiento necesita y el segundo debe recibir las señales de salida del sistema de enclavamiento (Tabla \ref{Trama_out}) y volver a generar el vector de elementos booleanos, que al no incluir el estado de ocupación ahora tendrá un tamaño M menor que el N original. 
-	 
-	\begin{table}[!hbt]
-	\renewcommand{\arraystretch}{1.3}
-	\caption{Trama de datos a recibir}
-	\label{Trama_in}
-	\centering
-	\begin{tabular}{| c | c | c | c |}
-	\multicolumn{4}{c}{Trama de entrada [N]} \\
-	\hline
-	Ocupación & Semáforos & Barreras & Cambios \\	
-	\hline
-	\end{tabular}
-	\end{table}	 
+	
+	Para el modelo de los estados de las barreras, circuitos de vías y máquinas se cambios se adoptó la convención de la Tabla \ref{Bool_1}.
 	
 	\begin{table}[!hbt]
 	\renewcommand{\arraystretch}{1.3}
-	\caption{Trama de datos a enviar}
+	\caption{Convención para elementos ferroviarios I}
+	\label{Bool_1}
+	\centering
+	\begin{tabular}{ c  c  c  c }
+	\hline	
+	Estado & Barrera & Máquina de cambiós & Circuito de vía \\	
+	\hline
+	'0' & Baja & Posición normal & Ocupado \\	
+	'1' & Alta & Posición inversa & Desocupado \\	
+	\hline
+	\end{tabular}
+	\end{table}	
+	
+	Pero en el caso de los semáforos, dependiendo de la cantidad de aspectos, pueden tenerse tres o cuatro estados. Por lo tanto la convención que se definió es la que se puede ver en la Tabla \ref{Bool_2}.
+	
+	\begin{table}[!hbt]
+	\renewcommand{\arraystretch}{1.3}
+	\caption{Convención para elementos ferroviarios II}
+	\label{Bool_2}
+	\centering
+	\begin{tabular}{ c  c  c  c }
+	\hline
+	Estado & Semáforo [2 aspectos] & Semáforo [3 aspectos] & Semáforo [4 aspectos] \\	
+	\hline
+	'00' & Rojo & Rojo & Rojo \\	
+	'01' & Amarillo & Amarillo & Amarillo \\	
+	'10' & - & - & Doble amarillo \\
+	'11' & - & Verde & Verde \\
+	\hline
+	\end{tabular}
+	\end{table}	
+	
+	Queda de manifiesto que podrían enviarse tramas conformadas únicamente por ceros y unos de forma serializada a la plataforma. Para luego procesar la trama e ir dividiendo cada porción en información a la zona que le corresponda. 
+	
+	Una forma de organizar la trama de entrada fue la adoptada en la Tabla \ref{Trama_in}. En la misma, se envían en orden todos los estados de ocupación, seguidos de todos los estados de los semáforos (intercalando el bit mas significativo con el menos significativo), los estados de las barreras y finalmente los estados de las máquinas de cambios.
+	
+	\begin{table}[!hbt]
+	\renewcommand{\arraystretch}{1.3}
+	\caption{Trama de entrada [N]}
+	\label{Trama_in}
+	\centering
+	\begin{tabular}{ | c | c | c | c | }
+	\hline
+	Ocupación & Semáforos & Barreras & Cambios \\
+	\hline	
+	\end{tabular}
+	\end{table}		 
+	
+	La trama de salida será muy similar, salvo que los estados de ocupación no serán un dato a transmitir ya que son de solo lectura y se asume que el mismo no ha cambiado durante el tiempo de procesamiento. La trama se definió en la Tabla \ref{Trama_out}.
+	
+	\begin{table}[!hbt]
+	\renewcommand{\arraystretch}{1.3}
+	\caption{Trama de salida [M]}
 	\label{Trama_out}
 	\centering
-	\begin{tabular}{| c | c | c | c |}
-	\multicolumn{4}{c}{Trama de salida [M]} \\
+	\begin{tabular}{| c | c | c | }
 	\hline
-	 & Semáforos & Barreras & Cambios \\
+	  Semáforos & Barreras & Cambios \\
 	\hline	
 	\end{tabular}
 	\end{table}	
-	 
-	La información de la ocupación tendrá tantos elementos como circuitos de vía a modelar, donde cada tramo libre se modelará con un 1 y cada ocupado con un 0. De igual forma para barreras y cambios.
 	
-	La única diferencia es en el caso de los semáforos, donde la información de cada uno no ocupará 1 bit sino 2 bits, de forma tal de tener cuatro posibles aspectos: rojo (00), amarillo (01), doble amarillo (10) y verde (11).
+	El módulo de enclavamientos espera como entradas las señales de estado de cada elemento en paralelo. Pero, como ya definimos en las Tablas \ref{Trama_in} y \ref{Trama_out}, la entrada del sistema es serializada. Por lo tanto, es necesario tener dos módulos que adapten ambas etapas: 
+	
+	\begin{itemize}
+		\item Módulo separador: encargado de convertir las entradas seriales en señales en paralelo y distribuir los datos según donde sean requeridos.
+		\item Módulo mediador: encargado de serializar las señales en paralelo que vienen del enclavamiento, según el orden requerido.
+	\end{itemize}
 	 
 	\subsection{Módulo separador}
 	
-		En la figura \ref{fig:FSMD_Separador} se puede ver la FSMD del módulo separador. Este debe recibir el vector de elementos booleanos de tamaño N (paquete[N]) y la orden de que debe procesarlo (procesar). 
+		El módulo separador diseñado se puede ver en la figura \ref{fig:FSMD_Separador}. Este debe recibir el vector de elementos booleanos de tamaño N (''paquete[N]'') y la orden de que debe procesarlo (''procesar''). 
 		
 		\begin{figure}[h]
 		\centering
@@ -197,26 +242,30 @@ Los módulos del sistema fueron implementados con máquinas de estado finitas co
 			\label{fig:FSMD_Separador}
 		\end{figure}
 		
-		A continuación, como el generador de código sabe previamente la cantidad de cada uno de los elementos ferroviarios, puede descomponer de forma sencilla los elementos del vector paquete[N] en vectores (o variables) mas pequeñas según corresponda.
+		\vspace{5cm}
+		
+		A continuación, como el generador de código sabe previamente la cantidad de cada uno de los elementos ferroviarios, puede descomponer de forma sencilla los elementos del vector paquete[N] en vectores mas pequeños según corresponda.
 		
 	\subsection{Módulo mediador}
 	
-		El bloque mediador que se puede visualizar en la figura \ref{fig:FSMD_Mediador} tiene como función volver a generar el vector de elementos booleanos que ya han sido procesados por el enclavamiento.
+		El módulo mediador diseñado, que se puede visualizar en la figura \ref{fig:FSMD_Mediador}, tiene como función volver a generar el vector de elementos booleanos que ya han sido procesados por el enclavamiento.
 		
-		\begin{figure}[h]
+		\begin{figure}[hbt]
 		\centering
-			\includegraphics[scale=.5]{./Figures/FSMD-Mediador}
+			\includegraphics[scale=.48]{./Figures/FSMD-Mediador}
 			\caption{FSMD del módulo mediador}
 			\label{fig:FSMD_Mediador}
 		\end{figure}
 		
-		El módulo mediador recibe la salida del enclavamiento y la orden de generar el paquete ("procesar"). Una vez que el vector ("paquete[M]") ha sido creado, se envía una variable de control ("procesado") a la siguiente etapa para poder coordinar todo el sistema con un solo reloj.
+		\vspace{10cm}
+		
+		El módulo mediador recibe la salida del enclavamiento y la orden de generar el paquete (''procesar''). Una vez que el vector (''paquete[M]'') ha sido creado, se envía una variable de control ("procesado") a la siguiente etapa para poder coordinar todo el sistema con un solo reloj.
 
 \section{Módulos de procesamiento de tramas}
 
-	Durante el desarrollo del trabajo de la Especialización en Sistemas Embebidos se había considerado la estrategia de obtener las señales de forma paralela, es decir, para cada elemento se tenía asignado un pin que monitoreaba su estado. Esto resultó ser un problema a la hora de implementar topologías mas grandes, donde se necesitó hasta cinco veces la cantidad de entradas digitales que la plataforma tenía. Por lo tanto, se decidió cambiar a una lectura y escritura en serie.
+	Durante el desarrollo del trabajo de la Especialización en Sistemas Embebidos se había considerado la estrategia de obtener las señales de forma paralela, es decir, para cada elemento se tenía asignado un pin que monitoreaba su estado. Esto resultó ser un problema a la hora de implementar topologías mas grandes, donde se necesitó hasta cinco veces la cantidad de entradas digitales que la FPGA tenía disponibles. Por lo tanto, se decidió cambiar a una lectura y escritura en serie.
 	
-	Pero el utilizar una lectura serie implica que debe indicarse cuál es el inicio y el final de cada mensaje, además de un criterio para determinar si el mensaje recibido es fiable.
+	Sin embargo, utilizar una lectura serie implica que debe indicarse cuál es el inicio y el final de cada mensaje, además de un criterio para determinar si el mensaje recibido es fiable. La solución desarrollada se presenta a continuación en esta sección.
 	
 	\subsection{Módulo detector}
 	
@@ -229,7 +278,7 @@ Los módulos del sistema fueron implementados con máquinas de estado finitas co
 			\label{fig:FSMD_Detector}
 		\end{figure}
 		
-		\vspace{5cm}
+		\vspace{10cm}
 		
 		La UART(del inglés, \textit{Universal Asynchronous Receiver-Transmitter}) es la unidad encargada de recibir y transmitir las tramas desde la computadora hasta la plataforma. Esta envía secuencialmente un caracter por medio de la señal r\_data (8 bytes) y un pulso (r\_disponible) para informar que un nuevo dato ha sido enviado, además de indicar por medio de la señal N la cantidad de caracteres que serán enviados. 
 		
@@ -237,14 +286,14 @@ Los módulos del sistema fueron implementados con máquinas de estado finitas co
 		
 		\begin{figure}[h]
 		\centering
-			\includegraphics[scale=.65,angle = -90]{./Figures/Estados-Detector}
+			\includegraphics[scale=.65]{./Figures/Estados-Detector}
 			\caption{Estados del módulo detector}
 			\label{fig:Estados_Detector}
 		\end{figure}
 		
-		\vspace{10cm}
+		%\vspace{10cm}
 		
-		Se tiene un estado inicial en el cual se espera el caracter de inicio de la trama ("$<$") que provoca una transición al estado de lectura. En dicho estado se recibirán hasta N caracteres mientras se actualiza un contador interno. Cuando el contador interno iguale la cantidad N, se verifica si el próximo caracter es el de fin de trama ("$>$").
+		En la figura \ref{fig:Estados_Detector} se tiene un estado inicial en el cual se espera el caracter de inicio de la trama ("$<$") que provoca una transición al estado de lectura. En dicho estado se recibirán hasta N caracteres mientras se actualiza un contador interno. Cuando el contador interno iguale la cantidad N, se verifica si el próximo caracter es el de fin de trama ("$>$").
 		
 		Si el caracter leído es el de final de trama, se pasa al estado final, donde el paquete es considerado válido y enviado a la próxima etapa junto con su pulso de validación del dato. Si el caracter leído es distinto, entonces se descarta toda la trama y se vuelve al inicio a la espera de otro caracter de inicio de trama, reiniciando todas las variables auxiliares.
 		
@@ -252,39 +301,41 @@ Los módulos del sistema fueron implementados con máquinas de estado finitas co
 		
 	\subsection{Módulo registro}
 	
-		Así como el módulo de detección realizaba una conversión de caracteres (1 byte) a booleanos (1 bit), el módulo de registro (figura \ref{fig:FSMD_Registro}) hace la operación inversa. Dado un vector de elementos booleanos, el módulo debe generar M caracteres '0' o '1' según corresponda en base al vector, y enviarlos a la Uart para su posterior impresión.
+		Así como el módulo de detección realiza una conversión de caracteres (1 byte) a booleanos (1 bit), el módulo de registro (figura \ref{fig:FSMD_Registro}) hace la operación inversa. Dado un vector de elementos booleanos, el módulo debe generar M caracteres '0' o '1' según corresponda en base al vector, y enviarlos a la UART para su posterior impresión.
 		
 		\begin{figure}[h]
 		\centering
-			\includegraphics[scale=.6]{./Figures/FSMD-Registro}
+			\includegraphics[scale=.65]{./Figures/FSMD-Registro}
 			\caption{FSMD del módulo registro}
 			\label{fig:FSMD_Registro}
 		\end{figure}
 
-		\vspace{10cm}
+		%\vspace{10cm}
 		
-		La máquina de estados (FSM) se ocupa de generar cada dos ciclos de reloj un pulso para poder enviar secuencialmente los caracteres detectados. A la vez que el multiplexor va seleccionando cada elemento del vector paquete[M] según el valor del contador vigente, que se incrementa cada pulso del reloj interno generado.
+		La máquina de estados (FSM) desarrollada se ocupa de generar cada dos ciclos de reloj un pulso para poder enviar secuencialmente los caracteres detectados. A la vez que el multiplexor va seleccionando cada elemento del vector paquete[M] según el valor del contador vigente, que se incrementa cada pulso del reloj interno generado.
 		
-		Finalmente se envía un caracter ASCII "1" si el elemento i-ésimo del paquete es '1' lógico y un "0" si lo recibido es un '0' lógico. Junto con el caracter se envía la señal "wr\_uart" para indicarle a la UART que ese dato debe ser guardado en una estructura de memoria llamada FIFO (del inglés, \textit{First-In,First-Out}) de salida y la señal "procesado" para indicarle al módulo de detección que ya puede recibir nuevas tramas.
+		Finalmente se envía un caracter ASCII '1' si el elemento i-ésimo del paquete es '1' lógico y un "0" si lo recibido es un '0' lógico. Junto con el caracter se envía la señal ''wr\_uart'' para indicarle a la UART que ese dato debe ser guardado en una estructura de memoria llamada FIFO (del inglés, \textit{First-In,First-Out}) de salida y la señal ''procesado'' para indicarle al módulo de detección que ya puede recibir nuevas tramas.
 	
-		La máquina de estados es ilustrada en la figura \ref{fig:Estado_Registro}. Se añadieron dos estados para generar el pulso de reloj necesario para mantener sincronizadas las tramas. Al estado de reinicio se accede cuando el contador haya recorrido todos los elementos del paquete, igualando el valor de M, la cantidad de elementos esperados.
+		La máquina de estados es ilustrada en la figura \ref{fig:Estado_Registro}. 
 		
 		\begin{figure}[h]
 		\centering
-			\includegraphics[scale=.9, angle = -90]{./Figures/Estados-Registro}
+			\includegraphics[scale=.85]{./Figures/Estados-Registro}
 			\caption{Estados del módulo registro}
 			\label{fig:Estado_Registro}
 		\end{figure}
 		
-		%\vspace{10cm}
+		\vspace{10cm}	
 		
-		La señal "procesar" es recibida de las etapas anteriores. Si la trama ingresada es incorrecta o si ya fue impresa, entonces esa señal será '0' y el registro dejará de enviar datos a la UART. En caso afirmativo ("procesar" = '1') el proceso continuará hasta que la UART indique que no pueda recibir mas datos o que alguna etapa previa informe de algún error en el proceso.
+		Se añadieron dos estados para generar el pulso de reloj necesario para mantener sincronizadas las tramas. Al estado de reinicio se accede cuando el contador haya recorrido todos los elementos del paquete, igualando el valor de M, la cantidad de elementos esperados. 
+		
+		La señal ''procesar'' es recibida de las etapas anteriores. Si la trama ingresada es incorrecta o si ya fue impresa, entonces esa señal será '0' y el registro dejará de enviar datos a la UART. En caso afirmativo (''procesar'' = '1') el proceso continuará hasta que la UART indique que no pueda recibir mas datos o que alguna etapa previa informe de algún error en el proceso.
 		
 	\subsection{Módulo selector}
 	
-		Para facilitar el proceso se añadió la posibilidad de elegir con uno de los switches del kit de desarrollo el puntear completamente el enclavamiento. Es decir, con una posición del switch la salida era una copia exacta de la entrada, lo cuál permitió diseñar todo el proceso de detección, lectura y escritura en la UART de forma independiente al enclavamiento. Mientras que con la otra posición del switch se enviaba la señal de entrada al sistema de enclavamiento y la salida era la consecuencia de haber pasado por este proceso.
+		Para facilitar el proceso se añadió la posibilidad de elegir con uno de los switches del kit de desarrollo el puntear completamente el enclavamiento. En la figura \ref{fig:FSMD_Selector} se ilustra brevemente el módulo diseñado para lograr este objetivo.
 		
-		En la figura \ref{fig:FSMD_Selector} se ilustra brevemente este módulo.
+		El módulo selector permite que ante un cambio en la posición del switch la salida sea una copia exacta de la entrada, lo cuál permitió diseñar todo el proceso de detección, lectura y escritura en la UART de forma independiente al enclavamiento. Mientras que con la otra posición del switch se enviaba la señal de entrada al sistema de enclavamiento y la salida era la consecuencia de haber pasado por este proceso.
 		
 		\begin{figure}[h]
 		\centering
@@ -293,13 +344,13 @@ Los módulos del sistema fueron implementados con máquinas de estado finitas co
 			\label{fig:FSMD_Selector}
 		\end{figure}	
 		
-		\vspace{5cm}
+		\vspace{10cm} 
 		
-		La implementación es por demás sencilla: un selector que decide enviar la entrada a una salida u otra según la posición del switch, de forma asincrónica. Aunque no solo envía el dato sino también la ráfaga de pulsos asociada para su correcta escritura en la UART.
+		La implementación permite enviar la entrada a una salida u otra según la posición del switch, de forma asincrónica. Aunque no solo envía el dato sino también la ráfaga de pulsos asociada para su correcta escritura en la UART.
 		
 \section{Módulo de comunicación UART}
 
-	En el diseño de los módulos para la interface UART con el exterior se utilizó un modelo básico aportado por los docentes, pero fueron necesarias varias premisas para modificarlo y poder automatizarlo:
+	En el diseño de los módulos para la interface UART con el exterior se utilizó un modelo  aportado por los docentes, pero fueron necesarias varias premisas para modificarlo y poder automatizarlo:
 	
 	\begin{itemize}
 		\item Se deben tener dos FIFOs distintas, una de entrada y la otra de salida.
@@ -322,7 +373,7 @@ Los módulos del sistema fueron implementados con máquinas de estado finitas co
 
 		La FIFO de entrada se utiliza para almacenar una trama de la forma '<Mensaje de largo N>' por lo que espera al menos N+2 bytes, mientras que la FIFO de salida espera mensajes de la forma 'Mensaje de largo M'. Ya que N > M es claro que N + 2 > M en la mayoría de los casos. Aunque también puede ocurrir que la diferencia entre ambos no sea tanta y al implementar el tamaño de las FIFOs en potencias de 2 terminen ambas FIFOs con el mismo tamaño. 
 
-		Con este criterio de diseño, en todos los demás casos, la FIFO de salida deberá ser $50$\% menor que la de entrada, lo que representa un ahorro de $25$\% de los recursos estimados.
+		Con este criterio de diseño, en todos los demás casos, la FIFO de salida tendrá el mismo tamaño que la FIFO de entrada o a lo sumo será $50$\% menor, lo que representa un ahorro de $25$\% de los recursos estimados. Por ejemplo, si necesito la entrada tiene 15 elementos y la salida 7 elementos y le asigno el mismo tamaño a ambas FIFOs; tanto la FIFO de entrada como la de salida necesitarán 16 bits cada una, dando un total de 32 bits. Pero si se aplica el criterio de tamaños desacoplados, entonces para la FIFO de salida podrían asignarse solamente 8 bits, dando un total de 24 bits, un $25$\% menos que los 32 bits que necesitaría si ambas FIFOs quedaran definidas según los datos de la entrada.
 		
 \section{Interfaz de comunicación Python}
 

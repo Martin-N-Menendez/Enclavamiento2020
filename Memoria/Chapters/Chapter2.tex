@@ -2,13 +2,13 @@
 
 \label{Chapter2}
 
-Es este capítulo se presentan las topologías básicas del sistema ferroviario y los dos enfoques de resolución del proyecto, con sus ventajas y desventajas antes de abordar la implementación de la solución elegida.
+Es este capítulo se presentan las topologías básicas del sistema ferroviario y dos enfoques de resolución, con sus ventajas y desventajas antes de abordar la implementación de la solución elegida.
 
 \section{Topologías típicas}
-	
+\label{Topologias}	
 	El tendido ferroviario argentino dista de ser uniforme: en las zonas rurales predominan vías simples con bypass debido al alto costo de utilizar vías dobles, mientras que en las zonas urbanas son mayoría las estaciones y playas de maniobras a talleres de mantenimiento.
 	
-	Es por eso que el trabajo realizado debe abocarse a muchos frentes y muy diversos unos de otros. La cantidad de elementos involucrados diverge conforme la complejidad de la topología se incrementa, pero los elementos y sus comportamientos no dejan de ser los mismos de los presentados en el capítulo 1.
+	Es por eso que el trabajo realizado debe abocarse a muchas locaciones y muy diversos unos de otros. La cantidad de elementos involucrados diverge conforme la complejidad de la topología se incrementa, pero los elementos y sus comportamientos no dejan de ser los mismos de los presentados en el capítulo 1.
 
 	\subsection{Bypass}
 
@@ -161,17 +161,17 @@ Es este capítulo se presentan las topologías básicas del sistema ferroviario 
 			\label{fig:Work_Funcional}
 		\end{figure}
 	
-		Como bien se resaltó anteriormente, el diseño nace de la tabla de enclavamientos, y para evitar que cualquier error en esta se propague al sistema, la tabla es diseñada y revisada por varios profesionales ferroviarios. Pero si aun así no es suficiente, en la UTN-Haedo se ha avanzado en el desarrollo de un \textit{script} que busca errores en las tablas de enclavamientos.
+		Como bien se resaltó anteriormente, el diseño nace de la tabla de enclavamientos, y para evitar que cualquier error en esta se propague al sistema, la tabla es diseñada y revisada por varios profesionales ferroviarios. La validación de las tablas puede ser automatizada mediantes \textit{scripts} que busquen errores en las mismas.
 		
 		El proceso culmina con la redundancia de los sistemas diseñados y la diversificación de plataformas, sin lo cual no se podrían alcanzar estándares de calidad y seguridad altos como los demandados por industrias tan críticas como la nuclear, la aeronáutica, etc. 
 		
 		En el transcurso de la Especialización de Sistemas Embebidos se trabajó en un diseño con enfoque funcional de la estación Belgrano R de la Línea Mitre, pero sin automatización del proceso. En él, la tabla de enclavamientos fue una pieza vital de todo el desarrollo.
 		
-		Durante 2019 se avanzó en la automatización de este flujo de trabajo, que culminó con la presentación de un artículo en el Congreso Argentino de Sistemas Embebidos 2019 y en una edición especial de \textit{IEEE Latin American Transaction}.
+		%Durante 2019 se avanzó en la automatización de este flujo de trabajo, que culminó con la presentación de un artículo en el Congreso Argentino de Sistemas Embebidos 2019 y en una edición especial de \textit{IEEE Latin American Transaction}.
 		
 	\subsection{Escalabilidad de la estrategia}	
 		
-		Al ir automatizando el sistema se fue llegando a la conclusión de que los bloques que contenían las máquinas de estados crecían en tamaño hasta volverse inmanejables las conexiones. En la figura \ref{fig:Escala_Funcional} se representa el concepto del crecimiento del sistema conforme la topología se vuelve mas compleja.		
+		Al ir automatizando la generación del código del sistema se fue llegando a la conclusión de que los bloques que contenían las máquinas de estados crecían en tamaño hasta volverse inmanejables las conexiones. En la figura \ref{fig:Escala_Funcional} se representa el concepto del crecimiento del sistema conforme la topología se vuelve mas compleja.		
 					
 		\begin{figure}[h]
 		\centering
@@ -180,13 +180,13 @@ Es este capítulo se presentan las topologías básicas del sistema ferroviario 
 			\label{fig:Escala_Funcional}
 		\end{figure}
 		
-	Es destacable que a medida que la topología se complejiza la cantidad de bloques para modelarla sigue siendo la misma. Lo que se incrementa es la cantidad de estados en cada bloque y la densidad de conexiones tanto entre estos como internamente.
+	Es importante destacar que a medida que la topología se complejiza la cantidad de bloques para modelarla sigue siendo la misma. Lo que se incrementa es la cantidad de estados en cada bloque y la densidad de conexiones tanto entre estos como internamente.
 	
-	El tener bloques monolíticos y de crecimiento exponencial perjudica el desarrollo de los tests, que deben ser desechados y reescritos de cero cada vez que la topología cambia, por mas mínimos que sean esos cambios. 
+	El tener bloques monolíticos y de crecimiento exponencial perjudica el desarrollo de los tests, que deben ser desechados y reescritos por completo cada vez que la topología cambia, por mas mínimos que sean esos cambios. 
 	
 	Otro problema encontrado es el de la incompletitud, que se detalló al inicio de la Sección \ref{Incompletitud}. Si la red admite M rutas pero solo se definieron N como necesarias (donde $N \leq M$), entonces se podrían tener N tests que las validen y el sistema se certifica para N rutas. Pero si en un futuro se necesitan N+1 rutas, se deberá hacer todo el proceso de validación desde cero, lo que encarece todo el proyecto.
 			
-	La ventaja central de este enfoque es que, teniendo la tabla de enclavamientos correctamente definida, es muy sencillo e inmediato pasar de la tabla a la implementación del sistema. Aunque el uso de memoria es excesivo y desde el punto de vista del testing y la validación es incompleto.			
+	La ventaja central de este enfoque es que, teniendo la tabla de enclavamientos correctamente definida, es muy sencillo e inmediato pasar de la tabla a la implementación del sistema. La desventaja es que el uso de memoria es excesivo y desde el punto de vista del testing y la validación es incompleto.			
 					
 \section{Enfoque geográfico}
 
@@ -201,7 +201,7 @@ Es este capítulo se presentan las topologías básicas del sistema ferroviario 
 			\label{fig:Enfoque_Geografico}
 		\end{figure}
 
-	Se puede apreciar en la figura que la variedad de colores de los pequeños bloques es limitada. Esto se debe a que cada uno simboliza un elemento ferroviario, sin importar cuál sea. El concepto a destacar es que una vez que se ha modelado un bloque rojo, todos los bloques rojos se comportarán igual y es su posición relativa a los otros bloques (sean o no rojos) lo que tendrá una funcionalidad a nivel general.
+	Se puede apreciar en la figura \ref{fig:Enfoque_Geografico} que la variedad de colores de los pequeños bloques es limitada. Esto se debe a que cada uno simboliza un elemento ferroviario, sin importar cuál sea. El concepto a destacar es que una vez que se ha modelado un bloque rojo, todos los bloques rojos se comportarán igual y es su posición relativa a los otros bloques (sean o no rojos) lo que tendrá una funcionalidad a nivel general.
 	
 	\subsection{Análisis de grafos}
 		
@@ -240,7 +240,7 @@ Es este capítulo se presentan las topologías básicas del sistema ferroviario 
 			\label{fig:Work_Geografico}
 		\end{figure}
 	
-		A diferencia del enfoque funcional, en el enfoque geográfico la tabla de enclavamientos ocupa un rol secundario al ser un historial del proceso de conversión entre el gráfico y la implementación electrónica del sistema. Obviamente la tabla de enclavamientos del enfoque funcional (al ser incompleta) debe estar contenida en la tabla de enclavamientos del enfoque geográfico (al considerar todas las rutas que admite la red). Ambos enfoques, aunque parten de conceptos distintos, deben converger en los mismos resultados y ser consistentes a la hora de comparar ambas tablas.
+		A diferencia del enfoque funcional, en el enfoque geográfico la tabla de enclavamientos ocupa un rol secundario al ser un historial del proceso de conversión entre el gráfico y la implementación electrónica del sistema. Es inmediato deducir que la tabla de enclavamientos del enfoque funcional (al ser incompleta) debe estar contenida en la tabla de enclavamientos del enfoque geográfico (al considerar todas las rutas que admite la red). Ambos enfoques, aunque parten de conceptos distintos, deben converger en los mismos resultados y ser consistentes a la hora de comparar ambas tablas.
 		
 		El proceso se inicia con el pasaje, de momento manual, del layout al grafo. Este es analizado por el algoritmo que detecta cuántos semáforos, de cuántos aspectos, en qué orientación y dónde deben situarse para que el sistema sea seguro. Esto, además de detectar la posición de todos los cambios y barreras, encontrando todas las rutas soportadas por la red y generando una tabla de enclavamientos completa.
 		
@@ -257,9 +257,52 @@ Es este capítulo se presentan las topologías básicas del sistema ferroviario 
 				\label{fig:Escala_Geografico}
 			\end{figure}
 		
+			\vspace{5cm}
+			
 			Todos los tests unitarios, referidos a cada bloque del mismo color que modelan un mismo espacio físico (que puede o no contener una barrera, un cambio o varios semáforos), se elaboran una única vez, sin importar la cantidad de elementos idénticos presentes en la topología. Sumado a que, como en este enfoque se identifican todas las rutas y por lo tanto se pueden generar todos los tests necesarios, la batería de ensayos que otorga este enfoque es completa. Es decir, siempre se tendrá una cantidad de tests mayor o igual que la necesaria para cualquier necesidad presente o futura.
 		
 			Una desventaja de este enfoque es que se debe implementar el analizador de redes ferroviarias y un conversor que a partir de un grafo genere toda la estructura de archivos necesaria para implementar el circuito electrónico en una FPGA. Por lo tanto, la complejidad y, en consecuencia, el tiempo de desarrollo son mayores.
 			
-			
+\section{Consideraciones generales}
+
+En el presente trabajo se optó por implementar el sistema bajo el enfoque funcional, asumiendo que sus ventajas son mucho mas fuertes que sus desventajas y el análisis de los resultados obtenidos fueron mucho mas provechosos que los de su contraparte funcional.
+
+Los módulos del sistema fueron implementados con máquinas de estado finitas con camino de datos (FSMD, del inglés \textit{Finite State Machine with Data path}), que son máquinas de estado finitas (FSM, del inglés \textit{Finite State Machine}) y circuitos secuenciales. La FSMD (figura \ref{fig:FSMD}) posee dos partes diferenciadas: el camino de control y el camino de datos. El camino de control contiene una FSM que, según las entradas de control y el estado interno que posee, genera señales internas que controlan los circuitos secuenciales del camino de datos. Estos, a su vez, contienen los bloques que procesan las entradas y actúan sobre las salidas.
+
+	\begin{figure}[h]
+	\centering
+		\includegraphics[scale=.55]{./Figures/FSMD}
+		\caption{Diagrama en bloques genérico de una FSMD}
+		\label{fig:FSMD}
+	\end{figure}
+	
+	\vspace{5cm}
+	
+	Siguiendo los lineamientos recomendados, una FSMD debe ser diseñada, implementada y simulada de acuerdo con los siguientes pasos:
+	
+	\begin{enumerate}
+		\item Definición del algoritmo a implementar.
+		\item Definición de entradas y salidas de la FSMD.
+		\item Diseño del camino de datos.
+		\item Diseño de interfaz entre camino de datos y camino de control.
+		\item Definición de los estados de la FSM.
+		\item Diseño de la FSM.
+		\item Implementación del diseño.
+		\item Diseño e implementación de los ensayos.
+	\end{enumerate}
+	
+	Esta metodología puede inferir mas tiempo de desarrollo que el habitual, pero ya ha demostrado ser exitosa en el proyecto realizado por el Mg. Ing. Facundo Larosa, codirector de este trabajo. Por lo que se aprovechó su experiencia y conocimiento para resolver esta etapa del desarrollo. Los beneficios son un mayor control del diseño a bajo nivel, una mayor portabilidad y un mas eficiente uso de los recursos de la plataforma electrónica.
+
+	\vspace{5cm}
+
+\section{Plataforma utilizada}
+
+	Por razones de disponibilidad se utilizó el kit de desarrollo Arty Z7  (figura \ref{fig:FPGA}), el cual posee 17600 LUT’s, 35200 FF’s, 32 BUFG’s y 100 IOB’s \cite{cite28}. Se lo utilizó como base para sintetizar el diseño y extraer conclusiones que permitan dimensionar los recursos lógicos necesarios para un desarrollo de estas características.
+	
+	\begin{figure}[h]
+	\centering
+		\includegraphics[scale=.4]{./Figures/FPGA}
+		\caption{FPGA Arty Z7-10 de Digilent}
+	\label{fig:FPGA}	
+	\end{figure}			
 			

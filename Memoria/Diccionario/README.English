@@ -1,0 +1,46 @@
+Manual instructions to install spell checking,  
+in OpenOffice.org 1.0 (OOorg1) for Linux and Windows.
+
+Note 1:  References based on OOorg1 in English.
+Note 2:  Assumes OOorg1 is installed and functioning on your system.
+Note 3:  That NEITHER OOorg1 NOR Quickstarter is executing. 
+
+1. Decompress the dictionary, *.zip or *.tgz, to directory:
+	c:\ProgramFiles\OOorg1\user\wordbook\       // typical for windows
+	or 
+	$HOME/$OOorg1_local_dir/user/wordbook/		// typical for linux
+
+	(Only dictionary.lst,  *.aff  &  *.dic  are required to be in user/wordbook.)
+
+2. Edit the file "dictionary.lst"  in this directory to register
+	 a specific language or for multiple languages. 
+	 (see Ejemplo_Dictionary.lst)
+	 With a text editor, add the following information to "dictionary.lst":
+        ...
+        #
+        DICT es ES es_ES
+        DICT en US en_US        
+
+3. Now, start OOorg1. If it was running while doing the above,
+	close all OOorg1 windows and the Quickstarter, if active,
+	and restart OOorg1 to read the modified dictionary.lst. 
+
+4. Language configuration:
+	Click on Tools|Options|Language Settings|Languages
+	Select Default Language for Documents to "Spanish (Spain)"
+
+	Click on  Tools|Options|LanguageSettings|WritingAids|Edit
+	In Edit Modules-Options Language, select the locale "Spanish (Spain), 
+	activate the "[ ] OpenOffice MySpell SpellChecker", for each language.
+	Press Close.
+	Select OK to save the changes.
+	 ********************
+
+Ready! Your dictionary is installed and registered for this language.
+
+If you have any problems, assure that you have read carefully, _all_
+the instructions.
+
+If you still have problems, send mail, stating what you've done to:
+Richard Holt   <richard@openoffice.org>
+Ciudad Ojeda, Zulia, Venezuela, 10-mayo-2002.
