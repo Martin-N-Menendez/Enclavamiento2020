@@ -17,35 +17,35 @@
 
 %----------------------------------------------------------------------------------------
 
-En este capítulo se presentan el contexto del proyecto, los sistemas ferroviarios, una introducción a las distintas tecnologías de los sistemas de enclavamientos y los objetivos a cumplir.
+En este capítulo se presentan el contexto del proyecto, los sistemas ferroviarios, las distintas tecnologías de los sistemas de enclavamientos y los objetivos a cumplir.
 
 %----------------------------------------------------------------------------------------
 		
 	\section{Contexto y motivación}
 	
-		En la actualidad, el sistema ferroviario argentino se encuentra enormemente deteriorado y desactualizado. Mientras que otras naciones más avanzadas han progresado en la migración de sus sistemas de transporte de cargas y pasajeros añadiendo electrónica de última generación, Argentina continúa utilizando mecanismos diseñados a principios o mediados del siglo XX.
+		En la actualidad, el sistema ferroviario argentino se encuentra deteriorado y desactualizado. Mientras que otras naciones han progresado en la migración de sus sistemas de transporte de cargas y pasajeros añadiendo electrónica de última generación, Argentina continúa utilizando mecanismos diseñados a principios o mediados del siglo XX.
 				
-		Esto repercute negativamente en la poca o nula seguridad que dichos sistemas pueden brindar a los pasajeros, conductores, peatones y automovilistas. Pero los sistemas electrónicos para la seguridad vial de trenes y subtes son importados y muy costosos, además de estar monopolizados por menos de una docena de empresas en todo el mundo. Un sistema de enclavamiento como el que se aborda en este trabajo puede costar entre 5 y 10 millones de dólares\citep{SIEMENS} y se requieren varias decenas de estos sistemas sólo para la zona urbana de la Ciudad Autónoma de Buenos Aires.
+		Esto repercute negativamente en la seguridad que dichos sistemas pueden brindar a los pasajeros, conductores, peatones y automovilistas. A la vez, ocurre que los sistemas electrónicos para la seguridad vial de trenes y subtes son importados y muy costosos, además de estar monopolizados por menos de una docena de empresas en todo el mundo. Un sistema de enclavamiento como el que se aborda en este trabajo puede costar entre 5 y 10 millones de dólares\citep{SIEMENS} y se requieren varias decenas de estos sistemas sólo para la zona urbana de la Ciudad Autónoma de Buenos Aires.
 		
-		Dichas empresas brindan muy poca información técnica sobre sus desarrollos y la mayoría de las herramientas que utilizan son de uso privado empresarial. No obstante, deben regirse bajo normativas como las que la comunidad europea ha establecido desde 2004. Las tres normas principales son EN-50126\citep{EN50126} (ciclo de vida), EN-50128\citep{EN50128} (técnicas de software) y EN-50129\citep{EN50129} (técnicas de hardware). Entre otras cuestiones, se busca la integridad de la seguridad.	
+		Las empresas que fabrican sistemas de enclavamiento brindan muy poca información técnica sobre sus desarrollos y la mayoría de las herramientas que utilizan son de uso corporativo. No obstante, deben regirse bajo normativas como las que la comunidad europea ha establecido desde 2004. Las tres normas principales son EN-50126\citep{EN50126} (ciclo de vida), EN-50128\citep{EN50128} (técnicas de software) y EN-50129\citep{EN50129} (técnicas de hardware). %Entre otras cuestiones, se busca la integridad de la seguridad.	
 		
-		En los sistemas críticos, una falla puede poner en peligro cientos de vidas humanas y/o costosas inversiones. Por lo tanto, se deben cumplir estrictos parámetros de fiabilidad, disponibilidad, mantenibilidad y seguridad (RAMS, del inglés \textit{Reliability}, \textit{Availability}, \textit{Mantenibility} \textit{and} \textit{Safety}), durante todo el ciclo de vida.
+		Los sistemas de enclavamiento son sistemas críticos. Esto implica que una falla puede poner en peligro cientos de vidas humanas y/o costosas inversiones. Por lo tanto, se deben cumplir estrictos parámetros de fiabilidad, disponibilidad, mantenibilidad y seguridad (RAMS, del inglés \textit{Reliability}, \textit{Availability}, \textit{Mantenibility} \textit{and} \textit{Safety}), durante todo el ciclo de vida.
 		
 		En este contexto, en 2015 se creó el CONICET-GICSAFe, cuyas siglas corresponden a Grupo de Investigación en Calidad y Seguridad de las Aplicaciones Ferroviarias, conformado por docentes e investigadores de una decena de universidades e instituciones públicas argentinas\citep{GICSAFE}. El grupo desarrolla sistemas electrónicos e informáticos para aplicaciones ferroviarias relacionadas con la seguridad, a partir de la generación de un prototipo funcional y la documentación correspondiente que luego se transfiere en su totalidad a los clientes. En particular, esta metodología se utiliza en este trabajo con Trenes Argentinos, que es la Sociedad del Estado que opera las líneas Roca, Sarmiento, Mitre, San Martín y Belgrano Sur, entre otras. Luego el cliente puede fabricar el sistema diseñado por el GICSAFe o licitar su fabricación, así como modificar el sistema de acuerdo con sus necesidades.   
 	
 		En el marco de la Especialización de Sistemas Embebidos, desde julio de 2018 se tuvieron reuniones con diferentes funcionarios y profesionales de Trenes Argentinos. En particular los encuentros se desarrollaron con la Gerencia de Ingeniería, Gerencia de Seguridad Operacional, Subgerencia de Desarrollo y Normas Técnicas, Subgerencia de Transporte, Gerencia de Señalamiento, entre otros, de los cuales surgió el interés en el desarrollo del presente proyecto. De dichas visitas y otras posteriores se obtuvo la totalidad de las fotografías incluidas en esta memoria.
 			 	
-		El desarrollo del sistema involucra muchas áreas distintas: procesamiento, comunicación, replicación del sistema para otras topologías, testing, etc. Un primer prototipo se desarrolló a finales de 2018 y actualmente se culminó una segunda versión para la Maestría en Sistemas Embebidos. La amplia variedad de topologías existentes obligó a abandonar la metodología de desarrollo artesanal de cada sistema y fue necesario abordar el diseño de forma general, para topologías genéricas, lo que adiciona aún más trabajo al monumental proyecto.		
+		El desarrollo del sistema involucra muchas áreas distintas: procesamiento, comunicación, replicación del sistema para otras topologías, testing, etc. Un primer prototipo se desarrolló a finales de 2018 y actualmente se culminó una segunda versión para la Maestría en Sistemas Embebidos. La amplia variedad de topologías existentes obligó a abandonar la metodología de desarrollo artesanal de cada sistema y fue necesario abordar el diseño de forma general, para topologías genéricas, lo que adiciona aún más trabajo al proyecto.		
 		
 		Por esa razón, durante la Maestría en Sistemas Embebidos, en el año 2019, se comenzó a seguir un estrategia orientada a obtener una solución integral para cualquier locación, generando automáticamente el código y los testbenchs involucrados. A la vez que miembros de CONICET-GICSAFe pertenecientes a UTN-Haedo comenzaron el desarrollo de un front-end gráfico y su correspondiente simulador en tiempo real, en vistas a ser integrado al proyecto en el mediano plazo.
 	
-		Hacia finales de 2019 se iniciaron reuniones con miembros de la Comisión Nacional de Energía Atómica (CNEA), para integrar el proyecto en sus plataformas de hardware ampliamente testeadas en el ámbito de los sistemas críticos. Además del intercambio de conocimiento y la puesta en común de estrategias a utilizar, se aprovechó todo lo posible la amplia experiencia que ellos brindaron a GICSAFe durante el pasado y corriente año.
+		Hacia finales de 2019 se iniciaron reuniones con miembros de la Comisión Nacional de Energía Atómica (CNEA), para integrar el proyecto en sus plataformas de hardware ampliamente testeadas en el ámbito de los sistemas críticos. Además del intercambio de conocimiento y la puesta en común de estrategias a utilizar, se aprovechó todo lo posible la amplia experiencia que ellos brindaron a GICSAFe desde fines del año pasado a la fecha.
 		
 	\section{Propuesta de solución}	
 		
-		El proyecto comenzó en 2018 en el marco de la Especialización de Sistemas Embebido. Durante ese año se implementó un sistema similar al de la Figura \ref{fig:CESE_1}. El sistema contaba con una cantidad limitada de tramos de vías y bifurcaciones que implicaba una cantidad acotada de circuitos lógicos complicados pero posibles de obtener y ensayar.
+		En el marco de la Especialización de Sistemas Embebidos se implementó en 2018 un sistema similar al de la Figura \ref{fig:CESE_1}. El mismo contaba con una cantidad limitada de tramos de vías y bifurcaciones que implicaba una cantidad acotada de circuitos lógicos.% complicados pero posibles de obtener y ensayar.
 		
-		La implementación se hacía de forma artesanal, bloque a bloque y conectándolos de igual manera uno por uno. Diseñar los ensayos demoraba días o semanas y era necesario revisar varias veces las pocas y difusas especificaciones que se tenían para corroborar un correcto funcionamiento del sistema.	
+		La implementación se hacía de forma artesanal, bloque a bloque y conectándolos de igual manera uno por uno. Diseñar los ensayos demoraba días o semanas y era necesario revisar varias veces las pocas especificaciones que se tenían para corroborar un correcto funcionamiento del sistema.	
 		
 		\begin{figure}[htbp!]
 			\centering
@@ -67,7 +67,7 @@ En este capítulo se presentan el contexto del proyecto, los sistemas ferroviari
 			
 		Una mayor cantidad de elementos ferroviarios implica una densidad mayor de circuitos lógicos, y estos a su vez repercuten en un crecimiento exponencial de la complejidad del desarrollo, mayor dificultad para implementar los ensayos y mayores chances de errores al extrapolar conceptos aún inmaduros a sistemas de mayor tamaño.
 		
-		La solución a proponer no podía quedar sujeta a una única topología, ya que aun culminando el proyecto se corría el riesgo de que el tiempo empleado fuese desperdiciado si se cambiaban los requerimientos de forma tan abrupta. Es por eso que se añadió como objetivo de este trabajo el desarrollo de una herramienta capaz de generar automáticamente la solución electrónica de un sistema de enclavamiento ferroviario, a partir de una representación matemática única de cada topología. En la figura \ref{fig:Generacion} se puede visualizar el proceso.
+		La solución a proponer no podía quedar sujeta a una única topología, ya que aun culminando el proyecto se corría el riesgo de que el tiempo empleado fuese desperdiciado si se cambiaban los requerimientos de forma tan abrupta. Es por eso que se añadió como objetivo de este trabajo el desarrollo de una herramienta capaz de generar automáticamente la solución electrónica de un sistema de enclavamiento ferroviario, a partir de una representación matemática única de cada topología. En la figura \ref{fig:Generacion} se puede visualizar el proceso, en el cual diversas topologías son procesadas e implementadas en una plataforma FPGA.
 		
 		\begin{figure}[htbp!]
 			\centering
@@ -76,7 +76,7 @@ En este capítulo se presentan el contexto del proyecto, los sistemas ferroviari
 			\label{fig:Generacion}
 		\end{figure}
 		
-		De esta manera, la solución parte de cualquier red ferroviaria, representada mediante un grafo y un analizador de redes ferroviarias (desarrollado también en este trabajo), detecta qué función cumplirá cada elemento de la red y determina cuántos semáforos, de cuántos aspectos, en qué orientación y en qué nodo deben situarse para que el sistema sea seguro. A continuación, en base a los semáforos insertados el analizador calcula todas las rutas posibles que admite esa red.
+		De esta manera, la solución parte de cualquier red ferroviaria, representada mediante un grafo y un analizador de redes ferroviarias (desarrollado también en este trabajo), detecta qué función cumplirá cada elemento de la red y determina cuántos semáforos, de cuántos aspectos, en qué orientación y en qué nodo deben situarse para que el sistema sea seguro. A continuación, en base a los semáforos insertados el analizador calcula todas las rutas posibles que admite esa red y genera automáticamente la solución electrónica para ser implementada mediante una FPGA.
 	
 		Para poder entender mejor el funcionamiento del sistema es necesario introducir conceptos propios del mundo ferroviario y sus componentes involucrados, que se describen en la sección siguiente.
 
@@ -116,7 +116,7 @@ En este capítulo se presentan el contexto del proyecto, los sistemas ferroviari
 				\label{fig:Sem_3Aspectos}
 			\end{figure}
 			
-			Otra diferencia fundamental es que no todos los semáforos ferroviarios poseen tres aspectos. Los semáforos de maniobras constan de solo dos, amarillo(precaución) y rojo(prohibido avanzar), y algunas líneas como la Línea Roca utilizan semáforos de cuatro aspectos.	
+			Otra diferencia fundamental es que no todos los semáforos ferroviarios poseen tres aspectos. Los semáforos de maniobras constan de solo dos, amarillo (precaución) y rojo (prohibido avanzar), y algunas líneas como la Línea Roca utilizan semáforos de cuatro aspectos.	
 			
 			En la figura \ref{fig:Sem_2Aspectos} se visualizan los semáforos de dos aspectos. Se utilizan en cambios de vías donde, por su peligrosidad, solo se podrían permitir aspectos rojos y amarillos.
 			 
@@ -214,7 +214,7 @@ En este capítulo se presentan el contexto del proyecto, los sistemas ferroviari
 		\end{figure}
 		%\vspace{5cm}
 			
-		Para evitar la colisión, se requiere un control seguro que evite que las formaciones avancen hacia secciones ya ocupadas por otras. También debe evitar que las formaciones avancen sobre los cambios cuando estos aún no han terminado de posicionarse en su lugar, lo que provocaría descarrillamientos. A este control se lo denomina sistema de enclavamiento; impide que se produzcan las configuraciones no seguras y controla los semáforos que habilitan o no los itinerarios de las formaciones.		
+		Para evitar la colisión, se requiere un control seguro que evite que las formaciones avancen hacia secciones ya ocupadas por otras. También debe evitar que las formaciones avancen sobre los cambios cuando estos aún no han terminado de posicionarse en su lugar, lo que provocaría descarrillamientos. A este control se lo denomina sistema de enclavamiento y en definitiva impide que se produzcan las configuraciones no seguras y controla los semáforos que habilitan o no los itinerarios de las formaciones.		
 					 
 	 	Una falla en un enclavamiento puede poner en peligro cientos de vidas humanas y generar gastos considerables. Por lo tanto, en el diseño del sistema de enclavamiento se deben cumplir estrictos parámetros de fiabilidad, disponibilidad, mantenibilidad y seguridad (RAMS).
 	 	
@@ -233,13 +233,13 @@ En este capítulo se presentan el contexto del proyecto, los sistemas ferroviari
 			\begin{figure}[htbp!]
 				\centering
 				\includegraphics[scale=.27]{./Figures/Mecanico}
-				\caption{Sistema mecánico de enclavamiento en la antigua estación de Chascomús, hoy convertida en museo.}
+				\caption{Sistema enclavamiento mecánico en la estación de Chascomús, hoy convertida en museo.}
 				\label{fig:Mecanico}
 			\end{figure}
 
 			Una vez que se constituye una configuración de posiciones de palancas que habilitan un trayecto, estas quedan 'enclavadas' mecánicamente. Es decir, su posición se bloquea y no es físicamente posible cambiarla. A medida que se van moviendo ciertas palancas, las demás que pudieran representar situaciones no seguras quedan enclavadas, y solo se pueden mover aquellas cuyo accionamiento representa una situación segura. De esa manera se garantiza que no se generarán configuraciones tales que las formaciones colisionen entre sí.
 			
-			Las tecnologías mas modernas heredaron el término 'enclavamiento', aunque ya no se tengan palancas enclavadas en posiciones fijas.
+			Las tecnologías mas modernas heredaron el término ''enclavamiento'', aunque ya no se tengan palancas enclavadas en posiciones fijas.
 		
 		\subsection{Enclavamientos electromecánicos}
 			
@@ -256,7 +256,7 @@ En este capítulo se presentan el contexto del proyecto, los sistemas ferroviari
 		
 			\vspace{7cm}
 			
-			Los sistemas de enclavamiento electromecánicos son comandados por un operario mediante un panel de control (figura \ref{fig:Electromecanico}). El operario solicita al sistema de enclavamiento las rutas que el conductor ferroviario necesita para circular. El sistema permitirá solo la operación de cambio de vías seguras. En caso contrario, se tendrán las salidas 'enclavadas' y el sistema de enclavamiento impedirá mediante los semáforos el avance de la formación hasta que pueda realizarse el cambio en forma segura.
+			Los sistemas de enclavamiento electromecánicos son comandados por un operario mediante un panel de control (figura \ref{fig:Electromecanico}). El operario solicita al sistema de enclavamiento las rutas que el conductor ferroviario necesita para circular. El sistema permitirá solo la operación de cambio de vías seguras. En caso contrario, se tendrán las salidas ''enclavadas'' y el sistema de enclavamiento impedirá mediante los semáforos el avance de la formación hasta que pueda realizarse el cambio en forma segura.
 		
 			\begin{figure}[h!]
 				\centering
@@ -273,7 +273,9 @@ En este capítulo se presentan el contexto del proyecto, los sistemas ferroviari
 		\label{sec:Redundancia}	
 			%La redundancia es obligatoria en sistemas electrónicos críticos para obtener un sistema tolerante a fallas, operando ante eventos no previstos u erróneos.
 			
-			El sistema de enclavamiento moderno es electrónico y debe incluir redundancia de hardware para lograr niveles RAMS adecuados. Pueden utilizarse, por ejemplo, estrategias de \emph{2 en 2} o sistemas de votación \emph{2 de 3},  como se ve en la figura \ref{fig:Redundancia}, para tener siempre una salida sin importar los fallos que puedan producirse\citep{REDUNDANCIA}. La diversidad de plataformas de hardware (representados en diferente color en la figura \ref{fig:Redundancia}), por ejemplo mediante diferentes proveedores de un mismo sistema o plataforma, es otra técnica muy utilizada.
+			El sistema de enclavamiento moderno es electrónico y debe incluir redundancia de hardware para lograr niveles RAMS adecuados. Pueden utilizarse, por ejemplo, estrategias de \emph{2 en 2} o sistemas de votación \emph{2 de 3}. En la figura \ref{fig:Redundancia} se presenta un sistema con redundancia \emph{2 de 3}, el mismo tendrá una salida correcta siempre que se tenga a lo sumo un fallo simultáneo\citep{REDUNDANCIA}. 
+			
+			También se ilustra en la Figura \ref{fig:Redundancia} el concepto de diversidad de plataformas de hardware (representados en diferente color). Para mitigar fallos comunes a una misma plataforma de hardware es una buena estrategia el utilizar sistemas de diferentes marcas o proveedores, para minimizar esta problemática. De esta forma, el resultado global es un sistema inmune a fallas singulares. No obstante, es vulnerable a fallas simultáneas de dos componentes, pero su probabilidad es mínima al ser de diferentes tecnologías u orígenes.
 			
 			\begin{figure}[h]
 				\centering
