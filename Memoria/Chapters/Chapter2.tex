@@ -14,13 +14,13 @@ Es este capítulo se presentan las topologías básicas del sistema ferroviario 
 
 		Para cubrir grandes distancias entre un punto estratégico, como podría ser Vaca Muerta, y un puerto para la exportación de los recursos se requiere una línea ferroviaria con vagones de carga que puedan transportar el producto. Por supuesto, es necesario un ida y vuelta entre trenes vacíos que van a ser llenados en el destino y trenes llenos que van a descargar al puerto la carga que lleven, pero el costo de utilizar dos vías en sentidos opuestos es muy elevado y usar solo una no tiene el menor sentido logístico.
 		
-		Es por eso que se utiliza la topología de bypass cada cierta cantidad de kilómetros de vías simples para poder permitir que trenes en sentidos opuestos se crucen sin riesgo de colisión. En la figura \ref{fig:Bypass} se representa la topología bypass, donde un tren que circula hacia la derecha por la vía principal podría entrar en colisión lateral con un tren que busca ingresar a la red desde una vía secundaria por medio del cambio de vías.
+		Es por eso que se utiliza la topología de bypass cada cierta cantidad de kilómetros de vías simples para poder permitir que trenes en sentidos opuestos se crucen sin riesgo de colisión. En la figura \ref{fig:Bypass_2} se representa la topología bypass, donde un tren que circula hacia la derecha por la vía principal podría entrar en colisión lateral con un tren que busca ingresar a la red desde una vía secundaria por medio del cambio de vías.
 		
 		\begin{figure}[h]
 		\centering
-			\includegraphics[scale=.5]{./Figures/Bypass_2}
+			\includegraphics[scale=.45]{./Figures/Bypass_2}
 			\caption{Topología bypass.}
-			\label{fig:Bypass}
+			\label{fig:Bypass_2}
 		\end{figure}
 
 	\vspace{5cm}
@@ -31,7 +31,7 @@ Es este capítulo se presentan las topologías básicas del sistema ferroviario 
 		
 			\begin{figure}[h]
 			\centering
-				\includegraphics[scale=.5]{./Figures/Estacion}
+				\includegraphics[scale=.45]{./Figures/Estacion}
 				\caption{Topología estación con andén único.}
 				\label{fig:Estacion}
 			\end{figure}
@@ -44,7 +44,7 @@ Es este capítulo se presentan las topologías básicas del sistema ferroviario 
 		
 			\begin{figure}[h]
 			\centering
-				\includegraphics[scale=.45]{./Figures/Hub}
+				\includegraphics[scale=.44]{./Figures/Hub}
 				\caption{Topología hub.}
 				\label{fig:Hub}
 			\end{figure}
@@ -63,75 +63,86 @@ Es este capítulo se presentan las topologías básicas del sistema ferroviario 
 			\end{figure}
 		
 		Ejemplos de esta topología pueden ser las estaciones Once de septiembre (Línea Sarmiento), Alejandro Korn y Constitución (Línea Roca) o Retiro (Línea San Martín, Línea Mitre, Línea Belgrano Norte y Cargas). Incluso hay estaciones que, aunque no son el final del recorrido, pueden funcionar como terminales de ramales mas cortos tales como Ezeiza, que extiende el ramal Constitución-Ezeiza hasta Cañuelas, o Glew, que extiende el ramal Constitución-Glew hasta Alejandro Korn.
-							
+		
+
+\section{Estrategias de resolución}
+
+% Describirlas
+% flujo de trabajo, modelo , escalabilidad explicado ANTES
+% enfoque funcional > historico, muy utilizado
+
 \section{Enfoque funcional}
 	\label{Incompletitud}
 	
-	A la hora de definir itinerarios se utiliza el concepto de ruta, que es el camino definido entre dos semáforos consecutivos. Pero no siempre se establecen todas las rutas posibles, sino solo las necesarias para generar los itinerarios. Por ejemplo, en la figura \ref{fig:EJ_Tabla} se pueden ver dos casos de definición de rutas para una misma topología de vía simple.
+	%Describir enfoque
 	
-	\begin{figure}[h]
+	\subsection{Tabla de enclavamientos}
+	
+		A la hora de definir itinerarios se utiliza el concepto de ruta, que es el camino definido entre dos semáforos consecutivos. Pero no siempre se establecen todas las rutas posibles, sino solo las necesarias para generar los itinerarios. Por ejemplo, en la figura \ref{fig:EJ_Tabla} se pueden ver dos casos de definición de rutas para una misma topología de vía simple.
+		
+			\begin{figure}[h]
+			\centering
+				\includegraphics[scale=.4]{./Figures/Tablas} % Quizas sea bueno hacerlo 2D (Y)
+				\caption{Ejemplo de elaboración de las rutas.} 
+				\label{fig:EJ_Tabla}
+			\end{figure}
+		
+		En el primer caso se puede querer utilizar la vía en un solo sentido, para lo cual el semáforo A es el inicial de la ruta $\text{R}_1$ y el semáforo B es el final de esta. Luego se definen las otras dos rutas y el itinerario para recorrer toda la topología es la concatenación de las rutas $\text{R}_1$,$\text{R}_2$ y $\text{R}_3$, como se describe en la Tabla \ref{Tabla_simple}.
+		
+		\begin{table}[!hbt]
+		\renewcommand{\arraystretch}{1.3}
+	
+		\caption{Tabla de enclavamientos (caso unidireccional)}
+		\label{Tabla_simple}
 		\centering
-			\includegraphics[scale=.4]{./Figures/Tablas}
-			\caption{Ejemplo de elaboración de las rutas.}
-			\label{fig:EJ_Tabla}
-		\end{figure}
 	
-	En el primer caso se puede querer utilizar la vía en un solo sentido, para lo cual el semáforo A es el inicial de la ruta $\text{R}_1$ y el semáforo B es el final de esta. Luego se definen las otras dos rutas y el itinerario para recorrer toda la topología es la concatenación de las rutas $\text{R}_1$,$\text{R}_2$ y $\text{R}_3$, como se describe en la Tabla \ref{Tabla_simple}.
+		\begin{tabular}{c c c c c c c}
+		\hline
+		Ruta & Señal de entrada & Señal de salida \\
+		\hline
+		 1 & $\text{Semáforo}_A$  & $\text{Semáforo}_B$ \\
+		 2 & $\text{Semáforo}_B$  & $\text{Semáforo}_C$ \\
+		 3 & $\text{Semáforo}_C$  & $\text{Semáforo}_D$ \\
+		\hline
+		\end{tabular}
+		\end{table}
+		
+		En el segundo caso de la figura \ref{fig:EJ_Tabla} el itinerario deberá contemplar un uso bidireccional de la vía, por lo que se añaden las rutas $\text{R}_4$,$\text{R}_5$ y $\text{R}_6$, como se describe en la Tabla \ref{Tabla_bidireccional}.
+		
+		\begin{table}[!hbt]
+		\renewcommand{\arraystretch}{1.3}
 	
-	\begin{table}[!hbt]
-	\renewcommand{\arraystretch}{1.3}
-
-	\caption{Tabla de enclavamientos (caso unidireccional)}
-	\label{Tabla_simple}
-	\centering
-
-	\begin{tabular}{c c c c c c c}
-	\hline
-	Ruta & Señal de entrada & Señal de salida \\
-	\hline
-	 1 & $\text{Semáforo}_A$  & $\text{Semáforo}_B$ \\
-	 2 & $\text{Semáforo}_B$  & $\text{Semáforo}_C$ \\
-	 3 & $\text{Semáforo}_C$  & $\text{Semáforo}_D$ \\
-	\hline
-	\end{tabular}
-	\end{table}
+		\caption{Tabla de enclavamientos (caso bidireccional)}
+		\label{Tabla_bidireccional}
+		\centering
 	
-	En el segundo caso de la figura \ref{fig:EJ_Tabla} el itinerario deberá contemplar un uso bidireccional de la vía, por lo que se añaden las rutas $\text{R}_4$,$\text{R}_5$ y $\text{R}_6$, como se describe en la Tabla \ref{Tabla_bidireccional}.
-	
-	\begin{table}[!hbt]
-	\renewcommand{\arraystretch}{1.3}
-
-	\caption{Tabla de enclavamientos (caso bidireccional)}
-	\label{Tabla_bidireccional}
-	\centering
-
-	\begin{tabular}{c c c c c c c}
-	\hline
-	Ruta & Señal de entrada & Señal de salida \\
-	\hline
-	 1 & $\text{Semáforo}_A$  & $\text{Semáforo}_B$ \\
-	 2 & $\text{Semáforo}_B$  & $\text{Semáforo}_C$ \\
-	 3 & $\text{Semáforo}_C$  & $\text{Semáforo}_D$ \\
-	 4 & $\text{Semáforo}_B$  & $\text{Semáforo}_A$ \\
-	 5 & $\text{Semáforo}_C$  & $\text{Semáforo}_B$ \\
-	 6 & $\text{Semáforo}_D$  & $\text{Semáforo}_C$ \\
-	\hline
-	\end{tabular}
-	\end{table}
-	
-	\vspace{5cm}
-	
-	Tanto la Tabla \ref{Tabla_simple} como la \ref{Tabla_bidireccional} son una porción de la llamada tabla de enclavamientos, que se utiliza para diseñar los sistemas de enclavamientos tanto mecánicos como electromecánicos y define completamente el comportamiento del sistema. En esta, cada ruta constituye una fila y presenta diferentes columnas tales como:
-	
-	\begin{itemize}
-		\item Semáforos de entrada y de salida.
-		\item Circuitos de vías que deben estar desocupados para permitir la ruta.
-		\item Pasos a nivel que deben tener la barrera baja para permitir la ruta.
-		\item Posición del cambio requerida para permitir la ruta.
-		\item Rutas conflictivas que inhiben la activación de la ruta.
-	\end{itemize}
-	
-	Como se pudo ver en ambos ejemplos, la necesidad de tales o cuales itinerarios puede requerir distintas tablas de enclavamientos para la misma topología. Algunas tablas serán mas completas que otras y eso puede repercutir en que, al querer añadir nuevas rutas a futuro, la tabla deba ser modificada y por lo tanto el desarrollo del sistema deba cambiar a otro mas complejo.
+		\begin{tabular}{c c c c c c c}
+		\hline
+		Ruta & Señal de entrada & Señal de salida \\
+		\hline
+		 1 & $\text{Semáforo}_A$  & $\text{Semáforo}_B$ \\
+		 2 & $\text{Semáforo}_B$  & $\text{Semáforo}_C$ \\
+		 3 & $\text{Semáforo}_C$  & $\text{Semáforo}_D$ \\
+		 4 & $\text{Semáforo}_B$  & $\text{Semáforo}_A$ \\
+		 5 & $\text{Semáforo}_C$  & $\text{Semáforo}_B$ \\
+		 6 & $\text{Semáforo}_D$  & $\text{Semáforo}_C$ \\
+		\hline
+		\end{tabular}
+		\end{table}
+		
+		\vspace{5cm}
+		
+		Tanto la Tabla \ref{Tabla_simple} como la \ref{Tabla_bidireccional} son una porción de la llamada tabla de enclavamientos, que se utiliza para diseñar los sistemas de enclavamientos tanto mecánicos como electromecánicos y define completamente el comportamiento del sistema. En esta, cada ruta constituye una fila y presenta diferentes columnas tales como:
+		
+		\begin{itemize}
+			\item Semáforos de entrada y de salida.
+			\item Circuitos de vías que deben estar desocupados para permitir la ruta.
+			\item Pasos a nivel que deben tener la barrera baja para permitir la ruta.
+			\item Posición del cambio requerida para permitir la ruta.
+			\item Rutas conflictivas que inhiben la activación de la ruta.
+		\end{itemize}
+		
+		Como se pudo ver en ambos ejemplos, la necesidad de tales o cuales itinerarios puede requerir distintas tablas de enclavamientos para la misma topología. Algunas tablas serán mas completas que otras y eso puede repercutir en que, al querer añadir nuevas rutas a futuro, la tabla deba ser modificada y por lo tanto el desarrollo del sistema deba cambiar a otro mas complejo.
 	
 	\subsection{Modelo del sistema}
 		
@@ -301,7 +312,7 @@ Los módulos del sistema fueron implementados con máquinas de estado finitas co
 	
 	\begin{figure}[h]
 	\centering
-		\includegraphics[scale=.4]{./Figures/FPGA}
+		\includegraphics[scale=.55]{./Figures/FPGA}
 		\caption{FPGA Arty Z7-10 de Digilent}
 	\label{fig:FPGA}	
 	\end{figure}			

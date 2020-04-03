@@ -629,8 +629,6 @@ def analizar_tabla(tabla,test = False):
 def generar_mapa(tabla, iniciar = True):
     v = 0.5
     
-    #fig = plt.figure()
-    
     print("@"*25+" Analizador de grafos v"+str(v)+" "+"@"*25+"\n")
     
     for i in range(len(archivos)):
@@ -638,8 +636,7 @@ def generar_mapa(tabla, iniciar = True):
         # Falta corregir desvios
         if i != 8:          # 8 u 2
             continue
-    
-        
+         
         secciones.clear()
         conexiones.clear()
         
@@ -664,33 +661,19 @@ def generar_mapa(tabla, iniciar = True):
             ajuste = 4
         else:
             ajuste = 3
-        
-        
+              
         buscar_vecinos()       
         clasificar_vecinos()        
         asignar_tipo()    
         cambios_herencia()
         asignar_semaforos()
-        #imprimir_estados()
+        #imprimir_estados()       
         
-        
-        mostrar_grafo(secciones,i,gif_mode = False)
-        
-#        dibujar_secciones(secciones, ajuste)  
-#        imprimir_semaforos(secciones,ajuste)     
-#        conectar_secciones(secciones)
-        
-        #proximo_semaforo(secciones)
-        
-        detectar_rutas(secciones)
-            
-        #dibujar_barrera(5.5,-1, b = 1, h = 3, c = [0.85,0.85,0.85])
-            
-        #ax.axis('off')
-        #plt.savefig('Mapas/Mapa_'+str(i)+'.png',dpi = 100)
-        #plt.show()
-        #plt.pause(0.0001)
-        #plt.clf()
+        mostrar_grafo(secciones,i,gif_mode = False)       
+        #proximo_semaforo(secciones)    
+        detectar_rutas(secciones)        
+        #dibujar_barrera(5.5,-1, b = 1, h = 3, c = [0.85,0.85,0.85])           
+       
         #print(tabla)    
         #tabla = analizar_tabla(tabla)
         #print(tabla)      

@@ -23,11 +23,9 @@ En este capítulo se presentan el contexto del proyecto, los sistemas ferroviari
 		
 	\section{Contexto y motivación}
 	
-		En la actualidad, el sistema ferroviario argentino se encuentra deteriorado y desactualizado. Mientras que otras naciones han progresado en la migración de sus sistemas de transporte de cargas y pasajeros añadiendo electrónica de última generación, Argentina continúa utilizando mecanismos diseñados a principios o mediados del siglo XX.
-				
-		Esto repercute negativamente en la seguridad que dichos sistemas pueden brindar a los pasajeros, conductores, peatones y automovilistas. A la vez, ocurre que los sistemas electrónicos para la seguridad vial de trenes y subtes son importados y muy costosos, además de estar monopolizados por menos de una docena de empresas en todo el mundo. Un sistema de enclavamiento como el que se aborda en este trabajo puede costar entre 5 y 10 millones de dólares\citep{SIEMENS} y se requieren varias decenas de estos sistemas sólo para la zona urbana de la Ciudad Autónoma de Buenos Aires.
+		Mientras que otras naciones han progresado en la migración de sus sistemas de transporte de cargas y pasajeros añadiendo electrónica de última generación, Argentina en muchos casos continúa utilizando mecanismos diseñados a principios o mediados del siglo XX. Esto repercute negativamente en la seguridad que dichos sistemas pueden brindar a los pasajeros, conductores, peatones y automovilistas. A la vez, ocurre que los sistemas electrónicos para la seguridad vial de trenes y subtes son importados y muy costosos, además de constituir un oligopolio conformado por menos de una docena de empresas en todo el mundo. Un sistema de enclavamiento como el que se aborda en este trabajo puede costar entre 5 y 10 millones de dólares\citep{SIEMENS} y se requieren varias decenas de estos sistemas sólo para la zona urbana de la Ciudad Autónoma de Buenos Aires.
 		
-		Las empresas que fabrican sistemas de enclavamiento brindan muy poca información técnica sobre sus desarrollos y la mayoría de las herramientas que utilizan son de uso corporativo. No obstante, deben regirse bajo normativas como las que la Unión Europea ha establecido desde 2004. Las tres normas principales son EN-50126\citep{EN50126} (ciclo de vida), EN-50128\citep{EN50128} (técnicas de software) y EN-50129\citep{EN50129} (técnicas de hardware). %Entre otras cuestiones, se busca la integridad de la seguridad.	
+		Las empresas que fabrican sistemas de enclavamiento brindan muy poca información técnica sobre sus desarrollos y la mayoría de las herramientas que utilizan son de uso privado de cada empresa. No obstante, deben regirse bajo normativas como las que la Unión Europea ha establecido desde 2004. Las tres normas principales son EN-50126\citep{EN50126} (ciclo de vida), EN-50128\citep{EN50128} (técnicas de software) y EN-50129\citep{EN50129} (técnicas de hardware). %Entre otras cuestiones, se busca la integridad de la seguridad.	
 		
 		Los sistemas de enclavamiento son sistemas críticos. Esto implica que una falla puede poner en peligro cientos de vidas humanas y/o costosas inversiones. Por lo tanto, se deben cumplir estrictos parámetros de fiabilidad, disponibilidad, mantenibilidad y seguridad (RAMS, del inglés \textit{Reliability}, \textit{Availability}, \textit{Mantenibility} \textit{and} \textit{Safety}), durante todo el ciclo de vida.
 		
@@ -43,47 +41,81 @@ En este capítulo se presentan el contexto del proyecto, los sistemas ferroviari
 		
 	\section{Propuesta de solución}	
 		
-		En el marco de la Especialización de Sistemas Embebidos se implementó en 2018 un sistema similar al de la Figura \ref{fig:CESE_1}. El mismo contaba con una cantidad limitada de tramos de vías y bifurcaciones que implicaba una cantidad acotada de circuitos lógicos.% complicados pero posibles de obtener y ensayar.
+		En el marco de la Especialización de Sistemas Embebidos se implementó en 2018 un sistema de enclavamiento para la estación Belgrano R de la Línea Mitre, como puede verse en la Figura \ref{fig:CESE_1}. El mismo contaba con una cantidad limitada de tramos de vías y bifurcaciones que implicaba una cantidad acotada de circuitos lógicos.% complicados pero posibles de obtener y ensayar.	
 		
 		La implementación se hacía de forma ad hoc, bloque a bloque y conectándolos de igual manera uno por uno. Diseñar los ensayos demoraba días o semanas y era necesario revisar varias veces las pocas especificaciones que se tenían para corroborar un correcto funcionamiento del sistema.	
 		
+		El desarrollo a medida de la estación Belgrano R permitió afianzar muchos conceptos del mundo ferroviario sobre cómo se comportaban sus diversos componentes y como interactuaban a nivel general. No obstante, de querer replicar el desarrollo en otras locaciones, aún con mínimas diferencias con Belgrano R, hubiese implicado rehacer por completo todo el proceso: análisis, diseño, testing, etc.
+		
 		\begin{figure}[htbp!]
 			\centering
-			\includegraphics[scale=.5]{./Figures/Grafo_VHDL}
-			\caption{Ejemplo de implementación de topología sencilla.}
+			\includegraphics[scale=.27]{./Figures/Belgrano_R}
+			\caption{Ejemplo de implementación de Belgrano R.}
 			\label{fig:CESE_1}
 		\end{figure}	
 		
-		\vspace{5cm}
+		%\vspace{5cm}
+				
+		Fue necesario garantizar no solo la reusabilidad, en el caso de locaciones de un tamaño similar a Belgrano R; sino que también su escalabilidad a topologías mas complejas. Una mayor cantidad de elementos ferroviarios implica una densidad mayor de circuitos lógicos, y estos a su vez repercuten en un crecimiento enormemente de la complejidad del desarrollo, mayor dificultad para implementar los ensayos y mayores chances de errores al extrapolar posibles fallas humanas a sistemas de mayor tamaño.
 		
-		
-		
-		Durante la especialización fue una constante que la locación en la cual se basaba el desarrollo del sistema cambiase abruptamente por otra diferente, representada en la figura \ref{fig:CESE_2}. Por lo que, aun manteniendo los mismos conceptos iniciales, el alcance y los requerimientos cambiaban completamente y se tenía que desechar gran parte de lo construido, tanto del sistema como de los tests, que ya no tenían sentido para el nuevo sistema. El rediseñar de todo de cero fue algo común durante esta etapa del proyecto.
-		
+		La solución a proponer no podía quedar sujeta a una única topología, ya que aun culminando el proyecto se corría el riesgo de que el tiempo empleado fuese desperdiciado si se cambiaban los requerimientos de forma abrupta. Es por eso que, en el marco de la Maestría en Sistemas Embebidos, se marcó como un objetivo central el desarrollo de una herramienta capaz de generar automáticamente la solución electrónica de un sistema de enclavamiento ferroviario, a partir de una representación matemática única de cada topología. En la figura \ref{fig:Generacion} se puede visualizar el proceso, en el cual diversas topologías son procesadas e implementadas en una plataforma FPGA.
+				
 		\begin{figure}[htbp!]
 			\centering
-			\includegraphics[scale=.5]{./Figures/Grafo_VHDL_B}
-			\caption{Ejemplo de implementación de topología compleja.}
-			\label{fig:CESE_2}
-		\end{figure}
-			
-		Una mayor cantidad de elementos ferroviarios implica una densidad mayor de circuitos lógicos, y estos a su vez repercuten en un crecimiento exponencial de la complejidad del desarrollo, mayor dificultad para implementar los ensayos y mayores chances de errores al extrapolar conceptos aún inmaduros a sistemas de mayor tamaño.
-		
-		La solución a proponer no podía quedar sujeta a una única topología, ya que aun culminando el proyecto se corría el riesgo de que el tiempo empleado fuese desperdiciado si se cambiaban los requerimientos de forma tan abrupta. Es por eso que se añadió como objetivo de este trabajo el desarrollo de una herramienta capaz de generar automáticamente la solución electrónica de un sistema de enclavamiento ferroviario, a partir de una representación matemática única de cada topología. En la figura \ref{fig:Generacion} se puede visualizar el proceso, en el cual diversas topologías son procesadas e implementadas en una plataforma FPGA.
-		
-		\begin{figure}[htbp!]
-			\centering
-			\includegraphics[scale=.5]{./Figures/Generacion}
+			\includegraphics[scale=.45]{./Figures/Generacion}
 			\caption{Proceso de generación automática de la solución electrónica.}
 			\label{fig:Generacion}
 		\end{figure}
 		
-		De esta manera, la solución parte de cualquier red ferroviaria, representada mediante un grafo y un analizador de redes ferroviarias (desarrollado también en este trabajo), detecta qué función cumplirá cada elemento de la red y determina cuántos semáforos, de cuántos aspectos, en qué orientación y en qué nodo deben situarse para que el sistema sea seguro. A continuación, en base a los semáforos insertados el analizador calcula todas las rutas posibles que admite esa red y genera automáticamente la solución electrónica para ser implementada mediante una FPGA.
-	
+		\vspace{10cm}
+		
+		% Spyder -> programa
+		% Carpeta de archivos VHDL		
+		% Carpeta de mapas generados
+		% Captura de esquematico generado
+		
+		De esta manera, la solución parte de cualquier red ferroviaria, representada mediante un grafo y un analizador de redes ferroviarias (figura \ref{fig:Spyder}), detecta qué función cumplirá cada elemento de la red y determina cuántos semáforos, de cuántos aspectos, en qué orientación y en qué nodo deben situarse para que el sistema sea seguro. 
+		
+		\begin{figure}[htbp!]
+			\centering
+			\includegraphics[scale=.4]{./Figures/Spyder}
+			\caption{Analizador de redes ferroviarias (Python).}
+			\label{fig:Spyder}
+		\end{figure}
+				
+		A continuación, en base a los semáforos insertados el analizador calcula todas las rutas posibles que admite esa red y genera automáticamente la solución electrónica para ser implementada mediante una FPGA. Puede verse en la figura \ref{fig:Archivos} que la cantidad de archivos creada es considerable, pero todo es producto del análisis de la red y son todos los códigos necesarios para implementar el sistema.
+		
+		\begin{figure}[htbp!]
+			\centering
+			\includegraphics[scale=.5]{./Figures/Archivos}
+			\caption{Archivos VHDL generados por el analizador de redes ferroviarias.}
+			\label{fig:Archivos}
+		\end{figure}
+		
+		El analizador de redes ferroviarias no solo procesa una topología, sino todas las definidas en archivos individuales. Es decir, si la carpeta principal tiene N archivos de texto plano que describen N topologías, el analizador generará N análisis distintos y por cada uno presentará una imagen de la topología recibida, como puede verse en la figura \ref{fig:Topologias}. De la misma manera genera un historial técnico del funcionamiento del sistema llamado tabla de enclavamientos.
+		
+		\begin{figure}[htbp!]
+			\centering
+			\includegraphics[scale=.5]{./Figures/Topologias}
+			\caption{Imágenes generadas para todas las topologías.}
+			\label{fig:Topologias}
+		\end{figure}
+		
+		Finalmente, todo el proceso culmina con la creación del	sistema electrónico, del cual se presenta un esquema de ejemplo en la figura \ref{fig:Esquematico}
+		
+		\begin{figure}[htbp!]
+			\centering
+			\includegraphics[scale=.45]{./Figures/Esquematico}
+			\caption{Esquemático generado por el analizador de redes ferroviarias.}
+			\label{fig:Esquematico}
+		\end{figure}
+		
 		Para poder entender mejor el funcionamiento del sistema es necesario introducir conceptos propios del mundo ferroviario y sus componentes involucrados, que se describen en la sección siguiente.
 
 	\section{Elementos del señalamiento ferroviario}
 	
+		En este trabajo se reutilizan las mismas definiciones de los elementos ferroviarios presentadas en la memoria del Trabajo Final de la Carrera de Especialización en Sistemas Embebidos, ya que son las definiciones mas precisas que este autor pudo elaborar y el paso del tiempo no ha modificado su validez.
+		
 		La función del señalamiento ferroviario es evitar las colisiones entre trenes y los descarrilamientos. A continuación se describen los diferentes elementos que componente el señalamiento y que fueron modelados durante este trabajo.
 		
 		\subsection{Vías}
@@ -97,7 +129,7 @@ En este capítulo se presentan el contexto del proyecto, los sistemas ferroviari
 				\label{fig:Via_eclisa}
 			\end{figure}	
 			
-			\vspace{7cm}
+			%\vspace{7cm}
 			
 			Las vías se dividen en secciones y por seguridad se establece que cada sección puede contener solo una formación por vez. Las mismas pueden tener largos variables en zonas urbanas de entre 500 a 1000 metros en zonas rurales. 
 			
@@ -113,7 +145,7 @@ En este capítulo se presentan el contexto del proyecto, los sistemas ferroviari
 						 	
 			 \begin{figure}[htbp!]
 				\centering
-				\includegraphics[scale=.35]{./Figures/Sem3}
+				\includegraphics[scale=.28]{./Figures/Sem3}
 				\caption{(a) Semáforo de tres aspectos\\(b) Semáforo doble de tres aspectos (Estación Olivos).}
 				\label{fig:Sem_3Aspectos}
 			\end{figure}
@@ -124,10 +156,12 @@ En este capítulo se presentan el contexto del proyecto, los sistemas ferroviari
 			 
 			 \begin{figure}[htbp!]
 				\centering
-				\includegraphics[scale=.33]{./Figures/Sem2}
+				\includegraphics[scale=.28]{./Figures/Sem2}
 				\caption{(a) Semáforo de dos aspectos\\(b) Semáforos de cruce de vías (Estación Lavallol).}
 				\label{fig:Sem_2Aspectos}
 			\end{figure}				
+			
+			\vspace{10cm}
 			
 			Los semáforos de cuatro aspectos son utilizados en la Línea Roca y poseen un doble amarillo antes del amarillo simple, para permitir así tramos de vías mas cortos en forma segura. Como no son objeto de estudio del presente trabajo, no serán explicados aquí.
 		
@@ -142,7 +176,7 @@ En este capítulo se presentan el contexto del proyecto, los sistemas ferroviari
 				\label{fig:Ocupacion}
 			\end{figure}
 			
-			\vspace{7cm}
+			%\vspace{7cm}
 			
 			Si el tramo de vía no tiene ninguna formación ocupándolo, el señalamiento indicará un aspecto verde o amarillo según el estado de ocupación del tramo siguiente. Si la formación ocupa la sección, el señalamiento cambiará su aspecto a rojo para indicar que no puede ingresar ninguna otra formación, a fin de evitar colisiones. Por seguridad también se establecerá a rojo el semáforo anterior y a amarillo el anterior a este (doble recubrimiento), tal como se ilustra en la figura \ref{fig:Recubrimiento}.			
 					
@@ -199,7 +233,7 @@ En este capítulo se presentan el contexto del proyecto, los sistemas ferroviari
 			
 			\begin{figure}[h!]
 				\centering
-				\includegraphics[scale=.45]{./Figures/Cambios}
+				\includegraphics[scale=.4]{./Figures/Cambios}
 				\caption{Posiciones normal e inversa del cambio.}
 				\label{fig:Cambios}
 			\end{figure} 	
@@ -239,9 +273,9 @@ En este capítulo se presentan el contexto del proyecto, los sistemas ferroviari
 				\label{fig:Mecanico}
 			\end{figure}
 
-			Una vez que se constituye una configuración de posiciones de palancas que habilitan un trayecto, estas quedan 'enclavadas' mecánicamente. Es decir, su posición se bloquea y no es físicamente posible cambiarla. A medida que se van moviendo ciertas palancas, las demás que pudieran representar situaciones no seguras quedan enclavadas, y solo se pueden mover aquellas cuyo accionamiento representa una situación segura. De esa manera se garantiza que no se generarán configuraciones tales que las formaciones colisionen entre sí.
+			Una vez que se constituye una configuración de posiciones de palancas que habilitan un trayecto, estas quedan <<enclavadas>> mecánicamente. Es decir, su posición se bloquea y no es físicamente posible cambiarla. A medida que se van moviendo ciertas palancas, las demás que pudieran representar situaciones no seguras quedan enclavadas, y solo se pueden mover aquellas cuyo accionamiento representa una situación segura. De esa manera se garantiza que no se generarán configuraciones tales que las formaciones colisionen entre sí.
 			
-			Las tecnologías mas modernas heredaron el término ''enclavamiento'', aunque ya no se tengan palancas enclavadas en posiciones fijas.
+			Las tecnologías mas modernas heredaron el término <<enclavamiento>>, aunque ya no se tengan palancas enclavadas en posiciones fijas.
 		
 		\subsection{Enclavamientos electromecánicos}
 			
@@ -258,7 +292,7 @@ En este capítulo se presentan el contexto del proyecto, los sistemas ferroviari
 		
 			\vspace{7cm}
 			
-			Los sistemas de enclavamiento electromecánicos son comandados por un operario mediante un panel de control (figura \ref{fig:Electromecanico}). El operario solicita al sistema de enclavamiento las rutas que el conductor ferroviario necesita para circular. El sistema permitirá solo la operación de cambio de vías seguras. En caso contrario, se tendrán las salidas ''enclavadas'' y el sistema de enclavamiento impedirá mediante los semáforos el avance de la formación hasta que pueda realizarse el cambio en forma segura.
+			Los sistemas de enclavamiento electromecánicos son comandados por un operario mediante un panel de control (figura \ref{fig:Electromecanico}). El operario solicita al sistema de enclavamiento las rutas que el conductor ferroviario necesita para circular. El sistema permitirá solo la operación de cambio de vías seguras. En caso contrario, se tendrán las salidas <<enclavadas>> y el sistema de enclavamiento impedirá mediante los semáforos el avance de la formación hasta que pueda realizarse el cambio en forma segura.
 		
 			\begin{figure}[h!]
 				\centering
