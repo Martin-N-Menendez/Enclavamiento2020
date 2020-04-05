@@ -40,7 +40,7 @@
 
 En este capítulo se presentan las decisiones de diseño adoptadas para concretar el desarrollo del trabajo. Además, se describen en forma genérica los módulos necesarios tanto del sistema de enclavamiento como de los bloques auxiliares para concretar una comunicación exitosa entre el sistema y el exterior.
 
-\section{Análisis de la red ferroviaria y generación automática del código}
+\section{Analizador de redes ferroviarias}
 
 	En el marco de la Especialización de Sistemas Embebidos se utilizó el enfoque funcional basado en la tabla de enclavamientos, con las limitaciones ya expuesta en el capítulo 2. La mayoría de los artículos encontrados utilizan ese enfoque\citep{FUNCIONAL}, pero una pequeña porción de los artículos aborda el modelado de los sistemas sin utilizar tablas de enclavamiento \citep{GEOGRAFICO}.
 	
@@ -371,9 +371,9 @@ En este capítulo se presentan las decisiones de diseño adoptadas para concreta
 			\label{fig:FSMD_UART}
 		\end{figure}
 
-		Los bloques de recepción y transmisión son funcionalmente idénticos, pero instanciados de forma diferente para que adopten tamaños distintos y sean conectados a señales distintas, ya que su rol no es el mismo. La FIFO de entrada es la encargada de almacenar los valores ingresados en la plataforma con un \textit{baud-rate} definido y envía su contenido al sistema junto con una serie de pulsos para indicar cuándo deben ser leídos. La FIFO de salida, en cambio, debe almacenar los resultados del sistema según una serie de pulsos generada por el mismo sistema, para luego imprimir el resultado por el puerto serie con el \textit{baud-rate} definido.
+		Los bloques de recepción y transmisión son funcionalmente idénticos, pero instanciados de forma diferente para que adopten tamaños distintos y sean conectados a señales distintas, ya que su rol no es el mismo. La FIFO de entrada es la encargada de almacenar los valores ingresados (conector amarillo) en la plataforma con un \textit{baud-rate} definido y envía su contenido al sistema junto con una serie de pulsos para indicar cuándo deben ser leídos. La FIFO de salida, en cambio, debe almacenar los resultados del sistema según una serie de pulsos generada por el mismo sistema, para luego imprimir el resultado por el puerto serie (conector rosa) con el \textit{baud-rate} definido.
 
-		La FIFO de entrada se utiliza para almacenar una trama de la forma '<Mensaje de largo N>' por lo que espera al menos N+2 bytes, mientras que la FIFO de salida espera mensajes de la forma 'Mensaje de largo M'. Ya que N > M es claro que N + 2 > M en la mayoría de los casos. Aunque también puede ocurrir que la diferencia entre ambos no sea tanta y al implementar el tamaño de las FIFOs en potencias de 2 terminen ambas FIFOs con el mismo tamaño. 
+		La FIFO de entrada se utiliza para almacenar una trama de la forma '<Mensaje de largo N>' (conector negro) por lo que espera al menos N+2 bytes, mientras que la FIFO de salida espera mensajes de la forma 'Mensaje de largo M' (conector negro). Ya que N > M es claro que N + 2 > M en la mayoría de los casos. Aunque también puede ocurrir que la diferencia entre ambos no sea tanta y al implementar el tamaño de las FIFOs en potencias de 2 terminen ambas FIFOs con el mismo tamaño. 
 
 		Con este criterio de diseño, en todos los demás casos, la FIFO de salida tendrá el mismo tamaño que la FIFO de entrada o a lo sumo será $50$\% menor, lo que representa un ahorro de $25$\% de los recursos estimados. Por ejemplo, si necesito la entrada tiene 15 elementos y la salida 7 elementos y le asigno el mismo tamaño a ambas FIFOs; tanto la FIFO de entrada como la de salida necesitarán 16 bits cada una, dando un total de 32 bits. Pero si se aplica el criterio de tamaños desacoplados, entonces para la FIFO de salida podrían asignarse solamente 8 bits, dando un total de 24 bits, un $25$\% menos que los 32 bits que necesitaría si ambas FIFOs quedaran definidas según los datos de la entrada.
 		
@@ -386,10 +386,17 @@ En este capítulo se presentan las decisiones de diseño adoptadas para concreta
 		\begin{figure}[h]
 		\centering
 		\includegraphics[scale=.76]{./Figures/Test/UART_2}
-			\caption{Menú de opciones para comunicarse con el sistema}
+			\caption{Menú de opciones para comunicarse con el sistema-}
 			\label{fig:Menu_UART}
 		\end{figure}
 	
 	\vspace{5cm}
 	
-	Todos los cambios repercuten en el grafo mostrado en pantalla, que cambiará los colores de los semáforos y de los nodos para representar la ocupación del tren; así como también el color de las aristas para indicar la posición de los cambios.
+	Todos los cambios repercuten en el grafo mostrado en pantalla (figura \ref{fig:Grafo_UART}), que cambiará los colores de los semáforos y de los nodos para representar la ocupación del tren; así como también el color de las aristas para indicar la posición de los cambios.
+	
+		\begin{figure}[h]
+		\centering
+		\includegraphics[scale=.76]{./Figures/Mapa_interfaz}
+			\caption{Grafo modificado en tiempo real por la FPGA.}
+			\label{fig:Grafo_UART}
+		\end{figure}

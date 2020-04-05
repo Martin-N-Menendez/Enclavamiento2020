@@ -2,13 +2,13 @@
 
 \label{Chapter2}
 
-Es este capítulo se presentan las topologías básicas del sistema ferroviario y dos enfoques de resolución, con sus ventajas y desventajas antes de abordar la implementación de la solución elegida.
+Es este capítulo se presentan las topologías típicas del sistema ferroviario y los enfoques de resolución, con sus ventajas y desventajas antes de abordar la implementación de la solución elegida.
 
 \section{Topologías típicas}
 \label{Topologias}	
 	El tendido ferroviario argentino dista de ser uniforme: en las zonas rurales predominan vías simples con bypass debido al alto costo de utilizar vías dobles, mientras que en las zonas urbanas son mayoría las estaciones y playas de maniobras a talleres de mantenimiento.
 	
-	Es por eso que el trabajo realizado debe abocarse a muchas locaciones y muy diversos unos de otros. La cantidad de elementos involucrados diverge conforme la complejidad de la topología se incrementa, pero los elementos y sus comportamientos no dejan de ser los mismos de los presentados en el capítulo 1.
+	Es por eso que el trabajo realizado debe abocarse a muchas locaciones y muy diversos unos de otros. La cantidad de elementos involucrados incrementa conforme la complejidad de la topología aumenta, pero los elementos y sus comportamientos no dejan de ser los mismos de los presentados en el capítulo 1.
 
 	\subsection{Bypass}
 
@@ -27,7 +27,7 @@ Es este capítulo se presentan las topologías básicas del sistema ferroviario 
 				
 	\subsection{Estación}
 
-		Los lugares donde se habilita a los pasajeros a ingresar o salir del tren se denominan andenes y se encuentran en las estaciones ferroviarias situadas cada cierta cantidad de kilómetros, en diferentes localidades del país. En la figura \ref{fig:Estacion} se muestra una topología de estación simple con andén central. Es decir, el mismo andén permite utilizar trenes tanto de la vía ascendente como de la descendente. Se añadió un paso a nivel vehicular en las inmediaciones de la estación y dos cambios de vías en orientaciones opuestas para permitir a la hipotética estación realizar trayectos cortos entre terminales.
+		Los lugares donde se habilita a los pasajeros a ingresar o salir del tren se denominan andenes y se encuentran en las estaciones ferroviarias situadas cada cierta cantidad de kilómetros, en diferentes localidades del país. En la figura \ref{fig:Estacion} se muestra una topología de estación simple con andén central. Es decir, el mismo andén permite utilizar trenes tanto de la vía ascendente como de la descendente. Se añadió un paso a nivel vehicular en las inmediaciones de la estación y dos cambios de vías en orientaciones opuestas para permitir a la formación realizar trayectos cortos entre terminales, utilizando la estación como terminal provisoria.
 		
 			\begin{figure}[h]
 			\centering
@@ -67,6 +67,19 @@ Es este capítulo se presentan las topologías básicas del sistema ferroviario 
 
 \section{Estrategias de resolución}
 
+	A lo largo de la investigación se relevaron decenas de artículos, los cuales abordan el problema con dos estrategias de desarrollo muy diferenciadas, con sus ventajas y desventajas: el enfoque funcional y el enfoque geográfico.
+	
+	En el enfoque funcional, el desarrollo se basa en la denominada <<tabla de enclavamientos>>. En la misma cada fila define una ruta que el enclavamiento debe poder ejecutar en caso de cumplir las condiciones que define expresamente cada una. Cada itinerario se forma a partir de la conjunción de diferentes rutas, siempre que estas sean compatibles, lo cual también está indicado en la tabla.
+	
+	Históricamente, tanto los enclavamientos mecánicos como los electromecánicos se han definido previamente por tablas de enclavamientos, las cuales también pueden ser usadas para definir la logística de la red. Es por eso que el personal técnico está muy capacitado tanto en la lectura de la tabla como en su elaboración. Automatizar el proceso es inmediato ya que la tabla de enclavamientos define todas las funcionalidades necesarias.
+	
+	En el enfoque geográfico, en cambio, no hay una descripción macro del sistema a nivel funcional, sino una descripción a nivel de componentes. Es la interacción entre los componentes, en función de su posición geográfica en el entorno, lo que se manifiesta a nivel macro. De poder definir las reglas genéricas de cada elemento y las condiciones en las cuales interactúan, es posible definir cualquier sistema, sin tabla de enclavamientos.
+	
+	Este enfoque dista de ser inmediato, ya que es necesario construir todas las herramientas de análisis de la red y diseñar cada elemento al detalle. La ventaja es que, concluida esa etapa, es un enfoque flexible y completamente independiente de la locación. Además de definir todas las funcionalidades que la red admite y no solo las necesarias para la logística.
+	
+	En las siguientes secciones se profundizará en ambos enfoques, los conceptos necesarios para su plena comprensión, cómo se modifica el flujo de trabajo y el análisis de su escalabilidad. Esto último es de vital importancia a la hora de elegir uno de los dos enfoques.
+	
+	
 % Describirlas
 % flujo de trabajo, modelo , escalabilidad explicado ANTES
 % enfoque funcional > historico, muy utilizado
@@ -74,25 +87,25 @@ Es este capítulo se presentan las topologías básicas del sistema ferroviario 
 \section{Enfoque funcional}
 	\label{Incompletitud}
 	
-	%Describir enfoque
+	El enfoque funcional necesita de un elemento central para su desarrollo, sin el cuál no es posible definir la funcionalidad del sistema: la tabla de enclavamientos.
 	
 	\subsection{Tabla de enclavamientos}
 	
-		A la hora de definir itinerarios se utiliza el concepto de ruta, que es el camino definido entre dos semáforos consecutivos. Pero no siempre se establecen todas las rutas posibles, sino solo las necesarias para generar los itinerarios. Por ejemplo, en la figura \ref{fig:EJ_Tabla} se pueden ver dos casos de definición de rutas para una misma topología de vía simple.
+		A la hora de establecer itinerarios se utiliza el concepto de ruta, que es el camino definido entre dos semáforos consecutivos. Pero no siempre se establecen todas las rutas posibles, sino solo las necesarias para generar los itinerarios. Por ejemplo, en la figura \ref{fig:EJ_Tabla} se pueden ver dos casos de definición de rutas para una misma topología de bypass.
 		
 			\begin{figure}[h]
 			\centering
-				\includegraphics[scale=.4]{./Figures/Tablas} % Quizas sea bueno hacerlo 2D (Y)
+				\includegraphics[scale=.5]{./Figures/Tablas}
 				\caption{Ejemplo de elaboración de las rutas.} 
 				\label{fig:EJ_Tabla}
 			\end{figure}
 		
-		En el primer caso se puede querer utilizar la vía en un solo sentido, para lo cual el semáforo A es el inicial de la ruta $\text{R}_1$ y el semáforo B es el final de esta. Luego se definen las otras dos rutas y el itinerario para recorrer toda la topología es la concatenación de las rutas $\text{R}_1$,$\text{R}_2$ y $\text{R}_3$, como se describe en la Tabla \ref{Tabla_simple}.
+		En el primer caso se utilizarán las vías en un solo sentido (izquierda a derecha), para lo cual el semáforo A es el inicial de la ruta $\text{R}_1$ y el semáforo C es el final de esta. Luego se define la ruta $\text{R}_2$ entre los semáforos de maniobra B y D para completar todas las posibles rutas con sentido izquierda a derecha, como se describe en la Tabla \ref{Tabla_simple}.
 		
 		\begin{table}[!hbt]
 		\renewcommand{\arraystretch}{1.3}
 	
-		\caption{Tabla de enclavamientos (caso unidireccional)}
+		\caption{Tabla de enclavamientos (izquierda a derecha)}
 		\label{Tabla_simple}
 		\centering
 	
@@ -100,19 +113,18 @@ Es este capítulo se presentan las topologías básicas del sistema ferroviario 
 		\hline
 		Ruta & Señal de entrada & Señal de salida \\
 		\hline
-		 1 & $\text{Semáforo}_A$  & $\text{Semáforo}_B$ \\
-		 2 & $\text{Semáforo}_B$  & $\text{Semáforo}_C$ \\
-		 3 & $\text{Semáforo}_C$  & $\text{Semáforo}_D$ \\
+		 1 & $\text{Semáforo}_A$  & $\text{Semáforo}_C$ \\
+		 2 & $\text{Semáforo}_B$  & $\text{Semáforo}_D$ \\
 		\hline
 		\end{tabular}
 		\end{table}
 		
-		En el segundo caso de la figura \ref{fig:EJ_Tabla} el itinerario deberá contemplar un uso bidireccional de la vía, por lo que se añaden las rutas $\text{R}_4$,$\text{R}_5$ y $\text{R}_6$, como se describe en la Tabla \ref{Tabla_bidireccional}.
+		En el segundo caso de la figura \ref{fig:EJ_Tabla} el itinerario podría contemplar también un uso estrictamente de derecha a izquierda. Sumando así las rutas $\text{R}_3$ y $\text{R}_4$, como se describe en la Tabla \ref{Tabla_bidireccional}.
 		
 		\begin{table}[!hbt]
 		\renewcommand{\arraystretch}{1.3}
 	
-		\caption{Tabla de enclavamientos (caso bidireccional)}
+		\caption{Tabla de enclavamientos (derecha a izquierda)}
 		\label{Tabla_bidireccional}
 		\centering
 	
@@ -120,18 +132,35 @@ Es este capítulo se presentan las topologías básicas del sistema ferroviario 
 		\hline
 		Ruta & Señal de entrada & Señal de salida \\
 		\hline
-		 1 & $\text{Semáforo}_A$  & $\text{Semáforo}_B$ \\
-		 2 & $\text{Semáforo}_B$  & $\text{Semáforo}_C$ \\
-		 3 & $\text{Semáforo}_C$  & $\text{Semáforo}_D$ \\
-		 4 & $\text{Semáforo}_B$  & $\text{Semáforo}_A$ \\
-		 5 & $\text{Semáforo}_C$  & $\text{Semáforo}_B$ \\
-		 6 & $\text{Semáforo}_D$  & $\text{Semáforo}_C$ \\
+		 3 & $\text{Semáforo}_C$  & $\text{Semáforo}_A$ \\
+		 4 & $\text{Semáforo}_D$  & $\text{Semáforo}_B$ \\
 		\hline
 		\end{tabular}
 		\end{table}
 		
-		\vspace{5cm}
+		Según el uso que se le quiera dar a la topología, ambas tablas de enclavamientos son válidas. Incluso podemos notar que ambas están incompletas porque una tabla no contempla los casos de la otra. Podríamos definir una nueva tabla de enclavamientos como la conjunción de ambas, como se describe en la Tabla \ref{Tabla_total}.
 		
+		\begin{table}[!hbt]
+		\renewcommand{\arraystretch}{1.3}
+	
+		\caption{Tabla de enclavamientos (caso bidireccional)}
+		\label{Tabla_total}
+		\centering
+	
+		\begin{tabular}{c c c c c c c c }
+		\hline
+		Ruta & Señal de entrada & Señal de salida & Rutas conflictivas \\
+		\hline
+		 1 & $\text{Semáforo}_A$  & $\text{Semáforo}_C$ & $\text{R}_2$, $\text{R}_3$ y $\text{R}_4$ \\
+		 2 & $\text{Semáforo}_B$  & $\text{Semáforo}_D$ & $\text{R}_1$, $\text{R}_3$ y $\text{R}_4$ \\
+		 3 & $\text{Semáforo}_C$  & $\text{Semáforo}_A$ & $\text{R}_1$, $\text{R}_2$ y $\text{R}_4$ \\
+		 4 & $\text{Semáforo}_D$  & $\text{Semáforo}_B$ & $\text{R}_1$, $\text{R}_2$ y $\text{R}_3$ \\
+		\hline
+		\end{tabular}
+		\end{table}
+		
+		Se añade a la tabla el concepto de ruta conflictiva. Es decir, rutas que no pueden coexistir con la ruta que se quiere pedir. Por ejemplo, $\text{R}_1$ y $\text{R}_3$ van en sentidos opuestos y por lo tanto no puede permitirse $\text{R}_1$ si un tren se encuentra realizando $\text{R}_3$. De la misma forma, como $\text{R}_1$ requiere que la máquina de cambios se encuentre en posición normal, no puede coexistir ni con $\text{R}_3$ ni con $\text{R}_4$ que requieren el que el cambio se encuentre en posición reversa. Es posible deducir el resto de rutas conflictivas de forma análoga.
+			
 		Tanto la Tabla \ref{Tabla_simple} como la \ref{Tabla_bidireccional} son una porción de la llamada tabla de enclavamientos, que se utiliza para diseñar los sistemas de enclavamientos tanto mecánicos como electromecánicos y define completamente el comportamiento del sistema. En esta, cada ruta constituye una fila y presenta diferentes columnas tales como:
 		
 		\begin{itemize}
@@ -146,24 +175,24 @@ Es este capítulo se presentan las topologías básicas del sistema ferroviario 
 	
 	\subsection{Modelo del sistema}
 		
-		En el enfoque de desarrollo llamado funcional se utiliza la tabla de enclavamientos como elemento central de decisión para el diseño y funcionamiento del sistema. Es la ruta la que impone qué acciones deben ser tomadas y cuáles prohibidas, y por lo tanto se abstrae de la topología una vez definida la tabla.
-			
-		En la figura \ref{fig:Modelo_Funcional} se presenta un modelo del sistema con enfoque funcional, donde cada bloque horizontal en diferentes colores representa máquinas de estados que modelan los elementos de entrada indicados. Todos ellos, gobernados por una máquina de estados general representada en un bloque vertical verde que se diseña en base a la tabla de enclavamientos. 	
+		En el enfoque funcional se utiliza la tabla de enclavamientos como elemento central de decisión para el diseño y funcionamiento del sistema. Es la ruta la que impone qué acciones deben ser tomadas y cuáles prohibidas, y por lo tanto se abstrae de la topología una vez definida la tabla.	En la figura \ref{fig:Modelo_Funcional} se presenta un modelo del sistema con enfoque funcional.
 		
 			\begin{figure}[h!]
 			\centering
-				\includegraphics[scale=.55]{./Figures/Funcional}
+				\includegraphics[scale=.45]{./Figures/Funcional}
 				\caption{Enfoque funcional.}
 				\label{fig:Modelo_Funcional}
 			\end{figure}
 		
-		\vspace{5cm}
-			
+		\vspace{10cm}
+		
+		Cada bloque horizontal en diferentes colores representa máquinas de estados que modelan los elementos de entrada indicados. Todos ellos, gobernados por una máquina de estados general representada en un bloque vertical verde que se diseña en base a la tabla de enclavamientos. 	
+		
 		La salida del sistema actúa sobre todo el señalamiento, menos la ocupación de los tramos de vías porque son elementos de solo lectura. Puede verse que conforme se añadan mas rutas a la tabla de enclavamientos, las máquinas de estados serán mas complejas y de mayor tamaño.
 	
 	\subsection{Flujo de trabajo}
 		
-		La tabla de enclavamientos es la piedra angular de todo el proceso, sin ella no se puede realizar ningún diseño. En la figura \ref{fig:Work_Funcional} se ilustra el flujo de trabajo en el enfoque funcional.		
+		En el enfoque funcional, la tabla de enclavamientos es la piedra angular de todo el proceso, sin ella no se puede realizar ningún diseño. En la figura \ref{fig:Work_Funcional} se ilustra el flujo de trabajo para este enfoque.		
 			
 		\begin{figure}[h]
 		\centering
@@ -201,9 +230,9 @@ Es este capítulo se presentan las topologías básicas del sistema ferroviario 
 					
 \section{Enfoque geográfico}
 
-	En el mundo de la electrónica el concepto de red circuital se usa ampliamente. El funcionamiento de la red a nivel macro es la consecuencia directa de los principios físicos de funcionamiento de pequeños elementos discretos (resistores, capacitores, inductores, etc.) y su interconexión entre ellos. Sabiendo como funciona un componente es posible predecir y simular el comportamiento de una red entera llena de estos, sin importar que sean de diferente valor; solo basta con que sean regidos por el mismo principio físico.
+	En el enfoque geográfico el énfasis no está puesto en la funcionalidad a nivel sistema sino en la interacción entre los componentes dependiendo de la posición de los mismos en la red. Por ende no necesita una tabla de enclavamientos que defina su comportamiento, sino definir genéricamente los componentes y establecer una representación matemática de las conexiones entre ellos. En ese sentido, este enfoque requiere un nivel de análisis previo mucho mayor y, por lo tanto, un tiempo de desarrollo mas elevado. No obstante, su flexibilidad a la hora de escalar a topologías de mayor tamaño es notable.
 	
-	Es entonces que removemos el concepto de ruta como elemento central del desarrollo y nos enfocamos a modelar los elementos discretos de la red ferroviaria (semáforos, barreras, cambios, circuitos de vía). Este enfoque se denomina geográfico, ya que el comportamiento macro de la red es consecuencia directa de la relación entre los elementos mencionados. En la figura \ref{fig:Enfoque_Geografico} se representa la idea central de este enfoque: la variedad de elementos es finita y puede ser modelada fácilmente; el foco del desarrollo debe estar centrado en el análisis de la red ferroviaria misma.
+	Es entonces que removemos el concepto de ruta como elemento central del desarrollo y nos enfocamos a modelar los elementos discretos de la red ferroviaria (semáforos, barreras, cambios, circuitos de vía). En la figura \ref{fig:Enfoque_Geografico} se representa la idea central de este enfoque: la variedad de elementos es finita y puede ser modelada fácilmente; el foco del desarrollo debe estar centrado en el análisis de la red ferroviaria misma.
 	
 		\begin{figure}[h]
 		\centering
@@ -216,7 +245,7 @@ Es este capítulo se presentan las topologías básicas del sistema ferroviario 
 	
 	\subsection{Análisis de grafos}
 		
-		Un grafo es una representación matemática de las relaciones (aristas) entre componentes (nodos) de una red. Utilizado ampliamente en ciencias de la computación y matemática, es sencillo llegar a un modelo de grafos partiendo desde una topología como la de la figura \ref{fig:Topologia_Grafo}, donde a cada tramo de vía se le asignó un nodo y cada arista del grafo representa el vínculo que existe entre ese tramo y sus vecinos.
+		Para poder representar las conexiones entre los elementos ferroviarios, se introduce el concepto de grafo. Un grafo es una representación matemática de las relaciones (aristas) entre componentes (nodos) de una red. Utilizado ampliamente en ciencias de la computación y matemática, es sencillo llegar a un modelo de grafos partiendo desde una topología como la de la figura \ref{fig:Topologia_Grafo}, donde a cada tramo de vía se le asignó un nodo y cada arista del grafo representa el vínculo que existe entre ese tramo y sus vecinos.
 		
 		\begin{figure}[h]
 		\centering
@@ -268,7 +297,7 @@ Es este capítulo se presentan las topologías básicas del sistema ferroviario 
 				\label{fig:Escala_Geografico}
 			\end{figure}
 		
-			\vspace{5cm}
+			%\vspace{5cm}
 			
 			Todos los tests unitarios, referidos a cada bloque del mismo color que modelan un mismo espacio físico (que puede o no contener una barrera, un cambio o varios semáforos), se elaboran una única vez, sin importar la cantidad de elementos idénticos presentes en la topología. Sumado a que, como en este enfoque se identifican todas las rutas y por lo tanto se pueden generar todos los tests necesarios, la batería de ensayos que otorga este enfoque es completa. Es decir, siempre se tendrá una cantidad de tests mayor o igual que la necesaria para cualquier necesidad presente o futura.
 		
@@ -287,7 +316,7 @@ Los módulos del sistema fueron implementados con máquinas de estado finitas co
 		\label{fig:FSMD}
 	\end{figure}
 	
-	\vspace{5cm}
+	%\vspace{5cm}
 	
 	Siguiendo los lineamientos recomendados, una FSMD debe ser diseñada, implementada y simulada de acuerdo con los siguientes pasos:
 	
@@ -304,7 +333,7 @@ Los módulos del sistema fueron implementados con máquinas de estado finitas co
 	
 	Esta metodología puede inferir mas tiempo de desarrollo que el habitual, pero ya ha demostrado ser exitosa en el proyecto realizado por el Mg. Ing. Facundo Larosa, codirector de este trabajo. Por lo que se aprovechó su experiencia y conocimiento para resolver esta etapa del desarrollo. Los beneficios son un mayor control del diseño a bajo nivel, una mayor portabilidad y un mas eficiente uso de los recursos de la plataforma electrónica.
 
-	\vspace{5cm}
+	%\vspace{5cm}
 
 \section{Plataforma utilizada}
 
