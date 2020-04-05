@@ -23,13 +23,13 @@ En este capítulo se presentan el contexto del proyecto, los sistemas ferroviari
 		
 	\section{Contexto y motivación}
 	
-		Mientras que otras naciones han progresado en la migración de sus sistemas de transporte de cargas y pasajeros añadiendo electrónica de última generación, Argentina en muchos casos continúa utilizando mecanismos diseñados a principios o mediados del siglo XX. Esto repercute negativamente en la seguridad que dichos sistemas pueden brindar a los pasajeros, conductores, peatones y automovilistas. A la vez, ocurre que los sistemas electrónicos para la seguridad vial de trenes y subtes son importados y muy costosos, además de constituir un oligopolio conformado por menos de una docena de empresas en todo el mundo. Un sistema de enclavamiento como el que se aborda en este trabajo puede costar entre 5 y 10 millones de dólares\citep{SIEMENS} y se requieren varias decenas de estos sistemas sólo para la zona urbana de la Ciudad Autónoma de Buenos Aires.
+		Mientras que otras naciones han progresado en la migración de sus sistemas de transporte de cargas y pasajeros añadiendo electrónica de última generación, Argentina en muchos casos continúa utilizando mecanismos diseñados a principios o mediados del siglo XX\cite{cite0,cite2}. Esto repercute negativamente en la seguridad que dichos sistemas pueden brindar a los pasajeros, conductores, peatones y automovilistas. A la vez, ocurre que los sistemas electrónicos para la seguridad vial de trenes y subtes son importados y muy costosos, además de constituir un oligopolio conformado por menos de una docena de empresas en todo el mundo. Un sistema de enclavamiento como el que se aborda en este trabajo puede costar entre 5 y 10 millones de dólares\citep{SIEMENS} y se requieren varias decenas de estos sistemas sólo para la zona urbana de la Ciudad Autónoma de Buenos Aires.
 		
-		Las empresas que fabrican sistemas de enclavamiento brindan muy poca información técnica sobre sus desarrollos y la mayoría de las herramientas que utilizan son de uso privado de cada empresa. No obstante, deben regirse bajo normativas como las que la Unión Europea ha establecido desde 2004. Las tres normas principales son EN-50126\citep{EN50126} (ciclo de vida), EN-50128\citep{EN50128} (técnicas de software) y EN-50129\citep{EN50129} (técnicas de hardware). %Entre otras cuestiones, se busca la integridad de la seguridad.	
+		Las empresas que fabrican sistemas de enclavamiento \cite{cite5,cite6,cite7,cite8,cite9,cite10,cite12,cite13,cite14,cite15} brindan muy poca información técnica sobre sus desarrollos y la mayoría de las herramientas que utilizan son de uso privado de cada empresa. No obstante, deben regirse bajo normativas como las que la Unión Europea ha establecido desde 2004. Las tres normas principales son EN-50126\cite{EN50126} (ciclo de vida), EN-50128\cite{EN50128} (técnicas de software) y EN-50129\cite{EN50129} (técnicas de hardware). %Entre otras cuestiones, se busca la integridad de la seguridad.	
 		
 		Los sistemas de enclavamiento son sistemas críticos. Esto implica que una falla puede poner en peligro cientos de vidas humanas y/o costosas inversiones. Por lo tanto, se deben cumplir estrictos parámetros de fiabilidad, disponibilidad, mantenibilidad y seguridad (RAMS, del inglés \textit{Reliability}, \textit{Availability}, \textit{Mantenibility} \textit{and} \textit{Safety}), durante todo el ciclo de vida.
 		
-		En este contexto, en 2015 se creó el CONICET-GICSAFe, cuyas siglas corresponden a Grupo de Investigación en Calidad y Seguridad de las Aplicaciones Ferroviarias, conformado por docentes e investigadores de una decena de universidades e instituciones públicas argentinas\citep{GICSAFE}. El grupo desarrolla sistemas electrónicos e informáticos para aplicaciones ferroviarias relacionadas con la seguridad, a partir de la generación de un prototipo funcional y la documentación correspondiente que luego se transfiere en su totalidad a los clientes. En particular, esta metodología se utiliza en este trabajo con Trenes Argentinos, que es la Sociedad del Estado que opera las líneas Roca, Sarmiento, Mitre, San Martín y Belgrano Sur, entre otras. Luego el cliente puede fabricar el sistema diseñado por el GICSAFe o licitar su fabricación, así como modificar el sistema de acuerdo con sus necesidades.   
+		En este contexto, en 2015 se creó el CONICET-GICSAFe \cite{GICSAFE}, cuyas siglas corresponden a Grupo de Investigación en Calidad y Seguridad de las Aplicaciones Ferroviarias, conformado por docentes e investigadores de una decena de universidades e instituciones públicas argentinas. El grupo desarrolla sistemas electrónicos e informáticos para aplicaciones ferroviarias relacionadas con la seguridad, a partir de la generación de un prototipo funcional y la documentación correspondiente que luego se transfiere en su totalidad a los clientes. En particular, esta metodología se utiliza en este trabajo con Trenes Argentinos\cite{Trenes}, que es la Sociedad del Estado que opera las líneas Roca, Sarmiento, Mitre, San Martín y Belgrano Sur, entre otras. Luego el cliente puede fabricar el sistema diseñado por el GICSAFe o licitar su fabricación, así como modificar el sistema de acuerdo con sus necesidades.   
 	
 		En el marco de la Especialización de Sistemas Embebidos, desde julio de 2018 se tuvieron reuniones con diferentes funcionarios y profesionales de Trenes Argentinos. En particular los encuentros se desarrollaron con la Gerencia de Ingeniería, Gerencia de Seguridad Operacional, Subgerencia de Desarrollo y Normas Técnicas, Subgerencia de Transporte, Gerencia de Señalamiento, entre otros, de los cuales surgió el interés en el desarrollo del presente proyecto. De dichas visitas y otras posteriores se obtuvo la totalidad de las fotografías incluidas en esta memoria.
 			 	
@@ -92,7 +92,7 @@ En este capítulo se presentan el contexto del proyecto, los sistemas ferroviari
 			\label{fig:Archivos}
 		\end{figure}
 		
-		El analizador de redes ferroviarias no solo procesa una topología, sino todas las definidas en archivos individuales. Es decir, si la carpeta principal tiene N archivos de texto plano que describen N topologías, el analizador generará N análisis distintos y por cada uno presentará una imagen de la topología recibida, como puede verse en la figura \ref{fig:Topologias}. De la misma manera genera un historial técnico del funcionamiento del sistema llamado tabla de enclavamientos.
+		El analizador de redes ferroviarias no solo procesa una topología, sino todas las definidas en archivos individuales. Es decir, si la carpeta principal tiene N archivos de texto plano que describen N topologías, el analizador generará N análisis distintos y por cada uno presentará una imagen de la topología recibida, como puede verse en la figura \ref{fig:Topologias}. De la misma manera genera un historial técnico del funcionamiento del sistema llamado tabla de enclavamientos \cite{cite21,cite22}.
 		
 		\begin{figure}[htbp!]
 			\centering
@@ -133,7 +133,7 @@ En este capítulo se presentan el contexto del proyecto, los sistemas ferroviari
 			
 			Las vías se dividen en secciones y por seguridad se establece que cada sección puede contener solo una formación por vez. Las mismas pueden tener largos variables en zonas urbanas de entre 500 a 1000 metros en zonas rurales. 
 			
-			Cada vía puede ser clasificada en dos grupos: vías ascendentes o vías descendentes. Las ascendentes son aquellas por las que los trenes circulan únicamente en la dirección del kilometraje en sentido creciente. Las descendentes son aquellas por las que los trenes circulan únicamente en la dirección del kilometraje en sentido decreciente\citep{RITO}. El kilómetro 0 es la estación principal de la línea ferroviaria, como por ejemplo: Plaza Constitución (para la línea Roca), Once de septiembre (para la línea Sarmiento) o Retiro (para las líneas Mitre y San Martín).
+			Cada vía puede ser clasificada en dos grupos: vías ascendentes o vías descendentes. Las ascendentes son aquellas por las que los trenes circulan únicamente en la dirección del kilometraje en sentido creciente. Las descendentes son aquellas por las que los trenes circulan únicamente en la dirección del kilometraje en sentido decreciente\cite{RITO}. El kilómetro 0 es la estación principal de la línea ferroviaria, como por ejemplo: Plaza Constitución (para la línea Roca), Once de septiembre (para la línea Sarmiento) o Retiro (para las líneas Mitre y San Martín).
 			
 			Existen vías de maniobra que pueden ser tanto ascendentes como descendentes. Estas vinculan, mediante un cambio de vías, una sección ascendente con otra descendente, en la cual los trenes deben circular a una velocidad reducida.
 			
@@ -280,9 +280,7 @@ En este capítulo se presentan el contexto del proyecto, los sistemas ferroviari
 		\subsection{Enclavamientos electromecánicos}
 			
 			A mediados del siglo XX se desarrolló el sistema de enclavamiento electromecánico. Su funcionamiento se basa en relés (figura \ref{fig:Reles}) y circuitos de vía, de forma tal de poder detectar la presencia de un tren y comandar tanto las señales como las barreras de los pasos a nivel.
-	
-			%Se visitó un sistema de enclavamientos en la estación Lavallol (figura \ref{fig:Reles})  de la Línea Roca. La misma es una sala refrigerada, de gran tamaño, con varios bastidores que contienen cientos de relés.	
-			
+				
 			\begin{figure}[htbp!]
 				\centering
 				\includegraphics[scale=.08]{./Figures/Reles}
@@ -300,18 +298,13 @@ En este capítulo se presentan el contexto del proyecto, los sistemas ferroviari
 				\caption{Panel de control enclavamientos - Central Lavallol.}
 				\label{fig:Electromecanico}
 			\end{figure}
-		
-			%\vspace{5cm}
 			
-			%El sistema debe evitar colisiones en los trenes, pero no siempre se tiene toda la red con circuitos de vías. Por lo tanto es el operario el que debe recordar a que sectores envió tal o cual formación. Lo que implica una enorme responsabilidad que recae en el operario y el factor de error humano aumenta conforme el personal se encuentre mas cansado o distraído por alguna razón.
-		
 		\subsection{Enclavamientos electrónicos}
 		\label{sec:Redundancia}	
-			%La redundancia es obligatoria en sistemas electrónicos críticos para obtener un sistema tolerante a fallas, operando ante eventos no previstos u erróneos.
 			
-			El sistema de enclavamiento moderno es electrónico y debe incluir redundancia de hardware para lograr niveles RAMS adecuados. Pueden utilizarse, por ejemplo, estrategias de \emph{2 en 2} o sistemas de votación \emph{2 de 3}. En la figura \ref{fig:Redundancia} se presenta un sistema con redundancia \emph{2 de 3}, el mismo tendrá una salida correcta siempre que se tenga a lo sumo un fallo simultáneo\citep{REDUNDANCIA}. 
+			El sistema de enclavamiento moderno es electrónico y debe incluir redundancia de hardware para lograr niveles RAMS adecuados. La redundancia en sistemas críticos se define por medio de la abreviatura NooM, donde M representa a la cantidad de módulos de medición o decisión que posee el sistema y N la cantidad de dichos módulos que deben funcionar correctamente para que el sistema opere normalmente\cite{cite17}. De la investigación realizada surge que el $66$\% de las empresas utiliza una redundancia 2oo2 o 2oo3 para alcanzar los niveles de seguridad requeridos\cite{Trenes,cite5,cite6,cite9,cite10,cite12,cite13,cite14,cite15}. Sólo una pequeña porción de las mismas utiliza redundancias 1oo2\cite{cite7} o 2oo4\cite{cite8}. 
 			
-			También se ilustra en la Figura \ref{fig:Redundancia} el concepto de diversidad de plataformas de hardware (representados en diferente color). Para mitigar fallos comunes a una misma plataforma de hardware es una buena estrategia el utilizar sistemas de diferentes marcas o proveedores, para minimizar esta problemática. De esta forma, el resultado global es un sistema inmune a fallas singulares. No obstante, es vulnerable a fallas simultáneas de dos componentes, pero su probabilidad es mínima al ser de diferentes tecnologías u orígenes.
+			En consecuencia, se puede afirmar que una redundancia 2oo2 o 2oo3 (figura \ref{fig:Redundancia}) es representativa de los sistemas analizados y puede utilizarse como esquema de partida para un diseño propio. En un sistema con redundancia 2oo3 se tendrá una salida correcta siempre que se tenga a lo sumo un fallo simultáneo\citep{REDUNDANCIA}. 
 			
 			\begin{figure}[h]
 				\centering
@@ -320,153 +313,10 @@ En este capítulo se presentan el contexto del proyecto, los sistemas ferroviari
 				\label{fig:Redundancia}
 			\end{figure}
 			
+			También se ilustra en la Figura \ref{fig:Redundancia} el concepto de diversidad de plataformas de hardware (representados en diferente color). Para mitigar fallos comunes a una misma plataforma de hardware es una buena estrategia el utilizar sistemas de diferentes marcas o proveedores, para minimizar esta problemática. De esta forma, el resultado global es un sistema inmune a fallas singulares. No obstante, es vulnerable a fallas simultáneas de dos componentes, pero su probabilidad es mínima al ser de diferentes tecnologías u orígenes.
+			
 			En este trabajo se implementó un sistema de enclavamiento electrónico, como se explicará en el Capítulo \ref{Chapter3}.
 	 
-	 		%\vspace{5cm}
-	 		
-%	\section{Tabla de enclavamientos}
-%	\label{Tabla_enclavamientos}
-%	\label{sec:Semi}	
-%		La forma de diseñar y presentar los enclavamientos es mediante tablas de enclavamiento. La figura \ref{fig:Matheu_a} presenta la tabla correspondiente a la estación Matheu de la Línea Mitre.
-%	
-%		\begin{figure}[htbp!]
-%			\centering
-%			%\includegraphics[scale=.4]{./Figures/Matheu_a}
-%			\caption{Tabla de enclavamientos mecánicos (Matheu-Mitre).}
-%			\label{fig:Matheu_a}
-%		\end{figure}
-%		
-%		La tabla define en que posiciones se enclavan las palancas de la segunda columna, respecto de las condiciones de la columna 'normal' e 'invertida'.
-%		
-%		Por ejemplo, en el caso de la palanca 1, que corresponde a la señal de distancia 2 y 3, si las palancas 2 y 3 se encuentran en posición invertida, entonces la palanca 1 se enclavará en invertida sin posibilidad de pasarla a normal hasta que las otras dos palancas reviertan su estado.
-%			
-%		En este trabajo se utiliza una forma alternativa de representar las tablas de enclavamiento, que se introduce a continuación, mediante un ejemplo en base a la figura \ref{fig:Esquema_vacio}.		
-%		
-%		\begin{figure}[htbp!]
-%			\centering
-%			%\includegraphics[scale=.3]{./Figures/Tabla_vacia}
-%			\caption{Esquema de ejemplo en el que las señales no se han asignado.}
-%			\label{fig:Esquema_vacio}
-%		\end{figure}
-%		
-%		\vspace{5cm}
-%		
-%		Se supone una topología de vías dobles con un cambio de vías entre ambas para realizar maniobras, dos pasos peatonales con campanilla (paso a nivel 1 y 3) y un paso a nivel vehicular con barrera automática (paso a nivel 2). 
-%		
-%		Además se presentan los semáforos de tres aspectos correspondientemente numerados de forma creciente en el sentido de circulación marcado para cada trayecto (impares para la vía ascendente y pares de la descendente). Se ilustran además, los semáforos de dos aspectos (10 y 11) para las maniobras de cambio de vías.
-%		
-%		Para comenzar el razonamiento, todo el señalamiento se muestra apagado (gris) ya que se busca determinar en qué aspecto debe estar cada señal. Supóngase que una formación ocupa el circuito de vía 8, detenido antes del semáforo 6 y se dispone a completar el trayecto descendente hacia la sección 6 de la vía.%, correspondiente a la estación. %Cabe destacar que el cambio de vía en este caso se toma en reversa, por lo que se denomina una 'maniobra de talón'.
-%		
-%		%Si nos encontramos en el modo semiautomático, el operario debe solicitar al sistema de enclavamiento cada ruta que desee que la formación recorra. Una ruta siempre se define de un semáforo al semáforo inmediatamente consecutivo. Por lo tanto mientras la ruta no esté aprobada los semáforos deben estar en aspecto rojo y como la aprobación requiere la presencia de una formación ocupando el circuito de vía inicial de la misma, se concluye que la vía ascendente tendrá todos los semáforos en rojo en ausencia de formación alguna.
-%		
-%		Ya que la formación usará la vía principal, los semáforos 10 y 11 correspondientes al cambio de vías también estarán a rojo, al igual que los semáforos 2 y 8 que no involucran a la ruta a solicitar. La ruta en cuestión se definirá entre los semáforos 6 (inicial) y el 4 (final). Para comenzar el trayecto la formación necesita permiso para acceder a los tramos de vías siguientes, para lo cual el semáforo 6 deberá estar en aspecto verde. Para finalizar el trayecto se necesita que el semáforo 4 se encuentre en rojo. Por seguridad se pusieron a rojo el semáforo 8 (para evitar colisiones de formaciones que vengan antes de la formación de ejemplo) y el semáforo 2 (por si la formación no llega a frenar ante el semáforo 4).
-%		
-%		El paso a nivel número 3 debería estar a peligro desde que la formación ocupo el circuito de vía 10, el número 2 debería tener su barrera baja por la misma razón y el número 1 estará a peligro tan pronto la formación ocupe el circuito de vía 6b. Por lo tanto los tres pasos a nivel se encuentran a peligro y no deberán permitir el cruce ni de vehículos ni de peatones mientras la ruta esté en ejecución. Durante todo el trayecto también se deberá garantizar que la máquina de cambios se encuentre en posición 'normal'. De esta forma se tiene la configuración que se muestra en la figura \ref{fig:Esquema_lleno}.
-%		
-%		\begin{figure}[htbp!]
-%			\centering
-%			%\includegraphics[scale=.3]{./Figures/Tabla_llena}
-%			\caption{Esquema de ejemplo en el que las señales se han asignado.}
-%			\label{fig:Esquema_lleno}
-%		\end{figure}
-%		
-%		La Tabla \ref{tab:Ejemplo_semi} representa la situación descripta, siendo:
-%		
-%		\begin{table}[htbp!]
-%			\centering
-%			\caption[Modelo de Tabla de enclavamientos semiautomáticos]{Modelo de Tabla de enclavamientos semiautomáticos}
-%			\resizebox{\textwidth}{!}{  
-%			\begin{tabular}{c|cccccc|ccccc|cccc|cc|c|ccc}    
-%				\toprule
-%				& \multicolumn{6}{c|}{Circuitos de vía (DES)} & \multicolumn{5}{c|}{Semáforos ASC} & \multicolumn{4}{c|}{Semáforos DES} & \multicolumn{2}{c|}{Cambio} & M & \multicolumn{3}{c}{PaN} \\
-%				\textbf{Rutas} 	 & 2 & 4 & 6a & 6b & 8 & 10 & 1 & 3 & 5 & 7 & 9 & 2 & 4 & 6 & 8 & 10 & 11 & - & 1 & 2 & 3  \\
-%				\midrule
-%				$\text{Ruta}$ &O&O&O&O&X&O&R&R&R&R&R&R&R&V&R&R&R&N&B&B&B\\ 
-%				%\bottomrule
-%				\hline
-%			\end{tabular}
-%			}
-%			\label{tab:Ejemplo_semi}
-%		\end{table}
-%		
-%		\begin{itemize}
-%			\item O: Circuito de vía que debe permanecer libre.
-%			\item X: Circuito de vía que se encuentra ocupado por una formación.
-%			\item R: Semáforo rojo.
-%			\item A: Semáforo amarillo.
-%			\item V: Semáforo verde.
-%			\item -: \emph{Don't care}, no es relevante.
-%			\item N: Máquina de cambios en posición normal.
-%			\item R: Máquina de cambios en posición reversa.
-%			\item A: Barrera alta.
-%			\item B: Barrera baja.
-%		\end{itemize}								
-%		
-%		Repitiendo el razonamiento se pueden generar las demás filas de la tabla para cualquier ruta entre dos semáforos. Solo se puede tener un tren en cada vía a la vez: uno para la vía ascendente y otro para la vía descendente.
-%		
-%%		En el caso del modo automático la construcción de la tabla es muy similar, pero cambia el criterio para los semáforos.
-%%		
-%%		Por otro lado, en el modo automático los semáforos por defecto se encuentran en verde y cada tren que ocupa la vía genera hacia atrás una estela de protección denominada doble recubrimiento[REF] a peligro como puede verse en la figura \ref{fig:Doble}.
-%%		
-%%		\begin{figure}[htbp!]
-%%			\centering
-%%			\includegraphics[scale=.33]{./Figures/Doble}
-%%			\caption{Doble recubrimiento a peligro}
-%%			\label{fig:Doble}
-%%		\end{figure}
-%%				
-%%		Dicho recubrimiento consiste en dos semáforos a rojo (semáforo 7 y 9) para proteger el tramo que ocupa la formación y el anterior (circuitos de vía 11 y 9), además de un semáforo amarillo de precaución (semáforo 5) para avisar a la formación anterior que la próxima señal será roja y debe disminuir su marcha.					
-%%		
-%%		En esta modalidad no se pueden realizar cambios de vías, por lo que la máquina de cambios estará en posición 'normal' y los semáforos de cambios 10 y 11 estarán en rojo. Además todos los pasos a nivel estarán a peligro menos el paso a nivel número 1, que al estar alejado de la formación que sigue avanzando en sentido ascendente, dejará de sonar su campanilla.
-%%		
-%%		La Tabla \ref{tab:Ejemplo_auto} presenta el ejemplo anterior pero para un sistema automático con una formación ocupando el circuito de vía 4.
-%%		
-%%		\begin{table}[htbp!]
-%%			\centering
-%%			\caption[Modelo de Tabla de enclavamientos semiautomáticos]{Modelo de Tabla de enclavamientos semiautomáticos}
-%%			\resizebox{\textwidth}{!}{  
-%%			\begin{tabular}{c|cccccc|ccccc|cccc|cc|c|ccc}    
-%%				\toprule
-%%				& \multicolumn{6}{c|}{Circuitos de vía(ASC)} & \multicolumn{5}{c|}{Semáforos ASC} & \multicolumn{4}{c|}{Semáforos DES} & \multicolumn{2}{c|}{Cambio} & M & \multicolumn{3}{c}{PaN} \\
-%%				\textbf{Rutas} 	 & 1 & 3 & 5 & 7 & 9 & 11 & 1 & 3 & 5 & 7 & 9 & 2 & 4 & 6 & 8 & 10 & 11 &  & 1 & 2 & 3  \\
-%%				\midrule
-%%				$\text{Ruta}$ &-&-&-&O&O&X&V&V&A&R&R&V&V&V&V&R&R&N&A&B&B\\ 
-%%				%\bottomrule
-%%				\hline
-%%			\end{tabular}
-%%			}
-%%			\label{tab:Ejemplo_auto}
-%%		\end{table}
-%%	
-%%		Los circuitos de vía 1,3 y5 figuran como \emph{don't care} porque queda fuera del doble recubrimiento y podría ser ocupado por otra formación. Además el semáforo para acceder a dicho tramo se establece en verde, lo que permite el acceso.
-%		
-	\section{Objetivos}
-	
-		El objetivo de este proyecto fue el diseño, implementación y realización de pruebas funcionales de un prototipo de sistema electrónico de enclavamiento, sobre un kit de desarrollo de FPGA. 
-		
-		Se procuró además estudiar las tecnologías para implementar metodologías orientadas a mejorar los niveles RAMS del sistema, de acuerdo con el estado del arte en sistemas ferroviarios altamente críticos. 
-		
-		Teniendo la experiencia acumulada del trabajo realizado en la Especialización de Sistemas Embebidos, se puso especial énfasis en la automatización del proceso, para poder satisfacer las necesidades de cualquier zona elegida. 
-
-%		Para lo cual se definieron los siguientes requerimientos funcionales:
-%		
-%		\begin{itemize}
-%			\item Cantidad de entradas: alrededor de 40
-%			\item Tipo de entrada: contactos secos
-%			\item Clase de entradas: ocupación de vía, señalamiento, estado de la máquina de cambios o posición de barreras del paso a nivel.
-%			\item Tiempo máximo entre cambios: 1 minuto
-%			\item Topología: vía doble con estación, cruce y tres pasos a nivel
-%			\item Distancia mínima entre formaciones: doble recubrimiento
-%			\item Tiempo mínimo para recorrer el tramo:
-%			\item Tiempo máximo para recorrer el tramo:
-%			\item Cantidad de trenes circulando en simultáneo: hasta 2 en modo semiautomático y hasta cuatro en modo automático.
-%			\item Cantidad de coches por formación: 6
-%		\end{itemize}
-
-	
-%----------------------------------------------------------------------------------------
-
-
 
 
 
