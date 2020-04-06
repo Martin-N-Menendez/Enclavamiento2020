@@ -38,6 +38,10 @@ begin
 					--estado = ROJO
 					Semaforo_propio_o_1.msb <= '0'; --ROJO
 					Semaforo_propio_o_1.lsb <= '0'; --ROJO
+				else
+					--estado = VERDE
+					Semaforo_propio_o_1.msb <= '1'; --VERDE
+					Semaforo_propio_o_1.lsb <= '1'; --VERDE
 				end if;
 			end if;
 		end if;
