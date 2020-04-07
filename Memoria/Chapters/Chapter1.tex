@@ -23,7 +23,9 @@ En este capítulo se presentan el contexto del proyecto, los sistemas ferroviari
 		
 	\section{Contexto y motivación}
 	
-		Mientras que otras naciones han progresado en la migración de sus sistemas de transporte de cargas y pasajeros añadiendo electrónica de última generación, Argentina en muchos casos continúa utilizando mecanismos diseñados a principios o mediados del siglo XX\cite{cite0,cite2}. Esto repercute negativamente en la seguridad que dichos sistemas pueden brindar a los pasajeros, conductores, peatones y automovilistas. A la vez, ocurre que los sistemas electrónicos para la seguridad vial de trenes y subtes son importados y muy costosos, además de constituir un oligopolio conformado por menos de una docena de empresas en todo el mundo. Un sistema de enclavamiento como el que se aborda en este trabajo puede costar entre 5 y 10 millones de dólares\citep{SIEMENS} y se requieren varias decenas de estos sistemas sólo para la zona urbana de la Ciudad Autónoma de Buenos Aires.
+		Mientras que otras naciones han progresado en la migración de sus sistemas de transporte de cargas y pasajeros añadiendo electrónica de última generación, Argentina en muchos casos continúa utilizando mecanismos diseñados a principios o mediados del siglo XX\cite{cite0,cite2}. Esto repercute negativamente en la seguridad que dichos sistemas pueden brindar a los pasajeros, conductores, peatones y automovilistas. 
+		
+		A la vez, ocurre que los sistemas electrónicos para la seguridad vial de trenes y subtes son importados y muy costosos, además de constituir un oligopolio conformado por menos de una docena de empresas en todo el mundo. Un sistema de enclavamiento como el que se aborda en este trabajo puede costar entre 5 y 10 millones de dólares\citep{SIEMENS} y se requieren varias decenas de estos sistemas sólo para la zona urbana de la Ciudad Autónoma de Buenos Aires.
 		
 		Las empresas que fabrican sistemas de enclavamiento \cite{cite5,cite6,cite7,cite8,cite9,cite10,cite12,cite13,cite14,cite15} brindan muy poca información técnica sobre sus desarrollos y la mayoría de las herramientas que utilizan son de uso privado de cada empresa. No obstante, deben regirse bajo normativas como las que la Unión Europea ha establecido desde 2004. Las tres normas principales son EN-50126\cite{EN50126} (ciclo de vida), EN-50128\cite{EN50128} (técnicas de software) y EN-50129\cite{EN50129} (técnicas de hardware). %Entre otras cuestiones, se busca la integridad de la seguridad.	
 		
@@ -41,9 +43,9 @@ En este capítulo se presentan el contexto del proyecto, los sistemas ferroviari
 		
 	\section{Propuesta de solución}	
 		
-		En el marco de la Especialización de Sistemas Embebidos se implementó en 2018 un sistema de enclavamiento para la estación Belgrano R de la Línea Mitre, como puede verse en la Figura \ref{fig:CESE_1}. El mismo contaba con una cantidad limitada de tramos de vías y bifurcaciones que implicaba una cantidad acotada de circuitos lógicos.% complicados pero posibles de obtener y ensayar.	
+		En el marco de la Especialización de Sistemas Embebidos se implementó en 2018 el diseño de un sistema de enclavamiento para la estación Belgrano R de la Línea Mitre, como puede verse en la Figura \ref{fig:CESE_1}. %El mismo contaba con una cantidad limitada de tramos de vías y bifurcaciones que implicaba una cantidad acotada de circuitos lógicos.% complicados pero posibles de obtener y ensayar.	
 		
-		La implementación se hacía de forma ad hoc, bloque a bloque y conectándolos de igual manera uno por uno. Diseñar los ensayos demoraba días o semanas y era necesario revisar varias veces las pocas especificaciones que se tenían para corroborar un correcto funcionamiento del sistema.	
+		La implementación se hacía de forma ad hoc, diseñar los ensayos demoraba días o semanas y era necesario revisar varias veces las pocas especificaciones que se tenían para corroborar un correcto funcionamiento del sistema.	
 		
 		El desarrollo a medida de la estación Belgrano R permitió afianzar muchos conceptos del mundo ferroviario sobre cómo se comportaban sus diversos componentes y como interactuaban a nivel general. No obstante, de querer replicar el desarrollo en otras locaciones, aún con mínimas diferencias con Belgrano R, hubiese implicado rehacer por completo todo el proceso: análisis, diseño, testing, etc.
 		
@@ -55,10 +57,14 @@ En este capítulo se presentan el contexto del proyecto, los sistemas ferroviari
 		\end{figure}	
 		
 		%\vspace{5cm}
-				
-		Fue necesario garantizar no solo la reusabilidad, en el caso de locaciones de un tamaño similar a Belgrano R; sino que también su escalabilidad a topologías mas complejas. Una mayor cantidad de elementos ferroviarios implica una densidad mayor de circuitos lógicos, y estos a su vez repercuten en un crecimiento enormemente de la complejidad del desarrollo, mayor dificultad para implementar los ensayos y mayores chances de errores al extrapolar posibles fallas humanas a sistemas de mayor tamaño.
 		
-		La solución a proponer no podía quedar sujeta a una única topología, ya que aun culminando el proyecto se corría el riesgo de que el tiempo empleado fuese desperdiciado si se cambiaban los requerimientos de forma abrupta. Es por eso que, en el marco de la Maestría en Sistemas Embebidos, se marcó como un objetivo central el desarrollo de una herramienta capaz de generar automáticamente la solución electrónica de un sistema de enclavamiento ferroviario, a partir de una representación matemática única de cada topología. En la figura \ref{fig:Generacion} se puede visualizar el proceso, en el cual diversas topologías son procesadas e implementadas en una plataforma FPGA.
+		A partir de esta experiencia se concluyó que es muy importante diseñar e implementar un método de trabajo que brinde reusabilidad, y que también sea escalable, de modo que se pueda aplicar en topologías más grandes y complejas. El método de trabajo a desarrollar debe ser tal que minimice la probabilidad y severidad de fallas humanas en el proceso de diseño y revisión.
+				
+		%Fue necesario garantizar no solo la reusabilidad, en el caso de locaciones de un tamaño similar a Belgrano R; sino que también su escalabilidad a topologías mas complejas. Una mayor cantidad de elementos ferroviarios implica una densidad mayor de circuitos lógicos, y estos a su vez repercuten en un crecimiento enormemente de la complejidad del desarrollo, mayor dificultad para implementar los ensayos y mayores chances de errores al extrapolar posibles fallas humanas a sistemas de mayor tamaño.
+		
+		%La solución a proponer no podía quedar sujeta a una única topología, ya que aun culminando el proyecto se corría el riesgo de que el tiempo empleado fuese desperdiciado si se cambiaban los requerimientos de forma abrupta. 
+		
+		Es por eso que, en el marco de la Maestría en Sistemas Embebidos, se marcó como un objetivo central el desarrollo de una herramienta capaz de generar automáticamente la solución electrónica de un sistema de enclavamiento ferroviario, a partir de una representación matemática única de cada topología. En la figura \ref{fig:Generacion} se muestra una imagen ilustrativa del proceso propuesto, en el que diversas topologías son procesadas e implementadas en forma automática en una plataforma FPGA.
 				
 		\begin{figure}[htbp!]
 			\centering
@@ -74,16 +80,16 @@ En este capítulo se presentan el contexto del proyecto, los sistemas ferroviari
 		% Carpeta de mapas generados
 		% Captura de esquematico generado
 		
-		De esta manera, la solución parte de cualquier red ferroviaria, representada mediante un grafo y un analizador de redes ferroviarias (figura \ref{fig:Spyder}), detecta qué función cumplirá cada elemento de la red y determina cuántos semáforos, de cuántos aspectos, en qué orientación y en qué nodo deben situarse para que el sistema sea seguro. 
+		De esta manera, la solución desarrollada parte de cualquier red ferroviaria (figura \ref{fig:Spyder}), y mediante un analizador de redes ferroviarias, diseñado e implementado en el marco de este trabajo, determina qué función cumplirá cada elemento de la red y cuántos semáforos, de cuántos aspectos, en qué orientación y en qué ubicación deben utilizarse para que el sistema sea seguro.
 		
 		\begin{figure}[htbp!]
 			\centering
 			\includegraphics[scale=.4]{./Figures/Spyder}
-			\caption{Analizador de redes ferroviarias (Python).}
+			\caption{Analizador de redes ferroviarias desarrollado en Python.}
 			\label{fig:Spyder}
 		\end{figure}
 				
-		A continuación, en base a los semáforos insertados el analizador calcula todas las rutas posibles que admite esa red y genera automáticamente la solución electrónica para ser implementada mediante una FPGA. Puede verse en la figura \ref{fig:Archivos} que la cantidad de archivos creada es considerable, pero todo es producto del análisis de la red y son todos los códigos necesarios para implementar el sistema.
+		A continuación, en base a los semáforos insertados el analizador calcula todas las rutas posibles que admite esa red y genera automáticamente la solución electrónica para ser implementada mediante una FPGA. Puede verse en la figura \ref{fig:Archivos} un ejemplo de los archivos .vhdl generados automáticamente producto del análisis de una determinada red ferroviaria.		
 		
 		\begin{figure}[htbp!]
 			\centering
@@ -92,16 +98,16 @@ En este capítulo se presentan el contexto del proyecto, los sistemas ferroviari
 			\label{fig:Archivos}
 		\end{figure}
 		
-		El analizador de redes ferroviarias no solo procesa una topología, sino todas las definidas en archivos individuales. Es decir, si la carpeta principal tiene N archivos de texto plano que describen N topologías, el analizador generará N análisis distintos y por cada uno presentará una imagen de la topología recibida, como puede verse en la figura \ref{fig:Topologias}. De la misma manera genera un historial técnico del funcionamiento del sistema llamado tabla de enclavamientos \cite{cite21,cite22}.
+		De esta forma el sistema desarrollado puede procesar en cuestión de minutos decenas de topologías ferroviarias y generar las correspondientes implementaciones de la solución electrónica. Esto se ilustra en la figura \ref{fig:Topologias}. 
 		
 		\begin{figure}[htbp!]
 			\centering
 			\includegraphics[scale=.5]{./Figures/Topologias}
-			\caption{Imágenes generadas para todas las topologías.}
+			\caption{Ejemplos de algunas topologías luego de ser procesadas por el sistema desarrollado.}
 			\label{fig:Topologias}
 		\end{figure}
 		
-		Finalmente, todo el proceso culmina con la creación del	sistema electrónico, del cual se presenta un esquema de ejemplo en la figura \ref{fig:Esquematico}
+		En la figura \ref{fig:Esquematico} se muestra a modo de ejemplo la solución electrónica lista para ser implementada en una FPGA que corresponde a los archivos .vhdl ilustrados en la figura \ref{fig:Archivos}.
 		
 		\begin{figure}[htbp!]
 			\centering
@@ -110,7 +116,7 @@ En este capítulo se presentan el contexto del proyecto, los sistemas ferroviari
 			\label{fig:Esquematico}
 		\end{figure}
 		
-		Para poder entender mejor el funcionamiento del sistema es necesario introducir conceptos propios del mundo ferroviario y sus componentes involucrados, que se describen en la sección siguiente.
+		Para poder entender mejor el funcionamiento del sistema desarrollado es necesario introducir conceptos propios del mundo ferroviario y sus componentes involucrados. Estos se describen en la siguiente sección.
 
 	\section{Elementos del señalamiento ferroviario}
 	
@@ -313,10 +319,9 @@ En este capítulo se presentan el contexto del proyecto, los sistemas ferroviari
 				\label{fig:Redundancia}
 			\end{figure}
 			
-			También se ilustra en la Figura \ref{fig:Redundancia} el concepto de diversidad de plataformas de hardware (representados en diferente color). Para mitigar fallos comunes a una misma plataforma de hardware es una buena estrategia el utilizar sistemas de diferentes marcas o proveedores, para minimizar esta problemática. De esta forma, el resultado global es un sistema inmune a fallas singulares. No obstante, es vulnerable a fallas simultáneas de dos componentes, pero su probabilidad es mínima al ser de diferentes tecnologías u orígenes.
+			También se ilustra en la Figura \ref{fig:Redundancia} el concepto de diversidad de plataformas de hardware, mediante las FPGA representadas en diferente color: azul, rojo y verde. Para mitigar fallos comunes a una misma plataforma de hardware o software una posible estrategia es utilizar sistemas de diferentes proveedores. %De esta forma, el resultado global es un sistema inmune a fallas singulares. No obstante, es vulnerable a fallas simultáneas de dos componentes, pero su probabilidad es mínima al ser de diferentes tecnologías u orígenes.
 			
-			En este trabajo se implementó un sistema de enclavamiento electrónico, como se explicará en el Capítulo \ref{Chapter3}.
-	 
+			%En este trabajo se implementó un sistema de enclavamiento electrónico, como se explicará en el Capítulo \ref{Chapter3}.
 
 	\section{Objetivos}
 	
@@ -324,5 +329,5 @@ En este capítulo se presentan el contexto del proyecto, los sistemas ferroviari
 		
 		Se procuró además estudiar las tecnologías para implementar metodologías orientadas a mejorar los niveles RAMS del sistema, de acuerdo con el estado del arte en sistemas ferroviarios altamente críticos. 
 		
-		Teniendo la experiencia acumulada del trabajo realizado en la Especialización de Sistemas Embebidos, se puso especial énfasis en la automatización del proceso, para poder satisfacer las necesidades de cualquier zona elegida. 
+		Teniendo la experiencia acumulada del trabajo realizado en la Especialización de Sistemas Embebidos, se puso especial énfasis en la automatización del proceso, para poder satisfacer las necesidades de cualquier locación. 
 

@@ -66,18 +66,18 @@ Es este capítulo se presentan las topologías típicas del sistema ferroviario 
 		
 
 \section{Estrategias de resolución}
-
-	A lo largo de la investigación se relevaron decenas de artículos, los cuales abordan el problema con dos estrategias de desarrollo muy diferenciadas, con sus ventajas y desventajas: el enfoque funcional y el enfoque geográfico.
+	\label{2_2}
+	A lo largo de la investigación se relevaron decenas de artículos, los cuales abordan el problema con dos estrategias de desarrollo muy diferenciadas, cada una con sus ventajas y desventajas: el enfoque funcional y el enfoque geográfico.
 	
-	En el enfoque funcional, el desarrollo se basa en la denominada <<tabla de enclavamientos>>. En la misma cada fila define una ruta que el enclavamiento debe poder ejecutar en caso de cumplir las condiciones que define expresamente cada una. Cada itinerario se forma a partir de la conjunción de diferentes rutas, siempre que estas sean compatibles, lo cual también está indicado en la tabla.
+	En el enfoque funcional, el desarrollo se basa en la denominada "tabla de enclavamientos". La tabla de enclavamientos define las condiciones que deben cumplirse para habilitar cada una de las rutas posibles. Cada itinerario se forma a partir de la conjunción de diferentes rutas, siempre que estas sean compatibles, lo cual también está indicado en la tabla. Este concepto se ampliará en la sección \ref{Tabla_Enclavamientos}.
 	
-	Históricamente, tanto los enclavamientos mecánicos como los electromecánicos se han definido previamente por tablas de enclavamientos, las cuales también pueden ser usadas para definir la logística de la red. Es por eso que el personal técnico está muy capacitado tanto en la lectura de la tabla como en su elaboración. Automatizar el proceso es inmediato ya que la tabla de enclavamientos define todas las funcionalidades necesarias.
+	Históricamente, tanto los enclavamientos mecánicos como los electromecánicos se han definido previamente por tablas de enclavamientos, las cuales también pueden ser usadas para definir la logística de la red. Es por eso que el personal técnico está muy capacitado tanto en la lectura de la tabla como en su elaboración. 
 	
 	En el enfoque geográfico, en cambio, no hay una descripción macro del sistema a nivel funcional, sino una descripción a nivel de componentes. Es la interacción entre los componentes, en función de su posición geográfica en el entorno, lo que se manifiesta a nivel macro. De poder definir las reglas genéricas de cada elemento y las condiciones en las cuales interactúan, es posible definir cualquier sistema, sin tabla de enclavamientos.
 	
-	Este enfoque dista de ser inmediato, ya que es necesario construir todas las herramientas de análisis de la red y diseñar cada elemento al detalle. La ventaja es que, concluida esa etapa, es un enfoque flexible y completamente independiente de la locación. Además de definir todas las funcionalidades que la red admite y no solo las necesarias para la logística.
+	Este enfoque dista de ser inmediato, ya que es necesario construir todas las herramientas de análisis de la red y diseñar cada elemento al detalle. La ventaja es que, concluida esa etapa, se independiza el enfoque de la locación, logrando una solución más flexible. Además de definir todas las funcionalidades que la red admite y no solo las necesarias para la logística.
 	
-	En las siguientes secciones se profundizará en ambos enfoques, los conceptos necesarios para su plena comprensión, cómo se modifica el flujo de trabajo y el análisis de su escalabilidad. Esto último es de vital importancia a la hora de elegir uno de los dos enfoques.
+	En las siguientes secciones se profundizará en ambos enfoques, los conceptos necesarios para su plena comprensión, cómo se modifica el flujo de trabajo y el análisis de su escalabilidad. Esto último es de vital importancia a la hora de comparar ambos enfoques.
 	
 	
 % Describirlas
@@ -87,20 +87,20 @@ Es este capítulo se presentan las topologías típicas del sistema ferroviario 
 \section{Enfoque funcional}
 	\label{Incompletitud}
 	
-	El enfoque funcional necesita de un elemento central para su desarrollo, sin el cuál no es posible definir la funcionalidad del sistema: la tabla de enclavamientos.
-	
+	El concepto de tabla de enclavamientos\cite{cite21,cite22} se introdujo en forma resumida en la sección \ref{2_2}, pero a continuación en la sección \ref{Tabla_Enclavamientos} se lo describe en detalle, para luego seguir explicando los demás elementos del enfoque funcional a partir de la sección \ref{2_3_2}.
+		
 	\subsection{Tabla de enclavamientos}
-	
+	\label{Tabla_Enclavamientos}
 		A la hora de establecer itinerarios se utiliza el concepto de ruta, que es el camino definido entre dos semáforos consecutivos. Pero no siempre se establecen todas las rutas posibles, sino solo las necesarias para generar los itinerarios. Por ejemplo, en la figura \ref{fig:EJ_Tabla} se pueden ver dos casos de definición de rutas para una misma topología de bypass.
 		
 			\begin{figure}[h]
 			\centering
-				\includegraphics[scale=.5]{./Figures/Tablas}
+				\includegraphics[scale=.65]{./Figures/Tablas}
 				\caption{Ejemplo de elaboración de las rutas.} 
 				\label{fig:EJ_Tabla}
 			\end{figure}
 		
-		En el primer caso se utilizarán las vías en un solo sentido (izquierda a derecha), para lo cual el semáforo A es el inicial de la ruta $\text{R}_1$ y el semáforo C es el final de esta. Luego se define la ruta $\text{R}_2$ entre los semáforos de maniobra B y D para completar todas las posibles rutas con sentido izquierda a derecha, como se describe en la Tabla \ref{Tabla_simple}.
+		En el primer caso se indican las rutas que corresponden a utilizar las vías en el sentido de izquierda a derecha. Para la ruta $\text{R}_1$ el semáforo A es el inicial y el semáforo C es el final. Para la ruta $\text{R}_2$ el semáforo de maniobra B es el inicial y el semáforo de maniobra D es el final. Esto se presenta en la Tabla \ref{Tabla_simple}.
 		
 		\begin{table}[!hbt]
 		\renewcommand{\arraystretch}{1.3}
@@ -138,7 +138,7 @@ Es este capítulo se presentan las topologías típicas del sistema ferroviario 
 		\end{tabular}
 		\end{table}
 		
-		Según el uso que se le quiera dar a la topología, ambas tablas de enclavamientos son válidas. Incluso podemos notar que ambas están incompletas porque una tabla no contempla los casos de la otra. Podríamos definir una nueva tabla de enclavamientos como la conjunción de ambas, como se describe en la Tabla \ref{Tabla_total}.
+		Según el uso que se le quiera dar a la topología, ambas tablas de enclavamientos son válidas. Incluso podemos notar que ambas están incompletas porque una tabla no contempla los casos de la otra. Se puede definir entonces una nueva tabla de enclavamientos como la conjunción de ambas, como se describe en la Tabla \ref{Tabla_total}.
 		
 		\begin{table}[!hbt]
 		\renewcommand{\arraystretch}{1.3}
@@ -159,9 +159,11 @@ Es este capítulo se presentan las topologías típicas del sistema ferroviario 
 		\end{tabular}
 		\end{table}
 		
-		Se añade a la tabla el concepto de ruta conflictiva. Es decir, rutas que no pueden coexistir con la ruta que se quiere pedir. Por ejemplo, $\text{R}_1$ y $\text{R}_3$ van en sentidos opuestos y por lo tanto no puede permitirse $\text{R}_1$ si un tren se encuentra realizando $\text{R}_3$. De la misma forma, como $\text{R}_1$ requiere que la máquina de cambios se encuentre en posición normal, no puede coexistir ni con $\text{R}_3$ ni con $\text{R}_4$ que requieren el que el cambio se encuentre en posición reversa. Es posible deducir el resto de rutas conflictivas de forma análoga.
+		Se añade a la Tabla \ref{Tabla_total} el concepto de ruta conflictiva. Es decir, rutas que no pueden coexistir con la ruta que se quiere pedir. Por ejemplo, $\text{R}_1$ y $\text{R}_3$ van en sentidos opuestos y por lo tanto no puede permitirse $\text{R}_1$ si un tren se encuentra realizando $\text{R}_3$. De la misma forma, como $\text{R}_1$ requiere que la máquina de cambios se encuentre en posición normal, no puede coexistir ni con $\text{R}_3$ ni con $\text{R}_4$ que requieren el que el cambio se encuentre en posición reversa. Es posible deducir el resto de rutas conflictivas de forma análoga.
 			
-		Tanto la Tabla \ref{Tabla_simple} como la \ref{Tabla_bidireccional} son una porción de la llamada tabla de enclavamientos, que se utiliza para diseñar los sistemas de enclavamientos tanto mecánicos como electromecánicos y define completamente el comportamiento del sistema. En esta, cada ruta constituye una fila y presenta diferentes columnas tales como:
+		%Tanto la Tabla \ref{Tabla_simple} como la \ref{Tabla_bidireccional} son una porción de la llamada tabla de enclavamientos, que se utiliza para diseñar los sistemas de enclavamientos tanto mecánicos como electromecánicos y define completamente el comportamiento del sistema. En esta, 
+		
+		Cada ruta constituye una fila y presenta diferentes columnas tales como:
 		
 		\begin{itemize}
 			\item Semáforos de entrada y de salida.
@@ -171,22 +173,22 @@ Es este capítulo se presentan las topologías típicas del sistema ferroviario 
 			\item Rutas conflictivas que inhiben la activación de la ruta.
 		\end{itemize}
 		
-		Como se pudo ver en ambos ejemplos, la necesidad de tales o cuales itinerarios puede requerir distintas tablas de enclavamientos para la misma topología. Algunas tablas serán mas completas que otras y eso puede repercutir en que, al querer añadir nuevas rutas a futuro, la tabla deba ser modificada y por lo tanto el desarrollo del sistema deba cambiar a otro mas complejo.
+		La necesidad de tales o cuales itinerarios puede requerir distintas tablas de enclavamientos para la misma topología. Esto puede repercutir en que, al querer añadir nuevas rutas a futuro, la tabla deba ser modificada y por lo tanto el desarrollo del sistema deba cambiar a otro mas complejo.
 	
 	\subsection{Modelo del sistema}
-		
-		En el enfoque funcional se utiliza la tabla de enclavamientos como elemento central de decisión para el diseño y funcionamiento del sistema. Es la ruta la que impone qué acciones deben ser tomadas y cuáles prohibidas, y por lo tanto se abstrae de la topología una vez definida la tabla.	En la figura \ref{fig:Modelo_Funcional} se presenta un modelo del sistema con enfoque funcional.
+	\label{2_3_2}	
+		En el enfoque funcional se utiliza la tabla de enclavamientos como elemento central de decisión para el diseño y funcionamiento del sistema. Es la ruta la que impone qué acciones deben ser tomadas y cuáles prohibidas, y por lo tanto se abstrae de la topología una vez definida la tabla. En la figura \ref{fig:Modelo_Funcional} se presenta un modelo del sistema con enfoque funcional.
 		
 			\begin{figure}[h!]
 			\centering
-				\includegraphics[scale=.45]{./Figures/Funcional}
+				\includegraphics[scale=.65]{./Figures/Funcional}
 				\caption{Enfoque funcional.}
 				\label{fig:Modelo_Funcional}
 			\end{figure}
 		
 		\vspace{10cm}
 		
-		Cada bloque horizontal en diferentes colores representa máquinas de estados que modelan los elementos de entrada indicados. Todos ellos, gobernados por una máquina de estados general representada en un bloque vertical verde que se diseña en base a la tabla de enclavamientos. 	
+		Cada bloque horizontal en diferentes colores representa máquinas de estados que modelan los elementos de entrada indicados. Todos ellos, gobernados por una máquina de estados general representada en un bloque se diseña en base a la tabla de enclavamientos (indicado en color verde en la figura \ref{fig:Modelo_Funcional}). 	
 		
 		La salida del sistema actúa sobre todo el señalamiento, menos la ocupación de los tramos de vías porque son elementos de solo lectura. Puede verse que conforme se añadan mas rutas a la tabla de enclavamientos, las máquinas de estados serán mas complejas y de mayor tamaño.
 	
@@ -196,43 +198,41 @@ Es este capítulo se presentan las topologías típicas del sistema ferroviario 
 			
 		\begin{figure}[h]
 		\centering
-			\includegraphics[scale=.4]{./Figures/Funcional_workflow}
+			\includegraphics[scale=.5]{./Figures/Funcional_workflow}
 			\caption{Esquema de trabajo en el enfoque funcional.}
 			\label{fig:Work_Funcional}
 		\end{figure}
 	
-		Como bien se resaltó anteriormente, el diseño nace de la tabla de enclavamientos, y para evitar que cualquier error en esta se propague al sistema, la tabla es diseñada y revisada por varios profesionales ferroviarios. La validación de las tablas puede ser automatizada mediantes \textit{scripts} que busquen errores en las mismas.
+		Cómo se resaltó anteriormente, el diseño nace de la tabla de enclavamientos, y para evitar que cualquier error en esta se propague al sistema, varios profesionales ferroviarios se encargan de diseñarla y revisarla. Además, su validación puede ser automatizada mediantes \textit{scripts} que busquen errores en las mismas.
 		
-		El proceso culmina con la redundancia de los sistemas diseñados y la diversificación de plataformas, sin lo cual no se podrían alcanzar estándares de calidad y seguridad altos como los demandados por industrias tan críticas como la nuclear, la aeronáutica, etc. 
-		
-		En el transcurso de la Especialización de Sistemas Embebidos se trabajó en un diseño con enfoque funcional de la estación Belgrano R de la Línea Mitre, pero sin automatización del proceso. En él, la tabla de enclavamientos fue una pieza vital de todo el desarrollo.
-		
-		%Durante 2019 se avanzó en la automatización de este flujo de trabajo, que culminó con la presentación de un artículo en el Congreso Argentino de Sistemas Embebidos 2019 y en una edición especial de \textit{IEEE Latin American Transaction}.
-		
+		El proceso culmina con la redundancia de los sistemas diseñados y la diversificación de plataformas, sin lo cual no se podrían alcanzar los niveles de disponibilidad y seguridad necesarios.
+			
+		%En el transcurso de la Especialización de Sistemas Embebidos se trabajó en un diseño con enfoque funcional de la estación Belgrano R de la Línea Mitre, pero sin automatización del proceso. En él, la tabla de enclavamientos fue una pieza vital de todo el desarrollo.
+				
 	\subsection{Escalabilidad de la estrategia}	
 		
-		Al ir automatizando la generación del código del sistema se fue llegando a la conclusión de que los bloques que contenían las máquinas de estados crecían en tamaño hasta volverse inmanejables las conexiones. En la figura \ref{fig:Escala_Funcional} se representa el concepto del crecimiento del sistema conforme la topología se vuelve mas compleja.		
+		Automatizar el proceso de generación del código es inmediato ya que la tabla de enclavamientos define todas las funcionalidades necesarias. Pero al hacerlo se llegó a la conclusión de que los bloques que contenían las máquinas de estados crecen de tamaño hasta volverse inmanejables las conexiones. En la figura \ref{fig:Escala_Funcional} se representa el concepto del crecimiento del sistema conforme la topología se vuelve mas compleja.		
 					
 		\begin{figure}[h]
 		\centering
-			\includegraphics[scale=.4]{./Figures/Funcional_complejidad}
+			\includegraphics[scale=.5]{./Figures/Funcional_complejidad}
 			\caption{Escalabilidad del enfoque funcional.}
 			\label{fig:Escala_Funcional}
 		\end{figure}
 		
-	Es importante destacar que a medida que la topología se complejiza la cantidad de bloques para modelarla sigue siendo la misma. Lo que se incrementa es la cantidad de estados en cada bloque y la densidad de conexiones tanto entre estos como internamente.
-	
-	El tener bloques monolíticos y de crecimiento exponencial perjudica el desarrollo de los tests, que deben ser desechados y reescritos por completo cada vez que la topología cambia, por mas mínimos que sean esos cambios. 
+	Es importante destacar que a medida que la topología se complejiza la cantidad de bloques para modelarla sigue siendo la misma. Lo que se incrementa es la cantidad de estados en cada bloque y la densidad de conexiones internas y externas a los bloques.
+			
+	El uso de bloques monolíticos que crecen velozmente perjudica el desarrollo de los tests, los cuales deben ser reescritos por completo cada vez que la topología cambia, incluso ante el cambio más mínimo. 
 	
 	Otro problema encontrado es el de la incompletitud, que se detalló al inicio de la Sección \ref{Incompletitud}. Si la red admite M rutas pero solo se definieron N como necesarias (donde $N \leq M$), entonces se podrían tener N tests que las validen y el sistema se certifica para N rutas. Pero si en un futuro se necesitan N+1 rutas, se deberá hacer todo el proceso de validación desde cero, lo que encarece todo el proyecto.
 			
-	La ventaja central de este enfoque es que, teniendo la tabla de enclavamientos correctamente definida, es muy sencillo e inmediato pasar de la tabla a la implementación del sistema. La desventaja es que el uso de memoria es excesivo y desde el punto de vista del testing y la validación es incompleto.			
+	La ventaja central de este enfoque es que, teniendo la tabla de enclavamientos correctamente definida, es inmediato pasar de la tabla a la implementación del sistema. La desventaja es que el uso de memoria es excesivo y desde el punto de vista del testing y la validación es incompleto.			
 					
 \section{Enfoque geográfico}
 
-	En el enfoque geográfico el énfasis no está puesto en la funcionalidad a nivel sistema sino en la interacción entre los componentes dependiendo de la posición de los mismos en la red. Por ende no necesita una tabla de enclavamientos que defina su comportamiento, sino definir genéricamente los componentes y establecer una representación matemática de las conexiones entre ellos. En ese sentido, este enfoque requiere un nivel de análisis previo mucho mayor y, por lo tanto, un tiempo de desarrollo mas elevado. No obstante, su flexibilidad a la hora de escalar a topologías de mayor tamaño es notable.
+	En el enfoque geográfico el énfasis está puesto en la interacción de los componentes dependiendo de su posición en la red y no en la funcionalidad a nivel sistema. Por ende no necesita una tabla de enclavamientos que defina su comportamiento, sino definir genéricamente los componentes y establecer una representación matemática de las conexiones entre ellos. En ese sentido, este enfoque requiere un nivel de análisis previo mucho mayor y, por lo tanto, un tiempo de desarrollo mas elevado. No obstante, su flexibilidad a la hora de escalar a topologías de mayor tamaño es notable.
 	
-	Es entonces que removemos el concepto de ruta como elemento central del desarrollo y nos enfocamos a modelar los elementos discretos de la red ferroviaria (semáforos, barreras, cambios, circuitos de vía). En la figura \ref{fig:Enfoque_Geografico} se representa la idea central de este enfoque: la variedad de elementos es finita y puede ser modelada fácilmente; el foco del desarrollo debe estar centrado en el análisis de la red ferroviaria misma.
+	Por todo lo anterior, se remueve el concepto de ruta como elemento central del desarrollo y el foco se pone en modelar los elementos discretos de la red ferroviaria (semáforos, barreras, cambios, circuitos de vía). En la figura \ref{fig:Enfoque_Geografico} se representa la idea central de este enfoque: la variedad de elementos es finita; el foco del desarrollo está centrado en el análisis de la red ferroviaria.
 	
 		\begin{figure}[h]
 		\centering
@@ -241,11 +241,11 @@ Es este capítulo se presentan las topologías típicas del sistema ferroviario 
 			\label{fig:Enfoque_Geografico}
 		\end{figure}
 
-	Se puede apreciar en la figura \ref{fig:Enfoque_Geografico} que la variedad de colores de los pequeños bloques es limitada. Esto se debe a que cada uno simboliza un elemento ferroviario, sin importar cuál sea. El concepto a destacar es que una vez que se ha modelado un bloque rojo, todos los bloques rojos se comportarán igual y es su posición relativa a los otros bloques (sean o no rojos) lo que tendrá una funcionalidad a nivel general.
+	En la figura \ref{fig:Enfoque_Geografico} los bloques de cada color representan un determinado elemento ferroviario. Así, un bloque cualesquiera se comportará a otro de iguales características y será su posición relativa a los otros bloques lo que determinará la funcionalidad a nivel general.
 	
 	\subsection{Análisis de grafos}
-		
-		Para poder representar las conexiones entre los elementos ferroviarios, se introduce el concepto de grafo. Un grafo es una representación matemática de las relaciones (aristas) entre componentes (nodos) de una red. Utilizado ampliamente en ciencias de la computación y matemática, es sencillo llegar a un modelo de grafos partiendo desde una topología como la de la figura \ref{fig:Topologia_Grafo}, donde a cada tramo de vía se le asignó un nodo y cada arista del grafo representa el vínculo que existe entre ese tramo y sus vecinos.
+	\label{grafos}
+		Para representar las conexiones entre los elementos ferroviarios, se introduce el concepto de grafo. Un grafo es una representación matemática de las relaciones (aristas) entre componentes (nodos) de una red. Utilizado ampliamente en ciencias de la computación y matemática, es sencillo llegar a un modelo de grafos partiendo desde una topología como la de la figura \ref{fig:Topologia_Grafo}, donde a cada tramo de vía se le asignó un nodo y cada arista del grafo representa el vínculo que existe entre ese tramo y sus vecinos.
 		
 		\begin{figure}[h]
 		\centering
@@ -256,7 +256,7 @@ Es este capítulo se presentan las topologías típicas del sistema ferroviario 
 	
 		Por ejemplo, el nodo B posee un cambio de vías que vincula los tramos A y C si el cambio se encuentra en posición normal y los tramos A y G si el cambio se encuentra en posición inversa. Por lo tanto, en el grafo, el nodo B posee aristas que lo vinculan con los nodos A,C y G.
 		
-		La misma topología de la figura \ref{fig:Topologia_Grafo} puede ser analizada por el algoritmo creado para este trabajo utilizando como información únicamente el grafo que la modela. Todos los nodos que tengan un solo vecino son extremos de la red, mientras que los que tengan tres vecinos se asumirá que poseen un cambio de vías. Los nodos que tengan dos vecinos serán analizados según su posición relativa a cambios cercanos. El resultado de analizar esta topología se muestra en la figura \ref{fig:Grafo_Analisis}.
+		La topología de la figura \ref{fig:Topologia_Grafo} puede ser analizada por el algoritmo creado para este trabajo utilizando como información únicamente el grafo que la modela. Todos los nodos que tengan un solo vecino son extremos de la red, mientras que los que tengan tres vecinos se asumirá que poseen un cambio de vías. Los nodos que tengan dos vecinos serán analizados según su posición relativa a cambios cercanos. El resultado de analizar esta topología se muestra en la figura \ref{fig:Grafo_Analisis}.
 	
 		\begin{figure}[h]
 		\centering
@@ -271,43 +271,43 @@ Es este capítulo se presentan las topologías típicas del sistema ferroviario 
 	
 		\subsection{Flujo de trabajo}
 		
-		El procedimiento se puede repetir infinitamente para cualquier topología, ya que sin importar la cantidad de elementos o sus conexiones todos los vínculos entre componentes pueden ser representados mediante un grafo. En la figura \ref{fig:Work_Geografico} se ilustra el esquema de trabajo seguido para el enfoque geográfico.	
+		El procedimiento se puede repetir para cualquier topología, ya que sin importar la cantidad de elementos o sus conexiones todos los vínculos entre componentes pueden ser representados mediante un grafo. En la figura \ref{fig:Work_Geografico} se ilustra el esquema de trabajo seguido para el enfoque geográfico.	
 		
 		\begin{figure}[h]
 		\centering
-			\includegraphics[scale=.4]{./Figures/Geografico_workflow}
+			\includegraphics[scale=.5]{./Figures/Geografico_workflow}
 			\caption{Esquema de trabajo en el enfoque geográfico.}
 			\label{fig:Work_Geografico}
 		\end{figure}
 	
-		A diferencia del enfoque funcional, en el enfoque geográfico la tabla de enclavamientos ocupa un rol secundario al ser un historial del proceso de conversión entre el gráfico y la implementación electrónica del sistema. Es inmediato deducir que la tabla de enclavamientos del enfoque funcional (al ser incompleta) debe estar contenida en la tabla de enclavamientos del enfoque geográfico (al considerar todas las rutas que admite la red). Ambos enfoques, aunque parten de conceptos distintos, deben converger en los mismos resultados y ser consistentes a la hora de comparar ambas tablas.
+		A diferencia del enfoque funcional, en el enfoque geográfico la tabla de enclavamientos ocupa un rol secundario al ser un historial del proceso de conversión entre el gráfico y la implementación electrónica del sistema. La tabla de enclavamientos del enfoque funcional (al ser incompleta) debe estar contenida en la tabla de enclavamientos del enfoque geográfico, al considerar todas las rutas que admite la red. Aunque ambos enfoques parten de conceptos distintos, deben converger y brindar resultados comparables, cuya consistencia pueda ser comprobada.
 		
-		El proceso se inicia con el pasaje, de momento manual, del layout al grafo. Este es analizado por el algoritmo que detecta cuántos semáforos, de cuántos aspectos, en qué orientación y dónde deben situarse para que el sistema sea seguro. Esto, además de detectar la posición de todos los cambios y barreras, encontrando todas las rutas soportadas por la red y generando una tabla de enclavamientos completa.
+		El proceso de implementación de la solución a un sistema ferroviario mediante el enfoque geográfico se inicia con el pasaje del layout al grafo. Este es analizado por el algoritmo que detecta cuántos semáforos, de cuántos aspectos, en qué orientación y dónde deben situarse para que el sistema sea seguro. Esto, además de detectar la posición de todos los cambios y barreras, permite encontrar todas las rutas soportadas por la red y genera como resultado una tabla de enclavamientos completa.
 		
-		El proceso culmina de forma idéntica al enfoque funcional: aplicando estrategias de redundancia y diversidad se buscará alcanzar un nivel de seguridad alto propio de la industria nuclear o aeroespacial.
+		El proceso culmina de forma idéntica al enfoque funcional: aplicando estrategias de redundancia y diversidad se buscará alcanzar un nivel de nivel de disponibilidad y seguridad apropiado.
 		
 		\subsection{Escalabilidad de la estrategia}	
 			
-			Realizando el mismo análisis de escalabilidad se llega a una conclusión muy diferente respecto del otro enfoque. Al aumentar la complejidad, y por lo tanto el tamaño, de las topologías, el tamaño de los bloques se mantiene constante, pero se incrementa la cantidad de bloques necesarios para implementar el sistema. Esto es ilustrado en la figura \ref{fig:Escala_Geografico}.
+			En el caso del enfoque geográfico el análisis de escalabilidad da un resultado muy diferente al obtenido para el enfoque funcional. En el enfoque geográfico al aumentar la complejidad, y por lo tanto el tamaño de las topologías, el tamaño de los bloques se mantiene constante, aunque se incrementa la cantidad de bloques necesarios para implementar el sistema. Esto es ilustrado en la figura \ref{fig:Escala_Geografico}.
 					
 			\begin{figure}[h]
 			\centering
-				\includegraphics[scale=.4]{./Figures/Geografico_complejidad}
+				\includegraphics[scale=.5]{./Figures/Geografico_complejidad}
 				\caption{Escalabilidad del enfoque geográfico.}
 				\label{fig:Escala_Geografico}
 			\end{figure}
 		
 			%\vspace{5cm}
 			
-			Todos los tests unitarios, referidos a cada bloque del mismo color que modelan un mismo espacio físico (que puede o no contener una barrera, un cambio o varios semáforos), se elaboran una única vez, sin importar la cantidad de elementos idénticos presentes en la topología. Sumado a que, como en este enfoque se identifican todas las rutas y por lo tanto se pueden generar todos los tests necesarios, la batería de ensayos que otorga este enfoque es completa. Es decir, siempre se tendrá una cantidad de tests mayor o igual que la necesaria para cualquier necesidad presente o futura.
+			Todos los tests unitarios, referidos a cada bloque del mismo color que modelan un mismo espacio físico (que puede o no contener una barrera, un cambio o varios semáforos). De esta forma se elaboran una única vez, sin importar la cantidad de elementos idénticos presentes en la topología. Sumado a que, como en este enfoque se identifican todas las rutas y por lo tanto se pueden generar todos los tests necesarios, la batería de ensayos que otorga este enfoque es completa. Es decir, siempre se tendrá una cantidad de tests mayor o igual que la necesaria para cualquier necesidad presente o futura.
 		
-			Una desventaja de este enfoque es que se debe implementar el analizador de redes ferroviarias y un conversor que a partir de un grafo genere toda la estructura de archivos necesaria para implementar el circuito electrónico en una FPGA. Por lo tanto, la complejidad y, en consecuencia, el tiempo de desarrollo son mayores.
+			Una desventaja de este enfoque es que se debe implementar el analizador de redes ferroviarias y un conversor que a partir de un grafo genere toda la estructura de archivos necesaria para implementar el circuito electrónico en una FPGA. Ya que no existen esas herramientas para uso masivo. Por lo tanto, la complejidad y, en consecuencia, el tiempo de desarrollo son mayores.
 			
 \section{Consideraciones generales}
 
-En el presente trabajo se optó por implementar el sistema bajo el enfoque funcional, asumiendo que sus ventajas son mucho mas fuertes que sus desventajas y el análisis de los resultados obtenidos fueron mucho mas provechosos que los de su contraparte funcional.
+	En el presente trabajo se optó por implementar el sistema bajo el enfoque geográfico, dado que se consideró que sus ventajas superan a sus desventajas, en particular en lo referente a la mayor escalabilidad y reusabilidad que provee.
 
-Los módulos del sistema fueron implementados con máquinas de estado finitas con camino de datos (FSMD, del inglés \textit{Finite State Machine with Data path}), que son máquinas de estado finitas (FSM, del inglés \textit{Finite State Machine}) y circuitos secuenciales. La FSMD (figura \ref{fig:FSMD}) posee dos partes diferenciadas: el camino de control y el camino de datos. El camino de control contiene una FSM que, según las entradas de control y el estado interno que posee, genera señales internas que controlan los circuitos secuenciales del camino de datos. Estos, a su vez, contienen los bloques que procesan las entradas y actúan sobre las salidas.
+	Los módulos del sistema fueron implementados con máquinas de estado finitas con camino de datos (FSMD, del inglés \textit{Finite State Machine with Data path}), que son máquinas de estado finitas (FSM, del inglés \textit{Finite State Machine}) y circuitos secuenciales y combinacionales que constituyen el camino de datos. La FSMD (figura \ref{fig:FSMD}) posee dos partes diferenciadas: el camino de control y el camino de datos. El camino de control se compone de una FSM que, según las entradas de control y el estado interno que posee, genera señales internas que controlan los circuitos secuenciales del camino de datos. Estos, a su vez, contienen los bloques que procesan las entradas y actúan sobre las salidas.
 
 	\begin{figure}[h]
 	\centering
