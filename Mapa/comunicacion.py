@@ -143,7 +143,7 @@ def procesar_trama_recibida(leido,secciones):
         print ("Pasos a nivel: ", pan) 
     
     if N_mdc > 0:
-        if mdc == "1":
+        if mdc == "0":
             cambio = "normal" 
         else:
             cambio = "reverso"

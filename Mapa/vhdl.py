@@ -724,7 +724,7 @@ def creando_red(secciones,objetos,tabla,test = False):
         f.write("\t\t"+"port("+"\n")
         f.write("\t\t\t"+"Clock"+   " : "+" in "+"std_logic;"+"\n")
         f.write("\t\t\t"+"Reset"+   " : "+" in "+"std_logic;"+"\n")
-        if secciones[i].tipo == "Cruce":
+        if secciones[i].tipo == "Cruce" or secciones[i].tipo == "Desvio":
             f.write("\t\t\t"+"Cambio_i"+   " : "+" in "+"std_logic;"+"\n") 
         f.write("\t\t\t"+"Estado_i"+   " : "+" in "+"std_logic;"+"\n")
         if secciones[i].anterior != "" or secciones[i].desvio_inf_dir == "<" or secciones[i].desvio_sup_dir == "<" :
@@ -899,7 +899,7 @@ def creando_red(secciones,objetos,tabla,test = False):
         #print ( cambios_conexion )
         
         for j in range(N_MDC):
-            if i+1 == cambios_conexion[j][0]:
+            if i+1 == cambios_conexion[j][0] or i+1 == cambios_conexion[j][2]:
                 mdc_index = j+1
                 if test:
                     print("{} tiene el cambio_{}".format(i+1,mdc_index))
@@ -1059,7 +1059,7 @@ def creando_nodo(secciones,objetos,tabla,test = False):
         f.write("\t\t"+"port("+"\n")
         f.write("\t\t\t"+"Clock"+   " : "+" in "+"std_logic;"+"\n")
         f.write("\t\t\t"+"Reset"+   " : "+" in "+"std_logic;"+"\n")
-        if secciones[i].tipo == "Cruce":
+        if secciones[i].tipo == "Cruce" or secciones[i].tipo == "Desvio":
             f.write("\t\t\t"+"Cambio_i"+   " : "+" in "+"std_logic;"+"\n")    
         f.write("\t\t\t"+"Estado_i"+   " : "+" in "+"std_logic;"+"\n")
         if secciones[i].anterior != "" or secciones[i].desvio_inf_dir == "<" or secciones[i].desvio_sup_dir == "<" :
@@ -1120,7 +1120,8 @@ def creando_nodo(secciones,objetos,tabla,test = False):
                 
                 if secciones[i].sem_sentido[j] == '<':
                     vecino = "Estado_ante"
-                    if secciones[i].anterior:
+                    
+                    if secciones[i].anterior or secciones[i].desvio_sup or secciones[i].desvio_inf:
                         vecino_existe = True
                     else:
                         vecino_existe = False
@@ -1145,29 +1146,40 @@ def creando_nodo(secciones,objetos,tabla,test = False):
                     f.write("\t\t\t\t"+""+"else"+"\n")
                     #print("{} : {}".format(sem_actual[j],secciones[i].vecinos))
                     if int(sem_actual[j]) in secciones[i].vecinos:
-                        print("A")
+                        #print("A")
                         if vecino_existe:
-                            f.write("\t\t\t\t\t"+""+"if "+str(vecino)+" = '0' then"+"\n") 
-                            f.write("\t\t\t\t\t\t"+"--"+"estado = AMARILLO"+"\n") 
-                            f.write("\t\t\t\t\t\t"+""+"Semaforo_propio_o_"+str(j+1)+".msb <= '1'; --AMARILLO"+"\n")
-                            f.write("\t\t\t\t\t\t"+""+"Semaforo_propio_o_"+str(j+1)+".lsb <= '0'; --AMARILLO"+"\n") 
+                            f.write("\t\t\t\t\t"+""+"if (Cambio_i = '0') then"+" --Normal"+"\n") 
                             
-                            f.write("\t\t\t\t\t"+""+"else"+"\n") 
-                            
-                            f.write("\t\t\t\t\t\t"+"--"+"Si Color = AMARILLO"+"\n") 
-                            f.write("\t\t\t\t\t\t"+""+"if (Semaforo_cercano_"+str(sem_actual[j])+"_i.msb = '1'"+" and  "+"Semaforo_cercano_"+str(sem_actual[j])+"_i.lsb = '0') then"+"\n")    
-                            
-                            f.write("\t\t\t\t\t\t\t"+"--"+"estado = VERDE"+"\n") 
-                            f.write("\t\t\t\t\t\t\t"+""+"Semaforo_propio_o_"+str(j+1)+".msb <= '1'; --VERDE"+"\n")
-                            f.write("\t\t\t\t\t\t\t"+""+"Semaforo_propio_o_"+str(j+1)+".lsb <= '1'; --VERDE"+"\n") 
+                            f.write("\t\t\t\t\t\t"+""+"if "+str(vecino)+" = '0' then"+"\n") 
+                            f.write("\t\t\t\t\t\t\t"+"--"+"estado = AMARILLO"+"\n") 
+                            f.write("\t\t\t\t\t\t\t"+""+"Semaforo_propio_o_"+str(j+1)+".msb <= '1'; --AMARILLO"+"\n")
+                            f.write("\t\t\t\t\t\t\t"+""+"Semaforo_propio_o_"+str(j+1)+".lsb <= '0'; --AMARILLO"+"\n") 
                             
                             f.write("\t\t\t\t\t\t"+""+"else"+"\n") 
-                            f.write("\t\t\t\t\t\t\t"+"--"+"estado = VERDE"+"\n") 
-                            f.write("\t\t\t\t\t\t\t"+""+"Semaforo_propio_o_"+str(j+1)+".msb <= '1'; --VERDE"+"\n")
-                            f.write("\t\t\t\t\t\t\t"+""+"Semaforo_propio_o_"+str(j+1)+".lsb <= '1'; --VERDE"+"\n") 
                             
-                            f.write("\t\t\t\t\t\t"+""+"end if;"+"\n")         
-                            f.write("\t\t\t\t\t"+""+"end if;"+"\n")  
+                            f.write("\t\t\t\t\t\t\t"+"--"+"Si Color = AMARILLO"+"\n") 
+                            f.write("\t\t\t\t\t\t\t"+""+"if (Semaforo_cercano_"+str(sem_actual[j])+"_i.msb = '1'"+" and  "+"Semaforo_cercano_"+str(sem_actual[j])+"_i.lsb = '0') then"+"\n")    
+                            
+                            f.write("\t\t\t\t\t\t\t\t"+"--"+"estado = VERDE"+"\n") 
+                            f.write("\t\t\t\t\t\t\t\t"+""+"Semaforo_propio_o_"+str(j+1)+".msb <= '1'; --VERDE"+"\n")
+                            f.write("\t\t\t\t\t\t\t\t"+""+"Semaforo_propio_o_"+str(j+1)+".lsb <= '1'; --VERDE"+"\n") 
+                            
+                            f.write("\t\t\t\t\t\t\t"+""+"else"+"\n") 
+                            f.write("\t\t\t\t\t\t\t\t"+"--"+"estado = VERDE"+"\n") 
+                            f.write("\t\t\t\t\t\t\t\t"+""+"Semaforo_propio_o_"+str(j+1)+".msb <= '1'; --VERDE"+"\n")
+                            f.write("\t\t\t\t\t\t\t\t"+""+"Semaforo_propio_o_"+str(j+1)+".lsb <= '1'; --VERDE"+"\n") 
+                            
+                            f.write("\t\t\t\t\t\t\t"+""+"end if;"+"\n")         
+                            f.write("\t\t\t\t\t\t"+""+"end if;"+"\n")  
+                            
+                            f.write("\t\t\t\t\t"+""+"else"+"\n") 
+                                
+                            f.write("\t\t\t\t\t\t"+"--"+"estado = ROJO"+"\n") 
+                            f.write("\t\t\t\t\t\t"+""+"Semaforo_propio_o_"+str(j+1)+".msb <= '0'; --ROJO"+"\n")
+                            f.write("\t\t\t\t\t\t"+""+"Semaforo_propio_o_"+str(j+1)+".lsb <= '0'; --ROJO"+"\n")
+                            
+                            f.write("\t\t\t\t\t"+""+"end if;"+"\n")
+                            
                         else:
                             f.write("\t\t\t\t\t"+"--"+"estado = VERDE"+"\n") 
                             f.write("\t\t\t\t\t"+"Semaforo_propio_o_"+str(j+1)+".msb <= '1'; --VERDE"+"\n")
@@ -1177,29 +1189,66 @@ def creando_nodo(secciones,objetos,tabla,test = False):
                 #f.write("\t\t\t\t\t"+"--"+"else"+"\n") 
                          
                     if int(sem_actual[j]) not in secciones[i].vecinos:
-                        print("B")
+                        #print("B")
                         if vecino_existe:
-                            f.write("\t\t\t\t\t"+""+"if "+str(vecino)+" = '0' then"+"\n") 
-                            f.write("\t\t\t\t\t\t"+"--"+"estado = ROJO"+"\n") 
-                            f.write("\t\t\t\t\t\t"+""+"Semaforo_propio_o_"+str(j+1)+".msb <= '0'; --ROJO"+"\n")
-                            f.write("\t\t\t\t\t\t"+""+"Semaforo_propio_o_"+str(j+1)+".lsb <= '0'; --ROJO"+"\n") 
+                            if secciones[i].N_aspectos[j] == '3':
+                                f.write("\t\t\t\t\t"+""+"if (Cambio_i = '0') then"+" --Normal"+"\n") 
+                                
+                                
+                                f.write("\t\t\t\t\t\t"+""+"if "+str(vecino)+" = '0' then"+"\n") 
+                                f.write("\t\t\t\t\t\t\t"+"--"+"estado = ROJO"+"\n") 
+                                f.write("\t\t\t\t\t\t\t"+""+"Semaforo_propio_o_"+str(j+1)+".msb <= '0'; --ROJO"+"\n")
+                                f.write("\t\t\t\t\t\t\t"+""+"Semaforo_propio_o_"+str(j+1)+".lsb <= '0'; --ROJO"+"\n") 
+                                
+                                f.write("\t\t\t\t\t\t"+""+"else"+"\n") 
+                                
+                                f.write("\t\t\t\t\t\t\t"+"--"+"Si OTRO = OCUPADO"+"\n") 
+                                f.write("\t\t\t\t\t\t\t"+""+"if (Estado_lejano_"+str(sem_actual[j])+"_i = '0') then"+"\n")    
+                                
+                                f.write("\t\t\t\t\t\t\t\t"+"--"+"estado = AMARILLO"+"\n") 
+                                f.write("\t\t\t\t\t\t\t\t"+""+"Semaforo_propio_o_"+str(j+1)+".msb <= '1'; --AMARILLO"+"\n")
+                                f.write("\t\t\t\t\t\t\t\t"+""+"Semaforo_propio_o_"+str(j+1)+".lsb <= '0'; --AMARILLO"+"\n") 
                             
-                            f.write("\t\t\t\t\t"+""+"else"+"\n") 
-                            
-                            f.write("\t\t\t\t\t\t"+"--"+"Si OTRO = OCUPADO"+"\n") 
-                            f.write("\t\t\t\t\t\t"+""+"if (Estado_lejano_"+str(sem_actual[j])+"_i = '0') then"+"\n")    
-                            
-                            f.write("\t\t\t\t\t\t\t"+"--"+"estado = AMARILLO"+"\n") 
-                            f.write("\t\t\t\t\t\t\t"+""+"Semaforo_propio_o_"+str(j+1)+".msb <= '1'; --AMARILLO"+"\n")
-                            f.write("\t\t\t\t\t\t\t"+""+"Semaforo_propio_o_"+str(j+1)+".lsb <= '0'; --AMARILLO"+"\n") 
-                        
-                            f.write("\t\t\t\t\t\t"+""+"else"+"\n") 
-                            f.write("\t\t\t\t\t\t\t"+"--"+"estado = VERDE"+"\n") 
-                            f.write("\t\t\t\t\t\t\t"+""+"Semaforo_propio_o_"+str(j+1)+".msb <= '1'; --VERDE"+"\n")
-                            f.write("\t\t\t\t\t\t\t"+""+"Semaforo_propio_o_"+str(j+1)+".lsb <= '1'; --VERDE"+"\n") 
-                            
-                            f.write("\t\t\t\t\t\t"+""+"end if;"+"\n")         
-                            f.write("\t\t\t\t\t"+""+"end if;"+"\n") 
+                                f.write("\t\t\t\t\t\t\t"+""+"else"+"\n") 
+                                f.write("\t\t\t\t\t\t\t\t"+"--"+"estado = VERDE"+"\n") 
+                                f.write("\t\t\t\t\t\t\t\t"+""+"Semaforo_propio_o_"+str(j+1)+".msb <= '1'; --VERDE"+"\n")
+                                f.write("\t\t\t\t\t\t\t\t"+""+"Semaforo_propio_o_"+str(j+1)+".lsb <= '1'; --VERDE"+"\n") 
+                                
+                                f.write("\t\t\t\t\t\t\t"+""+"end if;"+"\n")         
+                                f.write("\t\t\t\t\t\t"+""+"end if;"+"\n") 
+                                
+                                f.write("\t\t\t\t\t"+""+"else"+"\n") 
+                                
+                                f.write("\t\t\t\t\t\t"+"--"+"estado = ROJO"+"\n") 
+                                f.write("\t\t\t\t\t\t"+""+"Semaforo_propio_o_"+str(j+1)+".msb <= '0'; --ROJO"+"\n")
+                                f.write("\t\t\t\t\t\t"+""+"Semaforo_propio_o_"+str(j+1)+".lsb <= '0'; --ROJO"+"\n")
+                                
+                                f.write("\t\t\t\t\t"+""+"end if;"+"\n")
+                                
+                            if secciones[i].N_aspectos[j] == '2':
+                                f.write("\t\t\t\t\t"+""+"if (Cambio_i = '1') then"+" --Reverso"+"\n")  
+                                
+                                f.write("\t\t\t\t\t\t"+""+"if "+str(vecino)+" = '0' then"+"\n") 
+                                
+                                f.write("\t\t\t\t\t\t\t"+"--"+"estado = ROJO"+"\n") 
+                                f.write("\t\t\t\t\t\t\t"+""+"Semaforo_propio_o_"+str(j+1)+".msb <= '0'; --ROJO"+"\n")
+                                f.write("\t\t\t\t\t\t\t"+""+"Semaforo_propio_o_"+str(j+1)+".lsb <= '0'; --ROJO"+"\n")
+                                
+                                f.write("\t\t\t\t\t\t"+""+"else"+"\n") 
+                                
+                                f.write("\t\t\t\t\t\t\t"+"--"+"estado = AMARILLO"+"\n") 
+                                f.write("\t\t\t\t\t\t\t"+""+"Semaforo_propio_o_"+str(j+1)+".msb <= '1'; --AMARILLO"+"\n")
+                                f.write("\t\t\t\t\t\t\t"+""+"Semaforo_propio_o_"+str(j+1)+".lsb <= '0'; --AMARILLO"+"\n")                       
+                                
+                                f.write("\t\t\t\t\t\t"+""+"end if;"+"\n")  
+                                
+                                f.write("\t\t\t\t\t"+""+"else"+"\n") 
+                                
+                                f.write("\t\t\t\t\t\t"+"--"+"estado = ROJO"+"\n") 
+                                f.write("\t\t\t\t\t\t"+""+"Semaforo_propio_o_"+str(j+1)+".msb <= '0'; --ROJO"+"\n")
+                                f.write("\t\t\t\t\t\t"+""+"Semaforo_propio_o_"+str(j+1)+".lsb <= '0'; --ROJO"+"\n")
+                                
+                                f.write("\t\t\t\t\t"+""+"end if;"+"\n")  
                         else:
                             f.write("\t\t\t\t\t"+"--"+"estado = VERDE"+"\n") 
                             f.write("\t\t\t\t\t"+"Semaforo_propio_o_"+str(j+1)+".msb <= '1'; --VERDE"+"\n")

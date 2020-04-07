@@ -693,9 +693,9 @@ def main():
 
     generar_mapa(tabla)
     
-    crear_modulo_vhdl(secciones,tabla)
+    #crear_modulo_vhdl(secciones,tabla)
     
-    #conectar_terminal(secciones)
+    conectar_terminal(secciones)
     
     #generar_mapa(tabla,False)
     #mostrar_grafo(secciones)

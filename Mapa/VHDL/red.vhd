@@ -115,6 +115,7 @@ architecture Behavioral of red is
 		port(
 			Clock :  in std_logic;
 			Reset :  in std_logic;
+			Cambio_i :  in std_logic;
 			Estado_i :  in std_logic;
 			Estado_ante :  in std_logic;
 			Estado_post :  in std_logic;
@@ -261,6 +262,7 @@ begin
 		Clock => Clock,
 		Estado_ante => mdc_desv_o_1,
 		Estado_post => conector_6,
+		Cambio_i =>  mdc_i_1,
 		Semaforo_propio_i_1.lsb => sem_lsb_i_5,
 		Semaforo_propio_i_1.msb => sem_msb_i_5,
 		Semaforo_propio_o_1.lsb => sem_lsb_o_5,
