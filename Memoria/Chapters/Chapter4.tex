@@ -13,20 +13,20 @@
 
 %La idea de esta sección es explicar cómo se hicieron los ensayos, qué resultados se obtuvieron y analizarlos.
 
-\section{Verificación del análisis automático de las redes ferroviarias}
+\section{Verificación del análisis automático de redes ferroviarias}
 	
-	Para verificar el correcto funcionamiento del análisis automático de las redes ferroviarias se generaron varias topologías distintas, entre ellas: estaciones simples, estaciones complejas, bypass, playa de maniobras y aleatorias. Para todas ellas se generó automáticamente una tabla de enclavamientos, las cuales fueron comparadas con éxito con las tablas de enclavamientos realizadas de la forma tradicional por el Ingeniero Ramiro Ghignone de la UTN Haedo.
+	Para verificar el correcto funcionamiento del análisis automático de las redes ferroviarias se generaron varias topologías distintas, entre ellas: estaciones simples, estaciones complejas, bypass, playa de maniobras y aleatorias. Para todas ellas se generó automáticamente una tabla de enclavamientos, las cuales fueron comparadas con tablas de enclavamientos realizadas de la forma tradicional por el Ingeniero Ramiro Ghignone de la UTN Facultad Regional Haedo.
 	
-	En la figura \ref{fig:Mapa_0} se presenta una topología creada aleatoriamente con diversos elementos tales como: cambios en cruceta(nodos 14 a 17), bypass(entre los nodos 2-5 y 21-22) y ramificaciones complejas(nodos 2, 5 y 9) de una playa de maniobras hacia un posible taller ferroviario(nodo 13).
+	En la figura \ref{fig:Mapa_0} se presenta una topología creada aleatoriamente con diversos elementos tales como cambios en cruceta (nodos 14 a 17), bypass (entre los nodos 2-5 y 21-22) y ramificaciones complejas (nodos 2, 5 y 9) de una playa de maniobras hacia un posible taller ferroviario (nodo 13).
 	
 	\begin{figure}[h]
 	\centering
 	\includegraphics[scale=0.45]{./Figures/Mapa_0}
-		\caption{Topología aleatoria generada.}
+		\caption{Topología aleatoria generada para probar el análisis automático de redes ferroviarias.}
 		\label{fig:Mapa_0}
 	\end{figure}
 	
-	La tabla de enclavamientos generada por el script se presenta en la Tabla \ref{tabla_script}. La misma contiene el listado de todas las rutas, los semáforos que intervienen, la secuencia de nodos que abarca cada ruta y el sentido de la ruta.
+	La tabla de enclavamientos generada automáticamente mediante el analizador de redes ferroviarias desarrollado se presenta en la Tabla \ref{tabla_script}. La misma contiene el listado de todas las rutas, los semáforos que intervienen, la secuencia de nodos que abarca cada ruta y el sentido de la ruta.
 	
 	\begin{table}[!hbt]
 	%\renewcommand{\arraystretch}{1.3}
@@ -58,7 +58,7 @@
 	\end{tabular}
 	\end{table}		
 	
-	Paralelamente, el Ingeniero Ramiro Ghignone genero de forma manual la tabla de enclavamientos (Tabla \ref{tabla_manual}) para la misma topología.
+	Paralelamente, el ingeniero Ramiro Ghignone generó de forma manual la tabla de enclavamientos para la misma topología, que se presenta en la Tabla \ref{tabla_manual}.
 	 
 	 \begin{table}[!hbt]
 	%\renewcommand{\arraystretch}{1.3}
@@ -92,11 +92,11 @@
 	
 	 
 	 
-	 Se observa que ambas tablas son idénticas, salvo el orden de las rutas, que es irrelevante para el funcionamiento del sistema. Por lo tanto se concluye que la construcción automática de la tabla de enclavamientos es consistente con la construcción manual de la misma.			
+	 Se observa que ambas tablas son idénticas, salvo el orden de las rutas, que es irrelevante para el funcionamiento del sistema. Por lo tanto se concluye que la construcción automática de la tabla de enclavamientos es consistente con la construcción manual. Esta consistencia se comprobó en todos los casos en que comparó el resultado del análisis automático con el análisis realizado en forma manual.			
 			
 \section{Verificación de la implementación del nodo}
 
-	La generación automática de código instancia diferentes tipos de nodos con mas o menos salidas. A la hora de realizar los ensayos se utilizó como bloque de prueba el nodo mas completo: el nodo perteneciente al tramo de vía que incluye la máquina de cambios. De esta forma se tenía la mayor cantidad de semáforos, interacciones, vecinos y comportamientos posibles.
+	La generación automática de código instancia diferentes tipos de nodos, tal como se explicó en la sección \ref{nodos}. A la hora de realizar los ensayos de verificación de la implementación del nodo se utilizó como bloque de prueba el nodo mas completo, que corresponde al nodo perteneciente al tramo de vía que incluye la máquina de cambios. De esta forma se tiene la mayor cantidad de semáforos, interacciones, vecinos y comportamientos posibles.
 	
 	\subsection{Testbench del módulo nodo}
 			
@@ -126,7 +126,7 @@
 			\end{tabular}
 			\end{table}	
 	
-		Los semáforos asociados al nodo deberán pasar a un aspecto rojo cuando la posición del cambio o la ocupación de su sección o la sección vecina impidan el movimiento del tren sin colisionar o descarrillar. Para las demás combinaciones, el aspecto dependerá de la ocupación y aspectos presentados por sus vecinos, para presentar el doble recubrimiento exigido por las normas.
+		Los semáforos asociados al nodo deberán pasar a un aspecto rojo cuando la posición del cambio o la ocupación de su sección o la sección vecina impidan el movimiento del tren sin colisionar o descarrillar. Para las demás combinaciones, el aspecto dependerá de la ocupación y aspectos presentados por sus vecinos, para presentar el doble recubrimiento exigido por las normas ferroviarias, tal como se explicó en la sección \ref{CVs}.
 			
 		\subsection{Resultados obtenidos}
 			
@@ -148,7 +148,7 @@
 				\label{fig:Test_Nodo}
 			\end{figure}
 				
-			El haber validado el nodo genérico que incluye todos los posibles estados que los nodos menos complejos heredarán, se consideró que el ensayo fue un éxito.			
+			El haber validado el nodo genérico que incluye todos los posibles estados que pueden tener los nodos más simples, se considera que el ensayo fue exitoso.	
 	
 \section{Verificación de la implementación de la máquina de cambios}
 
@@ -197,7 +197,7 @@
 			\label{fig:Test_Cambios}
 		\end{figure}
 			
-		El nodo de cambios funciona de manera sincrónica y vincula correctamente los estados de los nodos involucrados. A diferencia de los bloques de nodos donde todos los nodos implementados tienen la misma cantidad de funciones que el ensayado o menor, todos los cambios tienen las mismas funcionalidades sin ninguna limitación, por lo que este ensayo unitario es suficiente para validar su correcto funcionamiento.
+		El nodo de cambios funciona de manera sincrónica y se comprobó que vincula correctamente los estados de los nodos involucrados. A diferencia de los bloques de nodos donde todos los nodos implementados tienen la misma cantidad de funciones que el ensayado o menor, todos los cambios tienen las mismas funcionalidades sin ninguna limitación, por lo que este ensayo es representativo del conjunto de máquinas de cambios y es suficiente para validar su correcto funcionamiento.
 				
 \section{Verificación de la implementación de la UART}
 
@@ -205,11 +205,11 @@
 
 	\subsection{Testbench del módulo UART}
 			
-		Se diseñó un testbench en el cual se inyecta la entrada de la UART directamente a la salida de la UART, teniendo una prueba echo. Todos los mensajes ingresados, siempre que sean válidos, pasarán a la salida para ser publicados en la terminal desde donde se originaron.
+		Se diseñó un testbench en el cual se inyecta la entrada de la UART directamente a la salida de la UART, teniendo una prueba de bucle cerrado. Todos los mensajes ingresados, siempre que sean válidos, pasarán a la salida para ser publicados en la terminal desde donde se originaron.
 						
 	\subsection{Resultados obtenidos}
 				
-		En la figura \ref{fig:Test_UART} se presentan los datos del ensayo. Se puede ver que las tramas inyectadas son presentadas idénticamente en la salida, con un pequeño delay temporal. Además de poder apreciar el tren de pulsos que envía la UART de un extremo al otro del módulo, primero para indicar la lectura de la FIFO de recepción y luego para indicar la escritura de la FIFO de transmisión.
+		En la figura \ref{fig:Test_UART} se presentan los datos obtenidos en el ensayo. Se puede ver que las tramas inyectadas son presentadas idénticamente en la salida, con un pequeño delay temporal. Además de poder apreciar el tren de pulsos que envía la UART de un extremo al otro del módulo, primero para indicar la lectura de la FIFO de recepción y luego para indicar la escritura de la FIFO de transmisión.
 		
 		\begin{figure}[h]
 		\centering
@@ -218,7 +218,7 @@
 			\label{fig:Test_UART}
 		\end{figure}
 			
-		Solo después de superado este ensayo se pudo avanzar con la inclusión de los demás módulos. No tenía ningún sentido implementar sistemas complejos sin la certeza de que la transmisión y recepción de datos de la computadora a la plataforma era fiable. Este proceso de desarrollo requirió varias iteraciones por la dificultad que implicó depurar cada uno de los elementos involucrados.
+		Solo después de superado este ensayo se pudo avanzar con la inclusión de los demás módulos. Esto se debe a que no tenía sentido implementar sistemas complejos sin la certeza de que la transmisión y recepción de datos de la computadora a la plataforma era fiable. %Este proceso de desarrollo requirió varias iteraciones por la dificultad que implicó depurar cada uno de los elementos involucrados.
 	
 \section{Verificación de la implementación del detector}
 
@@ -240,7 +240,7 @@
 						
 	\subsection{Resultados obtenidos}
 				
-		En la figura \ref{fig:Test_Detector} se puede visualizar una parte de los resultados del ensayo. En la cual se enviaron cuatro paquetes distintos y el módulo va alternando los estados según el evento ocurrido. 
+		En la figura \ref{fig:Test_Detector} se puede visualizar una parte de los resultados del ensayo. Este ensayo corresponde al envío de cuatro paquetes distintos y el módulo va alternando los estados según el evento ocurrido. 
 		
 		\begin{figure}[h]
 		\centering
@@ -253,19 +253,19 @@
 		
 		Para la transmisión, cada caracter (byte) leído deberá ser convertido en un booleano (bit) para ser empaquetado en un vector de booleanos. Esto puede verse en la señal auxiliar paquete\_aux que luego de validada toda la trama se envía por w\_data al próximo bloque, junto con el tren de pulsos wr\_uart para indicar el ciclo de lectura de la señal.
 		
-		El ensayo fue exitoso y todas las tramas listadas como erróneas al comienzo del ensayo fueron descartadas sin contratiempos.
+		El ensayo fue exitoso y todas las tramas listadas como erróneas al comienzo del ensayo fueron descartadas de acuerdo a lo previsto.
 		
 \section{Verificación de la implementación del enclavamiento}	
 
-	Utilizando el mismo algoritmo que para validar la UART, pero con el switch en la posición contraria, se pueden enviar las señales del módulo detector al enclavamiento, probando de esta forma los bloques separador, enclavamiento y mediador.
+	Utilizando el mismo algoritmo que para validar la UART, pero con el switch en la posición contraria, se pueden enviar las señales del módulo detector al enclavamiento. De esta forma se pueden probar los bloques separador, enclavamiento y mediador.
 	
 	\subsection{Testbench del módulo enclavamiento}
 			
-		Se diseñó un testbench para ensayar los módulos mencionados. En el cual se inyectan diferentes señales para comprobar que el módulo separador puede justamente separar las señales en vectores manejables. Luego de ser procesados por el enclavamiento, las señales son enviadas al mediador para volver a unificarlas en una sola señal. Finalmente el registro convierte cada elemento de la señal en un caracter imprimible que será enviado a la UART.		
+		Se diseñó un testbench para ensayar los módulos mencionados. En este caso se inyectan diferentes señales para comprobar que el módulo separador puede justamente separar las señales en vectores manejables. Luego de ser procesados por el enclavamiento, las señales son enviadas al mediador para volver a unificarlas en una sola señal. Finalmente el registro convierte cada elemento de la señal en un caracter imprimible que será enviado a la UART.		
 						
 	\subsection{Resultados obtenidos}
 				
-		En la figura \ref{fig:Test_Separador} se puede visualizar como la trama principal es separada en los diferentes vectores que serán recibidos por el enclavamiento. La separación es exitosa al ser un módulo de implementación trivial, la dificultad del mismo estaba en su automatización, mas no en su funcionamiento. El haber atomizado esta funcionalidad fue beneficioso para todo el diseño.
+		En la figura \ref{fig:Test_Separador} se puede visualizar como la trama principal es separada en los diferentes vectores que serán recibidos por el enclavamiento. La separación es exitosa al ser un módulo de cuya dificultad radicaba en su automatización, mas no en su funcionamiento. El haber separado esta funcionalidad del resto del enclavamiento fue beneficioso para todo el diseño.
 		
 		\begin{figure}[!hbt]
 		\centering
@@ -285,7 +285,7 @@
 
 		\vspace{5cm}
 		
-		En la figura \ref{fig:Test_Mediador} se presenta el proceso inverso del módulo mediador, donde las señales del enclavamiento son de vuelta combinadas en una única señal.
+		En la figura \ref{fig:Test_Mediador} se presenta el proceso inverso del módulo mediador, donde las señales del enclavamiento son combinadas en una única señal.
 		
 		\begin{figure}[!hbt]
 		\centering
@@ -294,7 +294,7 @@
 			\label{fig:Test_Mediador}
 		\end{figure}
 		
-		Los tres módulos son parte de un módulo mayor, al funcionar los tres correctamente se ha comprobado que también funciona de forma el bloque que los integra.
+		Los módulos separador, enclavamiento y mediador son parte de un módulo mayor, al funcionar los tres correctamente se ha comprobado que también funciona de forma el bloque que los integra.
 		
 \section{Verificación de la implementación del registro}
 
@@ -343,3 +343,20 @@
 	%\vspace{5cm}
 			
 	Las señales w\_data\_3 y wr\_uart\_3 son la salida del bloque selector, que se puede apreciar copian exactamente a w\_data\_2 y wr\_uart\_2. Cuando el switch se encuentra en estado bajo la salida copiará a w\_data\_1 y wr\_uart\_1.
+
+\section{Sistema general}
+
+	figure \ref{fig:Diagrama_general}
+	
+	\begin{figure}[h]
+	\centering
+	\includegraphics[scale=0.45]{./Figures/Diagrama_general}
+		\caption{Diagrama general del sistema.}
+		\label{fig:Diagrama_general}
+	\end{figure}
+	
+
+\section{Caso de aplicación: Bypass}
+
+
+

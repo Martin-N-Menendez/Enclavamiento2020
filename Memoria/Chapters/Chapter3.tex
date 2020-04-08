@@ -106,7 +106,7 @@ En este capítulo se presentan las decisiones de diseño adoptadas para concreta
 	El haber desarrollado un criterio propio para modelar las topologías tuvo como consecuencia el tener que diseñar tanto la herramienta de análisis, como así también la arquitectura y funcionalidad de cada uno de los módulos expuestos a continuación.	
 	
 \section{Módulo de nodos}
-
+\label{nodos}
 	El módulo principal a ser implementado es el módulo de nodos. Por cada nodo en el grafo se tendrá un módulo de nodos equivalente, cuyas conexiones a otros módulos estarán definidas por las aristas del grafo.
 	
 	Tal como se explicó en la sección \ref{grafos}, se definió que cada nodo del grafo representa un tramo de vía, con todos los elementos que posea ese tramo en la realidad. Es decir, si el tramo incluye semáforos o barreras serán modeladas dentro del módulo de nodo. Con excepción de las máquinas de cambios que por su naturaleza tendrán un módulo aparte.	
