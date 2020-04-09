@@ -93,10 +93,36 @@
 	 
 	 
 	 Se observa que ambas tablas son idénticas, salvo el orden de las rutas, que es irrelevante para el funcionamiento del sistema. Por lo tanto se concluye que la construcción automática de la tabla de enclavamientos es consistente con la construcción manual. Esta consistencia se comprobó en todos los casos en que comparó el resultado del análisis automático con el análisis realizado en forma manual.			
-			
+
+\section{Sistema general}
+
+	Los distintos bloques que se generan automáticamente por el analizador de redes ferroviarias son conectados automáticamente tal como se muestra en la figura \ref{fig:Diagrama_general}. 
+	
+	\begin{figure}[h]
+	\centering
+	\includegraphics[scale=0.45]{./Figures/Diagrama_general}
+		\caption{Diagrama general del sistema.}
+		\label{fig:Diagrama_general}
+	\end{figure}
+	
+	\vspace{2cm}
+	
+	Por simplicidad del diagrama, no se han incluido los bloques referidos a la UART que también son generados automáticamente. Tampoco se ha entrado en detalles respecto al interior del bloque "red", ya que el mismo presenta una cantidad variable de bloques "nodo" y "cambios", contados también de forma variable. Por lo que un diagrama no podría representarlo fielmente.
+	
+	Se ilustra en la figura \ref{fig:UART_General} la conexión entre el sistema y la computadora. La comunicación entre la computadora y la plataforma FPGA es posible gracias a una UART generada automáticamente. La misma adapta su tamaño según las tramas que necesita el sistema para funcionar.
+	
+	\begin{figure}[h]
+	\centering
+	\includegraphics[scale=0.5]{./Figures/Diagrama_UART_PC}
+		\caption{Diagrama de conexión del sistema a la computadora.}
+		\label{fig:UART_General}
+	\end{figure}
+	
+	Para poder verificar el funcionamiento del sistema a nivel general, primero es necesario verificar que cada bloque se comporta como debe. En la siguientes secciones se abordará la verificación de cada uno de los bloques.	
+				
 \section{Verificación de la implementación del nodo}
 
-	La generación automática de código instancia diferentes tipos de nodos, tal como se explicó en la sección \ref{nodos}. A la hora de realizar los ensayos de verificación de la implementación del nodo se utilizó como bloque de prueba el nodo mas completo, que corresponde al nodo perteneciente al tramo de vía que incluye la máquina de cambios. De esta forma se tiene la mayor cantidad de semáforos, interacciones, vecinos y comportamientos posibles.
+	La generación automática de código instancia, dentro del bloque ''red'', diferentes tipos de nodos, tal como se explicó en la sección \ref{nodos}. A la hora de realizar los ensayos de verificación de la implementación del nodo se utilizó como bloque de prueba el nodo mas completo, que corresponde al nodo perteneciente al tramo de vía que incluye la máquina de cambios. De esta forma se tiene la mayor cantidad de semáforos, interacciones, vecinos y comportamientos posibles.
 	
 	\subsection{Testbench del módulo nodo}
 			
@@ -152,7 +178,7 @@
 	
 \section{Verificación de la implementación de la máquina de cambios}
 
-	El módulo de la máquina de cambios tiene como función el conectar al estado anterior con el estado posterior o al estado anterior con el estado desvío según la posición del cambio de vías, como se indica en la Tabla \ref{tabla_cambios}.
+	El módulo de la máquina de cambios, incluido dentro del bloque ''red'', tiene como función el conectar al estado anterior con el estado posterior o al estado anterior con el estado desvío según la posición del cambio de vías, como se indica en la Tabla \ref{tabla_cambios}.
 	
 			\begin{table}[!hbt]
 			\renewcommand{\arraystretch}{1.3}
@@ -197,6 +223,8 @@
 			\label{fig:Test_Cambios}
 		\end{figure}
 			
+		\vspace{5cm}
+			
 		El nodo de cambios funciona de manera sincrónica y se comprobó que vincula correctamente los estados de los nodos involucrados. A diferencia de los bloques de nodos donde todos los nodos implementados tienen la misma cantidad de funciones que el ensayado o menor, todos los cambios tienen las mismas funcionalidades sin ninguna limitación, por lo que este ensayo es representativo del conjunto de máquinas de cambios y es suficiente para validar su correcto funcionamiento.
 				
 \section{Verificación de la implementación de la UART}
@@ -217,6 +245,8 @@
 			\caption{Simulación de la UART.}
 			\label{fig:Test_UART}
 		\end{figure}
+			
+		\vspace{10cm}
 			
 		Solo después de superado este ensayo se pudo avanzar con la inclusión de los demás módulos. Esto se debe a que no tenía sentido implementar sistemas complejos sin la certeza de que la transmisión y recepción de datos de la computadora a la plataforma era fiable. %Este proceso de desarrollo requirió varias iteraciones por la dificultad que implicó depurar cada uno de los elementos involucrados.
 	
@@ -283,7 +313,7 @@
 			\label{fig:Test_Enclavamiento}
 		\end{figure}
 
-		\vspace{5cm}
+		%\vspace{5cm}
 		
 		En la figura \ref{fig:Test_Mediador} se presenta el proceso inverso del módulo mediador, donde las señales del enclavamiento son combinadas en una única señal.
 		
@@ -340,23 +370,86 @@
 		\label{fig:Test_Selector}
 	\end{figure}
 	
-	%\vspace{5cm}
+	\vspace{5cm}
 			
 	Las señales w\_data\_3 y wr\_uart\_3 son la salida del bloque selector, que se puede apreciar copian exactamente a w\_data\_2 y wr\_uart\_2. Cuando el switch se encuentra en estado bajo la salida copiará a w\_data\_1 y wr\_uart\_1.
+	
+\section{Prueba de integración: topología bypass.}
 
-\section{Sistema general}
+	Finalmente se realizó una prueba de integración sobre una topología topología bypass, que se muestra en la figura \ref{fig:Bypass_1}.
 
-	figure \ref{fig:Diagrama_general}
+	\begin{figure}[h]
+	\centering
+	\includegraphics[scale=0.5]{./Figures/XXX}
+		\caption{Topología bypass sin procesar.}
+		\label{fig:Bypass_1}
+	\end{figure}
+	
+	Una vez que la topología es analizada por el analizador de redes ferroviarias, se clasifican todos sus nodos y se determinan todos los semáforos. El resultado del análisis es presentado en la figura \ref{fig:Bypass_2}.
+
+	\begin{figure}[h]
+	\centering
+	\includegraphics[scale=0.5]{./Figures/XXX}
+		\caption{Topología bypass procesada.}
+		\label{fig:Bypass_2}
+	\end{figure}
+	
+	El programa utiliza todos los semáforos creados para generar todas las rutas soportadas por la topología. Además, sólo a los fines de poder hacer la comprobación manual, genera la tabla de enclavamientos, tal como se muestra en la Tabla \ref{tabla_bypass}.
+
+	\begin{table}[!hbt]
+	%\renewcommand{\arraystretch}{1.3}
+	\caption{Tabla de enclavamientos de la topología bypass.}
+	\label{tabla_bypass}
+	\centering
+	\begin{tabular}{ c  c  c  c  c }
+	\hline
+	Ruta & Semáforo inicial & Semáforo final & Secuencia & Sentido \\	
+	\hline
+		1 & 2 & 1 & 2-1 & < \\
+		2 & 2 & 14 & 2-3-4-7-11-14 & > \\
+	\end{tabular}
+	\end{table}	
+	
+	Se generan los archivos de vhdl que describen el sistema, como se muestra en la figura \ref{fig:Bypass_3}.
 	
 	\begin{figure}[h]
 	\centering
-	\includegraphics[scale=0.45]{./Figures/Diagrama_general}
-		\caption{Diagrama general del sistema.}
-		\label{fig:Diagrama_general}
+	\includegraphics[scale=0.5]{./Figures/XXX}
+		\caption{Archivos .VHDL generados.}
+		\label{fig:Bypass_3}
 	\end{figure}
 	
+	En base a dichos archivos .vhdl se crean todos los bloques necesarios para implementar el sistema en la plataforma FPGA. A modo de ejemplo se presenta en la figura \ref{fig:Bypass_4} las conexiones del bloque ''red''. En el mismo se muestran diez bloques de nodos y dos de máquinas de cambios. 
+	
+	\begin{figure}[h]
+	\centering
+	\includegraphics[scale=0.5]{./Figures/Red}
+		\caption{Módulo de red generador.}
+		\label{fig:Bypass_4}
+	\end{figure}
+	
+	Los bloques de nodos tendrán diferentes tamaños según cómo fuesen clasificados por el analizador de redes ferroviarias. Los nodos que incluyen las máquinas de cambios (3 y 5) tendrán un tamaño mucho mayor que los nodos simples (2, 6 y 9).
+	
+	La densidad de conexiones es tan grande que queda de manifiesto la complejidad de realizar esta labor de forma manual. Haber desarrollado el analizador de redes ferroviarias, incluyendo la automatización de la generación de código, es una ventaja a la hora de abordar topologías mas complejas. Ya que la implementación se lleva a cabo sin elevar el tiempo de desarrollo ni incrementar las posibilidades de introducir errores humanos.
+	
+	Se establece una conexión serie entre la computadoray la plataforma FPGA por medio del analizador de redes ferroviarias. Se muestran en las figuras \ref{fig:Bypass_5} y \ref{fig:Bypass_6} el resultado de ocupar el nodo 3 y modificar la posición de las máquinas de cambios respectivamente.
+	
+	\begin{figure}[h]
+	\centering
+	\includegraphics[scale=0.5]{./Figures/Mapa_A}
+		\caption{Bypass con circulación normal y nodo 3 ocupado.}
+		\label{fig:Bypass_5}
+	\end{figure}
 
-\section{Caso de aplicación: Bypass}
+	\begin{figure}[h]
+	\centering
+	\includegraphics[scale=0.5]{./Figures/Mapa_B}
+		\caption{Bypass con circulación inversa y nodo 10 ocupado.}
+		\label{fig:Bypass_6}
+	\end{figure}
+	
+	
+	-ANALISIS FINAL DE AMBAS IMAGENES
+	
 
-
-
+	De esta forma concluye este capítulo, en el cual se presentaron los ensayos realizados y los resultados obtenidos.

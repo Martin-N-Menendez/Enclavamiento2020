@@ -9,7 +9,7 @@ use IEEE.numeric_std.all;
 			r_disponible : in std_logic;
 			led_rgb_1 : out std_logic_vector(3-1 downto 0);
 			led_rgb_2 : out std_logic_vector(3-1 downto 0);
-			paquete : out std_logic_vector(21-1 downto 0);
+			paquete : out std_logic_vector(32-1 downto 0);
 			procesar : in std_logic;
 			procesado : out std_logic;
 			N : in integer;
@@ -21,8 +21,8 @@ use IEEE.numeric_std.all;
 architecture Behavioral of detector is
 	type estados_t is (inicio,lectura,final,error);
 	signal estado, estado_siguiente : estados_t;
-	shared variable contador : integer range 0 to 32 := 0;
-	signal paquete_aux : std_logic_vector(21-1 downto 0);
+	shared variable contador : integer range 0 to 48 := 0;
+	signal paquete_aux : std_logic_vector(32-1 downto 0);
 	signal nuevo : std_logic;
 	signal largo_ok,tags_ok : std_logic;
 	signal tags_izq,tags_der : std_logic;
@@ -53,12 +53,12 @@ begin
 			else
 				if r_disponible = '1' then
 					if estado = lectura then
-						if contador < 23 then
+						if contador < 34 then
 							contador := contador + 1;
 						end if;
 					end if;
 				end if;
-				if contador > 21 and contador < 23 then
+				if contador > 32 and contador < 34 then
 					contador := contador + 1;
 				end if;
 				if estado = final or estado = error then
@@ -76,12 +76,12 @@ begin
 			else
 				if estado = lectura then
 					if r_disponible = '1' then
-						if contador < 22 then
+						if contador < 33 then
 							if r_data = char_0 then
-								paquete_aux(21-contador) <= '0';
+								paquete_aux(32-contador) <= '0';
 							end if;
 							if r_data = char_1 then
-								paquete_aux(21-contador) <= '1';
+								paquete_aux(32-contador) <= '1';
 							end if;
 						end if;
 						nuevo <= '1';
@@ -112,7 +112,7 @@ begin
 							estado_siguiente <= lectura;
 						end if;
 					when lectura =>
-						if contador = 23 then -- 21 (asi entran 21)
+						if contador = 34 then -- 32 (asi entran 32)
 							if r_data = tag_final then --  r_data = '>'
 								tags_der <= '1';
 								estado_siguiente <= final;
@@ -176,7 +176,7 @@ begin
 				largo_ok <= '0';
 				led_rgb_2 <= "001"; -- rojo
 			else
-				if N = 23 then
+				if N = 34 then
 					largo_ok <= '1';
 					led_rgb_2 <= "010"; -- verde
 				else

@@ -6,10 +6,10 @@ use IEEE.numeric_std.all;
 use work.my_package.all;
 	entity nodo_8 is
 		generic(
-			N : natural := 90;
-			N_SEM : natural := 27;
-			N_MDC : natural := 12;
-			N_CVS : natural := 24
+			N : natural := 32;
+			N_SEM : natural := 10;
+			N_MDC : natural := 2;
+			N_CVS : natural := 10
 		);
 		port(
 			Clock :  in std_logic;
@@ -20,10 +20,8 @@ use work.my_package.all;
 			Estado_post :  in std_logic;
 			Semaforo_propio_i_1 :  in sem_type;
 			Semaforo_propio_o_1 :  out sem_type;
-			Semaforo_propio_i_2 :  in sem_type;
-			Semaforo_propio_o_2 :  out sem_type;
-			Semaforo_cercano_18_i :  in sem_type;
-			Estado_lejano_18_i :  in std_logic;
+			Semaforo_cercano_1_i :  in sem_type;
+			Estado_lejano_1_i :  in std_logic;
 			Estado_o :  out std_logic
 		);
 	end entity nodo_8;
@@ -41,21 +39,22 @@ begin
 					--estado = ROJO
 					Semaforo_propio_o_1.msb <= '0'; --ROJO
 					Semaforo_propio_o_1.lsb <= '0'; --ROJO
-				end if;
-			end if;
-		end if;
-	end process;
-	Semaforo_2 : process(Clock,Reset)
-	begin
-		if (Clock = '1' and Clock'Event) then
-			if (Reset = '1') then
-				Semaforo_propio_o_2.msb <= '0';
-				Semaforo_propio_o_2.lsb <= '0';
-			else
-				if ( Estado_i = '0' ) then
-					--estado = ROJO
-					Semaforo_propio_o_2.msb <= '0'; --ROJO
-					Semaforo_propio_o_2.lsb <= '0'; --ROJO
+				else
+					if (Cambio_i = '1') then --Reverso
+						if Estado_ante = '0' then
+							--estado = ROJO
+							Semaforo_propio_o_1.msb <= '0'; --ROJO
+							Semaforo_propio_o_1.lsb <= '0'; --ROJO
+						else
+							--estado = AMARILLO
+							Semaforo_propio_o_1.msb <= '1'; --AMARILLO
+							Semaforo_propio_o_1.lsb <= '0'; --AMARILLO
+						end if;
+					else
+						--estado = ROJO
+						Semaforo_propio_o_1.msb <= '0'; --ROJO
+						Semaforo_propio_o_1.lsb <= '0'; --ROJO
+					end if;
 				end if;
 			end if;
 		end if;

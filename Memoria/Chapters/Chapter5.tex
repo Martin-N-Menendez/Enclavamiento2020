@@ -5,21 +5,17 @@
 \label{Chapter5} % Change X to a consecutive number; for referencing this chapter elsewhere, use \ref{ChapterX}
 
 
-En este capítulo se presentan las conclusiones obtenidas, los logros alcanzados y las dificultades encontradas, además de un resumen de los elementos del proyecto que no se incluyeron en la memoria.
+En este capítulo se presentan las conclusiones obtenidas y los logros alcanzados, además de un resumen de los elementos del proyecto que no se incluyeron en la memoria.
 
 %----------------------------------------------------------------------------------------
 
 \section{Resultados obtenidos}
 	
-	A lo largo de todo el proyecto se han visitado una gran cantidad de lugares claves del ámbito ferroviario (estaciones, talleres, oficinas, áreas de pruebas, etc.). Se ha conocido a decenas de profesionales del área que, con sus conocimientos y experiencias, han sabido aportar a la resolución del problema. Ello, combinando tanto el esfuerzo propio como la ayuda de los integrantes del CONICET-GICSAFe, permitió implementar de forma exitosa un prototipo del sistema de enclavamiento electrónico.
+	A lo largo de todo el proyecto se han visitado una gran cantidad estaciones, talleres, oficinas y áreas de pruebas. Se ha establecido relación con decenas de profesionales del área que, con sus conocimientos y experiencias, han sabido aportar a la resolución del problema abordado. Esto, combinando tanto el esfuerzo propio como la ayuda de los integrantes del CONICET-GICSAFe, permitió implementar de forma exitosa un prototipo del sistema de enclavamiento electrónico.
 	
-	%El proyecto comenzó como una idea abstracta y ambiciosa que fue evolucionando y adquiriendo mayor definición conforme avanzaban las entrevistas con los diversos actores que en el día a día comandan las instalaciones ferroviarias. Al ir investigando, se iban encontrando nuevas ramificaciones para el proyecto y nuevos enfoques para abordarlo, lo cual elevó su complejidad a tal punto de calificar para una beca de doctorado que iniciará el corriente año.
+	Los conocimientos en el área de las FPGAs sirvieron para materializar los diseños planteados, llegando a obtener no solo un sistema seguro y funcional, sino también escalable, y además la implementación de un sistema que brinda la generación automática de la solución.
 	
-	%Durante la Especialización, las modificaciones de metas y alcances fueron una constante, al igual que los cambios de locación. Por lo tanto, el haber encarado la segunda etapa del proyecto en la maestría con un enfoque general, en vistas de automatizar la totalidad del proceso, fue un enorme esfuerzo extra que no estaba contemplado pero cuya necesidad surgió del contexto adverso en el que se desarrolló el sistema. Al final del trabajo, todas esas horas dedicadas a la automatización tuvieron su impacto positivo en cada una de sus aristas.
-		
-	Los conocimientos en el área de las FPGAs sirvieron para materializar los diseños planteados, llegando a obtener no solo un sistema seguro y funcional, sino también uno escalable al automatizar la generación del código.
-	
-	El haber trabajado en conjunto en otros proyectos de CONICET-GICSAFe a la par del desarrollo del sistema de enclavamientos permitió tomar conciencia de su importancia como sistema crítico y abre las puertas a una tercera etapa próxima a iniciarse. %Con una base sólida de conocimientos, expectativas mucho mas altas y vínculos humanos y profesionales, pero con la confianza y el respaldo que otorgan los avances concretados en esta etapa que llega a su fin.
+	%El haber trabajado en conjunto en otros proyectos de CONICET-GICSAFe a la par del desarrollo del sistema de enclavamientos permitió tomar conciencia de su importancia como sistema crítico y abre las puertas a una tercera etapa próxima a iniciarse. %Con una base sólida de conocimientos, expectativas mucho mas altas y vínculos humanos y profesionales, pero con la confianza y el respaldo que otorgan los avances concretados en esta etapa que llega a su fin.
 
 	En el transcurso del proyecto se han alcanzado los siguientes logros:
 	
@@ -28,8 +24,8 @@ En este capítulo se presentan las conclusiones obtenidas, los logros alcanzados
 		\item Diseño e implementación de un generador de código en VHDL basado en un grafo ferroviario, por lo que pueden implementarse enclavamientos electrónicos cualquiera sea la locación.
 		\item Diseño e implementación de un generador de tramas para comandar la plataforma FPGA desde Python, que facilita el testeo de los sistemas generados.
 		\item Publicación de artículos en IEEE Latin America y el Congreso Argentino de Sistemas Embebidos 2019\cite{IEEE_LAT}.
-		\item Se completó con éxito una beca de Maestría de UBACyT.
-		\item Se obtuvo una beca de doctorado en desarrollo estratégico de CONICET 2020-2025.
+		\item Se completó con éxito una beca de Maestría UBACyT.
+		\item Se obtuvo una beca de doctorado en desarrollo estratégico de CONICET 2020-2025 en la que se continuará el desarrollo, abordando los aspectos relativos a redundancia y diversidad, y además se espera probar la solución desarrollada en una locación real.
 		%\item Desarrollo del primer sistema ferroviario crítico en el marco del CONICET-GICSAFe.
 	\end{itemize}
 	
@@ -38,13 +34,14 @@ En este capítulo se presentan las conclusiones obtenidas, los logros alcanzados
 	La planificación del proyecto contempló desde un inicio que sería un trabajo de dos años a ser realizado en conjunto entre la Especialización y la Maestría de Sistemas Embebidos. Sin embargo, el mencionado incremento en la complejidad del sistema abrió las puertas a continuar el proyecto durante el doctorado. Por lo tanto, se mencionan a continuación los pasos a seguir para el próximo tramo del proyecto:	
 	
 	\begin{itemize}
-		\item Optimización del analizador de grafos ferroviarios.
-		\item Integración con la interfaz gráfica deserrollada en UTN-Haedo.
-		\item Realización de pruebas en paralelo con la estación Olivos, gracias al desarrollo del sistema modular del Mg. Ing. Lucas Dórdolo.
-		\item Culminación del generador de test para COCOTB.
-		\item Culminación del generador de tablas de enclavamiento.
-		\item Corrección del funcionamiento de las barreras.
-		\item Elaboración de un análisis formal del sistema de enclavamientos para redes ferroviarias arbitrarias.
-		\item Aplicación de técnicas de redundancia por votación para aumentar la seguridad del sistema.
-		\item Obtención de los parámetros RAMS alcanzados para obtener el grado SIL necesario.
+		\item Optimización del analizador de grafos ferroviarios desarrollado, con el fin de abarcar topologías mas complejas que las presentadas.
+		\item Integración con la interfaz gráfica deserrollada en UTN Facultad Regional Haedo.
+		\item Realización de pruebas en paralelo con la estación Olivos, gracias al desarrollo del sistema modular del Mg. Ing. Lucas Dórdolo \cite{Lucas}.
+		\item Ampliación de la batería de ensayos, para abarcar mas casos en topologías mas complejas.
+		\item Ampliación del generador de tablas de enclavamiento, para abarcar mas condiciones de funcionamiento.
+		%\item Corrección del funcionamiento de las barreras.
+		%\item Elaboración de un análisis formal del sistema de enclavamientos para redes ferroviarias arbitrarias.
+		\item Aplicación de técnicas de redundancia y diversidad por votación para aumentar la seguridad del sistema.
+		\item Realización de pruebas en una locación real.
+		\item Determinación de los niveles RAMS alcanzados para así establecer si el sistema diseñado puede ser utilizado en aplicaciones reales, o en su defecto cuáles son los aspectos en los que debe ser mejorado.
 	\end{itemize}

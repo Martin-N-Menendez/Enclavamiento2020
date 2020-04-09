@@ -6,18 +6,18 @@ use IEEE.numeric_std.all;
 use work.my_package.all;
 	entity mediador is
 		generic(
-			N : natural := 21;
-			N_SEM : natural := 7;
-			N_MDC : natural := 1;
-			N_CVS : natural := 6
+			N : natural := 32;
+			N_SEM : natural := 10;
+			N_MDC : natural := 2;
+			N_CVS : natural := 10
 		);
 		port(
 			Clock :  in std_logic;
 			procesar :  in std_logic;
 			procesado :  out std_logic;
 			semaforos :  in sems_type;
-			Cambios :  in std_logic;
-			Salida :  out std_logic_vector(15-1 downto 0);
+			Cambios :  in std_logic_vector(2-1 downto 0);
+			Salida :  out std_logic_vector(22-1 downto 0);
 			Reset :  in std_logic
 		);
 	end entity mediador;
@@ -46,7 +46,13 @@ begin
 					Salida(11) <= semaforos.lsb(5);
 					Salida(12) <= semaforos.msb(6);
 					Salida(13) <= semaforos.lsb(6);
-					Salida(14) <= Cambios;
+					Salida(14) <= semaforos.msb(7);
+					Salida(15) <= semaforos.lsb(7);
+					Salida(16) <= semaforos.msb(8);
+					Salida(17) <= semaforos.lsb(8);
+					Salida(18) <= semaforos.msb(9);
+					Salida(19) <= semaforos.lsb(9);
+					Salida(22-1 downto 20) <= Cambios;
 				end if;
 			end if;
 		end if;

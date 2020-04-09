@@ -1,5 +1,6 @@
 from circles import *
 from matplotlib.patches import Rectangle
+from pylab import rcParams
 
 from Estaciones import *
 
@@ -8,6 +9,8 @@ import matplotlib.pyplot as plt
 global plt
 
 global r
+
+global ax 
 
 r = 0.14
 
@@ -303,6 +306,8 @@ def mostrar_grafo(secciones,i = 0,j = 0, gif_mode = False):
     axis = [[-0.5,10.5],[-2.5,2.5]]    
     axis = calcular_ejes(secciones)
     
+    #plt.figure(figsize=(16,9))
+    
     ax = plt.gca()
     ax.cla() # clear things for fresh plot
     
@@ -314,18 +319,27 @@ def mostrar_grafo(secciones,i = 0,j = 0, gif_mode = False):
     else:
         ajuste = 3
     
+    #plt.figure(figsize=(16,9))
+    
     #cargar_secciones(archivos[i][0],archivos[i][1])
         
     dibujar_secciones(secciones,ajuste)
     conectar_secciones(secciones)     
     imprimir_semaforos(secciones,ajuste)    
-        
+     
+    #plt.figure(figsize=(16,9))
     
     ax.axis('off')
     
     if gif_mode:  
+        #fig = plt.gcf()
+        #fig.set_size_inches(16, 9)
+        #plt.figure(figsize=(16,9))
         plt.savefig('Mapas/Mapa_'+str(i)+'('+str(j)+').png',dpi = 100)
     else:
+        #fig = plt.gcf()
+        #fig.set_size_inches(16, 9)
+        #plt.figure(figsize=(16,9))
         plt.savefig('Mapas/Mapa_'+str(i)+'.png',dpi = 100)
         
     plt.show()

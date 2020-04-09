@@ -6,10 +6,10 @@ use IEEE.numeric_std.all;
 use work.my_package.all;
 	entity cambio_3 is
 		generic(
-			N : natural := 90;
-			N_SEM : natural := 27;
-			N_MDC : natural := 12;
-			N_CVS : natural := 24
+			N : natural := 50;
+			N_SEM : natural := 16;
+			N_MDC : natural := 4;
+			N_CVS : natural := 14
 		);
 		port(
 			Clock :  in std_logic;

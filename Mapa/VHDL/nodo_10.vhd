@@ -6,18 +6,22 @@ use IEEE.numeric_std.all;
 use work.my_package.all;
 	entity nodo_10 is
 		generic(
-			N : natural := 90;
-			N_SEM : natural := 27;
-			N_MDC : natural := 12;
-			N_CVS : natural := 24
+			N : natural := 32;
+			N_SEM : natural := 10;
+			N_MDC : natural := 2;
+			N_CVS : natural := 10
 		);
 		port(
 			Clock :  in std_logic;
 			Reset :  in std_logic;
+			Cambio_i :  in std_logic;
 			Estado_i :  in std_logic;
+			Estado_ante :  in std_logic;
 			Estado_post :  in std_logic;
 			Semaforo_propio_i_1 :  in sem_type;
 			Semaforo_propio_o_1 :  out sem_type;
+			Semaforo_cercano_7_i :  in sem_type;
+			Estado_lejano_7_i :  in std_logic;
 			Estado_o :  out std_logic
 		);
 	end entity nodo_10;
@@ -35,6 +39,10 @@ begin
 					--estado = ROJO
 					Semaforo_propio_o_1.msb <= '0'; --ROJO
 					Semaforo_propio_o_1.lsb <= '0'; --ROJO
+				else
+					--estado = VERDE
+					Semaforo_propio_o_1.msb <= '1'; --VERDE
+					Semaforo_propio_o_1.lsb <= '1'; --VERDE
 				end if;
 			end if;
 		end if;

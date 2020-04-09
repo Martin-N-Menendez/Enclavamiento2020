@@ -413,7 +413,9 @@ def creando_separador(secciones,objetos,test = False):
         f.write("\t\t\t\t\t"+"barreras <= Paquete("+str(N_CVS+2*N_SEM+N_PAN)+"-1);"+"\n")
           
     if N_MDC > 1:
-        f.write("\t\t\t\t\t"+"Cambios <= Paquete("+str(N-(N_CVS+2*N_SEM+N_PAN+N_MDC))+" downto "+str(N-(N_CVS+2*N_SEM+N_PAN))+");"+"\n")
+        for i in range(N_MDC):
+            #f.write("\t\t\t\t\t"+"Ocupacion("+str(i)+") <= Paquete("+str(N-i-1)+");"+"\n")
+            f.write("\t\t\t\t\t"+"Cambios("+str(i)+") <= Paquete("+str(N_MDC-i-1)+");"+"\n")
     if N_MDC == 1:
         f.write("\t\t\t\t\t"+"Cambios <= Paquete("+str(N-(N_CVS+2*N_SEM+N_PAN+N_MDC))+");"+"\n")
     
@@ -1141,13 +1143,20 @@ def creando_nodo(secciones,objetos,tabla,test = False):
                            
                 print("N {} | Sem {} | {} {} | {} {}".format(i+1,j+1,secciones[i].sem_sentido[j],secciones[i].N_aspectos[j],vecino,vecino_existe))
                 
-                
+                if str(i+1) in sem_anterior:
+                    sem_index = sem_anterior.index(str(i+1))
+                    #print(sem_index)
+                    
                 if (str(i+1) in sem_anterior or str(i+1) in sem_actual):
+                    
+                    
+                    
                     f.write("\t\t\t\t"+""+"else"+"\n")
                     #print("{} : {}".format(sem_actual[j],secciones[i].vecinos))
                     if int(sem_actual[j]) in secciones[i].vecinos:
                         #print("A")
                         if vecino_existe:
+                                                
                             f.write("\t\t\t\t\t"+""+"if (Cambio_i = '0') then"+" --Normal"+"\n") 
                             
                             f.write("\t\t\t\t\t\t"+""+"if "+str(vecino)+" = '0' then"+"\n") 
@@ -1158,7 +1167,7 @@ def creando_nodo(secciones,objetos,tabla,test = False):
                             f.write("\t\t\t\t\t\t"+""+"else"+"\n") 
                             
                             f.write("\t\t\t\t\t\t\t"+"--"+"Si Color = AMARILLO"+"\n") 
-                            f.write("\t\t\t\t\t\t\t"+""+"if (Semaforo_cercano_"+str(sem_actual[j])+"_i.msb = '1'"+" and  "+"Semaforo_cercano_"+str(sem_actual[j])+"_i.lsb = '0') then"+"\n")    
+                            f.write("\t\t\t\t\t\t\t"+""+"if (Semaforo_cercano_"+str(sem_actual[sem_index+j])+"_i.msb = '1'"+" and  "+"Semaforo_cercano_"+str(sem_actual[sem_index+j])+"_i.lsb = '0') then"+"\n")    
                             
                             f.write("\t\t\t\t\t\t\t\t"+"--"+"estado = VERDE"+"\n") 
                             f.write("\t\t\t\t\t\t\t\t"+""+"Semaforo_propio_o_"+str(j+1)+".msb <= '1'; --VERDE"+"\n")
@@ -1191,9 +1200,10 @@ def creando_nodo(secciones,objetos,tabla,test = False):
                     if int(sem_actual[j]) not in secciones[i].vecinos:
                         #print("B")
                         if vecino_existe:
+                            
                             if secciones[i].N_aspectos[j] == '3':
-                                f.write("\t\t\t\t\t"+""+"if (Cambio_i = '0') then"+" --Normal"+"\n") 
                                 
+                                f.write("\t\t\t\t\t"+""+"if (Cambio_i = '0') then"+" --Normal"+"\n")                              
                                 
                                 f.write("\t\t\t\t\t\t"+""+"if "+str(vecino)+" = '0' then"+"\n") 
                                 f.write("\t\t\t\t\t\t\t"+"--"+"estado = ROJO"+"\n") 
@@ -1203,7 +1213,7 @@ def creando_nodo(secciones,objetos,tabla,test = False):
                                 f.write("\t\t\t\t\t\t"+""+"else"+"\n") 
                                 
                                 f.write("\t\t\t\t\t\t\t"+"--"+"Si OTRO = OCUPADO"+"\n") 
-                                f.write("\t\t\t\t\t\t\t"+""+"if (Estado_lejano_"+str(sem_actual[j])+"_i = '0') then"+"\n")    
+                                f.write("\t\t\t\t\t\t\t"+""+"if (Estado_lejano_"+str(sem_actual[sem_index+j])+"_i = '0') then"+"\n")    
                                 
                                 f.write("\t\t\t\t\t\t\t\t"+"--"+"estado = AMARILLO"+"\n") 
                                 f.write("\t\t\t\t\t\t\t\t"+""+"Semaforo_propio_o_"+str(j+1)+".msb <= '1'; --AMARILLO"+"\n")

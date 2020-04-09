@@ -86,8 +86,8 @@ Es este capítulo se presentan las topologías típicas del sistema ferroviario 
 
 \section{Enfoque funcional}
 	\label{Incompletitud}
-	
-	El concepto de tabla de enclavamientos\cite{cite21,cite22} se introdujo en forma resumida en la sección \ref{2_2}, pero a continuación en la sección \ref{Tabla_Enclavamientos} se lo describe en detalle, para luego seguir explicando los demás elementos del enfoque funcional a partir de la sección \ref{2_3_2}.
+
+	El concepto de tabla de enclavamientos\cite{cite21,cite22} se introdujo en forma resumida en la sección \ref{2_2}. Sin embargo, dado que es fundamental para entender el enfoque funcional, a continuación se lo describe en detalle.%, para luego seguir explicando los demás elementos del enfoque funcional a partir de la sección \ref{2_3_2}.
 		
 	\subsection{Tabla de enclavamientos}
 	\label{Tabla_Enclavamientos}
@@ -203,7 +203,7 @@ Es este capítulo se presentan las topologías típicas del sistema ferroviario 
 			\label{fig:Work_Funcional}
 		\end{figure}
 	
-		Cómo se resaltó anteriormente, el diseño nace de la tabla de enclavamientos, y para evitar que cualquier error en esta se propague al sistema, varios profesionales ferroviarios se encargan de diseñarla y revisarla. Además, su validación puede ser automatizada mediantes \textit{scripts} que busquen errores en las mismas.
+		En la sección \ref{2_2} se resaltó que el diseño nace de la tabla de enclavamientos, y para evitar que cualquier error en esta impacte negativamente en la seguridad del sistema, varios profesionales ferroviarios se encargan de diseñarla y revisarla. Además, su validación puede ser automatizada mediantes \textit{scripts} que busquen errores en las mismas.
 		
 		El proceso culmina con la redundancia de los sistemas diseñados y la diversificación de plataformas, sin lo cual no se podrían alcanzar los niveles de disponibilidad y seguridad necesarios.
 			
@@ -230,9 +230,9 @@ Es este capítulo se presentan las topologías típicas del sistema ferroviario 
 					
 \section{Enfoque geográfico}
 
-	En el enfoque geográfico el énfasis está puesto en la interacción de los componentes dependiendo de su posición en la red y no en la funcionalidad a nivel sistema. Por ende no necesita una tabla de enclavamientos que defina su comportamiento, sino definir genéricamente los componentes y establecer una representación matemática de las conexiones entre ellos. En ese sentido, este enfoque requiere un nivel de análisis previo mucho mayor y, por lo tanto, un tiempo de desarrollo mas elevado. No obstante, su flexibilidad a la hora de escalar a topologías de mayor tamaño es notable.
+	En el enfoque geográfico el énfasis está puesto en la interacción entre los componentes a partir de de su posición en la red y no en su funcionalidad a nivel de sistema. Por ende el enfoque geográfico no necesita una tabla de enclavamientos que defina su comportamiento, sino definir genéricamente los componentes y establecer una representación matemática de las conexiones entre ellos. En ese sentido, este enfoque requiere un nivel de análisis previo mucho mayor y, por lo tanto, un mayor tiempo de desarrollo. No obstante, su flexibilidad a la hora de escalar a topologías de mayor tamaño es notable.
 	
-	Por todo lo anterior, se remueve el concepto de ruta como elemento central del desarrollo y el foco se pone en modelar los elementos discretos de la red ferroviaria (semáforos, barreras, cambios, circuitos de vía). En la figura \ref{fig:Enfoque_Geografico} se representa la idea central de este enfoque: la variedad de elementos es finita; el foco del desarrollo está centrado en el análisis de la red ferroviaria.
+	Por todo lo expuesto, se remueve el concepto de ruta como elemento central del desarrollo y el foco se pone en modelar los elementos discretos de la red ferroviaria (semáforos, barreras, cambios, circuitos de vía). En la figura \ref{fig:Enfoque_Geografico} se representa la idea central de este enfoque: la variedad de elementos es finita; el foco del desarrollo está centrado en el análisis de la red ferroviaria.
 	
 		\begin{figure}[h]
 		\centering
@@ -288,7 +288,7 @@ Es este capítulo se presentan las topologías típicas del sistema ferroviario 
 		
 		\subsection{Escalabilidad de la estrategia}	
 			
-			En el caso del enfoque geográfico el análisis de escalabilidad da un resultado muy diferente al obtenido para el enfoque funcional. En el enfoque geográfico al aumentar la complejidad, y por lo tanto el tamaño de las topologías, el tamaño de los bloques se mantiene constante, aunque se incrementa la cantidad de bloques necesarios para implementar el sistema. Esto es ilustrado en la figura \ref{fig:Escala_Geografico}.
+			En el caso del enfoque geográfico el análisis de escalabilidad da un resultado muy diferente al obtenido para el enfoque funcional. En el enfoque geográfico al aumentar la complejidad y tamaño de las topologías, el tamaño de cada bloque se mantiene constante.  Lo que se incrementa es la cantidad de bloques necesarios para implementar el sistema. Esto es ilustrado en la figura \ref{fig:Escala_Geografico}.
 					
 			\begin{figure}[h]
 			\centering
@@ -337,7 +337,7 @@ Es este capítulo se presentan las topologías típicas del sistema ferroviario 
 
 \section{Plataforma utilizada}
 
-	Se utilizó una plataforma FPGA, a diferencia de las empresas mencionadas en el capítulo 1 que utilizan microprocesadores, ya que se busca aprovechar la concurrencia y mayor seguridad inherentes a esta tecnología\cite{cite23,cite24,cite25} para la implementación de sistemas
+	Se utilizó una plataforma FPGA, a diferencia de las empresas mencionadas en el capítulo 1 que utilizan microprocesadores, ya que se busca aprovechar la concurrencia y mayor seguridad inherentes a esta tecnología \cite{cite23,cite24,cite25} para la implementación de sistemas
 críticos.
 
 	Por razones de disponibilidad se utilizó el kit de desarrollo Arty Z7  (figura \ref{fig:FPGA}), el cual posee 17600 LUT’s, 35200 FF’s, 32 BUFG’s y 100 IOB’s \cite{cite28}. Se lo utilizó como base para sintetizar el diseño y extraer conclusiones que permitan dimensionar los recursos lógicos necesarios para un desarrollo de estas características.

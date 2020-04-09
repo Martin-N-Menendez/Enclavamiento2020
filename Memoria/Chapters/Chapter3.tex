@@ -42,13 +42,13 @@ En este capítulo se presentan las decisiones de diseño adoptadas para concreta
 
 \section{Analizador de redes ferroviarias}
 
-	En el marco de la Especialización de Sistemas Embebidos se utilizó el enfoque funcional basado en la tabla de enclavamientos, con las limitaciones ya expuesta en el capítulo 2. Algunos de los artículos encontrados utilizan ese enfoque\cite{Fun_1,Fun_2,Fun_3,Fun_4}, mientras otros artículos encontrados abordan el modelado de los sistemas sin utilizar tablas de enclavamiento \cite{Geo_1,Geo_2,Geo_3,Geo_4}.
+	En el marco de la Especialización de Sistemas Embebidos se utilizó el enfoque funcional basado en la tabla de enclavamientos, con las limitaciones ya expuesta en el capítulo 2. Algunos de los artículos encontrados utilizan ese enfoque \cite{Fun_1,Fun_2,Fun_3,Fun_4}, mientras otros artículos mas recientes abordan el modelado de los sistemas sin utilizar tablas de enclavamiento \cite{Geo_1,Geo_2,Geo_3,Geo_4}.
 	
-	Los diversos artículos que modelan los sistemas ferroviarios en base a la topología utilizan estrategias muy dispares. Por ejemplo, no existe una idea en común de que herramienta matemática utilizar: algunos utilizan redes de Petri, mientras que otros utilizan grafos. Incluso dentro del subgrupo de los artículos que sugieren utilizar grafos no tienen un criterio unificado de qué representa cada nodo y cada arista, ni tampoco cómo analizar la red ni cuáles son los elementos básicos que necesita para estar definida.	
+	Los diversos artículos que modelan los sistemas ferroviarios en base a la topología utilizan estrategias muy dispares. Por ejemplo, no existe una idea en común de que herramienta matemática utilizar: algunos recurren a las redes de Petri, mientras que otros a los grafos. Incluso dentro del subgrupo de los artículos que sugieren utilizar grafos no existe un criterio unificado de qué representa cada nodo y cada arista, ni tampoco cómo analizar la red ni cuáles son los elementos básicos que necesita para estar definida.	
 	
 	En base a la bibliografía relevada, se llegó a la conclusión de que todo grafo ferroviario necesita dos datos para estar definido. El primero es la lista de relaciones entre nodo inicial y nodo final, y el segundo es la posición absoluta del nodo en el grafo junto con datos adicionales, como si posee un paso a nivel o si es bidireccional. 
 	
-	Con esa información fue posible realizar un analizador de redes ferroviarias. Un script implementado en python que procesa archivos de texto plano donde se indican las conexiones entre ellos y cuyos resultados son:
+	Con esa información fue posible realizar un analizador de redes ferroviarias. Un script implementado en el lenguaje Python que procesa archivos de texto plano donde se indican las conexiones entre ellos y cuyos resultados son:
 	
 	\begin{itemize}
 		\item Análisis de red ferroviaria:
@@ -77,7 +77,7 @@ En este capítulo se presentan las decisiones de diseño adoptadas para concreta
 		\end{itemize}
 	\end{itemize}
 	
-	Todas las topologías de la sección \ref{Topologias} pueden ser analizadas por el programa y generar, de forma automática, todo el código en VHDL que sea necesario para el correcto funcionamiento del sistema. A modo de ejemplo se incluye el caso de la figura \ref{fig:Mapa_2_B}, grafo de una red ferroviaria bypass, antes de ser procesado. El analizador de redes ferroviarias devuelve el grafo procesado tal como se presenta en la figura \ref{fig:Mapa_2}.
+	Todas las topologías de la sección \ref{Topologias} pueden ser analizadas por el programa y generar, de forma automática, el código en VHDL que sea necesario para el correcto funcionamiento del sistema. A modo de ejemplo se incluye el caso de la figura \ref{fig:Mapa_2_B}, grafo de una red ferroviaria bypass, antes de ser procesado. El analizador de redes ferroviarias devuelve el grafo procesado tal como se presenta en la figura \ref{fig:Mapa_2}.
 
 	\begin{figure}[h]
 	\centering
@@ -93,11 +93,11 @@ En este capítulo se presentan las decisiones de diseño adoptadas para concreta
 		\label{fig:Mapa_2}
 	\end{figure}		
 
-	Los nodos 1 y 7 se encuentran pintados de violeta porque, al tener un único vecino cada uno, se consideran nodos extremos. Los nodos 2, 6 y 9 no presentan nada en especial, por lo que son nodos simples y están pintados de azul. Los nodos que sí tienen una importancia central en el análisis son los nodos que poseen tres vecinos: el nodo 3 y el nodo 5, que están pintados en verde y se consideran "cambios raíz".
+	Los nodos 1 y 7 se encuentran pintados de violeta porque, al tener un único vecino cada uno, se consideran nodos extremos. Los nodos 2, 6 y 9 no presentan nada en especial, por lo que son nodos simples y están pintados de azul. Los nodos que sí tienen una importancia central en el análisis son los nodos que poseen tres vecinos: el nodo 3 y el nodo 5, que están pintados en verde y se consideran ''cambios raíz".
 
-	Luego el nodo 4 se categoriza como nodo de cambio directo por ser la continuación de los segmentos 2-3 y 5-6 de tener el cambio de vía en posición normal, permitiendo la circulación directa. En este caso el nodo 4 es compartido por ambos cambios, pero no siempre se da este caso.
+	Luego el nodo 4 se categoriza como nodo de cambio directo por ser la continuación de los segmentos 2-3 y 5-6 de tener el cambio de vía en posición normal, permitiendo la circulación directa. En este caso el nodo 4 es compartido por ambos cambios.
 	
-	Los nodos 8 y 10, que son vecinos de los cambios 3 y 5 pero no comparten ninguna coordenada espacial con ellos, son nodos de cambios ramificados. Es decir, solo permitirán la secuencia de nodos 2-3-8 o 9-8-3 si la máquina de cambios se encuentra en posición inversa. Para el nodo 5 el análisis es análogo.
+	Los nodos 8 y 10 son vecinos de los cambios 3 y 5 pero no comparten ninguna coordenada espacial con ellos, son nodos de cambios ramificados. Es decir, solo permitirán la secuencia de nodos 2-3-8 o 9-8-3 si la máquina de cambios se encuentra en posición inversa. El mismo análisis puede hacerse para el nodo 5.
 
 	La asignación de semáforos se realiza solo sobre los nodos extremos, cambios raíz y cambios ramificados. Los extremos necesitan los semáforos para permitir la salida de las formaciones de la red, ya que la red ferroviaria continúa mas allá del nodo 1 y del 7; de ser nodos extremos absolutos (fin de red) no corresponde que se les asigne un semáforo.
 	
@@ -107,32 +107,32 @@ En este capítulo se presentan las decisiones de diseño adoptadas para concreta
 	
 \section{Módulo de nodos}
 \label{nodos}
-	El módulo principal a ser implementado es el módulo de nodos. Por cada nodo en el grafo se tendrá un módulo de nodos equivalente, cuyas conexiones a otros módulos estarán definidas por las aristas del grafo.
+	El módulo de nodos corresponde al módulo principal en esta implementación. Por cada nodo en el grafo se tiene un módulo de nodos equivalente, cuyas conexiones a otros módulos estarán definidas por las aristas del grafo.
 	
 	Tal como se explicó en la sección \ref{grafos}, se definió que cada nodo del grafo representa un tramo de vía, con todos los elementos que posea ese tramo en la realidad. Es decir, si el tramo incluye semáforos o barreras serán modeladas dentro del módulo de nodo. Con excepción de las máquinas de cambios que por su naturaleza tendrán un módulo aparte.	
 	
 	Como cada tramo puede tener diferentes cantidades de elementos, existen diversos tipos de nodos en el sistema. Para ejemplificar se describirá el funcionamiento de un nodo genérico con la máxima cantidad de funcionalidades, de forma tal de cubrir todos los casos.
 	
-	Un módulo de nodo (cuyo diagrama de bloques se presenta en la figura \ref{fig:FSMD_Nodo}) recibe los estados de ocupación de sus vecinos ("Estado\_post\_i" y "Estado\_ante\_i") y de sí mismo ("Estado\_i") desde el exterior, además del estado de los semáforos que posee("Sem\_s\_i[N\_SEM]"). 
+	Un módulo de nodo (cuyo diagrama de bloques se presenta en la figura \ref{fig:FSMD_Nodo}) recibe los estados de ocupación de sus vecinos (''Estado\_post\_i'' y ''Estado\_ante\_i'') y de sí mismo (''Estado\_i'') desde el exterior, además del estado de los semáforos que posee(''Sem\_s\_i[N\_SEM]''). 
 	
 	\begin{figure}[h]
 	\centering
 	\includegraphics[scale=.5]{./Figures/FSMD-Nodo}
-		\caption{FSMD del módulo de nodo genérico}
+		\caption{Diagrama en bloques del módulo de nodo genérico}
 		\label{fig:FSMD_Nodo}
 	\end{figure}		
 	
 	%\vspace{10cm}
 	
-	Internamente deberá informar su estado de ocupación a sus vecinos ("Estado\_o") y decidir los aspectos que deberán tener sus semáforos ("Sem\_s\_o[N\_SEM]") de la siguiente manera:
+	Internamente debe informar su estado de ocupación a sus vecinos (''Estado\_o'') y decidir los aspectos que deben tener sus semáforos (''Sem\_s\_o[N\_SEM]'') de la siguiente manera:
 			
 	\begin{itemize}
-		\item Si el tramo propio está ocupado: el semáforo propio estará en aspecto rojo.
-		\item Si el vecino está ocupado: el semáforo propio estará en aspecto rojo.
+		\item Si el tramo propio está ocupado: el semáforo propio debe estar en aspecto rojo.
+		\item Si el vecino está ocupado: el semáforo propio debe estar en aspecto rojo.
 		\item Si el vecino está desocupado:
 		\begin{itemize}
-			\item Si el semáforo vecino está en rojo: el semáforo analizado estará en aspecto amarillo.
-			\item Si el semáforo vecino está en amarillo:  el semáforo analizado estará en aspecto verde.
+			\item Si el semáforo vecino está en rojo: el semáforo analizado debe estar en aspecto amarillo.
+			\item Si el semáforo vecino está en amarillo:  el semáforo analizado debe estar en aspecto verde.
 		\end{itemize}				 
 	\end{itemize}
 	
@@ -142,7 +142,7 @@ En este capítulo se presentan las decisiones de diseño adoptadas para concreta
 	
 	Esto llevó a la necesidad de disponer de un módulo que conmute las conexiones en el caso de tener nodos con mas de dos vecinos. Este bloque es el módulo de la máquina de cambios.
 	
-	Un cambio de vías conecta un tramo A con un tramo B o con un tramo C. El módulo de la máquina de cambios tiene como función el conectar un nodo anterior (A) con un nodo posterior (B) o un nodo del desvío (C), según la posición de la máquina de cambios, como se muestra en la figura \ref{fig:Cambio_conexion}.
+	Un cambio de vías conecta un tramo A con un tramo B o con un tramo C. El módulo de la máquina de cambios tiene como función conectar un nodo anterior (A) con un nodo posterior (B) o un nodo del desvío (C), según la posición de la máquina de cambios, como se muestra en la figura \ref{fig:Cambio_conexion}.
 	
 	\begin{figure}[h]
 	\centering
@@ -160,7 +160,7 @@ En este capítulo se presentan las decisiones de diseño adoptadas para concreta
 	\begin{figure}[h]
 	\centering
 	\includegraphics[scale=.5]{./Figures/FSMD-Cambio}
-		\caption{FSMD del módulo de máquina de cambios}
+		\caption{Diagrama en bloques del módulo de máquina de cambios}
 		\label{fig:FSMD_Cambio}
 	\end{figure}
 		
@@ -183,9 +183,9 @@ En este capítulo se presentan las decisiones de diseño adoptadas para concreta
 		
 		\vspace{10cm}
 		
-		La UART (del inglés, \textit{Universal Asynchronous Receiver-Transmitter}) es la unidad encargada de recibir y transmitir las tramas desde la computadora hasta la plataforma. Esta envía secuencialmente un caracter por medio de la señal r\_data (8 bytes) y un pulso (r\_disponible) para informar que un nuevo dato ha sido enviado, además de indicar por medio de la señal N la cantidad de caracteres que serán enviados. 
+		La UART (del inglés, \textit{Universal Asynchronous Receiver-Transmitter}) es la unidad encargada de recibir y transmitir las tramas desde la computadora hasta la plataforma. Ésta envía secuencialmente un caracter por medio de la señal r\_data (8 bytes) y un pulso (r\_disponible) para informar que un nuevo dato ha sido enviado, además de indicar por medio de la señal N la cantidad de caracteres que serán enviados. 
 		
-		El proceso de detección es ilustrado en la figura \ref{fig:Estados_Detector}.  		
+		El proceso de detección se ilustra en la figura \ref{fig:Estados_Detector}.  		
 		
 		\begin{figure}[h]
 		\centering
@@ -219,7 +219,7 @@ En este capítulo se presentan las decisiones de diseño adoptadas para concreta
 		
 		Finalmente se envía un caracter ASCII '1' si el elemento i-ésimo del paquete es '1' lógico y un "0" si lo recibido es un '0' lógico. Junto con el caracter se envía la señal ''wr\_uart'' para indicarle a la UART que ese dato debe ser guardado en una estructura de memoria llamada FIFO (del inglés, \textit{First-In,First-Out}) de salida y la señal ''procesado'' para indicarle al módulo de detección que ya puede recibir nuevas tramas.
 	
-		La máquina de estados es ilustrada en la figura \ref{fig:Estado_Registro}. 
+		La máquina de estados se ilustra en la figura \ref{fig:Estado_Registro}. 
 		
 		\begin{figure}[h]
 		\centering
@@ -232,7 +232,7 @@ En este capítulo se presentan las decisiones de diseño adoptadas para concreta
 		
 		Se añadieron dos estados para generar el pulso de reloj necesario para mantener sincronizadas las tramas. Al estado de reinicio se accede cuando el contador haya recorrido todos los elementos del paquete, igualando el valor de M, la cantidad de elementos esperados. 
 		
-		La señal ''procesar'' es recibida de las etapas anteriores. Si la trama ingresada es incorrecta, o si ya fue impresa, entonces esa señal será '0' y el registro dejará de enviar datos a la UART. En caso afirmativo (''procesar'' = '1') el proceso continuará hasta que la UART indique que no pueda recibir mas datos o que alguna etapa previa informe de algún error en el proceso.
+		La señal ''procesar'' se recibe de las etapas anteriores. Si la trama ingresada es incorrecta, o si ya fue impresa, entonces esa señal será '0' y el registro dejará de enviar datos a la UART. En caso afirmativo (''procesar'' = '1') el proceso continuará hasta que la UART indique que no pueda recibir mas datos o que alguna etapa previa informe de algún error en el proceso.
 		
 	\subsection{Módulo selector}
 	
@@ -243,7 +243,7 @@ En este capítulo se presentan las decisiones de diseño adoptadas para concreta
 		\begin{figure}[h]
 		\centering
 			\includegraphics[scale=.6]{./Figures/FSMD-Selector}
-			\caption{Diagrama de estados finitos digitales del módulo selector}
+			\caption{Diagrama de bloques del módulo selector}
 			\label{fig:FSMD_Selector}
 		\end{figure}	
 		
@@ -289,7 +289,7 @@ En este capítulo se presentan las decisiones de diseño adoptadas para concreta
 	\end{tabular}
 	\end{table}	
 	
-	Queda de manifiesto que se pueden enviar tramas conformadas únicamente por ceros y unos de forma serializada a la plataforma FPGA. Para luego procesar la trama e ir dividiendo cada porción de datos en información a la zona que le corresponda. 
+	Queda de manifiesto que se pueden enviar tramas conformadas únicamente por ceros y unos de forma serializada a la plataforma FPGA. De esta manera, luego se podría procesar la trama e ir dividiendo cada porción de datos en información a la zona que le corresponda. 
 	
 	Una forma de organizar la trama de entrada fue la adoptada en la Tabla \ref{Trama_in}. En la misma, se envían en orden todos los estados de ocupación, seguidos de todos los estados de los semáforos (intercalando el bit mas significativo con el menos significativo), los estados de las barreras y finalmente los estados de las máquinas de cambios.
 	
@@ -323,7 +323,7 @@ En este capítulo se presentan las decisiones de diseño adoptadas para concreta
 	
 	\begin{itemize}
 		\item Módulo separador: encargado de convertir las entradas seriales en señales en paralelo y distribuir los datos según donde sean requeridos.
-		\item Módulo mediador: encargado de serializar las señales en paralelo que vienen del enclavamiento, según el orden requerido.
+		\item Módulo mediador: encargado de serializar las señales en paralelo que genera el enclavamiento, según el orden requerido.
 	\end{itemize}
 	 
 	\subsection{Módulo separador}
@@ -333,11 +333,11 @@ En este capítulo se presentan las decisiones de diseño adoptadas para concreta
 		\begin{figure}[h]
 		\centering
 			\includegraphics[scale=.5]{./Figures/FSMD-Separador}
-			\caption{FSMD del módulo separador}
+			\caption{Diagrama de bloques del módulo separador}
 			\label{fig:FSMD_Separador}
 		\end{figure}
 		
-		\vspace{5cm}
+		\vspace{7cm}
 		
 		A continuación, como el generador de código sabe previamente la cantidad de cada uno de los elementos ferroviarios, puede descomponer los elementos del vector paquete[N] en vectores mas pequeños según corresponda.
 		
@@ -348,7 +348,7 @@ En este capítulo se presentan las decisiones de diseño adoptadas para concreta
 		\begin{figure}[hbt]
 		\centering
 			\includegraphics[scale=.48]{./Figures/FSMD-Mediador}
-			\caption{FSMD del módulo mediador}
+			\caption{Diagrama de bloques del módulo mediador}
 			\label{fig:FSMD_Mediador}
 		\end{figure}
 		
@@ -360,7 +360,7 @@ En este capítulo se presentan las decisiones de diseño adoptadas para concreta
 		
 \section{Módulo de comunicación UART}
 
-	En el diseño de los módulos para la interface UART con el exterior se utilizó un modelo  aportado por los docentes, pero fueron necesarias varias premisas para modificarlo y poder automatizarlo:
+	En el diseño de los módulos para la interface UART con el exterior se utilizó un modelo  aportado por los docentes, pero fue necesario modificarlo para poder automatizarlo y cumplir con las siguientes premisas:
 	
 	\begin{itemize}
 		\item Se deben tener dos FIFOs distintas, una de entrada y la otra de salida.
@@ -383,11 +383,11 @@ En este capítulo se presentan las decisiones de diseño adoptadas para concreta
 
 		La FIFO de entrada se utiliza para almacenar una trama de la forma '<Mensaje de largo N>' (conector negro) por lo que espera al menos N+2 bytes, mientras que la FIFO de salida espera mensajes de la forma 'Mensaje de largo M' (conector negro). Ya que N > M es claro que N + 2 > M en la mayoría de los casos. Aunque también puede ocurrir que la diferencia entre ambos no sea tanta y al implementar el tamaño de las FIFOs en potencias de 2 terminen ambas FIFOs con el mismo tamaño. 
 
-		Con este criterio de diseño, en todos los demás casos, la FIFO de salida tendrá el mismo tamaño que la FIFO de entrada o a lo sumo será $50$\% menor, lo que representa un ahorro de $25$\% de los recursos estimados. Por ejemplo, si necesito la entrada tiene 15 elementos y la salida 7 elementos y se le asigna el mismo tamaño a ambas FIFOs; tanto la FIFO de entrada como la de salida necesitarán 16 bits cada una, dando un total de 32 bits. Pero si se aplica el criterio de tamaños desacoplados, entonces para la FIFO de salida podrían asignarse solamente 8 bits, dando un total de 24 bits, un $25$\% menos que los 32 bits que necesitaría si ambas FIFOs quedaran definidas según los datos de la entrada.
+		Con este criterio de diseño, en todos los demás casos, la FIFO de salida tendrá el mismo tamaño que la FIFO de entrada o a lo sumo será $50$\% menor, lo que representa un ahorro de $25$\% de los recursos estimados. Por ejemplo, si se necesita que la entrada tenga 15 elementos y la salida 7 elementos y se le asigna el mismo tamaño a ambas FIFOs; tanto la FIFO de entrada como la de salida necesitarán 16 bits cada una, dando un total de 32 bits. Pero si se aplica el criterio de tamaños desacoplados, entonces para la FIFO de salida podrían asignarse solamente 8 bits, dando un total de 24 bits, un $25$\% menos que los 32 bits que necesitaría si ambas FIFOs quedaran definidas según los datos de la entrada.
 		
 \section{Interfaz de comunicación Python}
 
-	El algoritmo analizador de redes finaliza ejecutando la conexión de la consola utilizada con la plataforma FPGA. Presenta al usuario un menú de opciones para ocupar/desocupar ciertos tramos de la vía, cambiar el aspecto de ciertos semáforos, pedir que una barrera suba o baje o incluso modificar la posición de una máquina de cambios.
+	El algoritmo analizador de redes ejecuta la conexión de la consola utilizada con la plataforma FPGA. Presenta al usuario un menú de opciones para ocupar/desocupar ciertos tramos de la vía, cambiar el aspecto de ciertos semáforos, pedir que una barrera suba o baje o incluso modificar la posición de una máquina de cambios.
 	
 	En la figura \ref{fig:Menu_UART} se ilustra el menú diseñado para ingresar los comandos al sistema. Ya que existe una interfaz mucho mas avanzada desarrollada por otra parte del equipo de investigación en UTN Haedo, no se ha invertido demasiado tiempo en tener una interfaz propia para realizar pruebas a mayor escala.
 	
@@ -409,6 +409,6 @@ En este capítulo se presentan las decisiones de diseño adoptadas para concreta
 			\label{fig:Grafo_UART}
 		\end{figure}
 
-	De esta forma es posible simular el comportamiento de toda la topología: posición de cada semáforo, aspectos de las señales y su orientación, clasificación de cada nodo, posición de las máquinas de cambios, etc. Lo cual permite validar con mayor facilidad que el comportamiento sea el esperado.
+	De esta forma es posible simular el comportamiento de toda la topología: posición de cada semáforo, aspectos de las señales y su orientación, clasificación de cada nodo, posición de las máquinas de cambios, etc. Esto permite verificar con mayor facilidad que el comportamiento sea el esperado.
 
 	En el siguiente capítulo se presentarán los ensayos y resultados que permiten analizar el funcionamiento del proceso automatizado de implementación desarrollado.

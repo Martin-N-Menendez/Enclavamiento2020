@@ -634,7 +634,7 @@ def generar_mapa(tabla, iniciar = True):
     for i in range(len(archivos)):
             
         # Falta corregir desvios
-        if i != 8:          # 8 u 2
+        if i != 2:          # 8 u 2
             continue
          
         secciones.clear()
@@ -696,10 +696,7 @@ def main():
     #crear_modulo_vhdl(secciones,tabla)
     
     conectar_terminal(secciones)
-    
-    #generar_mapa(tabla,False)
-    #mostrar_grafo(secciones)
-    
+        
     
 if __name__ == "__main__":
     main()

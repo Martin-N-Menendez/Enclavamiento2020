@@ -28,7 +28,7 @@ architecture Behavioral of sistema is
 			r_disponible :  in std_logic;
 			led_rgb_1 :  out std_logic_vector(3-1 downto 0);
 			led_rgb_2 :  out std_logic_vector(3-1 downto 0);
-			paquete :  out std_logic_vector(21-1 downto 0);
+			paquete :  out std_logic_vector(32-1 downto 0);
 			procesar :  in std_logic;
 			procesado :  out std_logic;
 			N :  in integer;
@@ -42,8 +42,8 @@ architecture Behavioral of sistema is
 			Clock :  in std_logic;
 			procesar :  in std_logic;
 			procesado :  out std_logic;
-			Paquete_i :  in std_logic_vector(21-1 downto 0);
-			Paquete_o :  out std_logic_vector(15-1 downto 0);
+			Paquete_i :  in std_logic_vector(32-1 downto 0);
+			Paquete_o :  out std_logic_vector(22-1 downto 0);
 			Reset :  in std_logic
 		);
 	end component enclavamiento;
@@ -66,14 +66,14 @@ architecture Behavioral of sistema is
 			Clock :  in std_logic;
 			procesar :  in std_logic;
 			procesado :  out std_logic;
-			paquete_i :  in std_logic_vector(15-1 downto 0);
+			paquete_i :  in std_logic_vector(22-1 downto 0);
 			w_data :  out std_logic_vector(8-1 downto 0);
 			wr_uart :  out std_logic;
 			Reset :  in std_logic
 		);
 	end component registro;
-	Signal paquete_i_s : std_logic_vector(21-1 downto 0);
-	Signal paquete_o_s : std_logic_vector(15-1 downto 0);
+	Signal paquete_i_s : std_logic_vector(32-1 downto 0);
+	Signal paquete_o_s : std_logic_vector(22-1 downto 0);
 	Signal w_data_1,w_data_2,w_data_3 : std_logic_vector(8-1 downto 0);
 	Signal wr_uart_1_s,wr_uart_2_s : std_logic;
 	Signal pro_enc_reg,pro_det_enc,pro_reg_det : std_logic;

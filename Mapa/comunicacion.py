@@ -23,10 +23,10 @@ global pan_t
 global mdc_t
 global trama
 
-cvs_t = "111111"
-sem_t = "00000000000000"
+cvs_t = ""
+sem_t = ""
 pan_t = ""
-mdc_t = "1"
+mdc_t = ""
 
 global trama_tagged
 
@@ -106,7 +106,8 @@ def procesar_trama_recibida(leido,secciones):
     
     print ("Recibido: ", leido) 
     
-    print ("Sem: ", sem) 
+    print ("mdc : ", 2*N_sem+N_pan,2*N_sem+N_pan+N_mdc)
+    #print ("Sem: ", sem) 
     
     sem_index = 0
     nuevo = False
@@ -135,7 +136,7 @@ def procesar_trama_recibida(leido,secciones):
         
         secciones[sem_owner-1].aspecto[sem_index-1] = color
         
-        print ("({})Semaforos_{}:{} ".format( sem_owner,i+1,color ))
+        print ("({})Semaforos_{} : {} ".format( sem_owner,i+1,color ))
     
     
     
@@ -143,12 +144,13 @@ def procesar_trama_recibida(leido,secciones):
         print ("Pasos a nivel: ", pan) 
     
     if N_mdc > 0:
-        if mdc == "0":
-            cambio = "normal" 
-        else:
-            cambio = "reverso"
-             
-        print ("Cambio: ", cambio) 
+        for i in range(N_mdc):   
+            if mdc[i] == '0':
+                cambio = "Normal" 
+            else:
+                cambio = "Reverso"
+                 
+            print ("Cambio_{} : {}".format(i,cambio)) 
 
 def sendData( trama , secciones ,conexiones ):
 
@@ -165,6 +167,7 @@ def sendData( trama , secciones ,conexiones ):
       #time.sleep(1)
       procesar_trama_recibida(leido,secciones)     
       mostrar_grafo(secciones,10,j = intento,gif_mode = True)
+      
    except:
       pass
    
@@ -215,9 +218,11 @@ def cmd_1(secciones,conexiones):
    comando = ""
     
    print("Ingresar tramo ocupado")
+   
    comando = input(">> ")      # for Python 3
-
-   if comando >= '1' and comando <= str(N_cvs):
+   print(comando,N_cvs)
+       
+   if int(comando) >= 1 and int(comando) <= N_cvs:
        print("Ocupado tramo "+str(comando))
        index = int(comando)
        cvs_t = cvs_t[:index-1] + '0' + cvs_t[index:]
@@ -238,7 +243,7 @@ def cmd_2(secciones,conexiones):
    print("Ingresar tramo desocupado")
    comando = input(">> ")      # for Python 3
 
-   if comando >= '1' and comando <= str(N_cvs):
+   if int(comando) >= 1 and int(comando) <= N_cvs:
        print("Desocupando tramo "+str(comando))
        index = int(comando)
        cvs_t = cvs_t[:index-1] + '1' + cvs_t[index:]
@@ -265,7 +270,7 @@ def cmd_4(secciones,conexiones):
    print("Ingresar maquina de cambios a modificar")
    comando = input(">> ")      # for Python 3
 
-   if comando >= '1' and comando <= str(N_mdc):
+   if int(comando) >= 1 and int(comando) <= N_mdc:
        print("Modificando maquina de cambios "+str(comando))
        index = int(comando)
        if mdc_t[index-1] == '1':
@@ -289,6 +294,25 @@ def cmd_atras(secciones,conexiones):
    #for i in range(10):
    #    sendData( '(',')',True )
    return   
+
+def iniciar_tramas(objetos):
+
+    N_cvs = objetos[0]
+    N_sem = objetos[1]
+    N_pan = objetos[2]
+    N_mdc = objetos[3]
+
+    global cvs_t
+    global sem_t
+    global pan_t
+    global mdc_t
+    global trama
+    
+    cvs_t = "1"*N_cvs
+    sem_t = "0"*2*N_sem
+    pan_t = "1"*N_pan
+    mdc_t = "1"*N_mdc
+
      
 # Inicializa y abre el puertos serie ------------------------------------------           
 def uart_main(secciones,conexiones):
@@ -302,6 +326,8 @@ def uart_main(secciones,conexiones):
     
     global intento
     intento = 0
+    
+    iniciar_tramas(objetos)
     
     print("Conectandose a "+str(ser.port))
     
@@ -356,7 +382,7 @@ def uart_main(secciones,conexiones):
                 cmd_h()
     
               elif command == '0':   # Insertar trama manual
-                intento += 1
+                
                 cmd_0(secciones,conexiones)
                 
               elif command == '1':   # Insertar tren
