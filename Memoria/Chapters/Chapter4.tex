@@ -15,9 +15,9 @@
 
 \section{Verificación del análisis automático de redes ferroviarias}
 	
-	Para verificar el correcto funcionamiento del análisis automático de las redes ferroviarias se generaron varias topologías distintas, entre ellas: estaciones simples, estaciones complejas, bypass, playa de maniobras y aleatorias. Para todas ellas se generó automáticamente una tabla de enclavamientos, las cuales fueron comparadas con tablas de enclavamientos realizadas de la forma tradicional por el Ingeniero Ramiro Ghignone de la UTN Facultad Regional Haedo.
+	Para verificar el correcto funcionamiento del análisis automático de las redes ferroviarias se generaron diversas topologías representativas, tales como: estaciones simples, estaciones complejas, bypass, playa de maniobras y aleatorias. Para cada una de ellas se generó automáticamente una tabla de enclavamientos, las cuales fueron comparadas con tablas de enclavamientos realizadas de la forma tradicional por el Ingeniero Ramiro Ghignone de la UTN Facultad Regional Haedo.
 	
-	En la figura \ref{fig:Mapa_0} se presenta una topología creada aleatoriamente con diversos elementos tales como cambios en cruceta (nodos 14 a 17), bypass (entre los nodos 2-5 y 21-22) y ramificaciones complejas (nodos 2, 5 y 9) de una playa de maniobras hacia un posible taller ferroviario (nodo 13).
+	A modo de ejemplo, en la figura \ref{fig:Mapa_0} se presenta una topología creada aleatoriamente con diversos elementos tales como cambios en cruceta (nodos 14 a 17), bypass (entre los nodos 2-5 y 21-22) y ramificaciones complejas (nodos 2, 5 y 9) de una playa de maniobras hacia un hipotético taller ferroviario (nodo 13).
 	
 	\begin{figure}[h]
 	\centering
@@ -26,7 +26,7 @@
 		\label{fig:Mapa_0}
 	\end{figure}
 	
-	La tabla de enclavamientos generada automáticamente mediante el analizador de redes ferroviarias desarrollado se presenta en la Tabla \ref{tabla_script}. La misma contiene el listado de todas las rutas, los semáforos que intervienen, la secuencia de nodos que abarca cada ruta y el sentido de la ruta.
+	La tabla de enclavamientos generada automáticamente mediante el analizador de redes ferroviarias desarrollado se presenta en la Tabla \ref{tabla_script}. Ésta contiene el listado de todas las rutas, los semáforos que intervienen, la secuencia de nodos que abarca cada ruta y el sentido de la ruta.
 	
 	\begin{table}[!hbt]
 	%\renewcommand{\arraystretch}{1.3}
@@ -88,9 +88,9 @@
 		17 & 21 & 23 & 21-22-23 & > \\	
 		18 & 22 & 23 & 22-23 & > \\
 	\end{tabular}
-	\end{table}
-	
+	\end{table}	 
 	 
+	 \vspace{2cm}
 	 
 	 Se observa que ambas tablas son idénticas, salvo el orden de las rutas, que es irrelevante para el funcionamiento del sistema. Por lo tanto se concluye que la construcción automática de la tabla de enclavamientos es consistente con la construcción manual. Esta consistencia se comprobó en todos los casos en que comparó el resultado del análisis automático con el análisis realizado en forma manual.			
 
@@ -105,9 +105,9 @@
 		\label{fig:Diagrama_general}
 	\end{figure}
 	
-	\vspace{2cm}
+	%\vspace{2cm}
 	
-	Por simplicidad del diagrama, no se han incluido los bloques referidos a la UART que también son generados automáticamente. Tampoco se ha entrado en detalles respecto al interior del bloque "red", ya que el mismo presenta una cantidad variable de bloques "nodo" y "cambios", contados también de forma variable. Por lo que un diagrama no podría representarlo fielmente.
+	Por simplicidad del diagrama, no se han incluido los bloques referidos a la UART que también son generados automáticamente. Tampoco se ha entrado en detalles respecto al interior del bloque ''red'', ya que el mismo presenta una cantidad variable de bloques ''nodo'' y ''cambios'', contados también de forma variable. Por lo que un diagrama no podría representarlo fielmente.
 	
 	Se ilustra en la figura \ref{fig:UART_General} la conexión entre el sistema y la computadora. La comunicación entre la computadora y la plataforma FPGA es posible gracias a una UART generada automáticamente. La misma adapta su tamaño según las tramas que necesita el sistema para funcionar.
 	
@@ -126,7 +126,7 @@
 	
 	\subsection{Testbench del módulo nodo}
 			
-			Se diseñó un testbench para evaluar todas las posibles combinaciones de estados, definidas en la Tabla \ref{tabla_nodos}, además de la posición del cambio de vías próximo.
+			Se diseñó un testbench para probar de forma exhaustiva todas las condiciones posibles de funcionamiento, definidas en la Tabla \ref{tabla_nodos}, además de la posición del cambio de vías próximo.
 					
 			\begin{table}[!hbt]
 			\renewcommand{\arraystretch}{1.3}
@@ -174,11 +174,11 @@
 				\label{fig:Test_Nodo}
 			\end{figure}
 				
-			El haber validado el nodo genérico que incluye todos los posibles estados que pueden tener los nodos más simples, se considera que el ensayo fue exitoso.	
+			Dado que se validó el nodo genérico que incluye todos los posibles estados que pueden tener los nodos más simples, se considera que el ensayo fue exitoso.	
 	
 \section{Verificación de la implementación de la máquina de cambios}
 
-	El módulo de la máquina de cambios, incluido dentro del bloque ''red'', tiene como función el conectar al estado anterior con el estado posterior o al estado anterior con el estado desvío según la posición del cambio de vías, como se indica en la Tabla \ref{tabla_cambios}.
+	El módulo de la máquina de cambios, incluido dentro del bloque ''red'', tiene como función conectar al estado de ocupación del nodo anterior con el del nodo posterior o al estado de ocupación del nodo anterior con el del nodo desvío según la posición del cambio de vías, como se indica en la Tabla \ref{tabla_cambios}.
 	
 			\begin{table}[!hbt]
 			\renewcommand{\arraystretch}{1.3}
@@ -209,8 +209,8 @@
 			\end{table}	
 	
 	\subsection{Testbench del módulo de la máquina de cambios}
-			
-		Se diseñó un testbench donde se ensayan todas las combinaciones definidas en la Tabla \ref{tabla_cambios} para una topología de medio bypass con un único cambio, para simplificar la presentación de los resultados.
+		
+		Se diseñó un testbench para probar de forma exhaustiva todas las condiciones posibles de funcionamiento definidas en la Tabla \ref{tabla_cambios} para una topología de medio bypass con un único cambio, para simplificar la presentación de los resultados.
 						
 	\subsection{Resultados obtenidos}
 			
@@ -225,11 +225,11 @@
 			
 		\vspace{5cm}
 			
-		El nodo de cambios funciona de manera sincrónica y se comprobó que vincula correctamente los estados de los nodos involucrados. A diferencia de los bloques de nodos donde todos los nodos implementados tienen la misma cantidad de funciones que el ensayado o menor, todos los cambios tienen las mismas funcionalidades sin ninguna limitación, por lo que este ensayo es representativo del conjunto de máquinas de cambios y es suficiente para validar su correcto funcionamiento.
+		El nodo de cambios funciona de manera sincrónica y se comprobó que vincula correctamente los estados de los nodos involucrados. A diferencia de los bloques de nodos donde todas las implementaciones tienen la misma cantidad de funciones que el ensayado o menor, todos los cambios tienen las mismas funcionalidades sin ninguna limitación, por lo que este ensayo es representativo del conjunto de máquinas de cambios y es suficiente para validar su correcto funcionamiento.
 				
 \section{Verificación de la implementación de la UART}
 
-	En el diseño del sistema se contempló utilizar uno de los switches de la placa de desarrollo para poder puentear todo el enclavamiento y probar fácilmente el funcionamiento de la UART sin el efecto del enclavamiento. En esta sección se realizó el ensayo con el switch en la posición en la cual la salida recibe el mensaje de la entrada directamente, sin pasar por ningun otro bloque.
+	En el diseño del sistema se contempló utilizar uno de los switches de la placa de desarrollo para poder puentear todo el enclavamiento y probar el funcionamiento de la UART sin el efecto del enclavamiento. En esta sección se realizó el ensayo con el switch en la posición en la cual la salida recibe el mensaje de la entrada directamente, sin pasar por ningun otro bloque.
 
 	\subsection{Testbench del módulo UART}
 			
@@ -237,7 +237,7 @@
 						
 	\subsection{Resultados obtenidos}
 				
-		En la figura \ref{fig:Test_UART} se presentan los datos obtenidos en el ensayo. Se puede ver que las tramas inyectadas son presentadas idénticamente en la salida, con un pequeño delay temporal. Además de poder apreciar el tren de pulsos que envía la UART de un extremo al otro del módulo, primero para indicar la lectura de la FIFO de recepción y luego para indicar la escritura de la FIFO de transmisión.
+		En la figura \ref{fig:Test_UART} se presentan los datos obtenidos en el ensayo. Se puede ver que las tramas inyectadas son presentadas idénticamente en la salida, con un pequeño retardo temporal. Además se puede apreciar el tren de pulsos que envía la UART de un extremo al otro del módulo, primero para indicar la lectura de la FIFO de recepción y luego para indicar la escritura de la FIFO de transmisión.
 		
 		\begin{figure}[h]
 		\centering
@@ -345,11 +345,11 @@
 		\label{fig:Test_Registro}
 	\end{figure}
 	
-	Cuando la señal procesar se encuentra en alto, la señal paquete\_i es invertida y en cada ciclo ena\_s se envía el caracter equivalente al elemento del paquete\_i en la posición mux\_s. A su vez la señal ena\_s se envía a la UART a través de wr\_uart para indicarle el ciclo de escritura en la FIFO.
+	Cuando la señal procesar se encuentra en alto, la señal paquete\_i se invierte y en cada ciclo ena\_s se envía el caracter equivalente al elemento del paquete\_i en la posición mux\_s. A su vez la señal ena\_s se envía a la UART a través de wr\_uart para indicarle el ciclo de escritura en la FIFO.
 	
 	Al finalizar la operación se envía la señal procesado para indicarle al bloque detector que el paquete ingresado ya ha sido enviado, de forma tal de iniciar otro ciclo de lectura y procesamiento. De esa forma la señal procesar pasa a un estado bajo a la espera de dicha lectura.
 	
-	El comportamiento del bloque fue tal cual fue diseñado y responde con un delay muy bajo de 2 ciclos de reloj. Por lo que tendríamos un espaciado entre tramas de hasta un mínimo de 16 nanosegundos, lo cual es muy positivo a la hora de tener un sistema que debe responder de forma rápida a los cambios en el exterior.	
+	El bloque se desempeñó tal como fue diseñado y responde con una latencia muy baja de 2 ciclos de reloj. Por lo que tendríamos un espaciado entre tramas de hasta un mínimo de 16 nanosegundos, lo cual es muy positivo a la hora de tener un sistema que debe responder de forma rápida a los cambios en el exterior.	
 	
 \section{Verificación de la implementación del selector}
 
@@ -380,7 +380,7 @@
 
 	\begin{figure}[h]
 	\centering
-	\includegraphics[scale=0.5]{./Figures/XXX}
+	\includegraphics[scale=0.5]{./Figures/Mapa_2_B}
 		\caption{Topología bypass sin procesar.}
 		\label{fig:Bypass_1}
 	\end{figure}
@@ -389,7 +389,7 @@
 
 	\begin{figure}[h]
 	\centering
-	\includegraphics[scale=0.5]{./Figures/XXX}
+	\includegraphics[scale=0.5]{./Figures/Mapa_2}
 		\caption{Topología bypass procesada.}
 		\label{fig:Bypass_2}
 	\end{figure}
@@ -405,51 +405,69 @@
 	\hline
 	Ruta & Semáforo inicial & Semáforo final & Secuencia & Sentido \\	
 	\hline
-		1 & 2 & 1 & 2-1 & < \\
-		2 & 2 & 14 & 2-3-4-7-11-14 & > \\
+		1 & 3 & 1 & 3-2-1 & < \\
+		2 & 3 & 5 & 3-4-5 & > \\
+		3 & 3 & 10 & 3-8-9-10 & > \\
+		4 & 5 & 3 & 5-4-3 & < \\
+		5 & 5 & 8 & 5-10-9-8 & < \\
+		6 & 5 & 7 & 5-6-7 & > \\
+		7 & 8 & 1 & 8-3-2-1 & < \\
+		8 & 10 & 7 & 10-5-6-7 & > \\
 	\end{tabular}
 	\end{table}	
+	
+	En la Tabla \ref{tabla_bypass} pueden verse todas las ocho rutas posibles de utilizar en la topología bypass. Por ejemplo, la ruta 1 permite desplazar la formación desde el nodo 3 hasta el nodo 1, pasando por el nodo 2. De la misma manera, es posible realizar maniobras para acceder al bypass desde el nodo 5 utilizando la ruta 5 o salir de la red desde el bypass por medio de la ruta 8.
 	
 	Se generan los archivos de vhdl que describen el sistema, como se muestra en la figura \ref{fig:Bypass_3}.
 	
 	\begin{figure}[h]
 	\centering
-	\includegraphics[scale=0.5]{./Figures/XXX}
+	\includegraphics[scale=0.55]{./Figures/Archivos}
 		\caption{Archivos .VHDL generados.}
 		\label{fig:Bypass_3}
 	\end{figure}
 	
 	En base a dichos archivos .vhdl se crean todos los bloques necesarios para implementar el sistema en la plataforma FPGA. A modo de ejemplo se presenta en la figura \ref{fig:Bypass_4} las conexiones del bloque ''red''. En el mismo se muestran diez bloques de nodos y dos de máquinas de cambios. 
 	
+	Los bloques de nodos tendrán diferentes tamaños según cómo fuesen clasificados por el analizador de redes ferroviarias. Los nodos que incluyen las máquinas de cambios (3 y 5) tendrán un tamaño mucho mayor que los nodos simples (2, 6 y 9).
+	
 	\begin{figure}[h]
 	\centering
-	\includegraphics[scale=0.5]{./Figures/Red}
+	\includegraphics[scale=0.6]{./Figures/Red}
 		\caption{Módulo de red generador.}
 		\label{fig:Bypass_4}
 	\end{figure}
 	
-	Los bloques de nodos tendrán diferentes tamaños según cómo fuesen clasificados por el analizador de redes ferroviarias. Los nodos que incluyen las máquinas de cambios (3 y 5) tendrán un tamaño mucho mayor que los nodos simples (2, 6 y 9).
+	\vspace{5cm}
 	
 	La densidad de conexiones es tan grande que queda de manifiesto la complejidad de realizar esta labor de forma manual. Haber desarrollado el analizador de redes ferroviarias, incluyendo la automatización de la generación de código, es una ventaja a la hora de abordar topologías mas complejas. Ya que la implementación se lleva a cabo sin elevar el tiempo de desarrollo ni incrementar las posibilidades de introducir errores humanos.
 	
 	Se establece una conexión serie entre la computadoray la plataforma FPGA por medio del analizador de redes ferroviarias. Se muestran en las figuras \ref{fig:Bypass_5} y \ref{fig:Bypass_6} el resultado de ocupar el nodo 3 y modificar la posición de las máquinas de cambios respectivamente.
+
+	La ocupación del nodo 3 provoca que los semáforos de circulación, presenten un aspecto rojo. Además el semáforo anterior, que se encuentra en el nodo 5, presentará un aspecto rojo para mantener el doble recubrimiento (la secuencia rojo-rojo-amarillo-verde luego de un nodo ocupado). Ya que la topología no es lo suficientemente larga no se aprecia el doble recubrimiento.
+	
+	Además, ya que la posición de ambos cambios es normal, no existen tramos para circular del nodo 3 al 8 o del nodo 9 al 10. Por lo tanto, los cuatro semáforos de maniobra presentan un aspecto rojo, prohibiendo la circulación por esas zonas.
 	
 	\begin{figure}[h]
 	\centering
-	\includegraphics[scale=0.5]{./Figures/Mapa_A}
+	\includegraphics[scale=0.4]{./Figures/Mapa_A}
 		\caption{Bypass con circulación normal y nodo 3 ocupado.}
 		\label{fig:Bypass_5}
 	\end{figure}
-
+	
+	\vspace{5cm}
+	
 	\begin{figure}[h]
 	\centering
-	\includegraphics[scale=0.5]{./Figures/Mapa_B}
+	\includegraphics[scale=0.4]{./Figures/Mapa_B}
 		\caption{Bypass con circulación inversa y nodo 10 ocupado.}
 		\label{fig:Bypass_6}
 	\end{figure}
 	
+	Por otro lado, cuando ambos cambios se encuentran en posición reversa, no existe circulación posible hacia el nodo 4. Los semáforos de maniobra para ir de 3 a 8 (o viceversa) presentan un aspecto amarillo. En cambio los semáforos de circulación de los nodos 3 y 5 tienen un aspecto rojo.
 	
-	-ANALISIS FINAL DE AMBAS IMAGENES
+	La ocupación del nodo 10 provoca que su semáforo de maniobras se encuentre rojo para impedir cualquier ocupación del nodo 10 por parte de otra formación, evitando una colisión. Además, eso tiene efecto en el semáforo de maniobra del nodo 5, que se encuentra con aspecto rojo para evitar una colisión frontal de la formación que ocupa el nodo 10.
 	
-
+	En ambas situaciones todos los semáforos se han comportado como se esperaba. Todas las combinaciones de ocupaciones y posiciones de cambios probadas fueron seguras para las formaciones introducidas. Topologías mas diversas fueron ensayadas, como la presentada a comienzo del capítulo \ref{Chapter4}, todas ellas con resultados favorables.
+	
 	De esta forma concluye este capítulo, en el cual se presentaron los ensayos realizados y los resultados obtenidos.
