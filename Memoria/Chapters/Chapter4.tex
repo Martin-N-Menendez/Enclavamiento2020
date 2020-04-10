@@ -93,32 +93,6 @@
 	 \vspace{2cm}
 	 
 	 Se observa que ambas tablas son idénticas, salvo el orden de las rutas, que es irrelevante para el funcionamiento del sistema. Por lo tanto se concluye que la construcción automática de la tabla de enclavamientos es consistente con la construcción manual. Esta consistencia se comprobó en todos los casos en que comparó el resultado del análisis automático con el análisis realizado en forma manual.			
-
-\section{Sistema general}
-
-	Los distintos bloques que se generan automáticamente por el analizador de redes ferroviarias son conectados automáticamente tal como se muestra en la figura \ref{fig:Diagrama_general}. 
-	
-	\begin{figure}[h]
-	\centering
-	\includegraphics[scale=0.45]{./Figures/Diagrama_general}
-		\caption{Diagrama general del sistema.}
-		\label{fig:Diagrama_general}
-	\end{figure}
-	
-	%\vspace{2cm}
-	
-	Por simplicidad del diagrama, no se han incluido los bloques referidos a la UART que también son generados automáticamente. Tampoco se ha entrado en detalles respecto al interior del bloque ''red'', ya que el mismo presenta una cantidad variable de bloques ''nodo'' y ''cambios'', contados también de forma variable. Por lo que un diagrama no podría representarlo fielmente.
-	
-	Se ilustra en la figura \ref{fig:UART_General} la conexión entre el sistema y la computadora. La comunicación entre la computadora y la plataforma FPGA es posible gracias a una UART generada automáticamente. La misma adapta su tamaño según las tramas que necesita el sistema para funcionar.
-	
-	\begin{figure}[h]
-	\centering
-	\includegraphics[scale=0.5]{./Figures/Diagrama_UART_PC}
-		\caption{Diagrama de conexión del sistema a la computadora.}
-		\label{fig:UART_General}
-	\end{figure}
-	
-	Para poder verificar el funcionamiento del sistema a nivel general, primero es necesario verificar que cada bloque se comporta como debe. En la siguientes secciones se abordará la verificación de cada uno de los bloques.	
 				
 \section{Verificación de la implementación del nodo}
 
@@ -135,7 +109,7 @@
 			\centering
 			\begin{tabular}{ c  c  c }
 			\hline
-			Tramo propia & Tramo vecino & Aspecto vecino \\	
+			Tramo propio & Tramo vecino & Aspecto vecino \\	
 			\hline
 			Ocupado & Ocupado & Rojo  \\
 			Ocupado & Ocupado & Amarillo  \\
@@ -223,7 +197,7 @@
 			\label{fig:Test_Cambios}
 		\end{figure}
 			
-		\vspace{5cm}
+		%\vspace{5cm}
 			
 		El nodo de cambios funciona de manera sincrónica y se comprobó que vincula correctamente los estados de los nodos involucrados. A diferencia de los bloques de nodos donde todas las implementaciones tienen la misma cantidad de funciones que el ensayado o menor, todos los cambios tienen las mismas funcionalidades sin ninguna limitación, por lo que este ensayo es representativo del conjunto de máquinas de cambios y es suficiente para validar su correcto funcionamiento.
 				
@@ -374,7 +348,7 @@
 			
 	Las señales w\_data\_3 y wr\_uart\_3 son la salida del bloque selector, que se puede apreciar copian exactamente a w\_data\_2 y wr\_uart\_2. Cuando el switch se encuentra en estado bajo la salida copiará a w\_data\_1 y wr\_uart\_1.
 	
-\section{Prueba de integración: topología bypass.}
+\section{Prueba de integración: topología bypass}
 
 	Finalmente se realizó una prueba de integración sobre una topología topología bypass, que se muestra en la figura \ref{fig:Bypass_1}.
 
@@ -385,7 +359,7 @@
 		\label{fig:Bypass_1}
 	\end{figure}
 	
-	Una vez que la topología es analizada por el analizador de redes ferroviarias, se clasifican todos sus nodos y se determinan todos los semáforos. El resultado del análisis es presentado en la figura \ref{fig:Bypass_2}.
+	Una vez que el analizador de redes ferroviarias analiza la topología, se clasifican sus nodos y se determinan los semáforos asociados. El resultado del análisis se presenta en la figura \ref{fig:Bypass_2}.
 
 	\begin{figure}[h]
 	\centering
@@ -416,9 +390,9 @@
 	\end{tabular}
 	\end{table}	
 	
-	En la Tabla \ref{tabla_bypass} pueden verse todas las ocho rutas posibles de utilizar en la topología bypass. Por ejemplo, la ruta 1 permite desplazar la formación desde el nodo 3 hasta el nodo 1, pasando por el nodo 2. De la misma manera, es posible realizar maniobras para acceder al bypass desde el nodo 5 utilizando la ruta 5 o salir de la red desde el bypass por medio de la ruta 8.
+	En la Tabla \ref{tabla_bypass} pueden verse todas las ocho rutas posibles que permite este tipo de topología. Por ejemplo, la ruta 1 permite desplazar la formación desde el nodo 3 hasta el nodo 1, pasando por el nodo 2. El resto de las rutas planteadas se pueden analizar de la misma manera.
 	
-	Se generan los archivos de vhdl que describen el sistema, como se muestra en la figura \ref{fig:Bypass_3}.
+	Se generan los archivos de VHDL que describen el sistema, como se muestra en la figura \ref{fig:Bypass_3}.
 	
 	\begin{figure}[h]
 	\centering
@@ -429,7 +403,7 @@
 	
 	En base a dichos archivos .vhdl se crean todos los bloques necesarios para implementar el sistema en la plataforma FPGA. A modo de ejemplo se presenta en la figura \ref{fig:Bypass_4} las conexiones del bloque ''red''. En el mismo se muestran diez bloques de nodos y dos de máquinas de cambios. 
 	
-	Los bloques de nodos tendrán diferentes tamaños según cómo fuesen clasificados por el analizador de redes ferroviarias. Los nodos que incluyen las máquinas de cambios (3 y 5) tendrán un tamaño mucho mayor que los nodos simples (2, 6 y 9).
+	Según la clasificación del analizador de redes ferroviarias, los bloques de nodos tendrán diferentes tamaños. Así, por ejemplo, los nodos que incluyen las máquinas de cambios (3 y 5) tendrán un tamaño mucho mayor que los nodos simples (2, 6 y 9), ya que su complejidad es mayor al incluir el manejo de los semáforos y circulación y los de maniobra.
 	
 	\begin{figure}[h]
 	\centering
@@ -440,22 +414,11 @@
 	
 	\vspace{5cm}
 	
-	La densidad de conexiones es tan grande que queda de manifiesto la complejidad de realizar esta labor de forma manual. Haber desarrollado el analizador de redes ferroviarias, incluyendo la automatización de la generación de código, es una ventaja a la hora de abordar topologías mas complejas. Ya que la implementación se lleva a cabo sin elevar el tiempo de desarrollo ni incrementar las posibilidades de introducir errores humanos.
+	La cantidad de conexiones es tan grande que queda de manifiesto la complejidad de realizar esta labor de forma manual. De esta manera, se aprecia la ventaja del desarrollo del analizador de redes ferroviarias, incluyendo la automatización de la generación de código, lo cual es una ventaja a la hora de abordar topologías mas complejas. Ya que la implementación se lleva a cabo sin elevar el tiempo de desarrollo ni incrementar las posibilidades de introducir errores humanos.
 	
-	Se establece una conexión serie entre la computadoray la plataforma FPGA por medio del analizador de redes ferroviarias. Se muestran en las figuras \ref{fig:Bypass_5} y \ref{fig:Bypass_6} el resultado de ocupar el nodo 3 y modificar la posición de las máquinas de cambios respectivamente.
-
-	La ocupación del nodo 3 provoca que los semáforos de circulación, presenten un aspecto rojo. Además el semáforo anterior, que se encuentra en el nodo 5, presentará un aspecto rojo para mantener el doble recubrimiento (la secuencia rojo-rojo-amarillo-verde luego de un nodo ocupado). Ya que la topología no es lo suficientemente larga no se aprecia el doble recubrimiento.
+	Para analizar el funcionamiento del sistema de enclavamiento para la configuración bypass se establece una conexión entre la computadora y la plataforma FPGA por medio del analizador de redes ferroviarias. De esta forma es posible solicitar en la computadora distintas rutas y visualizar a través de una interfaz cómo es el comportamiento del sistema de enclavamiento para distintas condiciones de ocupación y estados de las máquinas de cambio.
 	
-	Además, ya que la posición de ambos cambios es normal, no existen tramos para circular del nodo 3 al 8 o del nodo 9 al 10. Por lo tanto, los cuatro semáforos de maniobra presentan un aspecto rojo, prohibiendo la circulación por esas zonas.
-	
-	\begin{figure}[h]
-	\centering
-	\includegraphics[scale=0.4]{./Figures/Mapa_A}
-		\caption{Bypass con circulación normal y nodo 3 ocupado.}
-		\label{fig:Bypass_5}
-	\end{figure}
-	
-	\vspace{5cm}
+	A modo de ejemplo en la figura \ref{fig:Bypass_6} se muestra el estado de todas las señales de acuerdo a lo que indica el sistema de enclavamiento implementado en la FPGA para el caso en que se considera que únicamente el nodo 10 está ocupado y ambas máquinas de cambios están en posición reversa. Las aristas con un tono mas claro entre los nodos 3 y 4, y 4 y 5 representan la no conexión entre ambos tramos de vías, debido a la posición del cambio.
 	
 	\begin{figure}[h]
 	\centering
@@ -464,10 +427,18 @@
 		\label{fig:Bypass_6}
 	\end{figure}
 	
-	Por otro lado, cuando ambos cambios se encuentran en posición reversa, no existe circulación posible hacia el nodo 4. Los semáforos de maniobra para ir de 3 a 8 (o viceversa) presentan un aspecto amarillo. En cambio los semáforos de circulación de los nodos 3 y 5 tienen un aspecto rojo.
+	Como en el enfoque funcional no existe el concepto de ruta, no hay una trayectoria definida por la que la formación circulará. En cambio, los semáforos indicarán que acciones estarán permitidas y cuáles estarán prohibidas. 
 	
-	La ocupación del nodo 10 provoca que su semáforo de maniobras se encuentre rojo para impedir cualquier ocupación del nodo 10 por parte de otra formación, evitando una colisión. Además, eso tiene efecto en el semáforo de maniobra del nodo 5, que se encuentra con aspecto rojo para evitar una colisión frontal de la formación que ocupa el nodo 10.
+	A modo de recordatorio, las acciones que el enclavamiento no debe permitir son aquellas que conlleven al descarrilamiento de la formación y a colisiones entre formaciones. Las acciones no permitidas serán indicadas con aspectos rojos en los semáforos, mientras que todas las demás acciones están permitidas, indicadas con semáforos amarillos o verdes.
 	
-	En ambas situaciones todos los semáforos se han comportado como se esperaba. Todas las combinaciones de ocupaciones y posiciones de cambios probadas fueron seguras para las formaciones introducidas. Topologías mas diversas fueron ensayadas, como la presentada a comienzo del capítulo \ref{Chapter4}, todas ellas con resultados favorables.
+	Del análisis de la figura \ref{fig:Bypass_6} se concluye que la formación que ocupa el nodo 10 se encuentra protegida de colisiones desde el nodo 9, ya que el semáforo de ingreso al nodo 10 presenta un aspecto rojo. También se encuentra protegida de colisiones desde el nodo 5 al tener el semáforo de maniobra del nodo 5 en aspecto rojo.
+	
+	No obstante, la formación que se encuentra en el nodo 10 tiene permitido tanto avanzar en sentido 10-5-6-7 como en sentido 10-9-8-3-2-1 ya que ningún semáforo se lo impide. En ambos casos la formación puede abandonar la red por medio de los nodos 7 y 1, que presentan semáforos con aspecto verde. Es importante destacar que los semáforos de tres aspectos de los nodos 3 y 5 solo impiden el ingreso desde los nodos laterales y no impiden la salida. Por lo tanto, la formación no esta impedida de acceder al nodo 3 desde el nodo 8, de modo tal que ésta pueda continuar su recorrido hacia el nodo 2 y análogamente para la secuencia 10-5-6.
+	
+	Otra de las acciones no permitidas es circular desde el nodo 3 o el nodo 5 hacia el nodo 4, ya que la posición del cambio desconecta ambos tramos de vías.
+	
+	Habiendo analizado todas las situaciones del ejemplo de la figura \ref{fig:Bypass_6}, se concluye que todas las situaciones peligrosas han sido correctamente detectadas y prohibidas por el sistema de enclavamiento implementado en la FPGA, según se pudo observar mediante la interfaz de visualización desarrollada en Python. De esta forma se permite solamente la circulación segura de la formación en los dos sentidos posibles.
+	
+	Para el ejemplo de la figura \ref{fig:Bypass_6} se probaron todas las combinaciones de ocupaciones y posiciones de cambios posibles y en todos los casos el comportamiento fue el esperado. Además se hicieron pruebas en topologías mas complejas, como por ejemplo la presentada a comienzo del capítulo \ref{Chapter4}, y en todos los casos se obtuvo el comportamiento esperado.
 	
 	De esta forma concluye este capítulo, en el cual se presentaron los ensayos realizados y los resultados obtenidos.

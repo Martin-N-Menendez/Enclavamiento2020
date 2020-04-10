@@ -14,13 +14,13 @@ Es este capítulo se presentan las topologías típicas del sistema ferroviario 
 
 		Para cubrir grandes distancias entre un punto estratégico, como podría ser Vaca Muerta, y un puerto para la exportación de los recursos se requiere una línea ferroviaria con vagones de carga que puedan transportar el producto. Por supuesto, es necesario un ida y vuelta entre trenes vacíos que van a ser llenados en el destino y trenes llenos que van a descargar al puerto la carga que lleven, pero el costo de utilizar dos vías en sentidos opuestos es muy elevado y usar solo una no tiene el menor sentido logístico.
 		
-		Es por eso que se utiliza la topología de bypass cada cierta cantidad de kilómetros de vías simples para poder permitir que trenes en sentidos opuestos se crucen sin riesgo de colisión. En la figura \ref{fig:Bypass_2} se representa la topología bypass, donde un tren que circula hacia la derecha por la vía principal podría entrar en colisión lateral con un tren que busca ingresar a la red desde una vía secundaria por medio del cambio de vías.
+		Es por eso que se utiliza la topología de bypass cada cierta cantidad de kilómetros de vías simples para poder permitir que trenes en sentidos opuestos se crucen sin riesgo de colisión. En la figura \ref{fig:Bypass_T} se representa la topología bypass, donde un tren que circula hacia la derecha por la vía principal podría entrar en colisión lateral con un tren que busca ingresar a la red desde una vía secundaria por medio del cambio de vías.
 		
 		\begin{figure}[h]
 		\centering
 			\includegraphics[scale=.45]{./Figures/Bypass_2}
 			\caption{Topología bypass.}
-			\label{fig:Bypass_2}
+			\label{fig:Bypass_T}
 		\end{figure}
 
 	\vspace{5cm}
@@ -336,7 +336,7 @@ Es este capítulo se presentan las topologías típicas del sistema ferroviario 
 	%\vspace{5cm}
 
 \section{Plataforma utilizada}
-
+	\label{FPGA_P}
 	Se utilizó una plataforma FPGA, a diferencia de las empresas mencionadas en el capítulo 1 que utilizan microprocesadores, ya que se busca aprovechar la concurrencia y mayor seguridad inherentes a esta tecnología \cite{cite23,cite24,cite25} para la implementación de sistemas
 críticos.
 

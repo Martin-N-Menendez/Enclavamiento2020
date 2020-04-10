@@ -41,7 +41,8 @@
 En este capítulo se presentan las decisiones de diseño adoptadas para concretar el desarrollo del trabajo. Además, se describen en forma genérica los módulos necesarios tanto del sistema de enclavamiento como de los bloques auxiliares para concretar una comunicación exitosa entre el sistema y el exterior.
 
 \section{Analizador de redes ferroviarias}
-
+	\label{3_1}
+	
 	En el marco de la Especialización de Sistemas Embebidos se utilizó el enfoque funcional basado en la tabla de enclavamientos, con las limitaciones ya expuesta en el capítulo 2. Algunos de los artículos encontrados utilizan ese enfoque \cite{Fun_1,Fun_2,Fun_3,Fun_4}, mientras otros artículos mas recientes abordan el modelado de los sistemas sin utilizar tablas de enclavamiento \cite{Geo_1,Geo_2,Geo_3,Geo_4}.
 	
 	Los diversos artículos que modelan los sistemas ferroviarios en base a la topología utilizan estrategias muy dispares. Por ejemplo, no existe una idea en común de que herramienta matemática utilizar: algunos recurren a las redes de Petri, mientras que otros a los grafos. Incluso dentro del subgrupo de los artículos que sugieren utilizar grafos no existe un criterio unificado de qué representa cada nodo y cada arista, ni tampoco cómo analizar la red ni cuáles son los elementos básicos que necesita para estar definida.	
@@ -105,6 +106,50 @@ En este capítulo se presentan las decisiones de diseño adoptadas para concreta
 	
 	El haber desarrollado un criterio propio para modelar las topologías tuvo como consecuencia el tener que diseñar tanto la herramienta de análisis, como así también la arquitectura y funcionalidad de cada uno de los módulos expuestos a continuación.	
 	
+\section{Arquitectura de la solución propuesta}
+
+	La implementación del enclavamiento en la solución propuesta se realiza en una FPGA, como se explicó en la sección \ref{FPGA_P}. La FPGA debe contar como entrada con los datos de ocupación de vía, estado de las señales, etc. y debe proveer como salida las señales de control de cambios, señales, etc. 
+
+    Dada la gran cantidad de señales involucradas y la limitada cantidad de puertos disponibles en la FPGA, la información debe ser ingresada y leída de la FPGA en formato serie. Para eso se utilizan módulos de recepción y transmisión, junto con memorias FIFO, como se ilustra en la figura \ref{fig:UART_General}. 
+    
+    \begin{figure}[h]
+	\centering
+	\includegraphics[scale=0.5]{./Figures/Diagrama_UART_PC}
+		\caption{Diagrama de conexión del sistema a la computadora.}
+		\label{fig:UART_General}
+	\end{figure}
+	
+	Estos módulos, ilustrados en celeste en la figura \ref{fig:UART_General}, conforman la UART. La UART (del inglés, \textit{Universal Asynchronous Receiver-Transmitter}) es la unidad encargada de recibir y transmitir las tramas desde la computadora hasta la plataforma FPGA.
+	
+	Las memorias FIFO dependen de las características particulares de la comunicación serie utilizada. El sistema de enclavamiento propiamente dicho está dentro del bloque indicado como ''Sistema'' en el centro de la figura \ref{fig:UART_General}. Este bloque ''Sistema'' puede ser utilizado bajo distintos formatos de comunicación serie cambiando únicamente los módulos UART y FIFO según resulte necesario.
+	
+	La arquitectura propuesta para la implementación del bloque ''Sistema'' en la FPGA se muestra en la Figura \ref{fig:Diagrama_general}.
+	
+	\begin{figure}[h]
+	\centering
+	\includegraphics[scale=0.45]{./Figures/Diagrama_general}
+		\caption{Diagrama general del sistema.}
+		\label{fig:Diagrama_general}
+	\end{figure}
+	
+    El módulo ''Detector'' recibe las tramas en formato serie, comprueba su integridad y en caso de que los datos de ocupación de vía, estado de las señales, etc. recibidos sean válidos los entrega al módulo ''Separador''.
+    
+    El módulo ''Separador'' toma esos datos y los separa de modo de entregarlos al módulo ''Red'' en la entrada que corresponda a cada dato.
+
+    El módulo ''Red'' está conformado por la implementación de los nodos y las máquinas de cambio, junto con sus respectivas interconexiones.
+    
+    Las interconexiones de los nodos y las máquinas de cambios surgen como resultado del análisis que realiza en forma automática el Analizador de redes ferroviarias, de acuerdo a lo explicado en la sección \ref{3_1}. 
+    
+    El módulo ''Mediador'' toma las salidas de control de cambios, señales, etc. generadas por el bloque ''Red'', las agrupa apropiadamente y se las suministra al bloque ''Registro''.
+    
+    El módulo ''Registro'' transforma cada elemento de la señal en un caracter imprimible para enviar a la UART. 
+
+    Finalmente, el módulo ''Selector'' se usa exclusivamente a los fines de comprobar el correcto funcionamiento de la comunicación serie, quitando del sistema a los módulos Separador, Red, Mediador y Registro.
+    
+    Finalmente, es importante resaltar que en la figura \ref{fig:Diagrama_general} se ha indicado como ''Enclavamiento'' al subsistema conformado por los módulos Separador, Red y Mediador. Esto se debe a que el funcionamiento del Enclavamiento está dado no sólo por el módulo Red, sino por la forma en que las señales son distribuidas en las entradas de los distintos elementos del módulo Red y la forma en que las señales de salida del módulo Red son entregadas a cada uno de los elementos en campo (máquinas de cambio, señales, etc.)
+    	
+	Para poder verificar el funcionamiento del sistema a nivel general, primero es necesario verificar que cada bloque se comporta como debe. En la siguientes secciones se abordará el diseño e implementación de cada uno de los bloques.	
+	
 \section{Módulo de nodos}
 \label{nodos}
 	El módulo de nodos corresponde al módulo principal en esta implementación. Por cada nodo en el grafo se tiene un módulo de nodos equivalente, cuyas conexiones a otros módulos estarán definidas por las aristas del grafo.
@@ -164,6 +209,33 @@ En este capítulo se presentan las decisiones de diseño adoptadas para concreta
 		\label{fig:FSMD_Cambio}
 	\end{figure}
 		
+\section{Módulo de comunicación UART}
+
+	En el diseño de los módulos para la interface UART con el exterior se utilizó un modelo  aportado por los docentes, pero fue necesario modificarlo para poder automatizarlo y cumplir con las siguientes premisas:
+	
+	\begin{itemize}
+		\item Se deben tener dos FIFOs distintas, una de entrada y la otra de salida.
+		\item El tamaño de las FIFOs debe adaptarse a la topología: redes mas grandes necesitarán FIFOs mas grandes y redes mas pequeñas requerirán FIFOs mas pequeñas.
+		\item Ambas FIFOS no pueden tener tamaño idéntico.
+		\item Se deben incluir señales que indiquen al sistema si se tienen nuevos datos del exterior o si es posible recibir nuevos datos procesados para su posterior impresión.
+		\item Cada cierto tiempo ambas FIFOS deberán vaciarse en su totalidad.		
+	\end{itemize}
+	
+		Se presenta en la figura \ref{fig:FSMD_UART} un diagrama en bloques de la UART.
+			
+		\begin{figure}[h]
+		\centering
+		\includegraphics[scale=.35]{./Figures/UART}
+			\caption{Diagrama en bloques de la UART}
+			\label{fig:FSMD_UART}
+		\end{figure}
+
+		Los bloques de recepción y transmisión son funcionalmente idénticos, pero instanciados de forma diferente para que adopten tamaños distintos y sean conectados a señales distintas, ya que su rol no es el mismo. La FIFO de entrada es la encargada de almacenar los valores ingresados (conector amarillo) en la plataforma con un \textit{baud-rate} definido y envía su contenido al sistema junto con una serie de pulsos para indicar cuándo deben ser leídos. La FIFO de salida, en cambio, debe almacenar los resultados del sistema según una serie de pulsos generada por el mismo sistema, para luego imprimir el resultado por el puerto serie (conector rosa) con el \textit{baud-rate} definido.
+
+		La FIFO de entrada se utiliza para almacenar una trama de la forma '<Mensaje de largo N>' (conector negro) por lo que espera al menos N+2 bytes, mientras que la FIFO de salida espera mensajes de la forma 'Mensaje de largo M' (conector negro). Ya que N > M es claro que N + 2 > M en la mayoría de los casos. Aunque también puede ocurrir que la diferencia entre ambos no sea tanta y al implementar el tamaño de las FIFOs en potencias de 2 terminen ambas FIFOs con el mismo tamaño. 
+
+		Con este criterio de diseño, en todos los demás casos, la FIFO de salida tendrá el mismo tamaño que la FIFO de entrada o a lo sumo será $50$\% menor, lo que representa un ahorro de $25$\% de los recursos estimados. Por ejemplo, si se necesita que la entrada tenga 15 elementos y la salida 7 elementos y se le asigna el mismo tamaño a ambas FIFOs; tanto la FIFO de entrada como la de salida necesitarán 16 bits cada una, dando un total de 32 bits. Pero si se aplica el criterio de tamaños desacoplados, entonces para la FIFO de salida podrían asignarse solamente 8 bits, dando un total de 24 bits, un $25$\% menos que los 32 bits que necesitaría si ambas FIFOs quedaran definidas según los datos de la entrada.
+		
 \section{Módulos de procesamiento de tramas}
 
 	Durante el desarrollo del trabajo de la Especialización en Sistemas Embebidos se había considerado la estrategia de obtener las señales de forma paralela, es decir, para cada elemento se tenía asignado un pin que monitoreaba su estado. Esto resultó ser un problema a la hora de implementar topologías mas grandes, donde se necesitó hasta cinco veces la cantidad de entradas digitales que la FPGA tenía disponibles. Por lo tanto, se decidió cambiar a una lectura y escritura en serie.
@@ -183,13 +255,13 @@ En este capítulo se presentan las decisiones de diseño adoptadas para concreta
 		
 		\vspace{10cm}
 		
-		La UART (del inglés, \textit{Universal Asynchronous Receiver-Transmitter}) es la unidad encargada de recibir y transmitir las tramas desde la computadora hasta la plataforma. Ésta envía secuencialmente un caracter por medio de la señal r\_data (8 bytes) y un pulso (r\_disponible) para informar que un nuevo dato ha sido enviado, además de indicar por medio de la señal N la cantidad de caracteres que serán enviados. 
+		La UART envía secuencialmente un caracter por medio de la señal r\_data (8 bytes) y un pulso (r\_disponible) para informar que un nuevo dato ha sido enviado, además de indicar por medio de la señal N la cantidad de caracteres que serán enviados. 
 		
 		El proceso de detección se ilustra en la figura \ref{fig:Estados_Detector}.  		
 		
 		\begin{figure}[h]
 		\centering
-			\includegraphics[scale=.65]{./Figures/Estados-Detector}
+			\includegraphics[scale=.6]{./Figures/Estados-Detector}
 			\caption{Estados del módulo detector}
 			\label{fig:Estados_Detector}
 		\end{figure}
@@ -201,6 +273,8 @@ En este capítulo se presentan las decisiones de diseño adoptadas para concreta
 		Si el caracter leído es el de final de trama, se pasa al estado final, donde el paquete es considerado válido y enviado a la próxima etapa junto con su pulso de validación del dato. Si el caracter leído es distinto, entonces se descarta toda la trama y se vuelve al inicio a la espera de otro caracter de inicio de trama, reiniciando todas las variables auxiliares.
 		
 		Internamente se tienen diversas variables auxiliares para controlar si se han recibido los delimitadores y si la cantidad recibida es correcta. Eso cobra gran importancia al realizar los ensayos, porque se puede diferenciar rápidamente la fuente de posibles errores.
+	
+	\vspace{5cm}
 		
 	\subsection{Módulo registro}
 	
@@ -208,12 +282,12 @@ En este capítulo se presentan las decisiones de diseño adoptadas para concreta
 		
 		\begin{figure}[h]
 		\centering
-			\includegraphics[scale=.65]{./Figures/FSMD-Registro}
+			\includegraphics[scale=.6]{./Figures/FSMD-Registro}
 			\caption{FSMD del módulo registro}
 			\label{fig:FSMD_Registro}
 		\end{figure}
 
-		%\vspace{10cm}
+		\vspace{12cm}
 		
 		La máquina de estados (FSM) desarrollada se ocupa de generar cada dos ciclos de reloj un pulso para poder enviar secuencialmente los caracteres detectados. A la vez que el multiplexor va seleccionando cada elemento del vector paquete[M] según el valor del contador vigente, que se incrementa cada pulso del reloj interno generado.
 		
@@ -228,7 +302,7 @@ En este capítulo se presentan las decisiones de diseño adoptadas para concreta
 			\label{fig:Estado_Registro}
 		\end{figure}
 		
-		\vspace{10cm}	
+		%\vspace{10cm}	
 		
 		Se añadieron dos estados para generar el pulso de reloj necesario para mantener sincronizadas las tramas. Al estado de reinicio se accede cuando el contador haya recorrido todos los elementos del paquete, igualando el valor de M, la cantidad de elementos esperados. 
 		
@@ -247,7 +321,7 @@ En este capítulo se presentan las decisiones de diseño adoptadas para concreta
 			\label{fig:FSMD_Selector}
 		\end{figure}	
 		
-		\vspace{10cm} 
+		%\vspace{10cm} 
 		
 		La implementación permite enviar la entrada a una salida u otra según la posición del switch, de forma asincrónica. Aunque no solo envía el dato sino también la ráfaga de pulsos asociada para su correcta escritura en la UART.
 			
@@ -358,32 +432,7 @@ En este capítulo se presentan las decisiones de diseño adoptadas para concreta
 
 
 		
-\section{Módulo de comunicación UART}
 
-	En el diseño de los módulos para la interface UART con el exterior se utilizó un modelo  aportado por los docentes, pero fue necesario modificarlo para poder automatizarlo y cumplir con las siguientes premisas:
-	
-	\begin{itemize}
-		\item Se deben tener dos FIFOs distintas, una de entrada y la otra de salida.
-		\item El tamaño de las FIFOs debe adaptarse a la topología: redes mas grandes necesitarán FIFOs mas grandes y redes mas pequeñas requerirán FIFOs mas pequeñas.
-		\item Ambas FIFOS no pueden tener tamaño idéntico.
-		\item Se deben incluir señales que indiquen al sistema si se tienen nuevos datos del exterior o si es posible recibir nuevos datos procesados para su posterior impresión.
-		\item Cada cierto tiempo ambas FIFOS deberán vaciarse en su totalidad.		
-	\end{itemize}
-	
-		Se presenta en la figura \ref{fig:FSMD_UART} un diagrama en bloques de la UART.
-			
-		\begin{figure}[h]
-		\centering
-		\includegraphics[scale=.35]{./Figures/UART}
-			\caption{Diagrama en bloques de la UART}
-			\label{fig:FSMD_UART}
-		\end{figure}
-
-		Los bloques de recepción y transmisión son funcionalmente idénticos, pero instanciados de forma diferente para que adopten tamaños distintos y sean conectados a señales distintas, ya que su rol no es el mismo. La FIFO de entrada es la encargada de almacenar los valores ingresados (conector amarillo) en la plataforma con un \textit{baud-rate} definido y envía su contenido al sistema junto con una serie de pulsos para indicar cuándo deben ser leídos. La FIFO de salida, en cambio, debe almacenar los resultados del sistema según una serie de pulsos generada por el mismo sistema, para luego imprimir el resultado por el puerto serie (conector rosa) con el \textit{baud-rate} definido.
-
-		La FIFO de entrada se utiliza para almacenar una trama de la forma '<Mensaje de largo N>' (conector negro) por lo que espera al menos N+2 bytes, mientras que la FIFO de salida espera mensajes de la forma 'Mensaje de largo M' (conector negro). Ya que N > M es claro que N + 2 > M en la mayoría de los casos. Aunque también puede ocurrir que la diferencia entre ambos no sea tanta y al implementar el tamaño de las FIFOs en potencias de 2 terminen ambas FIFOs con el mismo tamaño. 
-
-		Con este criterio de diseño, en todos los demás casos, la FIFO de salida tendrá el mismo tamaño que la FIFO de entrada o a lo sumo será $50$\% menor, lo que representa un ahorro de $25$\% de los recursos estimados. Por ejemplo, si se necesita que la entrada tenga 15 elementos y la salida 7 elementos y se le asigna el mismo tamaño a ambas FIFOs; tanto la FIFO de entrada como la de salida necesitarán 16 bits cada una, dando un total de 32 bits. Pero si se aplica el criterio de tamaños desacoplados, entonces para la FIFO de salida podrían asignarse solamente 8 bits, dando un total de 24 bits, un $25$\% menos que los 32 bits que necesitaría si ambas FIFOs quedaran definidas según los datos de la entrada.
 		
 \section{Interfaz de comunicación Python}
 
@@ -398,7 +447,7 @@ En este capítulo se presentan las decisiones de diseño adoptadas para concreta
 			\label{fig:Menu_UART}
 		\end{figure}
 	
-	\vspace{5cm}
+	%\vspace{5cm}
 	
 	Todos los cambios repercuten en el grafo mostrado en pantalla (figura \ref{fig:Grafo_UART}), que cambiará los colores de los semáforos y de los nodos para representar la ocupación del tren; así como también el color de las aristas para indicar la posición de los cambios.
 	
