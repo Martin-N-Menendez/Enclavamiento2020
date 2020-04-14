@@ -1,9 +1,9 @@
--- separador.vhdl : Achivo VHDL generado automaticamente
+-- separador.vhdl : Achivo VHDL generado automaticamente
 library IEEE;
 use IEEE.std_logic_1164.all;
-use IEEE.numeric_std.all;
---Declare the package
-use work.my_package.all;
+use IEEE.numeric_std.all;
+--Declare the package
+use work.my_package.all;
 	entity separador is
 		generic(
 			N : natural := 32;
@@ -21,12 +21,12 @@ use work.my_package.all;
 			Cambios :  out std_logic_vector(N_MDC-1 downto 0);
 			Reset :  in std_logic
 		);
-	end entity separador;
-architecture Behavioral of separador is
+	end entity separador;
+architecture Behavioral of separador is
 	Signal cv_s : std_logic_vector(N_CVS-1 downto 0);
 	Signal sem_s_i,sem_s_o : sems_type;
 	Signal mdc_s_i,mdc_s_o : std_logic_vector(N_MDC-1 downto 0);
-begin
+begin
 	process(Clock,Reset)
 	begin
 		if (Clock = '1' and Clock'Event) then
@@ -74,5 +74,5 @@ begin
 				end if;
 			end if;
 		end if;
-	end process;
+	end process;
 end Behavioral;
