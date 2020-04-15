@@ -11,7 +11,7 @@
 ### Bypass - Rodeo
 ![Mapa_2](https://github.com/Martin-N-Menendez/Enclavamiento2020/blob/master/Video/GIF_A2.gif)
 ### Bypass - Circulación
-![Mapa_2](https://github.com/Martin-N-Menendez/Enclavamiento2020/blob/master/Video/GIF_A2.gif)
+![Mapa_2](https://github.com/Martin-N-Menendez/Enclavamiento2020/blob/master/Video/GIF_B.gif)
 
 
 ## Analizador de topologias
