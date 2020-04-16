@@ -45,6 +45,19 @@ def signal_handler(sig, frame):
     
 # Funciones -------------------------------------------------------------------
 #%%
+def buscar_mdc(index,secciones):
+
+    for i in range(len(secciones)):
+        if secciones[i].cambio:
+            index = index - 1
+            
+        if index == 0:
+            return i+1
+
+
+    
+    
+#%%    
 def calcular_sem_owner(secciones,i):
 
     acumulado = secciones[0].N_semaforos
@@ -259,7 +272,7 @@ def cmd_3(secciones):
    #sendData( '(',')',False )
    return
 
-# comando 4: Todo OK
+# comando 4: modificar cambios de via
 def cmd_4(secciones,conexiones):
    N_mdc = objetos[3]
 
@@ -275,8 +288,12 @@ def cmd_4(secciones,conexiones):
        index = int(comando)
        if mdc_t[index-1] == '1':
            mdc_t = mdc_t[:index-1] + '0' + mdc_t[index:]
+           nodo = buscar_mdc(index,secciones)
+           secciones[nodo-1].cambio_estado = False
        else:
            mdc_t = mdc_t[:index-1] + '1' + mdc_t[index:]
+           nodo = buscar_mdc(index,secciones)
+           secciones[nodo-1].cambio_estado = True
            
    sendData( cvs_t + sem_t + pan_t + mdc_t , secciones,conexiones )  
    return

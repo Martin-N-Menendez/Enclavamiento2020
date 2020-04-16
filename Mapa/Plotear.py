@@ -95,36 +95,55 @@ def conectar_secciones(secciones):
             # Evitar repetidos             
             if ( a < b ):
                 continue;
+             
+            #print("O {} {}".format(a+1,b+1))
+            
+            color = grey1
+            tipo_a = secciones[a].tipo
+            tipo_b = secciones[b].tipo
+            
+            if ( tipo_a == "Cruce"):
+                if ( tipo_b == "Directo"):  
+                    print("C-Di {} {}".format(a+1,b+1))
+                    if secciones[a].cambio_estado == True:
+                        color = grey2
+                if ( tipo_b == "Desvio"):  
+                    print("C-De {} {}".format(a+1,b+1))
+                    if secciones[a].cambio_estado == False:
+                        color = grey2
                 
-            if ( secciones[a].tipo == "Cruce" and
-                 secciones[b].tipo == "Cruce" ):
+            if ( tipo_b == "Cruce"):
+                if ( tipo_a == "Directo"):    
+                    print("Di-C {} {}".format(a+1,b+1))
+                    if secciones[b].cambio_estado == True:
+                        color = grey2  
+                if ( tipo_a == "Desvio"): 
+                    print("De-C {} {}".format(a+1,b+1))
+                    if secciones[b].cambio_estado == False:
+                        color = grey2
+
+#            if ( tipo_a == "Desvio"):
+#                if ( tipo_b == "Directo"):  
+#                    print("De-Di {} {}".format(a+1,b+1))
+#                    if secciones[a].cambio_estado == True:
+#                        color = red
+#                if ( tipo_b == "Desvio"):  
+#                    print("De-De {} {}".format(a+1,b+1))
+#                    if secciones[a].cambio_estado == False:
+#                        color = red
                 
-                if secciones[a].cambio_estado == True:
-                    color = grey2
-            else:
-                color = grey1
-        
-            if ( secciones[b].tipo == "Cruce" and len(secciones[b].vecinos) == 3 ):
-                if ( secciones[b].desvio_sup != "" ):              
-                    if ( secciones[b].desvio_sup_dir == '>'):
-                        if ( secciones[b].posterior == secciones[a].id ):
-                            if secciones[b].cambio_estado == False:
-                                color = grey2
-                    else:
-                        if ( secciones[b].anterior == secciones[a].id ):
-                            if secciones[b].cambio_estado == False:
-                                color = grey2
-                    
-            if ( secciones[a].tipo == "Cruce" and len(secciones[a].vecinos) == 3 ):
-                if ( secciones[a].desvio_sup != "" ):              
-                    if ( secciones[a].desvio_sup_dir == '>'):
-                        if ( secciones[a].posterior == secciones[b].id ):
-                            if secciones[a].cambio_estado == False:
-                                color = grey2
-                    else:
-                        if ( secciones[a].anterior == secciones[b].id ):
-                            if secciones[a].cambio_estado == False:
-                                color = grey2         
+            if ( tipo_b == "Desvio"):
+                if ( tipo_a == "Directo"):    
+                    print("Di-De {} {}".format(a+1,b+1))
+                    if secciones[b].cambio_estado == True:
+                        color = grey2  
+                if ( tipo_a == "Desvio"): 
+                    print("De-De {} {}".format(a+1,b+1))
+                    if secciones[b].cambio_estado == False:
+                        color = grey2           
+                        
+
+
             
             create_line(secciones[a].pos_x, secciones[a].pos_y,
                         secciones[b].pos_x, secciones[b].pos_y,

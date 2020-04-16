@@ -669,6 +669,10 @@ def generar_mapa(tabla, iniciar = True):
         asignar_semaforos()
         #imprimir_estados()       
         
+        secciones[3-1].cambio_estado = False
+        secciones[5-1].cambio_estado = False
+        #secciones[9-1].cambio_estado = True
+        
         mostrar_grafo(secciones,i,gif_mode = False)       
         #proximo_semaforo(secciones)    
         detectar_rutas(secciones)        
