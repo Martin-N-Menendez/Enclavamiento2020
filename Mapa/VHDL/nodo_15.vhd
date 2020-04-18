@@ -45,6 +45,29 @@ begin
 					--estado = ROJO
 					Semaforo_propio_o_1.msb <= '0'; --ROJO
 					Semaforo_propio_o_1.lsb <= '0'; --ROJO
+				else
+					if (Cambio_i = '0') then --Normal
+						if Estado_ante = '0' then
+							--estado = ROJO
+							Semaforo_propio_o_1.msb <= '0'; --ROJO
+							Semaforo_propio_o_1.lsb <= '0'; --ROJO
+						else
+							--Si OTRO = OCUPADO
+							if (Estado_lejano_10_i = '0') then
+								--estado = AMARILLO
+								Semaforo_propio_o_1.msb <= '1'; --AMARILLO
+								Semaforo_propio_o_1.lsb <= '0'; --AMARILLO
+							else
+								--estado = VERDE
+								Semaforo_propio_o_1.msb <= '1'; --VERDE
+								Semaforo_propio_o_1.lsb <= '1'; --VERDE
+							end if;
+						end if;
+					else
+						--estado = ROJO
+						Semaforo_propio_o_1.msb <= '0'; --ROJO
+						Semaforo_propio_o_1.lsb <= '0'; --ROJO
+					end if;
 				end if;
 			end if;
 		end if;
@@ -60,6 +83,22 @@ begin
 					--estado = ROJO
 					Semaforo_propio_o_2.msb <= '0'; --ROJO
 					Semaforo_propio_o_2.lsb <= '0'; --ROJO
+				else
+					if (Cambio_i = '1') then --Reverso
+						if Estado_ante = '0' then
+							--estado = ROJO
+							Semaforo_propio_o_2.msb <= '0'; --ROJO
+							Semaforo_propio_o_2.lsb <= '0'; --ROJO
+						else
+							--estado = AMARILLO
+							Semaforo_propio_o_2.msb <= '1'; --AMARILLO
+							Semaforo_propio_o_2.lsb <= '0'; --AMARILLO
+						end if;
+					else
+						--estado = ROJO
+						Semaforo_propio_o_2.msb <= '0'; --ROJO
+						Semaforo_propio_o_2.lsb <= '0'; --ROJO
+					end if;
 				end if;
 			end if;
 		end if;

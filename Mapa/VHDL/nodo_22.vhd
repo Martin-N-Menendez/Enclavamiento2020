@@ -14,6 +14,7 @@ use work.my_package.all;
 		port(
 			Clock :  in std_logic;
 			Reset :  in std_logic;
+			Cambio_i :  in std_logic;
 			Estado_i :  in std_logic;
 			Estado_ante :  in std_logic;
 			Estado_post :  in std_logic;
@@ -40,6 +41,22 @@ begin
 					--estado = ROJO
 					Semaforo_propio_o_1.msb <= '0'; --ROJO
 					Semaforo_propio_o_1.lsb <= '0'; --ROJO
+				else
+					if (Cambio_i = '1') then --Reverso
+						if Estado_ante = '0' then
+							--estado = ROJO
+							Semaforo_propio_o_1.msb <= '0'; --ROJO
+							Semaforo_propio_o_1.lsb <= '0'; --ROJO
+						else
+							--estado = AMARILLO
+							Semaforo_propio_o_1.msb <= '1'; --AMARILLO
+							Semaforo_propio_o_1.lsb <= '0'; --AMARILLO
+						end if;
+					else
+						--estado = ROJO
+						Semaforo_propio_o_1.msb <= '0'; --ROJO
+						Semaforo_propio_o_1.lsb <= '0'; --ROJO
+					end if;
 				end if;
 			end if;
 		end if;

@@ -1,7 +1,7 @@
 import time
 import serial
-from datetime import datetime
-import random
+#from datetime import datetime
+#import random
 import sys
 import signal
 

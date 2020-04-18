@@ -6,7 +6,9 @@ from Estaciones import *
 
 import matplotlib.pyplot as plt
 
-global plt
+#plt.close(1)
+#plt.figure(1,figsize=(16,9))
+#plt.figure(figsize=(16,9))
 
 global r
 
@@ -293,28 +295,28 @@ def imprimir_semaforos(secciones,ajuste):
 #%%
 def calcular_ejes(secciones):
     
-    mplt_x = 0.0
-    mplt_y = 0.0
+    max_x = 0.0
+    max_y = 0.0
     min_x = 0.0
     min_y = 0.0
         
     for i in range(len(secciones)):
                 
-        if(secciones[i].pos_x > mplt_x):         
-            mplt_x = secciones[i].pos_x
+        if(secciones[i].pos_x > max_x):         
+            max_x = secciones[i].pos_x
        
         if(secciones[i].pos_x < min_x):
             min_x = secciones[i].pos_x
        
-        if(secciones[i].pos_y > mplt_y):
-            mplt_y = secciones[i].pos_y
+        if(secciones[i].pos_y > max_y):
+            max_y = secciones[i].pos_y
          
         if(secciones[i].pos_y < min_y):
             min_y = secciones[i].pos_y
             
         #print(i,[[min_x,mplt_x],[min_y,mplt_y]])   
         
-    return [[min_x,float(mplt_x)],[min_y,mplt_y]]
+    return [[min_x,float(max_x)],[min_y,max_y]]
 
 #%% 
 def mostrar_grafo(secciones,i = 0,j = 0, gif_mode = False):
@@ -326,6 +328,8 @@ def mostrar_grafo(secciones,i = 0,j = 0, gif_mode = False):
     axis = calcular_ejes(secciones)
     
     #plt.figure(figsize=(16,9))
+    
+    #fig = plt.figure(3)
     
     ax = plt.gca()
     ax.cla() # clear things for fresh plot
@@ -360,9 +364,10 @@ def mostrar_grafo(secciones,i = 0,j = 0, gif_mode = False):
         #fig.set_size_inches(16, 9)
         #plt.figure(figsize=(16,9))
         plt.savefig('Mapas/Mapa_'+str(i)+'.png',dpi = 100)
-        
-    plt.show()
-    
+
+    #print("A")
+    plt.show( )
+    #print("B")
     
     
     

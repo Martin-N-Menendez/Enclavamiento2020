@@ -5,7 +5,7 @@ Created on Sat Oct 26 11:24:17 2019
 @author: 
 """
 
-import matplotlib.pyplot as plt
+#import matplotlib.pyplot as plt
 import random
 import pandas as pd
 
@@ -16,13 +16,14 @@ from vhdl import *
 from comunicacion import *
 
 from Serial import *
+#%matplotlib qt
 
 secciones = []
 conexiones = []
 
 df = []
 
-global ax 
+#global ax 
 
 global N_rutas
 N_rutas = 0
@@ -640,8 +641,8 @@ def generar_mapa(tabla, iniciar = True):
         secciones.clear()
         conexiones.clear()
         
-        ax = plt.gca()
-        ax.cla() # clear things for fresh plot
+        #ax = plt.gca()
+        #ax.cla() # clear things for fresh plot
         
         print("%"*25+" Mapa_"+str(i)+' '+"%"*25)  
             
@@ -673,7 +674,7 @@ def generar_mapa(tabla, iniciar = True):
         secciones[5-1].cambio_estado = False
         #secciones[9-1].cambio_estado = True
         
-        mostrar_grafo(secciones,i,gif_mode = False)       
+        mostrar_grafo(secciones,i,gif_mode = False)
         #proximo_semaforo(secciones)    
         detectar_rutas(secciones)        
         #dibujar_barrera(5.5,-1, b = 1, h = 3, c = [0.85,0.85,0.85])           
@@ -695,8 +696,9 @@ def conectar_terminal(secciones):
 #%%  
 def main():
 
+    #print("hola")
     generar_mapa(tabla)
-    
+    #print("j")
     #crear_modulo_vhdl(secciones,tabla)
     
     conectar_terminal(secciones)

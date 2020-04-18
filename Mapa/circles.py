@@ -76,7 +76,7 @@ def circles(x, y, s, c='b', vmin=None, vmax=None, **kwargs):
         plt.sci(collection)
     return collection
 
-fig = plt.figure(figsize=(ancho/100, alto/100))
+fig = plt.figure(1,figsize=(ancho/100, alto/100))
 ax = fig.add_subplot(1, 1, 1, aspect=1)
 
 def create_circle(x, y, radius = 0.25):

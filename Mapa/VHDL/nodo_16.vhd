@@ -14,6 +14,7 @@ use work.my_package.all;
 		port(
 			Clock :  in std_logic;
 			Reset :  in std_logic;
+			Cambio_i :  in std_logic;
 			Estado_i :  in std_logic;
 			Estado_ante :  in std_logic;
 			Estado_post :  in std_logic;
