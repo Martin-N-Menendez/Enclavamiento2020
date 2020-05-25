@@ -14,7 +14,7 @@
 ![Mapa_2](https://github.com/Martin-N-Menendez/Enclavamiento2020/blob/master/Video/GIF_B.gif)
 
 
-## Analizador de topologias
+## Analizador de topologiass
 - [x] Deteccion de nodos extremos absolutos
 - [x] Deteccion de nodos extremos relativos
 - [x] Deteccion de cambios
