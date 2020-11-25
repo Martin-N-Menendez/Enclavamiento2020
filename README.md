@@ -6,7 +6,7 @@
 :white_square_button::white_square_button::white_square_button::white_square_button::white_square_button::white_square_button::black_square_button::black_square_button::black_square_button::black_square_button:
 
 
-## Implementado en FPGA: 
+## Implementado en FPGA:
 ![Mapa_8](https://github.com/Martin-N-Menendez/Enclavamiento2020/blob/master/Mapa/Mapas/giphy.gif)
 ### Bypass - Rodeo
 ![Mapa_2](https://github.com/Martin-N-Menendez/Enclavamiento2020/blob/master/Video/GIF_A2.gif)
